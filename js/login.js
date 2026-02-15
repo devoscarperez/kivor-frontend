@@ -31,7 +31,7 @@ async function validarUsuario() {
 
     try {
 
-        const response = await fetch(`${API_BASE}/login-username`, {
+        const response = await fetch(`${API_BASE}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
