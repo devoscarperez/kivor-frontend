@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kivor - Ganancias Mensuales</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ganancias Mensuales</h1>
+
+        <div class="filtro">
+            <label for="mes">Selecciona un mes:</label>
+            <select id="mes">
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+
+            <button id="btnConsultar">Consultar</button>
+        </div>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/ganancias-mensuales.js"></script>
+</body>
+</html>
 
