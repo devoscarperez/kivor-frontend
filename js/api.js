@@ -35,7 +35,8 @@ async function obtenerGananciasPorMes(mes) {
         const token = sessionStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("No autenticado");
+            window.location.href = "login.html";
+            return;
         }
 
         const response = await fetch(`${API_BASE}/ganancias-por-mes?mes=${mes}`, {
@@ -44,17 +45,23 @@ async function obtenerGananciasPorMes(mes) {
             }
         });
 
+        if (response.status === 401) {
+            sessionStorage.removeItem("access_token");
+            window.location.href = "login.html";
+            return;
+        }
+
         if (!response.ok) {
             throw new Error("Error al consultar la API");
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
 
     } catch (error) {
         console.error("Error:", error);
         return null;
     }
 }
+
 
  
