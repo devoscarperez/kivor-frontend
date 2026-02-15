@@ -34,6 +34,13 @@
         <div id="resultado"></div>
     </div>
 
+    <script>
+        const token = sessionStorage.getItem("access_token");
+
+        if (!token) {
+            window.location.href = "login.html";
+        }
+    </script>
     <script src="js/api.js"></script>
     <script src="js/ganancias-mensuales.js"></script>
 </body>
