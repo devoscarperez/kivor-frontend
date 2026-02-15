@@ -1,13 +1,21 @@
-document.getElementById("btnConsultar").addEventListener("click", async () => {
+/* =========================
+   LOGOUT
+========================= */
+
 document.getElementById("logout").addEventListener("click", () => {
-sessionStorage.removeItem("access_token");
-window.location.href = "login.html";
+    sessionStorage.removeItem("access_token");
+    window.location.href = "login.html";
 });
+
+
+/* =========================
+   CONSULTAR GANANCIAS
+========================= */
+
+document.getElementById("btnConsultar").addEventListener("click", async () => {
+
     const mes = document.getElementById("mes").value;
     const resultadoDiv = document.getElementById("resultado");
-
-
-
 
     resultadoDiv.innerHTML = "Cargando...";
 
@@ -23,41 +31,59 @@ window.location.href = "login.html";
         return;
     }
 
-    let tabla = `
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Cabello</th>
-                    <th>Manos y Pies</th>
-                    <th>Depilación</th>
-                    <th>Cejas y Pestañas</th>
-                    <th>Faciales</th>
-                    <th>Corporal</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+    let html = "";
 
     data.data.forEach(fila => {
-        tabla += `
-            <tr>
-                <td>${fila.fecha}</td>
-                <td>${fila.cabello}</td>
-                <td>${fila.manos_y_pies}</td>
-                <td>${fila.depilacion}</td>
-                <td>${fila.cejas_y_pestanas}</td>
-                <td>${fila.faciales}</td>
-                <td>${fila.corporal}</td>
-            </tr>
+
+        const year = fila.fecha.substring(0,4);
+
+        html += `
+            <div class="card">
+                <div class="year-title">${year}</div>
+
+                <div class="row">
+                    <span>Cabello</span>
+                    <span class="value">$${formatearNumero(fila.cabello)}</span>
+                </div>
+
+                <div class="row">
+                    <span>Manos y Pies</span>
+                    <span class="value">$${formatearNumero(fila.manos_y_pies)}</span>
+                </div>
+
+                <div class="row">
+                    <span>Depilación</span>
+                    <span class="value">$${formatearNumero(fila.depilacion)}</span>
+                </div>
+
+                <div class="row">
+                    <span>Cejas y Pestañas</span>
+                    <span class="value">$${formatearNumero(fila.cejas_y_pestanas)}</span>
+                </div>
+
+                <div class="row">
+                    <span>Faciales</span>
+                    <span class="value">$${formatearNumero(fila.faciales)}</span>
+                </div>
+
+                <div class="row">
+                    <span>Corporal</span>
+                    <span class="value">$${formatearNumero(fila.corporal)}</span>
+                </div>
+            </div>
         `;
     });
 
-    tabla += `
-            </tbody>
-        </table>
-    `;
-
-    resultadoDiv.innerHTML = tabla;
+    resultadoDiv.innerHTML = html;
 });
+
+
+/* =========================
+   FORMATEAR NUMEROS
+========================= */
+
+function formatearNumero(numero) {
+    return Number(numero).toLocaleString("es-CL");
+}
+
  
