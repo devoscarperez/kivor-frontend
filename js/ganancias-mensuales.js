@@ -1,7 +1,13 @@
 document.getElementById("btnConsultar").addEventListener("click", async () => {
-
+document.getElementById("logout").addEventListener("click", () => {
+sessionStorage.removeItem("access_token");
+window.location.href = "login.html";
+});
     const mes = document.getElementById("mes").value;
     const resultadoDiv = document.getElementById("resultado");
+
+
+
 
     resultadoDiv.innerHTML = "Cargando...";
 
