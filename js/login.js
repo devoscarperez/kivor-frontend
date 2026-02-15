@@ -26,12 +26,12 @@ usernameInput.addEventListener("keypress", (e) => {
 async function validarUsuario() {
 
     const username = usernameInput.value.trim();
-
     if (!username) return;
 
     try {
 
-        const response = await fetch(`${API_BASE}/login`, {
+        // 🔹 AQUÍ CAMBIA: ahora llama a /login-username
+        const response = await fetch(`${API_BASE}/login-username`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -45,7 +45,6 @@ async function validarUsuario() {
         }
 
         currentUsername = username;
-
         displayUsername.textContent = username;
 
         screenUsername.classList.remove("active");
@@ -70,7 +69,6 @@ passwordInput.addEventListener("keypress", (e) => {
 async function loginFinal() {
 
     const password = passwordInput.value;
-
     if (!password) return;
 
     try {
@@ -93,9 +91,10 @@ async function loginFinal() {
 
         const data = await response.json();
 
+        // Guardamos el token
         sessionStorage.setItem("access_token", data.access_token);
 
-        // Redirigir a index principal
+        // Redirigir al dashboard
         window.location.href = "index.html";
 
     } catch (error) {
