@@ -9,7 +9,7 @@ document.getElementById("logout").addEventListener("click", () => {
 
 
 /* =========================
-   CONSULTAR GANANCIAS
+   CONSULTAR GANANCIAS (MATRIZ)
 ========================= */
 
 document.getElementById("btnConsultar").addEventListener("click", async () => {
@@ -31,48 +31,42 @@ document.getElementById("btnConsultar").addEventListener("click", async () => {
         return;
     }
 
-    let html = "";
+    let html = `
+        <div class="tabla-container">
+            <table class="tabla-dashboard">
+                <thead>
+                    <tr>
+                        <th>Año-Mes</th>
+                        <th>Cabello</th>
+                        <th>Manos y Pies</th>
+                        <th>Depilación</th>
+                        <th>Cejas y Pestañas</th>
+                        <th>Faciales</th>
+                        <th>Corporal</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
 
     data.data.forEach(fila => {
-
-        const year = fila.fecha.substring(0,4);
-
         html += `
-            <div class="card">
-                <div class="year-title">${year}</div>
-
-                <div class="row">
-                    <span>Cabello</span>
-                    <span class="value">$${formatearNumero(fila.cabello)}</span>
-                </div>
-
-                <div class="row">
-                    <span>Manos y Pies</span>
-                    <span class="value">$${formatearNumero(fila.manos_y_pies)}</span>
-                </div>
-
-                <div class="row">
-                    <span>Depilación</span>
-                    <span class="value">$${formatearNumero(fila.depilacion)}</span>
-                </div>
-
-                <div class="row">
-                    <span>Cejas y Pestañas</span>
-                    <span class="value">$${formatearNumero(fila.cejas_y_pestanas)}</span>
-                </div>
-
-                <div class="row">
-                    <span>Faciales</span>
-                    <span class="value">$${formatearNumero(fila.faciales)}</span>
-                </div>
-
-                <div class="row">
-                    <span>Corporal</span>
-                    <span class="value">$${formatearNumero(fila.corporal)}</span>
-                </div>
-            </div>
+            <tr>
+                <td>${fila.fecha}</td>
+                <td>$${formatearNumero(fila.cabello)}</td>
+                <td>$${formatearNumero(fila.manos_y_pies)}</td>
+                <td>$${formatearNumero(fila.depilacion)}</td>
+                <td>$${formatearNumero(fila.cejas_y_pestanas)}</td>
+                <td>$${formatearNumero(fila.faciales)}</td>
+                <td>$${formatearNumero(fila.corporal)}</td>
+            </tr>
         `;
     });
+
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
 
     resultadoDiv.innerHTML = html;
 });
