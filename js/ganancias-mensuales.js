@@ -2,10 +2,19 @@
    LOGOUT
 ========================= */
 
+/*
 document.getElementById("logout").addEventListener("click", () => {
     sessionStorage.removeItem("access_token");
     window.location.href = "login.html";
 });
+*/
+const logoutBtn = document.getElementById("logout");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        sessionStorage.removeItem("access_token");
+        window.location.href = "login.html";
+    });
+}
 
 
 /* =========================
