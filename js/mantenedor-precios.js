@@ -66,11 +66,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error(error);
         }
 
-    });
-
-});
-
-
 const selectLevel3 = document.getElementById("level3");
 
 selectLevel2.addEventListener("change", async () => {
@@ -118,4 +113,11 @@ selectLevel2.addEventListener("change", async () => {
     }
 
 });
+        
+    });
+
+});
+
+
+
 
