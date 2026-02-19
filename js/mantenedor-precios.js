@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!token) return;
 
     const selectFamily = document.getElementById("family");
+    const selectLevel2 = document.getElementById("level2");
 
+    // ===== CARGAR FAMILIAS =====
     try {
         const response = await fetch(`${API_BASE}/familias`, {
             headers: {
@@ -12,9 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
 
-        if (!response.ok) {
-            throw new Error("Error al cargar familias");
-        }
+        if (!response.ok) throw new Error("Error al cargar familias");
 
         const familias = await response.json();
 
@@ -29,42 +29,43 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error(error);
     }
 
-});
+    // ===== CARGAR NIVEL2 CUANDO CAMBIA FAMILIA =====
+    selectFamily.addEventListener("change", async () => {
 
-const selectLevel2 = document.getElementById("level2");
+        const token = sessionStorage.getItem("access_token");
+        const family = selectFamily.value;
 
-selectFamily.addEventListener("change", async () => {
+        selectLevel2.innerHTML = '<option value="">Seleccionar...</option>';
+        selectLevel2.disabled = true;
 
-    const family = selectFamily.value;
+        if (!family) return;
 
-    // Resetear
-    selectLevel2.innerHTML = '<option value="">Seleccionar...</option>';
-    selectLevel2.disabled = true;
+        try {
+            const response = await fetch(`${API_BASE}/niveles2?family=${family}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
 
-    if (!family) return;
+            if (!response.ok) throw new Error("Error cargando nivel2");
 
-    try {
-        const response = await fetch(`${API_BASE}/niveles2?family=${family}`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
+            const niveles = await response.json();
 
-        if (!response.ok) throw new Error("Error cargando nivel2");
+            if (niveles.length === 0) return;
 
-        const niveles = await response.json();
+            niveles.forEach(n => {
+                const option = document.createElement("option");
+                option.value = n;
+                option.textContent = n;
+                selectLevel2.appendChild(option);
+            });
 
-        niveles.forEach(n => {
-            const option = document.createElement("option");
-            option.value = n;
-            option.textContent = n;
-            selectLevel2.appendChild(option);
-        });
+            selectLevel2.disabled = false;
 
-        selectLevel2.disabled = false;
+        } catch (error) {
+            console.error(error);
+        }
 
-    } catch (error) {
-        console.error(error);
-    }
+    });
 
 });
