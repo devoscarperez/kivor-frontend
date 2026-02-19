@@ -69,3 +69,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
 });
+
+
+const selectLevel3 = document.getElementById("level3");
+
+selectLevel2.addEventListener("change", async () => {
+
+    const token = sessionStorage.getItem("access_token");
+    const family = selectFamily.value;
+    const level2 = selectLevel2.value;
+
+    // Reset nivel3
+    selectLevel3.innerHTML = '<option value="">Seleccionar...</option>';
+    selectLevel3.disabled = true;
+
+    if (!level2) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/niveles3?family=${encodeURIComponent(family)}&level2=${encodeURIComponent(level2)}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) throw new Error("Error cargando nivel3");
+
+        const niveles = await response.json();
+
+        if (niveles.length === 0) return;
+
+        niveles.forEach(n => {
+            const option = document.createElement("option");
+            option.value = n;
+            option.textContent = n;
+            selectLevel3.appendChild(option);
+        });
+
+        selectLevel3.disabled = false;
+
+    } catch (error) {
+        console.error(error);
+    }
+
+});
+
