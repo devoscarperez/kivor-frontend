@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KIVOR - Precios</title>
-<link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-
 <div class="container">
-  <button class="back-btn" onclick="goMenu()">← Menú</button>
-  <h1>Mantenedor de Precios</h1>
 
-  <div class="filtro">
-    <p style="margin:0;color:#777;font-size:14px;">
-      Próximo paso: filtros + tabla.
-    </p>
-  </div>
+<button class="back-btn" onclick="goMenu()">← Menú</button>
+
+<h1>Mantenedor de Precios</h1>
+
+<div class="filtro">
+
+<label for="family">Familia</label>
+<select id="family">
+    <option value="">Seleccionar...</option>
+</select>
+
+<button id="btnConsultar">Consultar</button>
+
+</div>
+
+<div id="resultado"></div>
+
 </div>
 
 <script>
@@ -24,9 +24,10 @@ const token = sessionStorage.getItem("access_token");
 if (!token) window.location.href = "login.html";
 
 function goMenu() {
-  window.location.href = "index.html";
+    window.location.href = "index.html";
 }
 </script>
 
-</body>
-</html>
+<script src="js/api.js"></script>
+<script src="js/mantenedor-precios.js"></script>
+
