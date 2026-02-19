@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kivor - Ganancias Mensuales</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+
+    <div class="container">
+        
+        <button id="logout" class="logout-btn">Salir</button>
+        
+        <h1>Ganancias Mensuales</h1>
+
+
+        <div class="filtro">
+            <label for="mes">Selecciona un mes:</label>
+            <select id="mes">
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+
+
+            <button id="btnConsultar">Consultar</button>
+        </div>
+
+
+        <div id="resultado"></div>
+    </div>
+
+
+    <script>
+        const token = sessionStorage.getItem("access_token");
+
+
+        if (!token) {
+            window.location.href = "login.html";
+        }
+    </script>
+    <script src="js/api.js"></script>
+    <script src="js/ganancias-mensuales.js"></script>
+</body>
+</html>
+
+
+Archivo: login.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIVOR Login</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+
+<div class="container">
+
+
+    <!-- PANTALLA USUARIO -->
+    <div id="screen-username" class="screen active">
+        <label>Usuario</label>
+        <input type="text" id="username" autocomplete="off" />
+        <button id="btn-username">OK</button>
+    </div>
+
+
+    <!-- PANTALLA PASSWORD -->
+    <div id="screen-password" class="screen">
+        <p class="user-display" id="display-username"></p>
+        <label>Clave</label>
+        <input type="password" id="password" />
+        <div class="buttons">
+            <button id="btn-back">Volver</button>
+            <button id="btn-login">Entrar</button>
+        </div>
+    </div>
+
+
+</div>
+
+
+<script src="js/login.js"></script>
+</body>
+</html>
