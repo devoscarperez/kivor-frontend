@@ -30,3 +30,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 });
+
+const selectLevel2 = document.getElementById("level2");
+
+selectFamily.addEventListener("change", async () => {
+
+    const family = selectFamily.value;
+
+    // Resetear
+    selectLevel2.innerHTML = '<option value="">Seleccionar...</option>';
+    selectLevel2.disabled = true;
+
+    if (!family) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/niveles2?family=${family}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) throw new Error("Error cargando nivel2");
+
+        const niveles = await response.json();
+
+        niveles.forEach(n => {
+            const option = document.createElement("option");
+            option.value = n;
+            option.textContent = n;
+            selectLevel2.appendChild(option);
+        });
+
+        selectLevel2.disabled = false;
+
+    } catch (error) {
+        console.error(error);
+    }
+
+});
