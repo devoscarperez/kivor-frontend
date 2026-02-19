@@ -119,4 +119,11 @@ td:first-child {
     font-size: 14px;
     margin-bottom: 12px;
 }
+.back-btn {
+    background: none;
+    border: none;
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
 
