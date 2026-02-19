@@ -79,6 +79,9 @@ selectLevel2.addEventListener("change", async () => {
     const family = selectFamily.value;
     const level2 = selectLevel2.value;
 
+    console.log("Nivel2 cambió:", level2);
+
+
     // Reset nivel3
     selectLevel3.innerHTML = '<option value="">Seleccionar...</option>';
     selectLevel3.disabled = true;
