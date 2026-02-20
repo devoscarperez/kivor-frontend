@@ -175,3 +175,43 @@ function addOption(select, value) {
     option.textContent = value;
     select.appendChild(option);
 }
+
+function renderTabla(data) {
+
+    const resultadoDiv = document.getElementById("resultado");
+
+    if (!data.length) {
+        resultadoDiv.innerHTML = "<p>No hay datos</p>";
+        return;
+    }
+
+    let html = `
+        <table style="width:100%;margin-top:20px;border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th>Servicio</th>
+                    <th>Lista</th>
+                    <th>Profesional</th>
+                    <th>% Salón</th>
+                    <th>% Profesional</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    data.forEach(row => {
+        html += `
+            <tr>
+                <td>${row.servicekey}</td>
+                <td>${row.listprice}</td>
+                <td>${row.professionalprice}</td>
+                <td>${row.salonpercentage}</td>
+                <td>${row.professionalpercentage}</td>
+            </tr>
+        `;
+    });
+
+    html += "</tbody></table>";
+
+    resultadoDiv.innerHTML = html;
+}
