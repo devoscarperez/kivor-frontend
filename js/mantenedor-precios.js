@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (error) {
             console.error(error);
         }
-
 const selectLevel3 = document.getElementById("level3");
 
 selectLevel2.addEventListener("change", async () => {
@@ -112,7 +111,49 @@ selectLevel2.addEventListener("change", async () => {
         console.error(error);
     }
 
+const selectLevel4 = document.getElementById("level4");
+
+selectLevel3.addEventListener("change", async () => {
+
+    const family = selectFamily.value;
+    const level2 = selectLevel2.value;
+    const level3 = selectLevel3.value;
+
+    selectLevel4.innerHTML = '<option value="">Seleccionar...</option>';
+    selectLevel4.disabled = true;
+
+    if (!level3) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/niveles4?family=${encodeURIComponent(family)}&level2=${encodeURIComponent(level2)}&level3=${encodeURIComponent(level3)}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) throw new Error("Error cargando nivel4");
+
+        const niveles = await response.json();
+
+        niveles.forEach(n => {
+            const option = document.createElement("option");
+            option.value = n;
+            option.textContent = n;
+            selectLevel4.appendChild(option);
+        });
+
+        selectLevel4.disabled = false;
+
+    } catch (error) {
+        console.error(error);
+    }
+
+});    
 });
+    
         
     });
 
