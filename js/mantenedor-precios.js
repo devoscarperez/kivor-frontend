@@ -248,3 +248,14 @@ function truncate(text) {
     return text.length > 15 ? text.substring(0, 15) : text;
 }
 
+function actualizarBreadcrumb() {
+    const family = selectFamily.value || "";
+    const l2 = selectLevel2.value || "";
+    const l3 = selectLevel3.value || "";
+    const l4 = selectLevel4.value || "";
+
+    breadcrumb.textContent = [family, l2, l3, l4]
+        .filter(v => v)
+        .join(" → ") || "Sin filtros";
+}
+
