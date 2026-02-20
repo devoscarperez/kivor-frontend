@@ -5,13 +5,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const selectFamily = document.getElementById("family");
     const selectLevel2 = document.getElementById("level2");
+    const selectLevel3 = document.getElementById("level3");
+    const selectLevel4 = document.getElementById("level4");
 
     // ===== CARGAR FAMILIAS =====
     try {
         const response = await fetch(`${API_BASE}/familias`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+            headers: { "Authorization": `Bearer ${token}` }
         });
 
         if (!response.ok) throw new Error("Error al cargar familias");
@@ -29,35 +29,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error(error);
     }
 
-    // ===== CARGAR NIVEL2 CUANDO CAMBIA FAMILIA =====
+    // ===== NIVEL2 =====
     selectFamily.addEventListener("change", async () => {
 
-        const token = sessionStorage.getItem("access_token");
         const family = selectFamily.value;
 
-        selectLevel2.innerHTML = '<option value="">Seleccionar...</option>';
-        selectLevel2.disabled = true;
+        resetSelect(selectLevel2);
+        resetSelect(selectLevel3);
+        resetSelect(selectLevel4);
 
         if (!family) return;
 
         try {
-            const response = await fetch(`${API_BASE}/niveles2?family=${family}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
+            const response = await fetch(
+                `${API_BASE}/niveles2?family=${encodeURIComponent(family)}`,
+                { headers: { "Authorization": `Bearer ${token}` } }
+            );
 
             if (!response.ok) throw new Error("Error cargando nivel2");
 
             const niveles = await response.json();
 
-            if (niveles.length === 0) return;
-
             niveles.forEach(n => {
-                const option = document.createElement("option");
-                option.value = n;
-                option.textContent = n;
-                selectLevel2.appendChild(option);
+                addOption(selectLevel2, n);
             });
 
             selectLevel2.disabled = false;
@@ -65,100 +59,84 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (error) {
             console.error(error);
         }
-const selectLevel3 = document.getElementById("level3");
+    });
 
-selectLevel2.addEventListener("change", async () => {
+    // ===== NIVEL3 =====
+    selectLevel2.addEventListener("change", async () => {
 
-    const token = sessionStorage.getItem("access_token");
-    const family = selectFamily.value;
-    const level2 = selectLevel2.value;
+        const family = selectFamily.value;
+        const level2 = selectLevel2.value;
 
-    console.log("Nivel2 cambió:", level2);
+        resetSelect(selectLevel3);
+        resetSelect(selectLevel4);
 
+        if (!level2) return;
 
-    // Reset nivel3
-    selectLevel3.innerHTML = '<option value="">Seleccionar...</option>';
-    selectLevel3.disabled = true;
+        try {
+            const response = await fetch(
+                `${API_BASE}/niveles3?family=${encodeURIComponent(family)}&level2=${encodeURIComponent(level2)}`,
+                { headers: { "Authorization": `Bearer ${token}` } }
+            );
 
-    if (!level2) return;
+            if (!response.ok) throw new Error("Error cargando nivel3");
 
-    try {
-        const response = await fetch(
-            `${API_BASE}/niveles3?family=${encodeURIComponent(family)}&level2=${encodeURIComponent(level2)}`,
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            }
-        );
+            const niveles = await response.json();
 
-        if (!response.ok) throw new Error("Error cargando nivel3");
+            niveles.forEach(n => {
+                addOption(selectLevel3, n);
+            });
 
-        const niveles = await response.json();
+            selectLevel3.disabled = false;
 
-        if (niveles.length === 0) return;
+        } catch (error) {
+            console.error(error);
+        }
+    });
 
-        niveles.forEach(n => {
-            const option = document.createElement("option");
-            option.value = n;
-            option.textContent = n;
-            selectLevel3.appendChild(option);
-        });
+    // ===== NIVEL4 =====
+    selectLevel3.addEventListener("change", async () => {
 
-        selectLevel3.disabled = false;
+        const family = selectFamily.value;
+        const level2 = selectLevel2.value;
+        const level3 = selectLevel3.value;
 
-    } catch (error) {
-        console.error(error);
-    }
+        resetSelect(selectLevel4);
 
-const selectLevel4 = document.getElementById("level4");
+        if (!level3) return;
 
-selectLevel3.addEventListener("change", async () => {
+        try {
+            const response = await fetch(
+                `${API_BASE}/niveles4?family=${encodeURIComponent(family)}&level2=${encodeURIComponent(level2)}&level3=${encodeURIComponent(level3)}`,
+                { headers: { "Authorization": `Bearer ${token}` } }
+            );
 
-    const family = selectFamily.value;
-    const level2 = selectLevel2.value;
-    const level3 = selectLevel3.value;
+            if (!response.ok) throw new Error("Error cargando nivel4");
 
-    selectLevel4.innerHTML = '<option value="">Seleccionar...</option>';
-    selectLevel4.disabled = true;
+            const niveles = await response.json();
 
-    if (!level3) return;
+            niveles.forEach(n => {
+                addOption(selectLevel4, n);
+            });
 
-    try {
-        const response = await fetch(
-            `${API_BASE}/niveles4?family=${encodeURIComponent(family)}&level2=${encodeURIComponent(level2)}&level3=${encodeURIComponent(level3)}`,
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            }
-        );
+            selectLevel4.disabled = false;
 
-        if (!response.ok) throw new Error("Error cargando nivel4");
-
-        const niveles = await response.json();
-
-        niveles.forEach(n => {
-            const option = document.createElement("option");
-            option.value = n;
-            option.textContent = n;
-            selectLevel4.appendChild(option);
-        });
-
-        selectLevel4.disabled = false;
-
-    } catch (error) {
-        console.error(error);
-    }
-
-});    
-});
-    
-        
+        } catch (error) {
+            console.error(error);
+        }
     });
 
 });
 
+// ===== UTILIDADES =====
 
+function resetSelect(select) {
+    select.innerHTML = '<option value="">Seleccionar...</option>';
+    select.disabled = true;
+}
 
-
+function addOption(select, value) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+}
