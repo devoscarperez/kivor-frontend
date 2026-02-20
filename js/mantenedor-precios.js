@@ -224,3 +224,15 @@ function renderTabla(data) {
     resultadoDiv.innerHTML = html;
 }
 
+function formatNumber(value) {
+    return Number(value || 0).toLocaleString("es-CL", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+}
+
+function truncate(text) {
+    if (!text) return "";
+    return text.length > 15 ? text.substring(0, 15) : text;
+}
+
