@@ -1,183 +1,200 @@
 document.addEventListener("DOMContentLoaded", async () => {
+
+    const token = sessionStorage.getItem("access_token");
+    if (!token) return;
+
     const overlay = document.getElementById("overlay");
     const btnFiltros = document.getElementById("btnFiltros");
     const btnAplicar = document.getElementById("btnAplicar");
     const breadcrumb = document.getElementById("breadcrumb");
-    
-    btnFiltros.addEventListener("click", () => {
-        overlay.classList.remove("hidden");
-    });
-    
-    btnAplicar.addEventListener("click", async () => {
-            overlay.classList.add("hidden");
-            actualizarBreadcrumb();
-            await cargarPrecios();
-    });
-
-
-    const token = sessionStorage.getItem("access_token");
-    if (!token) return;
 
     const selectFamily = document.getElementById("family");
     const selectLevel2 = document.getElementById("level2");
     const selectLevel3 = document.getElementById("level3");
     const selectLevel4 = document.getElementById("level4");
 
-    // ===== CARGAR FAMILIAS =====
+    const resultadoDiv = document.getElementById("resultado");
+
+    // ========================
+    // Overlay
+    // ========================
+
+    btnFiltros.addEventListener("click", () => {
+        overlay.classList.remove("hidden");
+    });
+
+    btnAplicar.addEventListener("click", async () => {
+        overlay.classList.add("hidden");
+        actualizarBreadcrumb();
+        await cargarPrecios();
+    });
+
+    // ========================
+    // Cargar Familias
+    // ========================
+
     try {
         const response = await fetch(`${API_BASE}/familias`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
-        if (!response.ok) throw new Error("Error al cargar familias");
-
         const familias = await response.json();
 
         familias.forEach(f => {
-            const option = document.createElement("option");
-            option.value = f;
-            option.textContent = f;
-            selectFamily.appendChild(option);
+            addOption(selectFamily, f);
         });
 
     } catch (error) {
         console.error(error);
     }
 
-    // ===== NIVEL2 =====
-    selectFamily.addEventListener("change", async () => {
+    // ========================
+    // Nivel 2
+    // ========================
 
-        const family = selectFamily.value;
+    selectFamily.addEventListener("change", async () => {
 
         resetSelect(selectLevel2);
         resetSelect(selectLevel3);
         resetSelect(selectLevel4);
 
-        if (!family) return;
+        if (!selectFamily.value) return;
 
-        try {
-            const response = await fetch(
-                `${API_BASE}/niveles2?family=${encodeURIComponent(family)}`,
-                { headers: { "Authorization": `Bearer ${token}` } }
-            );
+        const response = await fetch(
+            `${API_BASE}/niveles2?family=${encodeURIComponent(selectFamily.value)}`,
+            { headers: { "Authorization": `Bearer ${token}` } }
+        );
 
-            if (!response.ok) throw new Error("Error cargando nivel2");
-
-            const niveles = await response.json();
-
-            niveles.forEach(n => {
-                addOption(selectLevel2, n);
-            });
-
-            selectLevel2.disabled = false;
-
-        } catch (error) {
-            console.error(error);
-        }
+        const niveles = await response.json();
+        niveles.forEach(n => addOption(selectLevel2, n));
+        selectLevel2.disabled = false;
     });
 
-    // ===== NIVEL3 =====
-    selectLevel2.addEventListener("change", async () => {
+    // ========================
+    // Nivel 3
+    // ========================
 
-        const family = selectFamily.value;
-        const level2 = selectLevel2.value;
+    selectLevel2.addEventListener("change", async () => {
 
         resetSelect(selectLevel3);
         resetSelect(selectLevel4);
 
-        if (!level2) return;
+        if (!selectLevel2.value) return;
 
-        try {
-            const response = await fetch(
-                `${API_BASE}/niveles3?family=${encodeURIComponent(family)}&level2=${encodeURIComponent(level2)}`,
-                { headers: { "Authorization": `Bearer ${token}` } }
-            );
+        const response = await fetch(
+            `${API_BASE}/niveles3?family=${encodeURIComponent(selectFamily.value)}&level2=${encodeURIComponent(selectLevel2.value)}`,
+            { headers: { "Authorization": `Bearer ${token}` } }
+        );
 
-            if (!response.ok) throw new Error("Error cargando nivel3");
-
-            const niveles = await response.json();
-
-            niveles.forEach(n => {
-                addOption(selectLevel3, n);
-            });
-
-            selectLevel3.disabled = false;
-
-        } catch (error) {
-            console.error(error);
-        }
+        const niveles = await response.json();
+        niveles.forEach(n => addOption(selectLevel3, n));
+        selectLevel3.disabled = false;
     });
 
-    // ===== NIVEL4 =====
-    selectLevel3.addEventListener("change", async () => {
+    // ========================
+    // Nivel 4
+    // ========================
 
-        const family = selectFamily.value;
-        const level2 = selectLevel2.value;
-        const level3 = selectLevel3.value;
+    selectLevel3.addEventListener("change", async () => {
 
         resetSelect(selectLevel4);
 
-        if (!level3) return;
+        if (!selectLevel3.value) return;
 
-        try {
-            const response = await fetch(
-                `${API_BASE}/niveles4?family=${encodeURIComponent(family)}&level2=${encodeURIComponent(level2)}&level3=${encodeURIComponent(level3)}`,
-                { headers: { "Authorization": `Bearer ${token}` } }
-            );
-
-            if (!response.ok) throw new Error("Error cargando nivel4");
-
-            const niveles = await response.json();
-
-            niveles.forEach(n => {
-                addOption(selectLevel4, n);
-            });
-
-            selectLevel4.disabled = false;
-
-        } catch (error) {
-            console.error(error);
-        }
-    });
-
-const btnConsultar = document.getElementById("btnConsultar");
-const resultadoDiv = document.getElementById("resultado");
-
-btnConsultar.addEventListener("click", async () => {
-
-    const family = selectFamily.value;
-    const level2 = selectLevel2.value;
-    const level3 = selectLevel3.value;
-    const level4 = selectLevel4.value;
-
-    if (!family) return;
-
-    try {
         const response = await fetch(
-            `${API_BASE}/precios?family=${encodeURIComponent(family)}`
-            + `&level2=${encodeURIComponent(level2)}`
-            + `&level3=${encodeURIComponent(level3)}`
-            + `&level4=${encodeURIComponent(level4)}`,
-            {
-                headers: { "Authorization": `Bearer ${token}` }
-            }
+            `${API_BASE}/niveles4?family=${encodeURIComponent(selectFamily.value)}&level2=${encodeURIComponent(selectLevel2.value)}&level3=${encodeURIComponent(selectLevel3.value)}`,
+            { headers: { "Authorization": `Bearer ${token}` } }
         );
 
-        if (!response.ok) throw new Error("Error cargando precios");
+        const niveles = await response.json();
+        niveles.forEach(n => addOption(selectLevel4, n));
+        selectLevel4.disabled = false;
+    });
+
+    // ========================
+    // FUNCIONES INTERNAS
+    // ========================
+
+    function actualizarBreadcrumb() {
+        breadcrumb.textContent = [
+            selectFamily.value,
+            selectLevel2.value,
+            selectLevel3.value,
+            selectLevel4.value
+        ].filter(v => v).join(" → ") || "Sin filtros";
+    }
+
+    async function cargarPrecios() {
+
+        if (!selectFamily.value) return;
+
+        let url = `${API_BASE}/precios?family=${encodeURIComponent(selectFamily.value)}`;
+
+        if (selectLevel2.value)
+            url += `&level2=${encodeURIComponent(selectLevel2.value)}`;
+
+        if (selectLevel3.value)
+            url += `&level3=${encodeURIComponent(selectLevel3.value)}`;
+
+        if (selectLevel4.value)
+            url += `&level4=${encodeURIComponent(selectLevel4.value)}`;
+
+        const response = await fetch(url, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
 
         const data = await response.json();
-
         renderTabla(data);
-
-    } catch (error) {
-        console.error(error);
     }
+
+    function renderTabla(data) {
+
+        if (!data.length) {
+            resultadoDiv.innerHTML = "<p>No hay datos</p>";
+            return;
+        }
+
+        let html = `
+            <table class="tabla-precios">
+                <thead>
+                    <tr>
+                        <th>Family</th>
+                        <th>Nivel2</th>
+                        <th>Nivel3</th>
+                        <th>Nivel4</th>
+                        <th class="num">Lista</th>
+                        <th class="num">Profesional</th>
+                        <th class="num">% Salón</th>
+                        <th class="num">% Profesional</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        data.forEach(row => {
+            html += `
+                <tr>
+                    <td>${truncate(row.family)}</td>
+                    <td>${truncate(row.level2)}</td>
+                    <td>${truncate(row.level3)}</td>
+                    <td>${truncate(row.level4)}</td>
+                    <td class="num">${formatNumber(row.listprice)}</td>
+                    <td class="num">${formatNumber(row.professionalprice)}</td>
+                    <td class="num">${formatNumber(row.salonpercentage)}</td>
+                    <td class="num">${formatNumber(row.professionalpercentage)}</td>
+                </tr>
+            `;
+        });
+
+        html += "</tbody></table>";
+        resultadoDiv.innerHTML = html;
+    }
+
 });
 
-
-});
-
-// ===== UTILIDADES =====
+// ========================
+// UTILIDADES GLOBALES
+// ========================
 
 function resetSelect(select) {
     select.innerHTML = '<option value="">Seleccionar...</option>';
@@ -191,53 +208,6 @@ function addOption(select, value) {
     select.appendChild(option);
 }
 
-function renderTabla(data) {
-
-    const resultadoDiv = document.getElementById("resultado");
-
-    if (!data.length) {
-        resultadoDiv.innerHTML = "<p>No hay datos</p>";
-        return;
-    }
-
-    let html = `
-        <table class="tabla-precios">
-            <thead>
-                <tr>
-                    <th>Family</th>
-                    <th>Nivel2</th>
-                    <th>Nivel3</th>
-                    <th>Nivel4</th>
-                    <th class="num">Lista</th>
-                    <th class="num">Profesional</th>
-                    <th class="num">% Salón</th>
-                    <th class="num">% Profesional</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    data.forEach(row => {
-        html += `
-            <tr>
-                <td>${truncate(row.family)}</td>
-                <td>${truncate(row.level2)}</td>
-                <td>${truncate(row.level3)}</td>
-                <td>${truncate(row.level4)}</td>
-                <td class="num">${formatNumber(row.listprice)}</td>
-                <td class="num">${formatNumber(row.professionalprice)}</td>
-                <td class="num">${formatNumber(row.salonpercentage)}</td>
-                <td class="num">${formatNumber(row.professionalpercentage)}</td>
-            </tr>
-        `;
-    });
-
-    html += "</tbody></table>";
-
-    resultadoDiv.innerHTML = html;
-}
-
-
 function formatNumber(value) {
     return Number(value || 0).toLocaleString("es-CL", {
         minimumFractionDigits: 0,
@@ -249,45 +219,3 @@ function truncate(text) {
     if (!text) return "";
     return text.length > 15 ? text.substring(0, 15) : text;
 }
-
-function actualizarBreadcrumb() {
-    const family = selectFamily.value || "";
-    const l2 = selectLevel2.value || "";
-    const l3 = selectLevel3.value || "";
-    const l4 = selectLevel4.value || "";
-
-    breadcrumb.textContent = [family, l2, l3, l4]
-        .filter(v => v)
-        .join(" → ") || "Sin filtros";
-}
-
-async function cargarPrecios() {
-
-    const family = selectFamily.value;
-    const level2 = selectLevel2.value;
-    const level3 = selectLevel3.value;
-    const level4 = selectLevel4.value;
-
-    if (!family) return;
-
-    let url = `${API_BASE}/precios?family=${encodeURIComponent(family)}`;
-
-    if (level2) url += `&level2=${encodeURIComponent(level2)}`;
-    if (level3) url += `&level3=${encodeURIComponent(level3)}`;
-    if (level4) url += `&level4=${encodeURIComponent(level4)}`;
-
-    try {
-        const response = await fetch(url, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        if (!response.ok) throw new Error("Error cargando precios");
-
-        const data = await response.json();
-        renderTabla(data);
-
-    } catch (error) {
-        console.error(error);
-    }
-}
-
