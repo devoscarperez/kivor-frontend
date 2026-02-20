@@ -1,4 +1,17 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    const overlay = document.getElementById("overlay");
+    const btnFiltros = document.getElementById("btnFiltros");
+    const btnAplicar = document.getElementById("btnAplicar");
+    const breadcrumb = document.getElementById("breadcrumb");
+    
+    btnFiltros.addEventListener("click", () => {
+        overlay.classList.remove("hidden");
+    });
+    
+    btnAplicar.addEventListener("click", () => {
+        overlay.classList.add("hidden");
+        actualizarBreadcrumb();
+    });
 
     const token = sessionStorage.getItem("access_token");
     if (!token) return;
