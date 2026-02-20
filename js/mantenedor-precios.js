@@ -193,7 +193,6 @@ function renderTabla(data) {
                     <th>Nivel2</th>
                     <th>Nivel3</th>
                     <th>Nivel4</th>
-                    <th>Servicio</th>
                     <th class="num">Lista</th>
                     <th class="num">Profesional</th>
                     <th class="num">% Salón</th>
@@ -210,7 +209,6 @@ function renderTabla(data) {
                 <td>${truncate(row.level2)}</td>
                 <td>${truncate(row.level3)}</td>
                 <td>${truncate(row.level4)}</td>
-                <td>${row.servicekey}</td>
                 <td class="num">${formatNumber(row.listprice)}</td>
                 <td class="num">${formatNumber(row.professionalprice)}</td>
                 <td class="num">${formatNumber(row.salonpercentage)}</td>
@@ -223,6 +221,7 @@ function renderTabla(data) {
 
     resultadoDiv.innerHTML = html;
 }
+
 
 function formatNumber(value) {
     return Number(value || 0).toLocaleString("es-CL", {
