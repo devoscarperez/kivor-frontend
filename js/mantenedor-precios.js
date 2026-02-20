@@ -186,14 +186,18 @@ function renderTabla(data) {
     }
 
     let html = `
-        <table style="width:100%;margin-top:20px;border-collapse:collapse;">
+        <table class="tabla-precios">
             <thead>
                 <tr>
+                    <th>Family</th>
+                    <th>Nivel2</th>
+                    <th>Nivel3</th>
+                    <th>Nivel4</th>
                     <th>Servicio</th>
-                    <th>Lista</th>
-                    <th>Profesional</th>
-                    <th>% Salón</th>
-                    <th>% Profesional</th>
+                    <th class="num">Lista</th>
+                    <th class="num">Profesional</th>
+                    <th class="num">% Salón</th>
+                    <th class="num">% Profesional</th>
                 </tr>
             </thead>
             <tbody>
@@ -202,11 +206,15 @@ function renderTabla(data) {
     data.forEach(row => {
         html += `
             <tr>
+                <td>${truncate(row.family)}</td>
+                <td>${truncate(row.level2)}</td>
+                <td>${truncate(row.level3)}</td>
+                <td>${truncate(row.level4)}</td>
                 <td>${row.servicekey}</td>
-                <td>${row.listprice}</td>
-                <td>${row.professionalprice}</td>
-                <td>${row.salonpercentage}</td>
-                <td>${row.professionalpercentage}</td>
+                <td class="num">${formatNumber(row.listprice)}</td>
+                <td class="num">${formatNumber(row.professionalprice)}</td>
+                <td class="num">${formatNumber(row.salonpercentage)}</td>
+                <td class="num">${formatNumber(row.professionalpercentage)}</td>
             </tr>
         `;
     });
@@ -215,3 +223,4 @@ function renderTabla(data) {
 
     resultadoDiv.innerHTML = html;
 }
+
