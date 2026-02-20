@@ -8,10 +8,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         overlay.classList.remove("hidden");
     });
     
-    btnAplicar.addEventListener("click", () => {
-        overlay.classList.add("hidden");
-        actualizarBreadcrumb();
+    btnAplicar.addEventListener("click", async () => {
+            overlay.classList.add("hidden");
+            actualizarBreadcrumb();
+            await cargarPrecios();
     });
+
 
     const token = sessionStorage.getItem("access_token");
     if (!token) return;
@@ -257,5 +259,35 @@ function actualizarBreadcrumb() {
     breadcrumb.textContent = [family, l2, l3, l4]
         .filter(v => v)
         .join(" → ") || "Sin filtros";
+}
+
+async function cargarPrecios() {
+
+    const family = selectFamily.value;
+    const level2 = selectLevel2.value;
+    const level3 = selectLevel3.value;
+    const level4 = selectLevel4.value;
+
+    if (!family) return;
+
+    let url = `${API_BASE}/precios?family=${encodeURIComponent(family)}`;
+
+    if (level2) url += `&level2=${encodeURIComponent(level2)}`;
+    if (level3) url += `&level3=${encodeURIComponent(level3)}`;
+    if (level4) url += `&level4=${encodeURIComponent(level4)}`;
+
+    try {
+        const response = await fetch(url, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error("Error cargando precios");
+
+        const data = await response.json();
+        renderTabla(data);
+
+    } catch (error) {
+        console.error(error);
+    }
 }
 
