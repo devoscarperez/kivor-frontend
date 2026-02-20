@@ -125,6 +125,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+const btnConsultar = document.getElementById("btnConsultar");
+const resultadoDiv = document.getElementById("resultado");
+
+btnConsultar.addEventListener("click", async () => {
+
+    const family = selectFamily.value;
+    const level2 = selectLevel2.value;
+    const level3 = selectLevel3.value;
+    const level4 = selectLevel4.value;
+
+    if (!family) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/precios?family=${encodeURIComponent(family)}`
+            + `&level2=${encodeURIComponent(level2)}`
+            + `&level3=${encodeURIComponent(level3)}`
+            + `&level4=${encodeURIComponent(level4)}`,
+            {
+                headers: { "Authorization": `Bearer ${token}` }
+            }
+        );
+
+        if (!response.ok) throw new Error("Error cargando precios");
+
+        const data = await response.json();
+
+        renderTabla(data);
+
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+
 });
 
 // ===== UTILIDADES =====
