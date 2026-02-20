@@ -1,34 +1,60 @@
-<div class="container">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mantenedor de Precios</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/mantenedor.css">
+</head>
+<body>
 
-<button class="back-btn" onclick="goMenu()">← Menú</button>
+<div class="container-mant">
 
-<h1>Mantenedor de Precios</h1>
+    <!-- Header -->
+    <div class="header-mant">
+        <button class="back-btn" onclick="goMenu()">←</button>
+        <h1>Precios</h1>
+        <button id="btnFiltros" class="btn-filtro">⚙</button>
+    </div>
 
-<div class="filtro">
+    <!-- Breadcrumb -->
+    <div id="breadcrumb" class="breadcrumb">
+        Selecciona filtros
+    </div>
 
-<label for="family">Familia</label>
-<select id="family">
-    <option value="">Seleccionar...</option>
-</select>
-<label for="level2">Nivel 2</label>
-<select id="level2" disabled>
-    <option value="">Seleccionar...</option>
-</select>
-<label for="level3">Nivel 3</label>
-<select id="level3" disabled>
-    <option value="">Seleccionar...</option>
-</select>
-<label for="level4">Nivel 4</label>
-<select id="level4" disabled>
-    <option value="">Seleccionar...</option>
-</select>
-
-<button id="btnConsultar">Consultar</button>
+    <!-- Tabla -->
+    <div class="table-wrapper">
+        <div id="resultado"></div>
+    </div>
 
 </div>
 
-<div id="resultado"></div>
+<!-- Overlay Filtros -->
+<div id="overlay" class="overlay hidden">
+    <div class="panel-filtros">
 
+        <h2>Filtros</h2>
+
+        <select id="family">
+            <option value="">Familia</option>
+        </select>
+
+        <select id="level2" disabled>
+            <option value="">Nivel2</option>
+        </select>
+
+        <select id="level3" disabled>
+            <option value="">Nivel3</option>
+        </select>
+
+        <select id="level4" disabled>
+            <option value="">Nivel4</option>
+        </select>
+
+        <button id="btnAplicar">Aplicar</button>
+
+    </div>
 </div>
 
 <script>
@@ -43,3 +69,5 @@ function goMenu() {
 <script src="js/api.js"></script>
 <script src="js/mantenedor-precios.js"></script>
 
+</body>
+</html>
