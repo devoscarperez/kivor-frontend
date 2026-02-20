@@ -127,3 +127,36 @@ td:first-child {
     margin-bottom: 12px;
 }
 
+.tabla-precios {
+    width: 100%;
+    margin-top: 25px;
+    border-collapse: collapse;
+    font-family: "Courier New", monospace;
+    font-size: 12px; /* Aproximadamente 10 CPI */
+    color: #222;
+}
+
+.tabla-precios th,
+.tabla-precios td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #e5e5e5;
+    font-weight: normal;
+    max-width: 15ch;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tabla-precios th {
+    color: #555;
+    background: #f7f7f7;
+}
+
+.tabla-precios td.num {
+    text-align: right;
+}
+
+.tabla-precios tbody tr:hover {
+    background-color: #f0f0f0;
+    transition: background 0.15s ease;
+}
