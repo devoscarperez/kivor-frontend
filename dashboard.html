@@ -1,47 +1,65 @@
-const API_BASE = "https://kivor.onrender.com";
-const token = sessionStorage.getItem("access_token");
-
-if (!token) {
-    window.location.href = "login.html";
-}
-
-async function cargarMenu() {
-
-    const response = await fetch(`${API_BASE}/menu`, {
-        headers: {
-            "Authorization": `Bearer ${token}`
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>KIVOR Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
         }
-    });
 
-    if (response.status === 401) {
-        sessionStorage.clear();
-        window.location.href = "login.html";
-        return;
-    }
+        .sidebar {
+            width: 220px;
+            background: #111;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+        }
 
-    const menus = await response.json();
+        .menu-item {
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
 
-    const container = document.getElementById("menu");
+        .menu-item:hover {
+            background: #333;
+        }
 
-    menus.forEach(menu => {
+        .content {
+            flex: 1;
+            padding: 30px;
+        }
 
-        const item = document.createElement("div");
-        item.classList.add("menu-item");
-        item.innerText = menu.menu_name;
+        .topbar {
+            display: flex;
+            justify-content: flex-end;
+        }
 
-        item.onclick = () => {
-            if (menu.menu_path) {
-                window.location.href = menu.menu_path;
-            }
-        };
+        .logout {
+            cursor: pointer;
+            color: red;
+        }
+    </style>
+</head>
+<body>
 
-        container.appendChild(item);
-    });
-}
+<div class="sidebar">
+    <h2>KIVOR</h2>
+    <div id="menu"></div>
+</div>
 
-function logout() {
-    sessionStorage.clear();
-    window.location.href = "login.html";
-}
+<div class="content">
+    <div class="topbar">
+        <span class="logout" onclick="logout()">Cerrar sesión</span>
+    </div>
+    <h1>Bienvenido</h1>
+</div>
 
-cargarMenu();
+<script src="js/dashboard.js"></script>
+</body>
+</html>
