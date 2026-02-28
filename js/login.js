@@ -95,7 +95,7 @@ async function loginFinal() {
         sessionStorage.setItem("access_token", data.access_token);
 
         // Redirigir al dashboard
-        window.location.href = "index.html";
+        window.location.href = "dashboard.html";
 
     } catch (error) {
         alert("Error de conexión");
