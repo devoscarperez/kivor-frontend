@@ -81,10 +81,18 @@ function renderMenuItem(menu) {
         return wrapper;
 
     } else {
-        item.onclick = () => {
-            if (menu.menu_path) {
-                window.location.href = menu.menu_path;
-            }
+   item.onclick = () => {
+        if (menu.menu_path) {
+
+            // Quitar active de todos
+            document.querySelectorAll(".menu-item")
+                .forEach(m => m.classList.remove("active"));
+
+            // Marcar el actual
+            item.classList.add("active");
+
+            window.location.href = menu.menu_path;
+        }
         };
         return item;
     }
