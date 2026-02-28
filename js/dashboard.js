@@ -39,4 +39,9 @@ async function cargarMenu() {
     });
 }
 
+function logout() {
+    sessionStorage.clear();
+    window.location.href = "login.html";
+}
+
 cargarMenu();
