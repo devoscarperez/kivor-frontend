@@ -63,10 +63,15 @@ function renderMenuItem(menu) {
         item.classList.add("parent");
         
         item.onclick = () => {
-            const isOpen = subContainer.style.display === "block";
-            subContainer.style.display = isOpen ? "none" : "block";
         
-            item.classList.toggle("expanded", !isOpen);
+            const siblings = item.parentElement.parentElement.querySelectorAll(".submenu");
+            siblings.forEach(s => s.style.display = "none");
+        
+            const parents = item.parentElement.parentElement.querySelectorAll(".parent");
+            parents.forEach(p => p.classList.remove("expanded"));
+        
+            subContainer.style.display = "block";
+            item.classList.add("expanded");
         };
 
         const wrapper = document.createElement("div");
