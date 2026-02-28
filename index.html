@@ -12,34 +12,121 @@
 
 <h1>KIVOR</h1>
 
-<button class="menu-btn" onclick="goTo('ganancias-mensuales.html')">
-Ganancias
-</button>
-
-<button class="menu-btn" onclick="goTo('mantenedor-precios.html')">
-Mantenedor de Precios
-</button>
-
-<button class="menu-btn logout" onclick="logout()">
-Salir
-</button>
+<div id="menu-container"></div>
 
 </div>
 
 <script>
+
+// =============================
+// VALIDAR SESIÓN
+// =============================
+
 const token = sessionStorage.getItem("access_token");
+
 if (!token) {
     window.location.href = "login.html";
 }
 
-function goTo(page) {
-    window.location.href = page;
+// =============================
+// CARGAR MENÚ DESDE BACKEND
+// =============================
+
+async function loadMenu() {
+
+    try {
+
+        const response = await fetch("/api/menu", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (!response.ok) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const menus = await response.json();
+
+        renderMenu(menus);
+
+    } catch (error) {
+        console.error("Error cargando menú:", error);
+        window.location.href = "login.html";
+    }
 }
+
+
+// =============================
+// RENDERIZAR MENÚ JERÁRQUICO
+// =============================
+
+function renderMenu(menus) {
+
+    const container = document.getElementById("menu-container");
+
+    // Separar niveles
+    const rootMenus = menus.filter(m => m.menu_parent_id === null);
+
+    rootMenus.forEach(root => {
+
+        const button = createButton(root);
+        container.appendChild(button);
+
+        // Buscar hijos
+        const children = menus.filter(m => m.menu_parent_id === root.menu_id);
+
+        children.forEach(child => {
+            const childButton = createButton(child, true);
+            container.appendChild(childButton);
+        });
+
+    });
+
+}
+
+
+// =============================
+// CREAR BOTONES
+// =============================
+
+function createButton(menu, isChild = false) {
+
+    const button = document.createElement("button");
+
+    button.className = isChild ? "menu-btn child" : "menu-btn";
+
+    button.innerText = menu.menu_name;
+
+    if (menu.menu_path === "logout") {
+        button.classList.add("logout");
+        button.onclick = logout;
+    } else if (menu.menu_path) {
+        button.onclick = () => window.location.href = menu.menu_path;
+    }
+
+    return button;
+}
+
+
+// =============================
+// LOGOUT
+// =============================
 
 function logout() {
     sessionStorage.removeItem("access_token");
     window.location.href = "login.html";
 }
+
+
+// =============================
+// INICIALIZAR
+// =============================
+
+loadMenu();
+
 </script>
 
 </body>
