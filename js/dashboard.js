@@ -60,9 +60,13 @@ function renderMenuItem(menu) {
             subContainer.appendChild(renderMenuItem(child));
         });
 
+        item.classList.add("parent");
+        
         item.onclick = () => {
-            subContainer.style.display =
-                subContainer.style.display === "none" ? "block" : "none";
+            const isOpen = subContainer.style.display === "block";
+            subContainer.style.display = isOpen ? "none" : "block";
+        
+            item.classList.toggle("expanded", !isOpen);
         };
 
         const wrapper = document.createElement("div");
