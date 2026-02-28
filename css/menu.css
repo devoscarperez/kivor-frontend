@@ -52,3 +52,13 @@ h1 {
 .menu-item:hover {
     background: #222;
 }
+
+.submenu .menu-item {
+    font-size: 14px;
+    padding-left: 18px;
+}
+
+.submenu .submenu .menu-item {
+    font-size: 13px;
+    padding-left: 30px;
+}
