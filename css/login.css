@@ -1,60 +1,97 @@
+:root{
+  --kivor-base: #111111;          /* Negro carbón */
+  --kivor-primary: #D97706;       /* Ámbar fuerte */
+  --kivor-secondary: #2E2E2E;     /* Gris grafito */
+  --kivor-background: #F4F4F5;    /* Gris ultra claro */
+  --kivor-success: #166534;       /* Verde profesional */
+  --kivor-error: #991B1B;         /* Rojo profundo */
+
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--kivor-background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: var(--kivor-base);
 }
 
 .container {
-    width: 90%;
-    max-width: 350px;
+  width: 92%;
+  max-width: 420px;              /* clave: se ve bien en móvil y en 27" */
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
 .screen {
-    display: none;
-    flex-direction: column;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.screen.active {
-    display: flex;
-}
+.screen.active { display: flex; }
 
 label {
-    font-size: 18px;
-    margin-bottom: 8px;
+  font-size: 16px;
+  color: var(--kivor-secondary);
 }
 
 input {
-    padding: 14px;
-    font-size: 18px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+  padding: 14px;
+  font-size: 18px;
+  border: 1px solid #D1D5DB;
+  border-radius: var(--radius);
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--kivor-primary);
+  box-shadow: 0 0 0 3px rgba(217,119,6,0.18);
 }
 
 button {
-    padding: 14px;
-    font-size: 18px;
-    border: none;
-    border-radius: 6px;
-    background: black;
-    color: white;
+  padding: 14px;
+  font-size: 18px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--kivor-base);
+  color: white;
 }
 
-button:active {
-    opacity: 0.8;
+button:active { opacity: 0.9; }
+
+#btn-username, #btn-login {
+  background: var(--kivor-primary); /* acción principal en ámbar */
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .buttons {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  gap: 10px;
+}
+
+#btn-back {
+  background: #E5E7EB;
+  color: var(--kivor-base);
+  font-weight: 600;
+  flex: 1;
+}
+
+#btn-login {
+  flex: 1;
 }
 
 .user-display {
-    font-size: 20px;
-    margin-bottom: 20px;
-    font-weight: bold;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--kivor-base);       /* el dato manda */
 }
