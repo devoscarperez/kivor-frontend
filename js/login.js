@@ -21,13 +21,25 @@ btnLogin.disabled = true;
    PASO 1: VALIDAR USUARIO
 ===================== */
 
-usernameInput.addEventListener("input", () => limpiarError("username"));
-passwordInput.addEventListener("input", () => limpiarError("password"));
+// usernameInput.addEventListener("input", () => limpiarError("username"));
+// passwordInput.addEventListener("input", () => limpiarError("password"));
 
 btnUsername.addEventListener("click", validarUsuario);
 usernameInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") validarUsuario();
 });
+
+usernameInput.addEventListener("input", () => {
+    limpiarError("username");
+    btnUsername.disabled = usernameInput.value.trim() === "";
+});
+
+passwordInput.addEventListener("input", () => {
+    limpiarError("password");
+    btnLogin.disabled = passwordInput.value.trim() === "";
+});
+
+
 
 async function validarUsuario() {
 
@@ -120,6 +132,7 @@ async function loginFinal() {
 
 btnBack.addEventListener("click", () => {
     passwordInput.value = "";
+    btnLogin.disabled = true;
     screenPassword.classList.remove("active");
     screenUsername.classList.add("active");
 });
