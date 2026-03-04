@@ -118,7 +118,7 @@ button:active { opacity: 0.9; }
 }
 
 .brand-underline {
-  width: 70px;
+  width: 90px;
   height: 3px;
   background-color: var(--kivor-primary);
   margin: 16px auto 14px;
