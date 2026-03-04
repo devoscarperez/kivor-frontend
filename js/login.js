@@ -113,3 +113,22 @@ btnBack.addEventListener("click", () => {
     screenPassword.classList.remove("active");
     screenUsername.classList.add("active");
 });
+
+
+function mostrarError(campo, mensaje) {
+    const input = document.getElementById(campo);
+    const error = document.getElementById(`${campo}-error`);
+
+    input.classList.add("input-invalid");
+    error.textContent = mensaje;
+    error.classList.add("active");
+}
+
+function limpiarError(campo) {
+    const input = document.getElementById(campo);
+    const error = document.getElementById(`${campo}-error`);
+
+    input.classList.remove("input-invalid");
+    error.textContent = "";
+    error.classList.remove("active");
+}
