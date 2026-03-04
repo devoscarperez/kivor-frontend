@@ -175,7 +175,7 @@ function limpiarError(campo) {
 function applyTranslations() {
     document.getElementById("label-username").textContent = t("username");
     document.getElementById("label-password").textContent = t("password");
-    document.getElementById("btn-username").textContent = t("login");
+    document.getElementById("btn-username").textContent = t("btn_username");
     document.getElementById("btn-login").textContent = t("login");
     document.getElementById("btn-back").textContent = t("back");
     document.getElementById("brand-tagline").textContent = t("tagline");
