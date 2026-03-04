@@ -51,6 +51,9 @@ async function validarUsuario() {
 
    try {
 
+        btnUsername.disabled = true;
+        btnUsername.textContent = "Validando...";
+      
         // 🔹 AQUÍ CAMBIA: ahora llama a /login-username
         const response = await fetch(`${API_BASE}/login-username`, {
             method: "POST",
@@ -59,16 +62,20 @@ async function validarUsuario() {
             },
             body: JSON.stringify({ username })
         });
-
+      
         if (!response.ok) {
             // alert("Usuario no válido");
+           btnUsername.disabled = false;
+           btnUsername.textContent = t("login");
            mostrarError("username", t("invalid_user"));
             return;
         }
-
+              
         currentUsername = username;
         displayUsername.textContent = username;
 
+        btnUsername.textContent = t("login");
+      
         screenUsername.classList.remove("active");
         screenPassword.classList.add("active");
       
