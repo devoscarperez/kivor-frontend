@@ -40,7 +40,8 @@ async function validarUsuario() {
         });
 
         if (!response.ok) {
-            alert("Usuario no válido");
+            // alert("Usuario no válido");
+           mostrarError("username", "Usuario no válido");
             return;
         }
 
@@ -85,7 +86,8 @@ async function loginFinal() {
         });
 
         if (!response.ok) {
-            alert("Clave incorrecta");
+           // alert("Clave incorrecta");
+           mostrarError("password", "Credenciales incorrectas");
             return;
         }
 
