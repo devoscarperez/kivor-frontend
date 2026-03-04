@@ -28,10 +28,12 @@ usernameInput.addEventListener("keypress", (e) => {
 
 async function validarUsuario() {
 
-    const username = usernameInput.value.trim();
-    if (!username) return;
+   limpiarError("username");  // 🔥 limpiar antes de validar
 
-    try {
+   const username = usernameInput.value.trim().toLowerCase();
+   if (!username) return;
+
+   try {
 
         // 🔹 AQUÍ CAMBIA: ahora llama a /login-username
         const response = await fetch(`${API_BASE}/login-username`, {
@@ -72,6 +74,8 @@ passwordInput.addEventListener("keypress", (e) => {
 
 async function loginFinal() {
 
+    limpiarError("password");  // 🔥 limpiar antes de validar
+   
     const password = passwordInput.value;
     if (!password) return;
 
