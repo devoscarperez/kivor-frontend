@@ -26,7 +26,7 @@
 
         <!-- PANTALLA USUARIO -->
         <div id="screen-username" class="screen active">
-            <label>Usuario</label>
+            <label id="label-username"></label>
             <input type="text" id="username" autocomplete="off" />
             <p class="input-error" id="username-error"></p>
             <button id="btn-username">OK</button>
@@ -35,19 +35,22 @@
         <!-- PANTALLA PASSWORD -->
         <div id="screen-password" class="screen">
             <p class="user-display" id="display-username"></p>
-            <label>Clave</label>
+            <label id="label-password"></label>
             <input type="password" id="password" />
             <p class="input-error" id="password-error"></p>
             <div class="buttons">
-                <button id="btn-back">Volver</button>
-                <button id="btn-login">Entrar</button>
+                <button id="btn-username"></button>
+                <button id="btn-back"></button>
+                <button id="btn-login"></button>
             </div>
+            <p id="brand-tagline"></p>
         </div>
 
     </div>
 
 </div>
 
+<script src="js/i18n.js"></script>
 <script src="js/login.js"></script>
 </body>
 </html>
