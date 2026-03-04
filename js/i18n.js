@@ -5,10 +5,11 @@ const translations = {
     username: "Usuario",
     password: "Clave",
     login: "Entrar",
+    login_button: "Continue",
     back: "Volver",
     invalid_user: "Usuario no válido",
     invalid_credentials: "Credenciales incorrectas",
-    tagline: "Plataforma de gestión profesional"
+    tagline: "Opera tu salón como empresa"
   },
   en: {
     username: "User",
@@ -17,7 +18,8 @@ const translations = {
     back: "Back",
     invalid_user: "Invalid user",
     invalid_credentials: "Invalid credentials",
-    tagline: "Professional management platform"
+    tagline: "Operate your salon like a business",
+    continue_button: "Continuar"
   }
 };
 
