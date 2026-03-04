@@ -92,7 +92,7 @@ async function validarUsuario() {
         currentUsername = username;
         displayUsername.textContent = username;
 
-        btnUsername.textContent = t("login");
+        btnUsername.textContent = t("btn_username");
       
         screenUsername.classList.remove("active");
         screenPassword.classList.add("active");
