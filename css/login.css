@@ -115,6 +115,7 @@ button:active { opacity: 0.9; }
   height: auto;
   display: block;
   margin: 0 auto;
+  border: 1px solid red;
 }
 
 .brand-underline {
