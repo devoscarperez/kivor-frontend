@@ -168,3 +168,33 @@ button:disabled {
   color: #9CA3AF;
   cursor: not-allowed;
 }
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border: none;
+  background: none;
+
+  cursor: pointer;
+
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.toggle-password:hover {
+  opacity: 1;
+}
