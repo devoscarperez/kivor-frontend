@@ -41,6 +41,7 @@ passwordInput.addEventListener("input", () => {
 
 
 
+
 async function validarUsuario() {
 
    limpiarError("username");  // 🔥 limpiar antes de validar
@@ -70,7 +71,10 @@ async function validarUsuario() {
 
         screenUsername.classList.remove("active");
         screenPassword.classList.add("active");
-
+      
+        btnLogin.disabled = true;
+        passwordInput.value = "";
+      
         passwordInput.focus();
 
     } catch (error) {
