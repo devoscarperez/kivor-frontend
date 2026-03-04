@@ -110,6 +110,12 @@ button:active { opacity: 0.9; }
   margin-bottom: 32px;
 }
 
+.brand-logo {
+  width: 180px;      /* controla tamaño aquí */
+  height: auto;      /* mantiene proporción */
+  display: block;
+}
+
 .brand h1 {
   font-size: 34px;
   letter-spacing: 8px;
