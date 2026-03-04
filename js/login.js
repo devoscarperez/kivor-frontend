@@ -14,6 +14,9 @@ const btnLogin = document.getElementById("btn-login");
 
 let currentUsername = "";
 
+btnUsername.disabled = true;
+btnLogin.disabled = true;
+
 /* =====================
    PASO 1: VALIDAR USUARIO
 ===================== */
