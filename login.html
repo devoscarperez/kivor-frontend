@@ -36,9 +36,13 @@
         <div id="screen-password" class="screen">
             <p class="user-display" id="display-username"></p>
             <label id="label-password"></label>
-            <input type="password" id="password" />
+            <div class="password-field">
+                <input type="password" id="password" />
+                <span id="toggle-password" class="password-toggle">
+                    👁
+                </span>
+            </div>
             <p class="input-error" id="password-error"></p>
-
             <div class="buttons">
                 <button id="btn-back"></button>
                 <button id="btn-login"></button>
