@@ -24,7 +24,7 @@ en: {
   invalid_credentials: "Invalid credentials",
   tagline: "Operate your salon like a business",
   btn_username: "Continue",
-  label_validating = "Validating..."
+  label_validating: "Validating..."
 }
 };
 
