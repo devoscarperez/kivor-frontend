@@ -146,6 +146,11 @@ btnBack.addEventListener("click", () => {
     btnLogin.disabled = true;
     screenPassword.classList.remove("active");
     screenUsername.classList.add("active");
+   
+    // 🔥 Re-evaluar estado del botón usuario
+    btnUsername.disabled = usernameInput.value.trim() === "";
+
+    usernameInput.focus();
 });
 
 
