@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIVOR Login</title>
-    
-    <!-- 1️⃣ Sistema de colores y tokens globales -->
-    <link rel="stylesheet" href="css/theme.css">
 
-    <!-- 2️⃣ Estilos específicos del login -->
+    <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
@@ -18,7 +15,7 @@
     <!-- MARCA KIVOR -->
     <div class="brand">
         <h1>KIVOR</h1>
-        <p>Plataforma de gestión profesional</p>
+        <p id="brand-tagline"></p>
     </div>
 
     <!-- LOGIN -->
@@ -29,7 +26,7 @@
             <label id="label-username"></label>
             <input type="text" id="username" autocomplete="off" />
             <p class="input-error" id="username-error"></p>
-            <button id="btn-username">OK</button>
+            <button id="btn-username"></button>
         </div>
 
         <!-- PANTALLA PASSWORD -->
@@ -38,12 +35,11 @@
             <label id="label-password"></label>
             <input type="password" id="password" />
             <p class="input-error" id="password-error"></p>
+
             <div class="buttons">
-                <button id="btn-username"></button>
                 <button id="btn-back"></button>
                 <button id="btn-login"></button>
             </div>
-            <p id="brand-tagline"></p>
         </div>
 
     </div>
