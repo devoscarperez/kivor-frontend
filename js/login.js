@@ -17,6 +17,25 @@ let currentUsername = "";
 btnUsername.disabled = true;
 btnLogin.disabled = true;
 
+const togglePassword = document.getElementById("toggle-password");
+const passwordInput = document.getElementById("password");
+
+if (togglePassword) {
+
+  togglePassword.addEventListener("click", () => {
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePassword.textContent = "🙈";
+    } else {
+        passwordInput.type = "password";
+        togglePassword.textContent = "👁";
+    }
+
+  });
+
+}
+
 /* =====================
    PASO 1: VALIDAR USUARIO
 ===================== */
