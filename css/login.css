@@ -24,11 +24,14 @@ body {
 
 .container {
   width: 92%;
-  max-width: 420px;              /* clave: se ve bien en móvil y en 27" */
-  background: white;
-  padding: 22px;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 32px;
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.08),
+    0 2px 6px rgba(0,0,0,0.04);
 }
 
 .screen {
