@@ -19,7 +19,6 @@ btnLogin.disabled = true;
 
 const togglePassword = document.getElementById("toggle-password");
 
-
 if (togglePassword) {
 
   togglePassword.addEventListener("click", () => {
