@@ -46,7 +46,7 @@ async function validarUsuario() {
 
         if (!response.ok) {
             // alert("Usuario no válido");
-           mostrarError("username", "Usuario no válido");
+           mostrarError("username", t("invalid_user"));
             return;
         }
 
@@ -94,7 +94,7 @@ async function loginFinal() {
 
         if (!response.ok) {
            // alert("Clave incorrecta");
-           mostrarError("password", "Credenciales incorrectas");
+           mostrarError("password", t("invalid_credentials"));
             return;
         }
 
@@ -139,3 +139,14 @@ function limpiarError(campo) {
     error.textContent = "";
     error.classList.remove("active");
 }
+
+function applyTranslations() {
+    document.getElementById("label-username").textContent = t("username");
+    document.getElementById("label-password").textContent = t("password");
+    document.getElementById("btn-username").textContent = t("login");
+    document.getElementById("btn-login").textContent = t("login");
+    document.getElementById("btn-back").textContent = t("back");
+    document.getElementById("brand-tagline").textContent = t("tagline");
+}
+
+applyTranslations();
