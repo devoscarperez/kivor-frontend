@@ -45,16 +45,24 @@ label {
 }
 
 input {
-  padding: 14px;
-  font-size: 18px;
-  border: 1px solid #D1D5DB;
-  border-radius: var(--radius);
-  outline: none;
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+
+    border: 1px solid #d4d8dd;
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    background-color: #eef2f6;
+
+    transition: all 0.15s ease;
 }
 
 input:focus {
-  border-color: var(--kivor-primary);
-  box-shadow: 0 0 0 3px rgba(217,119,6,0.18);
+    outline: none;
+    border-color: #0d2b52;
+    background-color: #ffffff;
 }
 
 button {
