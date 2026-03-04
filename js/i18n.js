@@ -10,7 +10,8 @@ es: {
   invalid_user: "Usuario no válido",
   invalid_credentials: "Credenciales incorrectas",
   tagline: "Opera tu salón como empresa",
-  btn_username: "Continuar"
+  btn_username: "Continuar",
+  label_validating: "Validando..."
 },
 
 en: {
@@ -22,7 +23,8 @@ en: {
   invalid_user: "Invalid user",
   invalid_credentials: "Invalid credentials",
   tagline: "Operate your salon like a business",
-  btn_username: "Continue"
+  btn_username: "Continue",
+  label_validating = "Validating..."
 }
 };
 
