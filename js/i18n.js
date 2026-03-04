@@ -9,7 +9,7 @@ es: {
   back: "Volver",
   invalid_user: "Usuario no válido",
   invalid_credentials: "Credenciales incorrectas",
-  tagline: "Opera tu salón como empresa",
+  tagline: "Gestiona tu salón como empresa",
   btn_username: "Continuar",
   label_validating: "Validando..."
 },
@@ -22,7 +22,7 @@ en: {
   back: "Back",
   invalid_user: "Invalid user",
   invalid_credentials: "Invalid credentials",
-  tagline: "Operate your salon like a business",
+  tagline: "Manage your salon like a business",
   btn_username: "Continue",
   label_validating: "Validating..."
 }
