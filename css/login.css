@@ -149,3 +149,9 @@ button:active { opacity: 0.9; }
   border-color: var(--kivor-error) !important;
   box-shadow: 0 0 0 3px rgba(153,27,27,0.15);
 }
+
+button:disabled {
+  background: #E5E7EB;
+  color: #9CA3AF;
+  cursor: not-allowed;
+}
