@@ -18,6 +18,9 @@ let currentUsername = "";
    PASO 1: VALIDAR USUARIO
 ===================== */
 
+usernameInput.addEventListener("input", () => limpiarError("username"));
+passwordInput.addEventListener("input", () => limpiarError("password"));
+
 btnUsername.addEventListener("click", validarUsuario);
 usernameInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") validarUsuario();
