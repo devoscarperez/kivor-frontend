@@ -9,7 +9,8 @@ const translations = {
     back: "Volver",
     invalid_user: "Usuario no válido",
     invalid_credentials: "Credenciales incorrectas",
-    tagline: "Opera tu salón como empresa"
+    tagline: "Opera tu salón como empresa",
+    btn_username: "Continue"
   },
   en: {
     username: "User",
@@ -19,7 +20,8 @@ const translations = {
     invalid_user: "Invalid user",
     invalid_credentials: "Invalid credentials",
     tagline: "Operate your salon like a business",
-    continue_button: "Continuar"
+    continue_button: "Continuar",
+    btn_username: "Continuar"
   }
 };
 
