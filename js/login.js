@@ -85,7 +85,7 @@ async function validarUsuario() {
         if (!response.ok) {
             // alert("Usuario no válido");
            btnUsername.disabled = false;
-           btnUsername.textContent = t("label_validating");
+           btnUsername.textContent = t("btn_username");
            mostrarError("username", t("invalid_user"));
             return;
         }
