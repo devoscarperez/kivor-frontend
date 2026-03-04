@@ -71,7 +71,7 @@ async function validarUsuario() {
    try {
 
         btnUsername.disabled = true;
-        btnUsername.textContent = "Validando...";
+        btnUsername.textContent = t("label_validating");
       
         // 🔹 AQUÍ CAMBIA: ahora llama a /login-username
         const response = await fetch(`${API_BASE}/login-username`, {
@@ -85,7 +85,7 @@ async function validarUsuario() {
         if (!response.ok) {
             // alert("Usuario no válido");
            btnUsername.disabled = false;
-           btnUsername.textContent = t("login");
+           btnUsername.textContent = t("label_validating");
            mostrarError("username", t("invalid_user"));
             return;
         }
