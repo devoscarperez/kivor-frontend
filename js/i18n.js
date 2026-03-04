@@ -29,7 +29,7 @@ en: {
 };
 
 // 🔥 Idioma actual (mañana solo cambias esto)
-let currentLang = "en";
+let currentLang = "es";
 
 function t(key) {
   return translations[currentLang][key] || key;
