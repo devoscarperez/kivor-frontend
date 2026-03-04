@@ -1,0 +1,20 @@
+:root{
+  /* ===== KIVOR COLOR SYSTEM ===== */
+
+  --kivor-base: #111111;
+  --kivor-primary: #D97706;
+  --kivor-secondary: #2E2E2E;
+  --kivor-background: #F4F4F5;
+  --kivor-success: #166534;
+  --kivor-error: #991B1B;
+
+  /* Neutrales auxiliares */
+  --kivor-white: #FFFFFF;
+  --kivor-border: #E5E7EB;
+
+  /* Sombras */
+  --kivor-shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
+
+  /* Radios */
+  --kivor-radius: 14px;
+}
