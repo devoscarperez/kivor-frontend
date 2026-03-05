@@ -1,10 +1,40 @@
 const API_BASE = "https://kivor.onrender.com";
 
 /* =========================
+   FUNCIÓN CENTRAL API
+========================= */
+
+async function apiFetch(url, options = {}) {
+
+    const token = sessionStorage.getItem("access_token");
+
+    if (!token) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    options.headers = {
+        ...(options.headers || {}),
+        "Authorization": `Bearer ${token}`
+    };
+
+    const response = await fetch(url, options);
+
+    if (response.status === 401) {
+        sessionStorage.removeItem("access_token");
+        window.location.href = "login.html";
+        return;
+    }
+
+    return response;
+}
+
+/* =========================
    LOGIN
 ========================= */
 
 async function login(username, password) {
+
     const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: {
@@ -19,10 +49,19 @@ async function login(username, password) {
 
     const data = await response.json();
 
-    // Guardamos el token en sessionStorage
+    // Guardamos el token
     sessionStorage.setItem("access_token", data.access_token);
 
     return data;
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout() {
+    sessionStorage.removeItem("access_token");
+    window.location.href = "login.html";
 }
 
 /* =========================
@@ -30,26 +69,10 @@ async function login(username, password) {
 ========================= */
 
 async function obtenerGananciasPorMes(mes) {
+
     try {
 
-        const token = sessionStorage.getItem("access_token");
-
-        if (!token) {
-            window.location.href = "login.html";
-            return;
-        }
-
-        const response = await fetch(`${API_BASE}/ganancias-por-mes?mes=${mes}`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-
-        if (response.status === 401) {
-            sessionStorage.removeItem("access_token");
-            window.location.href = "login.html";
-            return;
-        }
+        const response = await apiFetch(`${API_BASE}/ganancias-por-mes?mes=${mes}`);
 
         if (!response.ok) {
             throw new Error("Error al consultar la API");
@@ -58,10 +81,11 @@ async function obtenerGananciasPorMes(mes) {
         return await response.json();
 
     } catch (error) {
+
         console.error("Error:", error);
         return null;
+
     }
 }
-
 
  
