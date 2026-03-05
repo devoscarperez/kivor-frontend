@@ -119,6 +119,7 @@ button:active { opacity: 0.9; }
 .brand {
   text-align: center;
   margin-bottom: 34px;
+  border: 2px solid red;
 }
 
 .brand-logo {
