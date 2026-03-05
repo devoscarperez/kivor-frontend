@@ -80,7 +80,28 @@ async function login(username, password) {
    LOGOUT
 ========================= */
 
-function logout() {
+async function logout() {
+
+    const token = sessionStorage.getItem("access_token");
+
+    if (!token) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+
+        await fetch(`${API_BASE}/logout`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+    } catch (e) {
+        console.error("Error al cerrar sesión");
+    }
+
     sessionStorage.removeItem("access_token");
     window.location.href = "login.html";
 }
