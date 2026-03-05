@@ -158,15 +158,18 @@ async function loginFinal() {
 btnBack.addEventListener("click", () => {
     passwordInput.value = "";
     btnLogin.disabled = true;
+
     screenPassword.classList.remove("active");
     screenUsername.classList.add("active");
-   
-    // 🔥 Re-evaluar estado del botón usuario
+
+    // restaurar texto del botón
+    btnUsername.textContent = t("btn_username");
+
+    // re-evaluar estado
     btnUsername.disabled = usernameInput.value.trim() === "";
 
     usernameInput.focus();
 });
-
 
 function mostrarError(campo, mensaje) {
     const input = document.getElementById(campo);
