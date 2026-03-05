@@ -1,4 +1,24 @@
 const API_BASE = "https://kivor.onrender.com";
+/* =========================
+   Funcion leer el JWT
+========================= */
+function isTokenExpired(token) {
+
+    try {
+
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const exp = payload.exp;
+
+        if (!exp) return true;
+
+        const now = Math.floor(Date.now() / 1000);
+
+        return now >= exp;
+
+    } catch (e) {
+        return true;
+    }
+}
 
 /* =========================
    FUNCIÓN CENTRAL API
@@ -7,12 +27,13 @@ const API_BASE = "https://kivor.onrender.com";
 async function apiFetch(url, options = {}) {
 
     const token = sessionStorage.getItem("access_token");
-
-    if (!token) {
+   
+    if (!token || isTokenExpired(token)) {
+   
+        sessionStorage.removeItem("access_token");
         window.location.href = "login.html";
         return;
     }
-
     options.headers = {
         ...(options.headers || {}),
         "Authorization": `Bearer ${token}`
