@@ -1,4 +1,3 @@
-const API_BASE = "https://kivor.onrender.com";
 const token = sessionStorage.getItem("access_token");
 
 if (!token) {
