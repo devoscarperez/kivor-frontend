@@ -251,6 +251,9 @@ function renderInput(field) {
         input.type = "text";
     }
 
+    // limpiar error al escribir (igual que login)
+    input.addEventListener("input", clearFieldError);
+
     container.appendChild(input);
 
 }
