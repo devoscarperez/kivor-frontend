@@ -368,3 +368,16 @@ function handleServerError(error) {
     }
 
 }
+
+
+function clearFieldError() {
+
+    const input = document.getElementById("express-input");
+    const error = document.getElementById("express-error");
+
+    input.classList.remove("input-invalid");
+
+    error.classList.remove("active");
+    error.innerText = "";
+
+}
