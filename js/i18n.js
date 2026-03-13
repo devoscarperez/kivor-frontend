@@ -11,7 +11,33 @@ es: {
   invalid_credentials: "Credenciales incorrectas",
   tagline: "Gestiona tu salón como empresa",
   btn_username: "Continuar",
-  label_validating: "Validando..."
+  label_validating: "Validando...",
+
+  // NUEVAS CLAVES
+  action_continue: "Continuar",
+  action_save: "Guardar",
+  action_retry: "Intentar nuevamente",
+
+  field_first_name: "Nombre",
+  field_last_name: "Apellido",
+  field_nickname: "Nickname",
+  field_mobile: "Celular",
+  field_identifier_type: "Tipo de identificación",
+  field_identifier: "Identificación",
+  field_email: "Correo electrónico",
+  field_birth_date: "Fecha de cumpleaños",
+
+  msg_intro_customer_data: "Para poder agendar tu atención necesitamos registrar algunos datos. Este formulario toma menos de un minuto.",
+  msg_success_saved: "¡Gracias! Tus datos fueron registrados correctamente.",
+
+  error_required_field: "Este campo es obligatorio",
+  error_invalid_email: "Correo electrónico no válido",
+  error_invalid_phone: "Número de celular no válido",
+  error_invalid_identifier: "Identificación no válida",
+  error_invalid_rut: "RUT no válido",
+
+  step_label: "Paso",
+  step_of: "de"
 },
 
 en: {
@@ -24,7 +50,33 @@ en: {
   invalid_credentials: "Invalid credentials",
   tagline: "Manage your salon like a business",
   btn_username: "Continue",
-  label_validating: "Validating..."
+  label_validating: "Validating...",
+
+  // NUEVAS CLAVES
+  action_continue: "Continue",
+  action_save: "Save",
+  action_retry: "Try again",
+
+  field_first_name: "First name",
+  field_last_name: "Last name",
+  field_nickname: "Nickname",
+  field_mobile: "Mobile phone",
+  field_identifier_type: "Identification type",
+  field_identifier: "Identification",
+  field_email: "Email",
+  field_birth_date: "Birth date",
+
+  msg_intro_customer_data: "To schedule your appointment we need to register some basic information. This form takes less than one minute.",
+  msg_success_saved: "Thank you! Your information has been registered successfully.",
+
+  error_required_field: "This field is required",
+  error_invalid_email: "Invalid email address",
+  error_invalid_phone: "Invalid phone number",
+  error_invalid_identifier: "Invalid identification",
+  error_invalid_rut: "Invalid RUT",
+
+  step_label: "Step",
+  step_of: "of"
 }
 };
 
