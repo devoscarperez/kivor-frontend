@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>KIVOR - Registro Cliente</title>
+
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="stylesheet" href="/css/styles.css">
+
+</head>
+
+<body>
+
+<div id="express-app">
+
+    <!-- HEADER -->
+    <div id="express-header">
+        <h1>Lindas y Lunáticas</h1>
+        <p id="express-subtitle"></p>
+    </div>
+
+    <!-- PROGRESO -->
+    <div id="express-progress"></div>
+
+    <!-- CONTENIDO -->
+    <div id="express-content">
+
+        <!-- INTRO -->
+        <div id="express-screen-intro" class="express-screen">
+            <p id="express-intro-text"></p>
+        </div>
+
+        <!-- FORM -->
+        <div id="express-screen-form" class="express-screen" style="display:none">
+
+            <label id="express-field-label"></label>
+
+            <div id="express-field-container">
+                <!-- input dinámico -->
+            </div>
+
+            <div id="express-error"></div>
+
+        </div>
+
+        <!-- SUCCESS -->
+        <div id="express-screen-success" class="express-screen" style="display:none">
+            <p id="express-success-text"></p>
+        </div>
+
+        <!-- ERROR -->
+        <div id="express-screen-error" class="express-screen" style="display:none">
+            <p id="express-error-text"></p>
+        </div>
+
+    </div>
+
+    <!-- ACCIONES -->
+    <div id="express-actions">
+
+        <button id="express-btn-back" style="display:none"></button>
+
+        <button id="express-btn-next"></button>
+
+        <button id="express-btn-save" style="display:none"></button>
+
+    </div>
+
+</div>
+
+<script src="/js/i18n.js"></script>
+<script src="/js/customer-express.js"></script>
+
+</body>
+</html>
