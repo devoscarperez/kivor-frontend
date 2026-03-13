@@ -6,6 +6,12 @@ let token = null;
 let fields = [];
 let currentStep = -1;
 let formData = {};
+let token = null;
+let fields = [];
+let currentStep = -1;
+let formData = {};
+
+const STORAGE_KEY = "kivor_customer_express_draft";
 
 // ===============================
 // INIT
@@ -19,6 +25,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         showError("msg_invalid_link");
         return;
     }
+
+    loadDraft(); // AQUÍ
 
     document.getElementById("express-btn-next")
         .addEventListener("click", handleNext);
@@ -172,6 +180,29 @@ function previousStep() {
 
 }
 
+function saveDraft() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(formData)
+    );
+
+}
+
+function loadDraft() {
+
+    const draft = localStorage.getItem(STORAGE_KEY);
+
+    if (!draft) return;
+
+    try {
+        formData = JSON.parse(draft);
+    } catch {
+        formData = {};
+    }
+
+}
+
 // ===============================
 // SAVE CURRENT FIELD
 // ===============================
@@ -184,7 +215,10 @@ function saveCurrentField() {
 
     if (!input) return;
 
-    formData[field.customer_capture_settings_field] = input.value.trim();
+    formData[field.customer_capture_settings_field] =
+        input.value.trim();
+
+    saveDraft(); // AQUÍ
 
 }
 
