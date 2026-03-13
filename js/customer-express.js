@@ -396,36 +396,42 @@ async function saveForm() {
 
     saveCurrentField();
 
+    const saveBtn = document.getElementById("express-btn-save");
+
+    saveBtn.disabled = true;
+    saveBtn.innerText = t("label_validating");
+
     try {
 
         const response = await fetch(`/customers-express/${token}`, {
-
             method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
-
         });
 
         if (!response.ok) {
             handleServerError(await response.json());
+
+            saveBtn.disabled = false;
+            saveBtn.innerText = t("action_save");
+
             return;
         }
 
-        localStorage.removeItem(STORAGE_KEY); // AQUÍ
+        localStorage.removeItem(STORAGE_KEY);
+
         showSuccess();
 
-    } catch (error) {
+    } catch {
 
         showError("msg_connection_lost");
+
+        saveBtn.disabled = false;
+        saveBtn.innerText = t("action_save");
 
     }
 
 }
-
 // ===============================
 // SERVER ERROR HANDLER
 // ===============================
