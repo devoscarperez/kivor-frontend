@@ -254,6 +254,9 @@ function renderInput(field) {
 
     const fieldName = field.customer_capture_settings_field;
 
+    document.getElementById("express-field-label").innerText =
+        t("field_" + fieldName);
+
     const input = document.createElement("input");
 
     input.id = "express-input";
@@ -264,7 +267,7 @@ function renderInput(field) {
     if (fieldName === "mobile") {
         input.type = "tel";
         input.inputMode = "numeric";
-        input.placeholder = "+569XXXXXXXX";
+        input.placeholder = "+56 9 1234 5678";
     }
 
     else if (fieldName === "email") {
@@ -289,24 +292,48 @@ function renderInput(field) {
         input.type = "text";
     }
 
-    // limpiar error al escribir (igual que login)
+    // limpiar error + formatear
     input.addEventListener("input", (e) => {
 
-    clearFieldError();
+        clearFieldError();
 
-    const formatted = formatFieldValue(
-        fieldName,
-        e.target.value
-    );
+        const formatted = formatFieldValue(
+            fieldName,
+            e.target.value
+        );
 
-    e.target.value = formatted;
+        e.target.value = formatted;
+
+    });
+
+    // avanzar con ENTER
+    input.addEventListener("keydown", (e) => {
+
+        if (e.key === "Enter") {
+
+            e.preventDefault();
+
+            if (!validateCurrentField()) {
+                return;
+            }
+
+            saveCurrentField();
+
+            if (currentStep < fields.length - 1) {
+                nextStep();
+            } else {
+                saveForm();
+            }
+
+        }
 
     });
 
     container.appendChild(input);
 
-}
+    input.focus();
 
+}
 // ===============================
 // UPDATE PROGRESS
 // ===============================
