@@ -214,15 +214,42 @@ function renderInput(field) {
 
     container.innerHTML = "";
 
+    const fieldName = field.customer_capture_settings_field;
+
     const input = document.createElement("input");
 
     input.id = "express-input";
-
     input.autofocus = true;
+    input.value = formData[fieldName] || "";
 
-    input.value = formData[field.customer_capture_settings_field] || "";
+    // Tipo de input según campo
+    if (fieldName === "mobile") {
+        input.type = "tel";
+        input.inputMode = "numeric";
+        input.placeholder = "+569XXXXXXXX";
+    }
 
-    input.type = "text";
+    else if (fieldName === "email") {
+        input.type = "email";
+        input.inputMode = "email";
+        input.placeholder = "email@email.com";
+    }
+
+    else if (fieldName === "birth_date") {
+        input.type = "text";
+        input.inputMode = "numeric";
+        input.placeholder = "DD MM AAAA";
+        input.maxLength = 10;
+    }
+
+    else if (fieldName === "identifier") {
+        input.type = "text";
+        input.placeholder = "12345678-9";
+    }
+
+    else {
+        input.type = "text";
+    }
 
     container.appendChild(input);
 
