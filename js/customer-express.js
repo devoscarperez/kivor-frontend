@@ -140,6 +140,10 @@ function handleNext() {
         return;
     }
 
+    if (!validateCurrentField()) {
+    return;
+    }
+    
     saveCurrentField();
 
     if (currentStep < fields.length - 1) {
