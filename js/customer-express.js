@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadFormConfig();
 
-    showIntro();
 
 });
 
@@ -74,6 +73,20 @@ async function loadFormConfig() {
         const data = await response.json();
 
         fields = data.fields;
+
+        // si hay datos guardados, continuar donde quedó
+        const lastStep = getLastCompletedStep();
+
+        if (Object.keys(formData).length > 0) {
+
+            currentStep = lastStep;
+            renderField();
+
+        } else {
+
+            showIntro();
+
+        }
 
     } catch (error) {
 
@@ -203,6 +216,21 @@ function loadDraft() {
 
 }
 
+function getLastCompletedStep() {
+
+    for (let i = 0; i < fields.length; i++) {
+
+        const fieldName = fields[i].customer_capture_settings_field;
+
+        if (!formData[fieldName]) {
+            return i;
+        }
+
+    }
+
+    return fields.length - 1;
+
+}
 // ===============================
 // SAVE CURRENT FIELD
 // ===============================
