@@ -421,6 +421,59 @@ function clearFieldError() {
 
 }
 
+function formatFieldValue(fieldName, value) {
+
+    // CELULAR
+    if (fieldName === "mobile") {
+
+        value = value.replace(/\D/g, "");
+
+        if (value.startsWith("56")) {
+            return "+" + value;
+        }
+
+        if (value.length === 9) {
+            return "+56" + value;
+        }
+
+        return "+" + value;
+
+    }
+
+    // RUT
+    if (fieldName === "identifier") {
+
+        value = value.replace(/[^0-9kK]/g, "");
+
+        if (value.length > 1) {
+            const body = value.slice(0, -1);
+            const dv = value.slice(-1);
+            return body + "-" + dv;
+        }
+
+        return value;
+
+    }
+
+    // FECHA
+    if (fieldName === "birth_date") {
+
+        value = value.replace(/\D/g, "");
+
+        if (value.length > 2)
+            value = value.slice(0,2) + " " + value.slice(2);
+
+        if (value.length > 5)
+            value = value.slice(0,5) + " " + value.slice(5);
+
+        return value.slice(0,10);
+
+    }
+
+    return value;
+}
+
+
 function validateCurrentField() {
 
     const field = fields[currentStep];
