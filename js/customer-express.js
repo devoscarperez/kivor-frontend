@@ -381,3 +381,47 @@ function clearFieldError() {
     error.innerText = "";
 
 }
+
+function validateCurrentField() {
+
+    const field = fields[currentStep];
+    const fieldName = field.customer_capture_settings_field;
+    const required = field.customer_capture_settings_is_required;
+
+    const input = document.getElementById("express-input");
+    const value = input.value.trim();
+
+    // Campo obligatorio
+    if (required && !value) {
+        showFieldError("error_required_field");
+        return false;
+    }
+
+    // Email
+    if (fieldName === "email" && value) {
+        if (!value.includes("@")) {
+            showFieldError("error_invalid_email");
+            return false;
+        }
+    }
+
+    // Celular
+    if (fieldName === "mobile" && value) {
+        if (value.length < 8) {
+            showFieldError("error_invalid_phone");
+            return false;
+        }
+    }
+
+    // Identificador (RUT simple)
+    if (fieldName === "identifier" && value) {
+        if (!value.includes("-")) {
+            showFieldError("error_invalid_identifier");
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
