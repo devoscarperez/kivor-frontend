@@ -290,7 +290,18 @@ function renderInput(field) {
     }
 
     // limpiar error al escribir (igual que login)
-    input.addEventListener("input", clearFieldError);
+    input.addEventListener("input", (e) => {
+
+    clearFieldError();
+
+    const formatted = formatFieldValue(
+        fieldName,
+        e.target.value
+    );
+
+    e.target.value = formatted;
+
+    });
 
     container.appendChild(input);
 
