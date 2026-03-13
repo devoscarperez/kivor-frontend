@@ -74,10 +74,11 @@ async function loadFormConfig() {
 
         fields = data.fields;
 
-        // si hay datos guardados, continuar donde quedó
         const lastStep = getLastCompletedStep();
 
-        if (Object.keys(formData).length > 0) {
+        const hasData = Object.values(formData).some(v => v && v.length > 0);
+
+        if (hasData) {
 
             currentStep = lastStep;
             renderField();
