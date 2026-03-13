@@ -20,6 +20,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    document.getElementById("express-btn-next")
+        .addEventListener("click", handleNext);
+
+    document.getElementById("express-btn-back")
+        .addEventListener("click", previousStep);
+
+    document.getElementById("express-btn-save")
+        .addEventListener("click", saveForm);
+
     await loadFormConfig();
 
     showIntro();
