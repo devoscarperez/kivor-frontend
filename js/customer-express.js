@@ -81,6 +81,10 @@ async function loadFormConfig() {
 
 function showIntro() {
 
+    hideAllScreens();
+
+    document.getElementById("express-screen-intro").style.display = "block";
+
     document.getElementById("express-intro-text").innerText =
         t("msg_intro_customer_data");
 
@@ -93,9 +97,7 @@ function showError(messageKey) {
 
     hideAllScreens();
 
-    const screen = document.getElementById("express-screen-error");
-
-    screen.style.display = "block";
+    document.getElementById("express-screen-error").style.display = "block";
 
     document.getElementById("express-error-text").innerText =
         t(messageKey);
@@ -106,9 +108,7 @@ function showSuccess() {
 
     hideAllScreens();
 
-    const screen = document.getElementById("express-screen-success");
-
-    screen.style.display = "block";
+    document.getElementById("express-screen-success").style.display = "block";
 
     document.getElementById("express-success-text").innerText =
         t("msg_success_saved");
@@ -131,6 +131,25 @@ function hideAllScreens() {
 // STEP NAVIGATION
 // ===============================
 
+function handleNext() {
+
+    // salir de intro
+    if (currentStep === -1) {
+        currentStep = 0;
+        renderField();
+        return;
+    }
+
+    saveCurrentField();
+
+    if (currentStep < fields.length - 1) {
+        nextStep();
+    } else {
+        showSaveButton();
+    }
+
+}
+
 function nextStep() {
 
     currentStep++;
@@ -150,6 +169,22 @@ function previousStep() {
 }
 
 // ===============================
+// SAVE CURRENT FIELD
+// ===============================
+
+function saveCurrentField() {
+
+    const field = fields[currentStep];
+
+    const input = document.getElementById("express-input");
+
+    if (!input) return;
+
+    formData[field.customer_capture_settings_field] = input.value.trim();
+
+}
+
+// ===============================
 // RENDER FIELD
 // ===============================
 
@@ -165,6 +200,8 @@ function renderField() {
 
     updateProgress();
 
+    updateButtons();
+
 }
 
 // ===============================
@@ -179,13 +216,13 @@ function renderInput(field) {
 
     const input = document.createElement("input");
 
-    input.type = "text";
-
     input.id = "express-input";
 
     input.autofocus = true;
 
     input.value = formData[field.customer_capture_settings_field] || "";
+
+    input.type = "text";
 
     container.appendChild(input);
 
@@ -208,10 +245,50 @@ function updateProgress() {
 }
 
 // ===============================
+// BUTTON CONTROL
+// ===============================
+
+function updateButtons() {
+
+    const backBtn = document.getElementById("express-btn-back");
+    const nextBtn = document.getElementById("express-btn-next");
+    const saveBtn = document.getElementById("express-btn-save");
+
+    backBtn.style.display = currentStep > 0 ? "inline-block" : "none";
+
+    if (currentStep === fields.length - 1) {
+
+        nextBtn.style.display = "none";
+        saveBtn.style.display = "inline-block";
+
+    } else {
+
+        nextBtn.style.display = "inline-block";
+        saveBtn.style.display = "none";
+
+    }
+
+}
+
+// ===============================
+// SHOW SAVE BUTTON
+// ===============================
+
+function showSaveButton() {
+
+    document.getElementById("express-btn-next").style.display = "none";
+
+    document.getElementById("express-btn-save").style.display = "inline-block";
+
+}
+
+// ===============================
 // SAVE FORM
 // ===============================
 
 async function saveForm() {
+
+    saveCurrentField();
 
     try {
 
