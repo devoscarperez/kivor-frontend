@@ -377,6 +377,7 @@ async function saveForm() {
             return;
         }
 
+        localStorage.removeItem(STORAGE_KEY); // AQUÍ
         showSuccess();
 
     } catch (error) {
