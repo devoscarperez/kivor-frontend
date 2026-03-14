@@ -29,6 +29,7 @@ es: {
 
   msg_intro_customer_data: "Para poder agendar tu atención necesitamos registrar algunos datos. Este formulario toma menos de un minuto.",
   msg_success_saved: "¡Gracias! Tus datos fueron registrados correctamente.",
+  msg_privacy_notice: "Tus datos se utilizarán únicamente para gestionar tu atención y contacto con el salón.",
 
   error_required_field: "Este campo es obligatorio",
   error_invalid_email: "Correo electrónico no válido",
@@ -68,6 +69,7 @@ en: {
 
   msg_intro_customer_data: "To schedule your appointment we need to register some basic information. This form takes less than one minute.",
   msg_success_saved: "Thank you! Your information has been registered successfully.",
+  msg_privacy_notice: "Your data will only be used to manage your appointment and contact with the salon.",
 
   error_required_field: "This field is required",
   error_invalid_email: "Invalid email address",
