@@ -110,6 +110,9 @@ function showIntro() {
     document.getElementById("express-intro-text").innerText =
         t("msg_intro_customer_data");
 
+    document.getElementById("express-privacy-text").innerText =
+        t("msg_privacy_notice");
+
     document.getElementById("express-btn-next").innerText =
         t("action_continue");
 
