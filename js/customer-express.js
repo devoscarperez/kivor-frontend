@@ -7,7 +7,6 @@ let currentStep = -1;
 let formData = {};
 let token = null;
 
-
 const STORAGE_KEY = "kivor_customer_express_draft";
 
 // ===============================
@@ -16,6 +15,12 @@ const STORAGE_KEY = "kivor_customer_express_draft";
 
 document.addEventListener("DOMContentLoaded", async () => {
 
+    if (typeof API_BASE === "undefined") {
+        console.error("API_BASE not defined");
+        showError("msg_connection_lost");
+        return;
+    }
+
     token = getTokenFromUrl();
 
     if (!token) {
@@ -23,19 +28,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    loadDraft(); // AQUÍ
+    loadDraft();
 
-    document.getElementById("express-btn-next")
-        .addEventListener("click", handleNext);
+    const nextBtn = document.getElementById("express-btn-next");
+    const backBtn = document.getElementById("express-btn-back");
+    const saveBtn = document.getElementById("express-btn-save");
 
-    document.getElementById("express-btn-back")
-        .addEventListener("click", previousStep);
-
-    document.getElementById("express-btn-save")
-        .addEventListener("click", saveForm);
+    if (nextBtn) nextBtn.addEventListener("click", handleNext);
+    if (backBtn) backBtn.addEventListener("click", previousStep);
+    if (saveBtn) saveBtn.addEventListener("click", saveForm);
 
     await loadFormConfig();
-
 
 });
 
@@ -68,7 +71,12 @@ async function loadFormConfig() {
 
         const data = await response.json();
 
-        fields = data.fields;
+        fields = data.fields || [];
+
+        if (fields.length === 0) {
+            showError("msg_invalid_link");
+            return;
+        }
 
         const lastStep = getLastCompletedStep();
 
@@ -85,6 +93,7 @@ async function loadFormConfig() {
 
     } catch (error) {
 
+        console.error(error);
         showError("msg_connection_lost");
 
     }
@@ -104,8 +113,11 @@ function showIntro() {
     document.getElementById("express-intro-text").innerText =
         t("msg_intro_customer_data");
 
-    document.getElementById("express-privacy-text").innerText =
-        t("msg_privacy_notice");
+    const privacy = document.getElementById("express-privacy-text");
+
+    if (privacy) {
+        privacy.innerText = t("msg_privacy_notice");
+    }
 
     document.getElementById("express-btn-next").innerText =
         t("action_continue");
@@ -152,17 +164,14 @@ function hideAllScreens() {
 
 function handleNext() {
 
-    // salir de intro
     if (currentStep === -1) {
         currentStep = 0;
         renderField();
         return;
     }
 
-    if (!validateCurrentField()) {
-    return;
-    }
-    
+    if (!validateCurrentField()) return;
+
     saveCurrentField();
 
     if (currentStep < fields.length - 1) {
@@ -176,7 +185,6 @@ function handleNext() {
 function nextStep() {
 
     currentStep++;
-
     renderField();
 
 }
@@ -185,11 +193,14 @@ function previousStep() {
 
     if (currentStep > 0) {
         currentStep--;
+        renderField();
     }
 
-    renderField();
-
 }
+
+// ===============================
+// LOCAL STORAGE
+// ===============================
 
 function saveDraft() {
 
@@ -229,6 +240,7 @@ function getLastCompletedStep() {
     return fields.length - 1;
 
 }
+
 // ===============================
 // SAVE CURRENT FIELD
 // ===============================
@@ -244,7 +256,7 @@ function saveCurrentField() {
     formData[field.customer_capture_settings_field] =
         input.value.trim();
 
-    saveDraft(); // AQUÍ
+    saveDraft();
 
 }
 
@@ -285,7 +297,7 @@ function renderInput(field) {
     let labelText = t("field_" + fieldName);
 
     if (field.customer_capture_settings_is_required) {
-     labelText += " *";
+        labelText += " *";
     }
 
     label.innerText = labelText;
@@ -293,62 +305,49 @@ function renderInput(field) {
     const input = document.createElement("input");
 
     input.id = "express-input";
-    input.autofocus = true;
     input.value = formData[fieldName] || "";
 
-    // Tipo de input según campo
     if (fieldName === "mobile") {
         input.type = "tel";
         input.inputMode = "numeric";
         input.placeholder = "+56 9 1234 5678";
     }
-
     else if (fieldName === "email") {
         input.type = "email";
-        input.inputMode = "email";
         input.placeholder = "email@email.com";
     }
-
     else if (fieldName === "birth_date") {
         input.type = "text";
         input.inputMode = "numeric";
         input.placeholder = "DD MM AAAA";
         input.maxLength = 10;
     }
-
     else if (fieldName === "identifier") {
         input.type = "text";
         input.placeholder = "12345678-9";
     }
-
     else {
         input.type = "text";
     }
 
-    // limpiar error + formatear
     input.addEventListener("input", (e) => {
 
         clearFieldError();
 
-        const formatted = formatFieldValue(
+        e.target.value = formatFieldValue(
             fieldName,
             e.target.value
         );
 
-        e.target.value = formatted;
-
     });
 
-    // avanzar con ENTER
     input.addEventListener("keydown", (e) => {
 
         if (e.key === "Enter") {
 
             e.preventDefault();
 
-            if (!validateCurrentField()) {
-                return;
-            }
+            if (!validateCurrentField()) return;
 
             saveCurrentField();
 
@@ -367,8 +366,9 @@ function renderInput(field) {
     input.focus();
 
 }
+
 // ===============================
-// UPDATE PROGRESS
+// PROGRESS
 // ===============================
 
 function updateProgress() {
@@ -376,15 +376,12 @@ function updateProgress() {
     const progress = document.getElementById("express-progress");
 
     progress.innerText =
-        t("step_label") + " " +
-        (currentStep + 1) + " " +
-        t("step_of") + " " +
-        fields.length;
+        `${t("step_label")} ${currentStep + 1} ${t("step_of")} ${fields.length}`;
 
 }
 
 // ===============================
-// BUTTON CONTROL
+// BUTTONS
 // ===============================
 
 function updateButtons() {
@@ -409,14 +406,9 @@ function updateButtons() {
 
 }
 
-// ===============================
-// SHOW SAVE BUTTON
-// ===============================
-
 function showSaveButton() {
 
     document.getElementById("express-btn-next").style.display = "none";
-
     document.getElementById("express-btn-save").style.display = "inline-block";
 
 }
@@ -437,18 +429,22 @@ async function saveForm() {
     try {
 
         const response = await fetch(`${API_BASE}/customers-express/${token}`, {
+
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
+
         });
 
         if (!response.ok) {
+
             handleServerError(await response.json());
 
             saveBtn.disabled = false;
             saveBtn.innerText = t("action_save");
 
             return;
+
         }
 
         localStorage.removeItem(STORAGE_KEY);
@@ -465,26 +461,47 @@ async function saveForm() {
     }
 
 }
+
 // ===============================
-// SERVER ERROR HANDLER
+// SERVER ERRORS
 // ===============================
 
 function handleServerError(error) {
 
-    if (error.detail === "invalid_link") {
+    if (!error || !error.detail) {
+        showError("msg_connection_lost");
+        return;
+    }
+
+    if (error.detail === "invalid_link")
         showError("msg_invalid_link");
-    }
 
-    if (error.detail === "expired_link") {
+    else if (error.detail === "expired_link")
         showError("msg_expired_link");
-    }
 
-    if (error.detail === "form_completed") {
+    else if (error.detail === "form_completed")
         showError("msg_form_completed");
-    }
+
+    else
+        showError("msg_connection_lost");
 
 }
 
+// ===============================
+// FIELD ERRORS
+// ===============================
+
+function showFieldError(messageKey) {
+
+    const input = document.getElementById("express-input");
+    const error = document.getElementById("express-error");
+
+    input.classList.add("input-invalid");
+
+    error.innerText = t(messageKey);
+    error.classList.add("active");
+
+}
 
 function clearFieldError() {
 
@@ -493,46 +510,46 @@ function clearFieldError() {
 
     input.classList.remove("input-invalid");
 
-    error.classList.remove("active");
     error.innerText = "";
+    error.classList.remove("active");
 
 }
 
+// ===============================
+// FORMAT FIELD
+// ===============================
+
 function formatFieldValue(fieldName, value) {
 
-    // CELULAR
     if (fieldName === "mobile") {
 
         value = value.replace(/\D/g, "");
 
-        if (value.startsWith("56")) {
-            return "+" + value;
-        }
+        if (value.startsWith("56")) return "+" + value;
 
-        if (value.length === 9) {
-            return "+56" + value;
-        }
+        if (value.length === 9) return "+56" + value;
 
         return "+" + value;
 
     }
 
-    // RUT
     if (fieldName === "identifier") {
 
         value = value.replace(/[^0-9kK]/g, "");
 
         if (value.length > 1) {
+
             const body = value.slice(0, -1);
             const dv = value.slice(-1);
+
             return body + "-" + dv;
+
         }
 
         return value;
 
     }
 
-    // FECHA
     if (fieldName === "birth_date") {
 
         value = value.replace(/\D/g, "");
@@ -548,8 +565,12 @@ function formatFieldValue(fieldName, value) {
     }
 
     return value;
+
 }
 
+// ===============================
+// VALIDATION
+// ===============================
 
 function validateCurrentField() {
 
@@ -560,37 +581,26 @@ function validateCurrentField() {
     const input = document.getElementById("express-input");
     const value = input.value.trim();
 
-    // Campo obligatorio
     if (required && !value) {
         showFieldError("error_required_field");
         return false;
     }
 
-    // Email
-    if (fieldName === "email" && value) {
-        if (!value.includes("@")) {
-            showFieldError("error_invalid_email");
-            return false;
-        }
+    if (fieldName === "email" && value && !value.includes("@")) {
+        showFieldError("error_invalid_email");
+        return false;
     }
 
-    // Celular
-    if (fieldName === "mobile" && value) {
-        if (value.length < 8) {
-            showFieldError("error_invalid_phone");
-            return false;
-        }
+    if (fieldName === "mobile" && value.length < 8) {
+        showFieldError("error_invalid_phone");
+        return false;
     }
 
-    // Identificador (RUT simple)
-    if (fieldName === "identifier" && value) {
-        if (!value.includes("-")) {
-            showFieldError("error_invalid_identifier");
-            return false;
-        }
+    if (fieldName === "identifier" && value && !value.includes("-")) {
+        showFieldError("error_invalid_identifier");
+        return false;
     }
 
     return true;
 
 }
-
