@@ -1,17 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Registro Cliente</title>
+
+<link rel="stylesheet" href="/css/theme.css">
+<link rel="stylesheet" href="/css/login.css">
+<link rel="stylesheet" href="/css/styles.css">
+
+</head>
+
 <body>
 
 <div class="layout">
 
+    <!-- LOGO / MARCA -->
+    <div class="brand">
+        <img src="/assets/images/logo-kivor.svg" alt="KIVOR" class="brand-logo">
+    </div>
+
+    <!-- TARJETA PRINCIPAL -->
     <div class="container">
 
+        <!-- PROGRESO -->
         <div id="express-progress"></div>
 
+        <!-- CONTENIDO -->
         <div id="express-content">
 
+            <!-- INTRO -->
             <div id="express-screen-intro" class="express-screen">
                 <p id="express-intro-text"></p>
+                <p id="express-privacy-text"></p>
             </div>
 
+            <!-- FORMULARIO -->
             <div id="express-screen-form" class="express-screen" style="display:none">
 
                 <label id="express-field-label"></label>
@@ -22,17 +49,20 @@
 
             </div>
 
+            <!-- ÉXITO -->
             <div id="express-screen-success" class="express-screen" style="display:none">
                 <p id="express-success-text"></p>
             </div>
 
+            <!-- ERROR -->
             <div id="express-screen-error" class="express-screen" style="display:none">
                 <p id="express-error-text"></p>
             </div>
 
         </div>
 
-        <div id="express-actions">
+        <!-- ACCIONES -->
+        <div id="express-actions" style="margin-top:20px; display:flex; gap:10px;">
 
             <button id="express-btn-back" style="display:none"></button>
 
@@ -45,3 +75,10 @@
     </div>
 
 </div>
+
+<script src="/js/i18n.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/customer-express.js"></script>
+
+</body>
+</html>
