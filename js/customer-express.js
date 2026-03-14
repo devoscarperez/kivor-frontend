@@ -2,7 +2,6 @@
 // KIVOR CUSTOMER EXPRESS FORM
 // ===============================
 
-let token = null;
 let fields = [];
 let currentStep = -1;
 let formData = {};
