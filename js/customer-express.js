@@ -48,10 +48,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function getTokenFromUrl() {
 
-    const path = window.location.pathname;
-    const parts = path.split("/");
+    const params = new URLSearchParams(window.location.search);
 
-    return parts[parts.length - 1];
+    return params.get("token");
 
 }
 
