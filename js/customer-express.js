@@ -403,10 +403,14 @@ function updateButtons() {
         nextBtn.style.display = "none";
         saveBtn.style.display = "inline-block";
 
+        saveBtn.innerText = t("action_save");   // ← ESTA LÍNEA FALTABA
+
     } else {
 
         nextBtn.style.display = "inline-block";
         saveBtn.style.display = "none";
+
+        nextBtn.innerText = t("action_continue");
 
     }
 
