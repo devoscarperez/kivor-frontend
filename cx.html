@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 
 <meta charset="UTF-8">
@@ -16,25 +17,14 @@
 
 <div id="express-app">
 
-<h2>Registro de cliente</h2>
-
-<div id="app"></div>
+    <h2>Registro de Cliente</h2>
 
 </div>
 
 <script src="/js/i18n.js"></script>
+<script src="/js/api.js"></script>
 <script src="/js/customer-express.js"></script>
 
-<script>
-
-// extraer token desde URL
-const path = window.location.pathname.split("/");
-const token = path[path.length - 1];
-
-// redirigir a la página real del formulario
-window.location.href = `/customer-express.html/${token}`;
-
-</script>
-
 </body>
+
 </html>
