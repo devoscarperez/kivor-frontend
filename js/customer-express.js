@@ -62,7 +62,7 @@ async function loadFormConfig() {
 
     try {
 
-        const response = await fetch(`/customers-express/${token}`);
+        const response = await fetch(`${API_BASE}/customers-express/${token}`);
 
         if (!response.ok) {
             handleServerError(await response.json());
@@ -75,9 +75,7 @@ async function loadFormConfig() {
 
         const lastStep = getLastCompletedStep();
 
-        const hasData = Object.values(formData).some(v => v && v.length > 0);
-
-        if (hasData) {
+        if (Object.keys(formData).length > 0) {
 
             currentStep = lastStep;
             renderField();
@@ -441,7 +439,7 @@ async function saveForm() {
 
     try {
 
-        const response = await fetch(`/customers-express/${token}`, {
+        const response = await fetch(`${API_BASE}/customers-express/${token}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
