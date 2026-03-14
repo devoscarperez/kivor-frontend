@@ -483,17 +483,47 @@ function handleServerError(error) {
         return;
     }
 
-    if (error.detail === "invalid_link")
+    if (error.detail === "invalid_link") {
         showError("msg_invalid_link");
+        return;
+    }
 
-    else if (error.detail === "expired_link")
+    if (error.detail === "expired_link") {
         showError("msg_expired_link");
+        return;
+    }
 
-    else if (error.detail === "form_completed")
+    if (error.detail === "form_completed") {
         showError("msg_form_completed");
+        return;
+    }
 
-    else
-        showError("msg_connection_lost");
+    if (error.detail === "invalid_email") {
+        showFieldError("error_invalid_email");
+        return;
+    }
+
+    if (error.detail === "invalid_rut") {
+        showFieldError("error_invalid_rut");
+        return;
+    }
+
+    if (error.detail === "invalid_identifier") {
+        showFieldError("error_invalid_identifier");
+        return;
+    }
+
+    if (error.detail === "invalid_birth_date") {
+        showFieldError("error_required_field");
+        return;
+    }
+
+    if (error.detail.startsWith("missing_field:")) {
+        showFieldError("error_required_field");
+        return;
+    }
+
+    showError("msg_connection_lost");
 
 }
 
