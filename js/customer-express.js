@@ -6,9 +6,7 @@ let fields = [];
 let currentStep = -1;
 let formData = {};
 let token = null;
-let fields = [];
-let currentStep = -1;
-let formData = {};
+
 
 const STORAGE_KEY = "kivor_customer_express_draft";
 
