@@ -283,8 +283,15 @@ function renderInput(field) {
 
     const fieldName = field.customer_capture_settings_field;
 
-    document.getElementById("express-field-label").innerText =
-        t("field_" + fieldName);
+    const label = document.getElementById("express-field-label");
+
+    let labelText = t("field_" + fieldName);
+
+    if (field.customer_capture_settings_is_required) {
+     labelText += " *";
+    }
+
+    label.innerText = labelText;
 
     const input = document.createElement("input");
 
