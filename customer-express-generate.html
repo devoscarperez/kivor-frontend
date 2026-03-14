@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Solicitar datos cliente</title>
+</head>
 
+<body>
+
+<h2>Generar formulario cliente</h2>
+
+<button id="btn">Generar link</button>
+
+<div id="result"></div>
+
+<script>
+
+const API_BASE = "https://kivor.onrender.com";
+const token = sessionStorage.getItem("access_token");
+
+document.getElementById("btn").onclick = async () => {
+
+    const response = await fetch(`${API_BASE}/customers-express/generate`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    const data = await response.json();
+
+    document.getElementById("result").innerHTML =
+        `<p>${data.link}</p>`;
+
+};
+
+</script>
+
+</body>
+</html>
