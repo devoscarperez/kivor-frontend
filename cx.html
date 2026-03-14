@@ -17,7 +17,43 @@
 
 <div id="express-app">
 
-    <h2>Registro de Cliente</h2>
+    <div id="express-progress"></div>
+
+    <div id="express-content">
+
+        <div id="express-screen-intro" class="express-screen">
+            <p id="express-intro-text"></p>
+        </div>
+
+        <div id="express-screen-form" class="express-screen" style="display:none">
+
+            <label id="express-field-label"></label>
+
+            <div id="express-field-container"></div>
+
+            <div id="express-error"></div>
+
+        </div>
+
+        <div id="express-screen-success" class="express-screen" style="display:none">
+            <p id="express-success-text"></p>
+        </div>
+
+        <div id="express-screen-error" class="express-screen" style="display:none">
+            <p id="express-error-text"></p>
+        </div>
+
+    </div>
+
+    <div id="express-actions">
+
+        <button id="express-btn-back" style="display:none"></button>
+
+        <button id="express-btn-next"></button>
+
+        <button id="express-btn-save" style="display:none"></button>
+
+    </div>
 
 </div>
 
@@ -26,5 +62,4 @@
 <script src="/js/customer-express.js"></script>
 
 </body>
-
 </html>
