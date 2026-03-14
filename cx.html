@@ -1,65 +1,47 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Registro Cliente</title>
-
-<link rel="stylesheet" href="/css/theme.css">
-<link rel="stylesheet" href="/css/styles.css">
-
-</head>
-
 <body>
 
-<div id="express-app">
+<div class="layout">
 
-    <div id="express-progress"></div>
+    <div class="container">
 
-    <div id="express-content">
+        <div id="express-progress"></div>
 
-        <div id="express-screen-intro" class="express-screen">
-            <p id="express-intro-text"></p>
+        <div id="express-content">
+
+            <div id="express-screen-intro" class="express-screen">
+                <p id="express-intro-text"></p>
+            </div>
+
+            <div id="express-screen-form" class="express-screen" style="display:none">
+
+                <label id="express-field-label"></label>
+
+                <div id="express-field-container"></div>
+
+                <p class="input-error" id="express-error"></p>
+
+            </div>
+
+            <div id="express-screen-success" class="express-screen" style="display:none">
+                <p id="express-success-text"></p>
+            </div>
+
+            <div id="express-screen-error" class="express-screen" style="display:none">
+                <p id="express-error-text"></p>
+            </div>
+
         </div>
 
-        <div id="express-screen-form" class="express-screen" style="display:none">
+        <div id="express-actions">
 
-            <label id="express-field-label"></label>
+            <button id="express-btn-back" style="display:none"></button>
 
-            <div id="express-field-container"></div>
+            <button id="express-btn-next"></button>
 
-            <div id="express-error"></div>
+            <button id="express-btn-save" style="display:none"></button>
 
         </div>
-
-        <div id="express-screen-success" class="express-screen" style="display:none">
-            <p id="express-success-text"></p>
-        </div>
-
-        <div id="express-screen-error" class="express-screen" style="display:none">
-            <p id="express-error-text"></p>
-        </div>
-
-    </div>
-
-    <div id="express-actions">
-
-        <button id="express-btn-back" style="display:none"></button>
-
-        <button id="express-btn-next"></button>
-
-        <button id="express-btn-save" style="display:none"></button>
 
     </div>
 
 </div>
-
-<script src="/js/i18n.js"></script>
-<script src="/js/api.js"></script>
-<script src="/js/customer-express.js"></script>
-
-</body>
-</html>
