@@ -122,6 +122,9 @@ function showIntro() {
     document.getElementById("express-btn-next").innerText =
         t("action_continue");
 
+    document.getElementById("express-btn-back").innerText =
+        t("action_back");   // ← ESTA ES LA LÍNEA QUE FALTABA
+
 }
 
 function showError(messageKey) {
