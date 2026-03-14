@@ -144,6 +144,9 @@ function showSuccess() {
     document.getElementById("express-success-text").innerText =
         t("msg_success_saved");
 
+    // ocultar botones
+    document.getElementById("express-actions").style.display = "none";
+
 }
 
 // ===============================
