@@ -1,36 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
-<title>Solicitar datos cliente</title>
+<title>Generar formulario cliente</title>
+
+<link rel="stylesheet" href="css/login.css">
+
+<style>
+
+.result-box{
+    margin-top:16px;
+    padding:12px;
+    background:#f3f4f6;
+    border-radius:10px;
+    font-size:14px;
+    word-break:break-all;
+}
+
+.copy-btn{
+    margin-top:10px;
+    background:#111;
+}
+
+.message{
+    margin-top:10px;
+    font-size:13px;
+    color:#166534;
+    display:none;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h2>Generar formulario cliente</h2>
+<div class="layout">
 
-<button id="btn">Generar link</button>
+<div class="container">
 
-<div id="result"></div>
+<h2 style="margin-bottom:10px;">Generar registro cliente</h2>
+
+<p style="font-size:14px;color:#555;margin-bottom:20px;">
+Genera un enlace para que la clienta complete su registro.
+</p>
+
+<button id="btn-generate">
+Generar enlace
+</button>
+
+<div id="result" class="result-box" style="display:none;"></div>
+
+<button id="btn-copy" class="copy-btn" style="display:none;">
+Copiar enlace
+</button>
+
+<div id="message" class="message">
+Enlace copiado al portapapeles
+</div>
+
+</div>
+
+</div>
 
 <script>
 
 const API_BASE = "https://kivor.onrender.com";
-const token = sessionStorage.getItem("access_token");
 
-document.getElementById("btn").onclick = async () => {
+let lastGeneratedLink = null;
 
-    const response = await fetch(`${API_BASE}/customers-express/generate`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`
+const btnGenerate = document.getElementById("btn-generate");
+const btnCopy = document.getElementById("btn-copy");
+const resultBox = document.getElementById("result");
+const message = document.getElementById("message");
+
+async function copiarAlPortapapeles(texto){
+
+    try{
+
+        await navigator.clipboard.writeText(texto);
+
+        message.style.display = "block";
+
+        setTimeout(()=>{
+            message.style.display = "none";
+        },2000);
+
+    }catch(e){
+        console.error("No se pudo copiar",e);
+    }
+
+}
+
+btnGenerate.onclick = async () => {
+
+    const token = sessionStorage.getItem("access_token");
+
+    const response = await fetch(`${API_BASE}/customers-express/generate`,{
+        method:"POST",
+        headers:{
+            "Authorization":`Bearer ${token}`
         }
     });
 
     const data = await response.json();
 
-    document.getElementById("result").innerHTML =
-        `<p>${data.link}</p>`;
+    lastGeneratedLink = data.link;
+
+    resultBox.style.display = "block";
+    resultBox.innerText = lastGeneratedLink;
+
+    btnCopy.style.display = "block";
+
+    copiarAlPortapapeles(lastGeneratedLink);
+
+};
+
+btnCopy.onclick = () => {
+
+    if(!lastGeneratedLink) return;
+
+    copiarAlPortapapeles(lastGeneratedLink);
 
 };
 
