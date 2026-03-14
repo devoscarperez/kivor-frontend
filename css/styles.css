@@ -160,3 +160,88 @@ td:first-child {
     background-color: #f0f0f0;
     transition: background 0.15s ease;
 }
+
+/* =========================
+   CUSTOMER EXPRESS FORM
+========================= */
+
+#express-content {
+    margin-top: 10px;
+}
+
+#express-field-label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #2E2E2E;
+}
+
+#express-field-container input {
+
+    width: 100%;
+    height: 48px;
+
+    padding: 0 14px;
+
+    border: 1px solid #d4d8dd;
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    background-color: #eef2f6;
+
+    transition: all 0.15s ease;
+}
+
+#express-field-container input:focus {
+
+    outline: none;
+
+    background-color: #ffffff;
+
+    border-color: #D97706;
+
+    box-shadow: 0 0 0 3px rgba(217,119,6,0.15);
+
+}
+
+#express-progress {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 14px;
+}
+
+#express-actions {
+    margin-top: 20px;
+}
+
+#express-actions button {
+
+    width: 100%;
+
+    padding: 14px;
+
+    font-size: 18px;
+
+    border-radius: 14px;
+
+    border: none;
+
+    background: #D97706;
+
+    color: white;
+
+    font-weight: 700;
+
+}
+
+#express-btn-back {
+    background: #E5E7EB;
+    color: #111;
+}
+
+#express-error {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #991B1B;
+}
