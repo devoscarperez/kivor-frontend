@@ -58,7 +58,7 @@ en: {
   action_continue: "Continue",
   action_save: "Save",
   action_retry: "Try again",
-  action_back: "Back"
+  action_back: "Back",
 
   field_first_name: "First name",
   field_last_name: "Last name",
