@@ -17,6 +17,7 @@ es: {
   action_continue: "Continuar",
   action_save: "Guardar",
   action_retry: "Intentar nuevamente",
+  action_back: "Volver",
 
   field_first_name: "Nombre",
   field_last_name: "Apellido",
@@ -57,6 +58,7 @@ en: {
   action_continue: "Continue",
   action_save: "Save",
   action_retry: "Try again",
+  action_back: "Back"
 
   field_first_name: "First name",
   field_last_name: "Last name",
