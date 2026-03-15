@@ -1,5 +1,29 @@
 let API_BASE = null;
 /* =========================
+   Le da valor a API_BASE
+========================= */
+async function loadConfig() {
+
+    try {
+
+        const response = await fetch("/config");
+
+        if (!response.ok) {
+            throw new Error("No se pudo cargar la configuración");
+        }
+
+        const config = await response.json();
+
+        API_BASE = config.api_base;
+
+    } catch (error) {
+
+        console.error("Error cargando configuración:", error);
+
+    }
+}
+
+/* =========================
    Funcion leer el JWT
 ========================= */
 function isTokenExpired(token) {
