@@ -224,10 +224,9 @@ function renderSearchResults(results, fields){
 
         html += `
             <tr style="border-bottom:1px solid #eee;">
-                <td style="padding:8px;">
+                <td style="padding:8px; white-space:nowrap;">
                     ${new Date(r.customers_express_completed_at).toLocaleString("es-CL")}
                 </td>
-
         `;
 
         (fields || []).forEach(f => {
