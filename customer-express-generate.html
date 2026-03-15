@@ -177,7 +177,7 @@ btnSearch.onclick = async () => {
     }
 
 };
-function renderSearchResults(results){
+function renderSearchResults(results, fields){
 
     if(!results || results.length === 0){
 
@@ -191,15 +191,22 @@ function renderSearchResults(results){
         <thead>
             <tr style="background:#f3f4f6;">
                 <th style="padding:8px;text-align:left;">Fecha</th>
-                <th style="padding:8px;text-align:left;">Nombre</th>
-                <th style="padding:8px;text-align:left;">Identificador</th>
+    `;
+
+    fields.forEach(f => {
+
+        html += `<th style="padding:8px;text-align:left;">${f}</th>`;
+
+    });
+
+    html += `
                 <th style="padding:8px;text-align:left;"></th>
             </tr>
         </thead>
         <tbody>
     `;
 
-    results.forEach((r,i)=>{
+    results.forEach((r)=>{
 
         const fullName =
             `${r.customers_express_first_name || ""} ${r.customers_express_last_name || ""}`.trim();
@@ -213,15 +220,21 @@ function renderSearchResults(results){
                 <td style="padding:8px;">
                     ${r.customers_express_completed_at || ""}
                 </td>
+        `;
 
+        fields.forEach(f => {
+
+            const column = `customers_express_${f}`;
+
+            html += `
                 <td style="padding:8px;">
-                    ${fullName}
+                    ${r[column] || ""}
                 </td>
+            `;
 
-                <td style="padding:8px;">
-                    ${identifier}
-                </td>
+        });
 
+        html += `
                 <td style="padding:8px;">
                     <button onclick="copyRow('${copyText}')">
                         Copiar
@@ -239,6 +252,7 @@ function renderSearchResults(results){
     searchResults.innerHTML = html;
 
 }
+
 async function copyRow(text){
 
     try{
