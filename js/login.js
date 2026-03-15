@@ -1,4 +1,3 @@
-const API_BASE = "https://kivor.onrender.com";
 
 const screenUsername = document.getElementById("screen-username");
 const screenPassword = document.getElementById("screen-password");
