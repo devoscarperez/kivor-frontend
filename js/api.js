@@ -1,4 +1,4 @@
-const API_BASE = "https://kivor.onrender.com";
+let API_BASE = null;
 /* =========================
    Funcion leer el JWT
 ========================= */
