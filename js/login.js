@@ -61,6 +61,7 @@ passwordInput.addEventListener("input", () => {
 
 async function validarUsuario() {
 
+   await window.APP_READY;
    limpiarError("username");
 
    const username = usernameInput.value.trim().toLowerCase();
@@ -113,6 +114,7 @@ passwordInput.addEventListener("keypress", (e) => {
 
 async function loginFinal() {
 
+    await window.APP_READY;
     limpiarError("password");  // 🔥 limpiar antes de validar
    
     const password = passwordInput.value;
