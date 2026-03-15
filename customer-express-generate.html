@@ -187,7 +187,8 @@ function renderSearchResults(results, fields){
     }
 
     let html = `
-    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+    <div style="overflow-x:auto; width:100%;">
+    <table style="width:100%;border-collapse:collapse;font-size:14px; min-width:600px;">
         <thead>
             <tr style="background:#f3f4f6;">
                 <th style="padding:8px;text-align:left;">Fecha</th>
@@ -218,8 +219,9 @@ function renderSearchResults(results, fields){
         html += `
             <tr style="border-bottom:1px solid #eee;">
                 <td style="padding:8px;">
-                    ${r.customers_express_completed_at || ""}
+                    ${new Date(r.customers_express_completed_at).toLocaleString("es-CL")}
                 </td>
+
         `;
 
         (fields || []).forEach(f => {
@@ -247,6 +249,7 @@ function renderSearchResults(results, fields){
     html += `
         </tbody>
     </table>
+    </div>
     `;
 
     searchResults.innerHTML = html;
