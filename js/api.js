@@ -154,5 +154,5 @@ async function obtenerGananciasPorMes(mes) {
     }
 }
 
-loadConfig();
+window.APP_READY = loadConfig();
  
