@@ -167,7 +167,7 @@ btnSearch.onclick = async () => {
 
         const data = await response.json();
 
-        renderSearchResults(data.results);
+        renderSearchResults(data.results, data.fields);
 
     }catch(e){
 
