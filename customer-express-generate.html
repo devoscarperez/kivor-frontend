@@ -143,6 +143,41 @@ btnCopy.onclick = () => {
     copiarAlPortapapeles(lastGeneratedLink);
 
 };
+btnSearch.onclick = async () => {
+
+    const mobile = searchMobile.value.trim();
+
+    if(!mobile){
+        alert("Ingrese el celular de la clienta");
+        return;
+    }
+
+    const token = sessionStorage.getItem("access_token");
+
+    try{
+
+        const response = await fetch(
+            `${API_BASE}/customers-express/search/${mobile}`,
+            {
+                headers:{
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        renderSearchResults(data.results);
+
+    }catch(e){
+
+        console.error(e);
+        alert("Error consultando datos");
+
+    }
+
+};
+
 
 </script>
 
