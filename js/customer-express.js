@@ -312,70 +312,112 @@ function renderInput(field) {
 
     label.innerText = labelText;
 
-    const input = document.createElement("input");
+    let input;
 
-    input.id = "express-input";
-    input.value = formData[fieldName] || "";
+    // ===============================
+    // SELECT PARA IDENTIFIER TYPE
+    // ===============================
 
-    if (fieldName === "mobile") {
-        input.type = "tel";
-        input.inputMode = "numeric";
-        input.placeholder = "+56 9 1234 5678";
-    }
-    else if (fieldName === "email") {
-        input.type = "email";
-        input.placeholder = "email@email.com";
-    }
-    else if (fieldName === "birth_date") {
-        input.type = "text";
-        input.inputMode = "numeric";
-        input.placeholder = "DD MM AAAA";
-        input.maxLength = 10;
-    }
-    else if (fieldName === "identifier") {
-        input.type = "text";
-        input.placeholder = "12345678-9";
-    }
-    else {
-        input.type = "text";
-    }
+    if (fieldName === "identifier_type") {
 
-    input.addEventListener("input", (e) => {
+        input = document.createElement("select");
+        input.id = "express-input";
 
-        clearFieldError();
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Seleccione";
+        input.appendChild(defaultOption);
 
-        e.target.value = formatFieldValue(
-            fieldName,
-            e.target.value
-        );
+        identifierTypes.forEach(type => {
 
-    });
+            const option = document.createElement("option");
 
-    input.addEventListener("keydown", (e) => {
+            option.value = type.identifier_type_settings_code;
+            option.textContent = type.identifier_type_settings_label;
 
-        if (e.key === "Enter") {
-
-            e.preventDefault();
-
-            if (!validateCurrentField()) return;
-
-            saveCurrentField();
-
-            if (currentStep < fields.length - 1) {
-                nextStep();
-            } else {
-                saveForm();
+            if (formData[fieldName] === option.value) {
+                option.selected = true;
             }
 
+            input.appendChild(option);
+
+        });
+
+    }
+
+    // ===============================
+    // INPUT NORMAL (LO QUE YA TENÍAS)
+    // ===============================
+
+    else {
+
+        input = document.createElement("input");
+
+        input.id = "express-input";
+        input.value = formData[fieldName] || "";
+
+        if (fieldName === "mobile") {
+            input.type = "tel";
+            input.inputMode = "numeric";
+            input.placeholder = "+56 9 1234 5678";
+        }
+        else if (fieldName === "email") {
+            input.type = "email";
+            input.placeholder = "email@email.com";
+        }
+        else if (fieldName === "birth_date") {
+            input.type = "text";
+            input.inputMode = "numeric";
+            input.placeholder = "DD MM AAAA";
+            input.maxLength = 10;
+        }
+        else if (fieldName === "identifier") {
+            input.type = "text";
+            input.placeholder = "12345678-9";
+        }
+        else {
+            input.type = "text";
         }
 
-    });
+        input.addEventListener("input", (e) => {
+
+            clearFieldError();
+
+            e.target.value = formatFieldValue(
+                fieldName,
+                e.target.value
+            );
+
+        });
+
+        input.addEventListener("keydown", (e) => {
+
+            if (e.key === "Enter") {
+
+                e.preventDefault();
+
+                if (!validateCurrentField()) return;
+
+                saveCurrentField();
+
+                if (currentStep < fields.length - 1) {
+                    nextStep();
+                } else {
+                    saveForm();
+                }
+
+            }
+
+        });
+
+    }
 
     container.appendChild(input);
 
     input.focus();
 
 }
+
 
 // ===============================
 // PROGRESS
