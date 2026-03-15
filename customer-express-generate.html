@@ -239,6 +239,22 @@ function renderSearchResults(results){
     searchResults.innerHTML = html;
 
 }
+async function copyRow(text){
+
+    try{
+
+        await navigator.clipboard.writeText(text);
+
+        alert("Copiado al portapapeles:\n\n" + text);
+
+    }catch(e){
+
+        console.error(e);
+        alert("No se pudo copiar al portapapeles");
+
+    }
+
+}
 
     
 
