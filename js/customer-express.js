@@ -3,9 +3,11 @@
 // ===============================
 
 let fields = [];
+let identifierTypes = [];
 let currentStep = -1;
 let formData = {};
 let token = null;
+
 
 const STORAGE_KEY = "kivor_customer_express_draft";
 
@@ -72,6 +74,8 @@ async function loadFormConfig() {
         const data = await response.json();
 
         fields = data.fields || [];
+        identifierTypes = data.identifier_types || [];
+
 
         if (fields.length === 0) {
             showError("msg_invalid_link");
