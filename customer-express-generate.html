@@ -193,7 +193,7 @@ function renderSearchResults(results, fields){
                 <th style="padding:8px;text-align:left;">Fecha</th>
     `;
 
-    fields.forEach(f => {
+    (fields || []).forEach(f => {
 
         html += `<th style="padding:8px;text-align:left;">${f}</th>`;
 
@@ -222,7 +222,7 @@ function renderSearchResults(results, fields){
                 </td>
         `;
 
-        fields.forEach(f => {
+        (fields || []).forEach(f => {
 
             const column = `customers_express_${f}`;
 
