@@ -208,13 +208,18 @@ function renderSearchResults(results, fields){
     `;
 
     results.forEach((r)=>{
-
-        const fullName =
-            `${r.customers_express_first_name || ""} ${r.customers_express_last_name || ""}`.trim();
-
+        const firstName = r.customers_express_first_name || "";
+        const lastName = r.customers_express_last_name || "";
+        const fullName = `${firstName} ${lastName}`.trim();
         const identifier = r.customers_express_identifier_value || "";
-
-        const copyText = `${identifier} / ${fullName}`;
+        let copyText = "";
+        if(identifier && fullName){
+            copyText = `${identifier} / ${fullName}`;
+        }else if(identifier){
+            copyText = identifier;
+        }else{
+            copyText = fullName;
+        }
 
         html += `
             <tr style="border-bottom:1px solid #eee;">
