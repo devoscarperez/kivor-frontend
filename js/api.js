@@ -6,16 +6,11 @@ function getApiBase() {
 
     const hostname = window.location.hostname;
 
-    const ENV_MAP = {
-        dev: "https://kivor-env.onrender.com",
-        prod: "https://kivor.onrender.com"
-    };
-
     if (hostname.includes("dev")) {
-        return ENV_MAP.dev;
+        return "https://kivor-dev.onrender.com";
     }
 
-    return ENV_MAP.prod;
+    return "https://kivor.onrender.com";
 }
 
 const API_BASE = getApiBase();
