@@ -6,11 +6,23 @@ function getApiBase() {
 
     const hostname = window.location.hostname;
 
-    if (hostname.includes("dev")) {
-        return "https://kivor-dev.onrender.com";
+    const ENVIRONMENTS = {
+        dev: "https://kivor-dev.onrender.com",
+        prod: "https://kivor.onrender.com"
+    };
+
+    // Desarrollo local
+    if (hostname.includes("localhost")) {
+        return ENVIRONMENTS.dev;
     }
 
-    return "https://kivor.onrender.com";
+    // Frontend dev
+    if (hostname.includes("frontend-dev")) {
+        return ENVIRONMENTS.dev;
+    }
+
+    // Producción
+    return ENVIRONMENTS.prod;
 }
 
 const API_BASE = getApiBase();
