@@ -1,4 +1,3 @@
-
 const screenUsername = document.getElementById("screen-username");
 const screenPassword = document.getElementById("screen-password");
 
@@ -18,6 +17,10 @@ btnLogin.disabled = true;
 
 const togglePassword = document.getElementById("toggle-password");
 
+/* =====================
+   TOGGLE PASSWORD
+===================== */
+
 if (togglePassword) {
 
   togglePassword.addEventListener("click", () => {
@@ -35,16 +38,8 @@ if (togglePassword) {
 }
 
 /* =====================
-   PASO 1: VALIDAR USUARIO
+   INPUT HANDLERS
 ===================== */
-
-// usernameInput.addEventListener("input", () => limpiarError("username"));
-// passwordInput.addEventListener("input", () => limpiarError("password"));
-
-btnUsername.addEventListener("click", validarUsuario);
-usernameInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") validarUsuario();
-});
 
 usernameInput.addEventListener("input", () => {
     limpiarError("username");
@@ -56,8 +51,15 @@ passwordInput.addEventListener("input", () => {
     btnLogin.disabled = passwordInput.value.trim() === "";
 });
 
+btnUsername.addEventListener("click", validarUsuario);
 
+usernameInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") validarUsuario();
+});
 
+/* =====================
+   PASO 1: VALIDAR USUARIO
+===================== */
 
 async function validarUsuario() {
 
@@ -81,10 +83,19 @@ async function validarUsuario() {
         });
 
         if (!response.ok) {
-           btnUsername.disabled = false;
-           btnUsername.textContent = t("btn_username");
-           mostrarError("username", t("invalid_user"));
-           return;
+
+            let msg = t("invalid_user");
+
+            try {
+                const data = await response.json();
+                if (data.detail) msg = data.detail;
+            } catch {}
+
+            mostrarError("username", msg);
+
+            btnUsername.disabled = false;
+            btnUsername.textContent = t("btn_username");
+            return;
         }
 
         currentUsername = username;
@@ -93,13 +104,18 @@ async function validarUsuario() {
         screenUsername.classList.remove("active");
         screenPassword.classList.add("active");
 
-        btnLogin.disabled = true;
         passwordInput.value = "";
+        btnLogin.disabled = true;
 
         passwordInput.focus();
 
     } catch (error) {
-        alert("Error de conexión");
+
+        console.error("Error login-username:", error);
+        alert("No se pudo conectar con el servidor");
+
+        btnUsername.disabled = false;
+        btnUsername.textContent = t("btn_username");
     }
 }
 
@@ -108,6 +124,7 @@ async function validarUsuario() {
 ===================== */
 
 btnLogin.addEventListener("click", loginFinal);
+
 passwordInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") loginFinal();
 });
@@ -115,12 +132,14 @@ passwordInput.addEventListener("keypress", (e) => {
 async function loginFinal() {
 
     await window.APP_READY;
-    limpiarError("password");  // 🔥 limpiar antes de validar
-   
+    limpiarError("password");
+
     const password = passwordInput.value;
     if (!password) return;
 
     try {
+
+        btnLogin.disabled = true;
 
         const response = await fetch(`${API_BASE}/login`, {
             method: "POST",
@@ -134,21 +153,31 @@ async function loginFinal() {
         });
 
         if (!response.ok) {
-           // alert("Clave incorrecta");
-           mostrarError("password", t("invalid_credentials"));
+
+            let msg = t("invalid_credentials");
+
+            try {
+                const data = await response.json();
+                if (data.detail) msg = data.detail;
+            } catch {}
+
+            mostrarError("password", msg);
+            btnLogin.disabled = false;
             return;
         }
 
         const data = await response.json();
 
-        // Guardamos el token
         sessionStorage.setItem("access_token", data.access_token);
 
-        // Redirigir al dashboard
         window.location.href = "dashboard.html";
 
     } catch (error) {
-        alert("Error de conexión");
+
+        console.error("Login error:", error);
+        alert("No se pudo conectar con el servidor");
+
+        btnLogin.disabled = false;
     }
 }
 
@@ -157,46 +186,60 @@ async function loginFinal() {
 ===================== */
 
 btnBack.addEventListener("click", () => {
+
     passwordInput.value = "";
     btnLogin.disabled = true;
 
     screenPassword.classList.remove("active");
     screenUsername.classList.add("active");
 
-    // restaurar texto del botón
     btnUsername.textContent = t("btn_username");
 
-    // re-evaluar estado
     btnUsername.disabled = usernameInput.value.trim() === "";
 
     usernameInput.focus();
+
 });
 
+/* =====================
+   UI HELPERS
+===================== */
+
 function mostrarError(campo, mensaje) {
+
     const input = document.getElementById(campo);
     const error = document.getElementById(`${campo}-error`);
 
     input.classList.add("input-invalid");
     error.textContent = mensaje;
     error.classList.add("active");
+
 }
 
 function limpiarError(campo) {
+
     const input = document.getElementById(campo);
     const error = document.getElementById(`${campo}-error`);
 
     input.classList.remove("input-invalid");
     error.textContent = "";
     error.classList.remove("active");
+
 }
 
+/* =====================
+   TRANSLATIONS
+===================== */
+
 function applyTranslations() {
+
     document.getElementById("label-username").textContent = t("username");
     document.getElementById("label-password").textContent = t("password");
     document.getElementById("btn-username").textContent = t("btn_username");
     document.getElementById("btn-login").textContent = t("login");
     document.getElementById("btn-back").textContent = t("back");
     document.getElementById("brand-tagline").textContent = t("tagline");
+
 }
 
 applyTranslations();
