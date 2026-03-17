@@ -1,31 +1,29 @@
-let API_BASE = null;
 /* =========================
-   Le da valor a API_BASE
+   CONFIG AUTOMÁTICA
 ========================= */
-async function loadConfig() {
 
-    try {
+function getApiBase() {
 
-        const response = await fetch("/config");
+    const hostname = window.location.hostname;
 
-        if (!response.ok) {
-            throw new Error("No se pudo cargar la configuración");
-        }
+    const ENV_MAP = {
+        dev: "https://kivor-env.onrender.com",
+        prod: "https://kivor.onrender.com"
+    };
 
-        const config = await response.json();
-
-        API_BASE = config.api_base;
-
-    } catch (error) {
-
-        console.error("Error cargando configuración:", error);
-
+    if (hostname.includes("dev")) {
+        return ENV_MAP.dev;
     }
+
+    return ENV_MAP.prod;
 }
+
+const API_BASE = getApiBase();
 
 /* =========================
    Funcion leer el JWT
 ========================= */
+
 function isTokenExpired(token) {
 
     try {
@@ -58,6 +56,7 @@ async function apiFetch(url, options = {}) {
         window.location.href = "login.html";
         return;
     }
+
     options.headers = {
         ...(options.headers || {}),
         "Authorization": `Bearer ${token}`
@@ -80,6 +79,10 @@ async function apiFetch(url, options = {}) {
 
 async function login(username, password) {
 
+    if (!API_BASE) {
+        throw new Error("API_BASE no definido");
+    }
+
     const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: {
@@ -92,9 +95,14 @@ async function login(username, password) {
         throw new Error("Credenciales inválidas");
     }
 
-    const data = await response.json();
+    let data;
 
-    // Guardamos el token
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error("Respuesta inválida del servidor");
+    }
+
     sessionStorage.setItem("access_token", data.access_token);
 
     return data;
@@ -153,6 +161,3 @@ async function obtenerGananciasPorMes(mes) {
 
     }
 }
-
-window.APP_READY = loadConfig();
- 
