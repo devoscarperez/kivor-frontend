@@ -236,8 +236,8 @@ function renderSearchResults(results, fields){
         `;
 
         (fields || []).forEach(f => {
-
-            const column = `customers_express_${f}`;
+       
+            const column = `customers_express_${f.replace("customers_", "")}`;
 
             html += `
                 <td style="padding:8px;">
