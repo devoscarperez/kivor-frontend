@@ -82,7 +82,10 @@ Consultar
 
 <script>
 
-const API_BASE = "https://kivor.onrender.com";
+const API_BASE =
+    window.location.hostname.includes("dev")
+        ? "https://kivor-dev.onrender.com"
+        : "https://kivor.onrender.com";
 
 let lastGeneratedLink = null;
 
