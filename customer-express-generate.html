@@ -158,9 +158,9 @@ btnSearch.onclick = async () => {
     try{
 
         const response = await fetch(
-            `${API_BASE}/customers-express/search/${mobile}`,
+            `${API_BASE}/customers-express/search/${encodeURIComponent(mobile)}`,
             {
-                headers:{
+                headers: {
                     "Authorization": `Bearer ${token}`
                 }
             }
