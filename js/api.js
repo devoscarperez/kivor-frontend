@@ -4,6 +4,8 @@
 
 function getApiBase() {
 
+   
+
     const hostname = window.location.hostname;
 
     const ENVIRONMENTS = {
