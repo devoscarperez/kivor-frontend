@@ -17,7 +17,8 @@ const STORAGE_KEY = "kivor_customer_express_draft";
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    if (typeof API_BASE === "undefined") {
+    # if (typeof API_BASE === "undefined") {
+    if (!API_BASE) {    
         console.error("API_BASE not defined");
         showError("msg_connection_lost");
         return;
