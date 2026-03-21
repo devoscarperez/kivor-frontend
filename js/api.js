@@ -11,11 +11,6 @@ function getApiBase() {
         prod: "https://kivor.onrender.com"
     };
 
-    // Desarrollo local
-    if (hostname.includes("localhost")) {
-        return ENVIRONMENTS.dev;
-    }
-
     // Frontend dev
     if (hostname.includes("frontend-dev")) {
         return ENVIRONMENTS.dev;
