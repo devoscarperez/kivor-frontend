@@ -86,9 +86,7 @@ const API_BASE =
     window.location.hostname.includes("dev")
         ? "https://kivor-dev.onrender.com"
         : "https://kivor.onrender.com";
-
-lastGeneratedLink = `${window.location.origin}/cx.html?token=${data.token}`;
-
+    
 const btnGenerate = document.getElementById("btn-generate");
 const btnCopy = document.getElementById("btn-copy");
 const resultBox = document.getElementById("result");
