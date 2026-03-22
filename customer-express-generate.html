@@ -129,8 +129,7 @@ btnGenerate.onclick = async () => {
 
     const data = await response.json();
     
-
-    lastGeneratedLink = data.link;
+    lastGeneratedLink = `${window.location.origin}/cx.html?token=${data.token}`;
 
     resultBox.style.display = "block";
     resultBox.innerText = lastGeneratedLink;
