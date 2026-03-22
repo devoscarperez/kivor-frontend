@@ -365,22 +365,25 @@ function renderInput(field) {
         input.id = "express-input";
         input.value = formData[fieldName] || "";
 
-        if (fieldName === "mobile") {
+        // 🔥 tipo dinámico desde BD
+        const inputType = field.customer_capture_settings_input_type;
+        
+        if (inputType  === "tel") {
             input.type = "tel";
             input.inputMode = "numeric";
             input.placeholder = "+56 9 1234 5678";
         }
-        else if (fieldName === "email") {
+        else if (inputType === "email") {
             input.type = "email";
             input.placeholder = "email@email.com";
         }
-        else if (fieldName === "birth_date") {
+        else if (inputType === "date") {
             input.type = "text";
             input.inputMode = "numeric";
             input.placeholder = "DD MM AAAA";
             input.maxLength = 10;
         }
-        else if (fieldName === "identifier") {
+        else if (inputType === "identifier") {
             input.type = "text";
             input.placeholder = "12345678-9";
         }
