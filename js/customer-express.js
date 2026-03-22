@@ -295,21 +295,19 @@ function renderField() {
 // ===============================
 
 function renderInput(field) {
-
-    const container = document.getElementById("express-field-container");
-
-    container.innerHTML = "";
-
-    const fieldName = field.customer_capture_settings_field;
-
+    
     const label = document.getElementById("express-field-label");
-
-    let labelText = t("field_" + fieldName);
-
+    
+    // ✅ NUEVO: usar label desde backend (multitenant dinámico)
+    let labelText = field.customer_capture_settings_label 
+        || t("field_" + fieldName) 
+        || fieldName;
+    
+    // ✅ requerido
     if (field.customer_capture_settings_is_required) {
         labelText += " *";
     }
-
+    
     label.innerText = labelText;
 
     let input;
