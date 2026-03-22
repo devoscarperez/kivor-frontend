@@ -295,19 +295,28 @@ function renderField() {
 // ===============================
 
 function renderInput(field) {
-    
+
+    const container = document.getElementById("express-field-container");
+
+    container.innerHTML = "";
+
+    // 🔹 nombre original (BD)
+    const fieldName = field.customer_capture_settings_field;
+
+    // 🔹 nombre limpio (sin prefijo técnico)
+    const cleanFieldName = fieldName.replace("customers_", "");
+
     const label = document.getElementById("express-field-label");
-    
-    // ✅ NUEVO: usar label desde backend (multitenant dinámico)
+
+    // 🔹 label dinámico (BD → i18n → fallback limpio)
     let labelText = field.customer_capture_settings_label 
-        || t("field_" + fieldName) 
-        || fieldName;
-    
-    // ✅ requerido
+        || t("field_" + cleanFieldName) 
+        || cleanFieldName;
+
     if (field.customer_capture_settings_is_required) {
         labelText += " *";
     }
-    
+
     label.innerText = labelText;
 
     let input;
