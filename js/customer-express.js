@@ -296,6 +296,8 @@ function renderField() {
 
 function renderInput(field) {
 
+    console.log("FIELD:", field); // 👈 AQUÍ
+    
     const container = document.getElementById("express-field-container");
 
     container.innerHTML = "";
