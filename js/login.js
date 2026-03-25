@@ -1,3 +1,5 @@
+import "./i18n.js";
+import "./api.js";
 import { createInputText } from "./components/input-text.js";
 const screenUsername = document.getElementById("screen-username");
 const screenPassword = document.getElementById("screen-password");
