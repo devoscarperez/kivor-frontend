@@ -207,3 +207,70 @@ button:disabled {
 .toggle-password:hover {
   opacity: 1;
 }
+
+/* =========================
+   INPUT FLOATING (KIVOR STYLE)
+========================= */
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 16px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+/* LABEL */
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    background: white;
+    padding: 0 6px;
+    font-size: 14px;
+    color: #64748b;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+/* FLOATING EFFECT */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 12px;
+    color: #1e3a8a; /* color KIVOR (ajustable) */
+}
+
+/* FOCUS */
+.input-group input:focus {
+    border-color: #1e3a8a;
+}
+
+/* ERROR */
+.input-group input.input-invalid {
+    border-color: #ef4444;
+}
+
+.input-group input.input-invalid + label {
+    color: #ef4444;
+}
+
+.input-error {
+    font-size: 12px;
+    color: #ef4444;
+    margin-top: 4px;
+    display: none;
+}
+
+.input-error.active {
+    display: block;
+}
