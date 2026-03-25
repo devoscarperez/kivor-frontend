@@ -1,4 +1,3 @@
-import { createInputRut } from "./components/input-rut.js";
 const screenUsername = document.getElementById("screen-username");
 const screenPassword = document.getElementById("screen-password");
 
@@ -10,7 +9,6 @@ const displayUsername = document.getElementById("display-username");
 const btnUsername = document.getElementById("btn-username");
 const btnBack = document.getElementById("btn-back");
 const btnLogin = document.getElementById("btn-login");
-const rutComponent = createInputRut("username");
 
 let currentUsername = "";
 
@@ -66,7 +64,7 @@ usernameInput.addEventListener("keypress", (e) => {
 async function validarUsuario() {
 
    await window.APP_READY;
-   rutComponent.clearError();
+   limpiarError("username");
 
    const username = usernameInput.value.trim().toLowerCase();
    if (!username) return;
@@ -93,7 +91,7 @@ async function validarUsuario() {
                 if (data.detail) msg = data.detail;
             } catch {}
 
-            rutComponent.setError(msg);
+            mostrarError("username", msg);
 
             btnUsername.disabled = false;
             btnUsername.textContent = t("btn_username");
