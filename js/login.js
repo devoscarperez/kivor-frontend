@@ -22,6 +22,8 @@ btnLogin.disabled = true;
 
 const togglePassword = document.getElementById("toggle-password");
 
+window.addEventListener("DOMContentLoaded", () => {
+   
 /* =====================
    TOGGLE PASSWORD
 ===================== */
@@ -47,7 +49,7 @@ if (togglePassword) {
 ===================== */
 
 usernameInput.addEventListener("input", () => {
-    rutComponent.clearError();
+    usernameField.clearError();
     btnUsername.disabled = usernameInput.value.trim() === "";
 });
 
@@ -248,3 +250,4 @@ function applyTranslations() {
 }
 
 applyTranslations();
+});
