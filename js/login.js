@@ -1,7 +1,9 @@
+import { createInputText } from "./components/input-text.js";
 const screenUsername = document.getElementById("screen-username");
 const screenPassword = document.getElementById("screen-password");
 
 const usernameInput = document.getElementById("username");
+const usernameField = createInputText("username");
 const passwordInput = document.getElementById("password");
 
 const displayUsername = document.getElementById("display-username");
@@ -9,6 +11,7 @@ const displayUsername = document.getElementById("display-username");
 const btnUsername = document.getElementById("btn-username");
 const btnBack = document.getElementById("btn-back");
 const btnLogin = document.getElementById("btn-login");
+
 
 let currentUsername = "";
 
@@ -64,7 +67,7 @@ usernameInput.addEventListener("keypress", (e) => {
 async function validarUsuario() {
 
    await window.APP_READY;
-   limpiarError("username");
+   usernameField.clearError();
 
    const username = usernameInput.value.trim().toLowerCase();
    if (!username) return;
@@ -91,7 +94,7 @@ async function validarUsuario() {
                 if (data.detail) msg = data.detail;
             } catch {}
 
-            mostrarError("username", msg);
+            usernameField.setError(msg);
 
             btnUsername.disabled = false;
             btnUsername.textContent = t("btn_username");
