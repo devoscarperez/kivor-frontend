@@ -138,15 +138,19 @@ button:active {
 /* LABEL (sin parche) */
 .input-group label {
     position: absolute;
-    top: -8px;
-    left: 14px;
+    top: -9px;
+    left: 12px;
 
-    font-size: 12px;
-    color: var(--kivor-secondary);
+    font-size: 13px;
+    font-weight: 500;
 
-    padding: 0 4px;
+    padding: 0 6px;
 
     background: var(--kivor-background);
+
+    color: var(--kivor-secondary);
+
+    line-height: 1;
 }
 
 /* ERROR */
