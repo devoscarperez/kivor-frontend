@@ -34,6 +34,16 @@ body {
   border: 1px solid rgba(0,0,0,0.05);
 }
 
+.screen {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.screen.active {
+  display: flex;
+}
+
 /* =========================
    INPUT GROUP (BCI STYLE)
 ========================= */
