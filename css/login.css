@@ -1,10 +1,13 @@
 :root{
-  --kivor-base: #111111;          /* Negro carbón */
-  --kivor-primary: #D97706;       /* Ámbar fuerte */
-  --kivor-secondary: #2E2E2E;     /* Gris grafito */
-  --kivor-background: #F4F4F5;    /* Gris ultra claro */
-  --kivor-success: #166534;       /* Verde profesional */
-  --kivor-error: #991B1B;         /* Rojo profundo */
+  --kivor-base: #111111;
+  --kivor-primary: #D97706;
+  --kivor-secondary: #2E2E2E;
+  --kivor-background: #F4F4F5;
+  --kivor-success: #166534;
+  --kivor-error: #991B1B;
+
+  --kivor-white: #FFFFFF;
+  --kivor-border: #E5E7EB;
 
   --radius: 14px;
 }
@@ -25,50 +28,88 @@ body {
 .container {
   width: 92%;
   max-width: 420px;
-  background: #ffffff;
+  background: var(--kivor-white);
   padding: 32px;
   border-radius: 18px;
   border: 1px solid rgba(0,0,0,0.05);
-  /* box-shadow:
-    0 24px 50px rgba(0,0,0,0.12),
-    0 8px 18px rgba(0,0,0,0.08); */
 }
 
-.screen {
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-  transition: opacity 0.2s ease;
+/* =========================
+   INPUT GROUP (BCI STYLE)
+========================= */
+
+.input-group {
+    position: relative;
+    margin-bottom: 22px;
 }
 
-.screen.active { display: flex; }
-
-label {
-  font-size: 16px;
-  color: var(--kivor-secondary);
-}
-
-input {
+/* INPUT */
+.input-group input {
     width: 100%;
-    height: 48px;
-    padding: 0 14px;
+    padding: 18px 14px 10px 14px;
 
-    border: 1px solid #d4d8dd;
+    border: 1px solid var(--kivor-border);
     border-radius: 12px;
 
     font-size: 16px;
 
-    background-color: #eef2f6;
+    background: var(--kivor-white);
+    color: var(--kivor-base);
 
-    transition: all 0.15s ease;
-}
-
-input:focus {
     outline: none;
-    background-color: #ffffff;
-    border-color: var(--kivor-primary);
-    box-shadow: 0 0 0 3px rgba(217,119,6,0.15);
+    box-shadow: none;
+
+    transition: border 0.15s ease;
 }
+
+/* PLACEHOLDER */
+.input-group input::placeholder {
+    color: #9CA3AF;
+}
+
+/* FOCUS (BCI REAL) */
+.input-group input:focus {
+    border: 2px solid var(--kivor-primary);
+    box-shadow: none;
+}
+
+/* LABEL (sin parche) */
+.input-group label {
+    position: absolute;
+    top: -8px;
+    left: 14px;
+
+    font-size: 12px;
+    color: var(--kivor-secondary);
+
+    padding: 0 4px;
+
+    background: var(--kivor-white);
+}
+
+/* ERROR */
+.input-group input.input-invalid {
+    border: 2px solid var(--kivor-error);
+}
+
+.input-group input.input-invalid + label {
+    color: var(--kivor-error);
+}
+
+.input-error {
+    font-size: 12px;
+    color: var(--kivor-error);
+    margin-top: 4px;
+    display: none;
+}
+
+.input-error.active {
+    display: block;
+}
+
+/* =========================
+   BUTTONS
+========================= */
 
 button {
   padding: 14px;
@@ -79,46 +120,50 @@ button {
   color: white;
 }
 
-button:active { opacity: 0.9; }
-
 #btn-username, #btn-login {
-  background: var(--kivor-primary); /* acción principal en ámbar */
+  background: var(--kivor-primary);
   color: #ffffff;
   font-weight: 700;
 }
 
-#btn-username{
-  background: var(--kivor-primary);
-  font-weight:700;
-  transition: all 0.15s ease;
-}
-
-#btn-username:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-}
-
-.buttons {
-  display: flex;
-  gap: 10px;
-}
-
-#btn-back {
+button:disabled {
   background: #E5E7EB;
-  color: var(--kivor-base);
-  font-weight: 600;
-  flex: 1;
+  color: #9CA3AF;
+  cursor: not-allowed;
 }
 
-#btn-login {
-  flex: 1;
+/* =========================
+   PASSWORD ICON
+========================= */
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
 }
 
-.user-display {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--kivor-base);       /* el dato manda */
+.password-wrapper input {
+  padding-right: 42px;
 }
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.toggle-password:hover {
+  opacity: 1;
+}
+
+/* =========================
+   BRAND
+========================= */
 
 .layout {
   display: flex;
@@ -136,8 +181,6 @@ button:active { opacity: 0.9; }
 
 .brand-logo {
   width: 260px;
-  height: auto;
-  display: block;
   margin: 0 auto 10px;
 }
 
@@ -152,149 +195,5 @@ button:active { opacity: 0.9; }
 .brand p {
   font-size: 15px;
   color: var(--kivor-secondary);
-  letter-spacing:0.3px;
   margin-top:8px;
-}
-
-.input-error {
-  font-size: 13px;
-  color: var(--kivor-error);
-  margin-top: 6px;
-  display: none;
-}
-
-.input-error.active {
-  display: block;
-}
-
-.input-invalid {
-  border-color: var(--kivor-error) !important;
-  box-shadow: 0 0 0 3px rgba(153,27,27,0.15);
-}
-
-button:disabled {
-  background: #E5E7EB;
-  color: #9CA3AF;
-  cursor: not-allowed;
-}
-
-.password-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.password-wrapper input {
-  width: 100%;
-  padding-right: 42px;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-
-  transform: translateY(-50%);
-
-  border: none;
-  background: none;
-
-  cursor: pointer;
-
-  font-size: 16px;
-  opacity: 0.6;
-}
-
-.toggle-password:hover {
-  opacity: 1;
-}
-
-/* =========================
-   INPUT FLOATING (KIVOR STYLE)
-========================= */
-
-.input-group {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-
-.input-group input::placeholder {
-    color: var(--color-input-placeholder);
-    opacity: 1;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 16px 14px 12px 14px;
-    padding-top: 18px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    font-size: 16px;
-    outline: none;
-    background: transparent;
-    transition: all 0.2s ease;
-}
-
-/* LABEL 
-.input-group label {
-    position: absolute;
-    top: 50%;
-    left: 12px;
-    transform: translateY(-50%);
-    background: white;
-    padding: 0 6px;
-    font-size: 14px;
-    color: #64748b;
-    pointer-events: none;
-    transition: all 0.2s ease;
-}
-*/
-
-/* LABEL estilo BCI */
-.input-group label {
-    position: absolute;
-    top: -8px;
-    left: 14px;
-
-    font-size: 12px;
-    color: var(--color-text-secondary);
-
-    padding: 0 4px;
-
-    background: var(--color-surface); /* 🔥 clave (NO background general) */
-}
-
-/* FLOATING EFFECT 
-.input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label {
-    top: -8px;
-    font-size: 12px;
-    color: #1e3a8a; /* color KIVOR (ajustable) */
-}
-*/
-
-
-/* FOCUS */
-.input-group input:focus {
-    border-color: #1e3a8a;
-}
-
-/* ERROR */
-.input-group input.input-invalid {
-    border-color: #ef4444;
-}
-
-.input-group input.input-invalid + label {
-    color: #ef4444;
-}
-
-.input-error {
-    font-size: 12px;
-    color: #ef4444;
-    margin-top: 4px;
-    display: none;
-}
-
-.input-error.active {
-    display: block;
 }
