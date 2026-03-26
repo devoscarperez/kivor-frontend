@@ -1,15 +1,24 @@
-:root{
-  --kivor-base: #111111;
-  --kivor-primary: #D97706;
-  --kivor-secondary: #2E2E2E;
-  --kivor-background: #F4F4F5;
-  --kivor-success: #166534;
-  --kivor-error: #991B1B;
+:root {
+  --color-background: #F4F4F5;
+  --color-surface: #FFFFFF;
 
-  --kivor-white: #FFFFFF;
-  --kivor-border: #E5E7EB;
+  --color-text-primary: #111111;
+  --color-text-secondary: #2E2E2E;
 
-  --radius: 14px;
+  --color-primary: #D97706;
+  --color-primary-hover: #B45309;
+
+  --color-border-default: #D1D5DB;
+  --color-border-focus: #D97706;
+  --color-border-error: #DC2626;
+
+  --color-input-background: #FFFFFF;
+  --color-input-text: #111111;
+  --color-input-placeholder: #9CA3AF;
+
+  --color-error: #DC2626;
+
+  --radius-default: 14px;
 }
 
 * { box-sizing: border-box; }
@@ -28,7 +37,7 @@ body {
 .container {
   width: 92%;
   max-width: 420px;
-  background: var(--kivor-white);
+  background: var(--color-surface);
   padding: 32px;
   border-radius: 18px;
   border: 1px solid rgba(0,0,0,0.05);
@@ -85,7 +94,7 @@ button:active {
 
 /* PLACEHOLDER */
 .input-group input::placeholder {
-    color: #9CA3AF;
+    color: var(--color-input-placeholder);
 }
 
 /* FOCUS (BCI REAL) */
