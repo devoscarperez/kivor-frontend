@@ -7,7 +7,7 @@
   --kivor-error: #991B1B;
 
   --kivor-white: #FFFFFF;
-  --kivor-border: #111111;
+  --kivor-border: #E5E7EB;
 
   --radius: 14px;
 }
@@ -79,7 +79,7 @@ body {
 
 /* FOCUS (BCI REAL) */
 .input-group input:focus {
-    border: 2px solid var(--kivor-primary);
+    border: 2px solid var(--kivor-base);
     box-shadow: none;
 }
 
