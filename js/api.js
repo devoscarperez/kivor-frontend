@@ -165,3 +165,22 @@ async function obtenerGananciasPorMes(mes) {
 
     }
 }
+
+
+function applyTheme(theme) {
+    if (!theme || !theme.color) return;
+
+    const root = document.documentElement;
+
+    Object.entries(theme.color).forEach(([key, value]) => {
+        root.style.setProperty(`--color-${key}`, value);
+    });
+
+    if (theme.radius?.default) {
+        root.style.setProperty("--radius-default", theme.radius.default);
+    }
+
+    if (theme.shadow?.soft) {
+        root.style.setProperty("--shadow-soft", theme.shadow.soft);
+    }
+}
