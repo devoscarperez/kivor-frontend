@@ -50,6 +50,10 @@ window.addEventListener("DOMContentLoaded", () => {
    ===================== */
    
    usernameInput.addEventListener("input", () => {
+       usernameInput.classList.add("input-typing");
+       if (usernameInput.value === "") {
+           usernameInput.classList.remove("input-typing");
+       }
        usernameField.clearError();
        btnUsername.disabled = usernameInput.value.trim() === "";
    });
