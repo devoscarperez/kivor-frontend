@@ -65,23 +65,22 @@ button:active {
 /* INPUT */
 .input-group input {
     width: 100%;
-    padding: 18px 14px 10px 14px;
+    padding: 16px 14px;
+    border-radius: var(--radius-default);
 
-    border: 1px solid var(--kivor-border);
-    border-radius: 12px;
-
-    font-size: 16px;
-
-    background: var(--kivor-white);
-    color: var(--kivor-base);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-input-background);
+    color: var(--color-input-text);
 
     outline: none;
-    box-shadow: none;
+
+    /* 🔥 CLAVE: sensación blanda */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
 
     transition: 
-      border-color 0.2s ease,
-      box-shadow 0.2s ease,
-      transform 0.05s ease;
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.05s ease;
 }
 
 /* PLACEHOLDER */
@@ -92,9 +91,15 @@ button:active {
 /* FOCUS (BCI REAL) */
 .input-group input:focus {
     border-color: var(--color-border-focus);
-    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.15);
+
+    /* 🔥 Glow MUY suave (no anillo duro) */
+    box-shadow:
+        inset 0 1px 2px rgba(0,0,0,0.04),
+        0 0 0 3px rgba(217, 119, 6, 0.08);
+
     transform: translateY(-1px);
 }
+
 
 /* LABEL (sin parche) */
 .input-group label {
@@ -113,7 +118,10 @@ button:active {
 /* ERROR */
 .input-group input.input-invalid {
     border-color: var(--color-border-error);
-    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.12);
+
+    box-shadow:
+        inset 0 1px 2px rgba(0,0,0,0.04),
+        0 0 0 3px rgba(220, 38, 38, 0.08);
 }
 
 .input-group input.input-invalid + label {
