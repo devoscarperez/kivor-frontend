@@ -94,6 +94,7 @@ button:active {
     font-size: 16px;
     border-radius: var(--radius);
     border: 1px solid var(--kivor-border);
+    box-shadow: none;
     background: var(--kivor-white);
     color: var(--kivor-base);
 
@@ -119,6 +120,11 @@ button:active {
 
 /* FOCUS (BCI REAL) */
 .input-group input:focus {
+    border: 1.5px solid var(--kivor-primary);
+    box-shadow: none;
+}
+/*
+.input-group input:focus {
     border-color: var(--kivor-primary);
 
     box-shadow:
@@ -127,7 +133,7 @@ button:active {
 
     transform: translateY(1px); /* 👈 se hunde */
 }
-
+*/
 
 /* LABEL (sin parche) */
 .input-group label {
@@ -145,6 +151,11 @@ button:active {
 
 /* ERROR */
 .input-group input.input-invalid {
+    border: 1.5px solid var(--kivor-error);
+    box-shadow: none;
+}
+/*
+.input-group input.input-invalid {
     border-color: var(--color-border-error);
     font-size: 13px;
     top: -10px;
@@ -152,6 +163,7 @@ button:active {
         inset 0 1px 2px rgba(0,0,0,0.04),
         0 0 0 3px rgba(220, 38, 38, 0.08);
 }
+*/
 
 .input-group input.input-invalid + label {
     color: var(--kivor-error);
