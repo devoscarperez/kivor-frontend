@@ -1,20 +1,21 @@
-:root{
-  /* ===== KIVOR COLOR SYSTEM ===== */
-
-  --kivor-base: #111111;
-  --kivor-primary: #D97706;
-  --kivor-secondary: #2E2E2E;
-  --kivor-background: #F4F4F5;
-  --kivor-success: #166534;
-  --kivor-error: #991B1B;
-
-  /* Neutrales auxiliares */
-  --kivor-white: #FFFFFF;
-  --kivor-border: #E5E7EB;
-
-  /* Sombras */
-  --kivor-shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
-
-  /* Radios */
-  --kivor-radius: 14px;
+:root {
+  --color-background: #F4F4F5;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #111111;
+  --color-text-secondary: #2E2E2E;
+  --color-primary: #D97706;
+  --color-primary-hover: #B45309;
+  --color-primary-active: #92400E;
+  --color-border-default: #E5E7EB;
+  --color-border-focus: #D97706;
+  --color-border-error: #991B1B;
+  --color-input-background: #FFFFFF;
+  --color-input-text: #111111;
+  --color-input-placeholder: #9CA3AF;
+  --color-error: #991B1B;
+  --color-success: #166534;
+  --color-warning: #D97706;
+  --color-info: #2563EB;
+  --radius-default: 14px;
+  --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
 }
