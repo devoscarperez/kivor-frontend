@@ -44,6 +44,15 @@ body {
   display: flex;
 }
 
+button {
+    transition: all 0.15s ease;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+
 /* =========================
    INPUT GROUP (BCI STYLE)
 ========================= */
@@ -69,7 +78,10 @@ body {
     outline: none;
     box-shadow: none;
 
-    transition: border 0.15s ease;
+    transition: 
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.05s ease;
 }
 
 /* PLACEHOLDER */
@@ -79,11 +91,9 @@ body {
 
 /* FOCUS (BCI REAL) */
 .input-group input:focus {
-    /* border: 2px solid var(--kivor-border); */
-    border-color: var(--kivor-border);
-    border-width: 1px;
-    box-shadow: 0 0 0 1px var(--kivor-primary);
-    /* box-shadow: none; */
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.15);
+    transform: translateY(-1px);
 }
 
 /* LABEL (sin parche) */
@@ -102,8 +112,8 @@ body {
 
 /* ERROR */
 .input-group input.input-invalid {
-    /* border: 2px solid var(--kivor-error); */
-    border-color: var(--kivor-error);
+    border-color: var(--color-border-error);
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.12);
 }
 
 .input-group input.input-invalid + label {
@@ -111,14 +121,17 @@ body {
 }
 
 .input-error {
-    font-size: 12px;
-    color: var(--kivor-error);
-    margin-top: 4px;
-    display: none;
+    font-size: 0.85rem;
+    color: var(--color-error);
+    margin-top: 6px;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.2s ease;
 }
 
 .input-error.active {
-    display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* =========================
