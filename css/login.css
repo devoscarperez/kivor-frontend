@@ -146,7 +146,7 @@ button:active {
 
     padding: 0 4px;
 
-    background: var(--kivor-white);
+    background: var(--kivor-background);
 }
 
 /* ERROR */
