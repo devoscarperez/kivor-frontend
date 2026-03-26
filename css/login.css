@@ -79,8 +79,11 @@ body {
 
 /* FOCUS (BCI REAL) */
 .input-group input:focus {
-    border: 2px solid var(--kivor-base);
-    box-shadow: none;
+    /* border: 2px solid var(--kivor-border); */
+    border-color: var(--kivor-border);
+    border-width: 1px;
+    box-shadow: 0 0 0 1px var(--kivor-primary);
+    /* box-shadow: none; */
 }
 
 /* LABEL (sin parche) */
@@ -99,7 +102,8 @@ body {
 
 /* ERROR */
 .input-group input.input-invalid {
-    border: 2px solid var(--kivor-error);
+    /* border: 2px solid var(--kivor-error); */
+    border-color: var(--kivor-error);
 }
 
 .input-group input.input-invalid + label {
