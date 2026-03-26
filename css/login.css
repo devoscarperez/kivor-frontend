@@ -217,9 +217,15 @@ button:disabled {
     margin-bottom: 20px;
 }
 
+
+.input-group input::placeholder {
+    color: var(--color-input-placeholder);
+    opacity: 1;
+}
+
 .input-group input {
     width: 100%;
-    padding: 16px 14px;
+    padding: 16px 14px 12px 14px;
     padding-top: 18px;
     border: 1px solid #cbd5e1;
     border-radius: 10px;
