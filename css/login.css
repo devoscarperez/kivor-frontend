@@ -81,6 +81,9 @@ button:active {
 /* =========================
    INPUT GROUP (BCI STYLE)
 ========================= */
+.input-initial-focus {
+    border: 1.5px solid var(--kivor-primary);
+}
 
 .input-group {
     position: relative;
