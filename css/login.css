@@ -147,8 +147,8 @@ button:active {
 
 /* ERROR */
 .input-group input.input-invalid {
-    border: 1.5px solid var(--kivor-error);
-    box-shadow: none;
+    border: 1.5px solid var(--kivor-error-border);
+    background-color: var(--kivor-error-bg);
 }
 /*
 .input-group input.input-invalid {
@@ -162,7 +162,7 @@ button:active {
 */
 
 .input-group input.input-invalid + label {
-    color: var(--kivor-error);
+    color: var(--kivor-error-text);
 }
 
 .input-error {
