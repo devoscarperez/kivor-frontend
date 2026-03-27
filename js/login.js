@@ -11,6 +11,10 @@ window.addEventListener("DOMContentLoaded", () => {
    usernameInput.addEventListener("focus", () => {
        usernameInput.classList.remove("input-initial-focus");
    });
+
+   document.addEventListener("touchstart", () => {
+       usernameInput.focus();
+   }, { once: true });
    
    const usernameField = createInputText("username");
    const passwordInput = document.getElementById("password");
