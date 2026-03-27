@@ -13,7 +13,7 @@ window.addEventListener("DOMContentLoaded", () => {
    });
    const container = document.querySelector(".container");
 
-   container.addEventListener("click", () => {
+   container.addEventListener("touchstart", () => {
        usernameInput.focus();
    }, { once: true });
    
