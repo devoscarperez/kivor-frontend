@@ -18,7 +18,7 @@
   --color-info: #2563EB;
   --radius-default: 14px;
   --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
-  --kivor-error-border: #DC2626;      /* borde */
+  --kivor-error-border: #B91C1C;      /* borde */
   --kivor-error-bg: #FEF2F2;          /* fondo sutil */
   --kivor-error-text: #991B1B;        /* texto */
 }
