@@ -147,7 +147,7 @@ button:active {
 
 /* ERROR */
 .input-group input.input-invalid {
-    border: 1.5px solid var(--kivor-error-border);
+    border: 2px solid var(--kivor-error-border);
     background-color: transparent; /*var(--kivor-error-bg);*/
 }
 
