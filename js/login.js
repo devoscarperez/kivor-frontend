@@ -11,8 +11,9 @@ window.addEventListener("DOMContentLoaded", () => {
    usernameInput.addEventListener("focus", () => {
        usernameInput.classList.remove("input-initial-focus");
    });
+   const container = document.querySelector(".container");
 
-   document.addEventListener("touchstart", () => {
+   container.addEventListener("click", () => {
        usernameInput.focus();
    }, { once: true });
    
