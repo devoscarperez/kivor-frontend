@@ -95,6 +95,8 @@ button:active {
     border-radius: var(--radius);
     border: 1px solid var(--kivor-border);
     box-shadow: none;
+    position: relative;
+    z-index: 1;
     background: var(--kivor-white);
     color: var(--kivor-base);
 
@@ -121,17 +123,7 @@ button:active {
     border: 1.5px solid var(--kivor-primary);
     box-shadow: none;
 }
-/*
-.input-group input:focus {
-    border-color: var(--kivor-primary);
 
-    box-shadow:
-        inset 0 2px 4px rgba(0,0,0,0.06),
-        0 0 0 2px rgba(217,119,6,0.08);
-
-    transform: translateY(1px); /* 👈 se hunde */
-}
-*/
 
 /* LABEL (sin parche) */
 .input-group label {
