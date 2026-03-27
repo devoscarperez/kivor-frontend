@@ -83,7 +83,7 @@ button:active {
 ========================= */
 
 .input-group {
-    position: relative !important;
+    position: relative;
     margin-bottom: 22px;
 }
 
