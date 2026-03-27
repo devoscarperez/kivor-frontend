@@ -255,4 +255,5 @@ window.addEventListener("DOMContentLoaded", () => {
    }
    
    applyTranslations();
+   usernameInput.focus();
 });
