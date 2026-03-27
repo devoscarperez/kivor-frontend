@@ -6,6 +6,12 @@ window.addEventListener("DOMContentLoaded", () => {
    const screenPassword = document.getElementById("screen-password");
    
    const usernameInput = document.getElementById("username");
+   usernameInput.classList.add("input-initial-focus");
+
+   usernameInput.addEventListener("focus", () => {
+       usernameInput.classList.remove("input-initial-focus");
+   });
+   
    const usernameField = createInputText("username");
    const passwordInput = document.getElementById("password");
    
