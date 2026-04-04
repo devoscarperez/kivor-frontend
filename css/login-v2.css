@@ -12,8 +12,9 @@ body {
     color: var(--color-text-primary);
     height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;   /* antes center */
     justify-content: center;
+    padding-top: 120px;        /* agrega esto */
 }
 
 /* CONTENEDOR */
