@@ -1,4 +1,77 @@
 :root {
+  /* =========================
+     LIGHT MODE (DEFAULT)
+  ========================= */
+
+  --color-background: #F4F4F5;
+  --color-surface: #FFFFFF;
+
+  --color-text-primary: #111111;
+  --color-text-secondary: #2E2E2E;
+
+  --color-primary: #D97706;
+  --color-primary-hover: #B45309;
+  --color-primary-active: #92400E;
+
+  --color-border-default: #D1D5DB;
+  --color-border-focus: #D97706;
+  --color-border-error: #DC2626;
+
+  --color-input-background: #FFFFFF;
+  --color-input-text: #111111;
+  --color-input-placeholder: #9CA3AF;
+
+  --color-error: #991B1B;
+  --color-success: #166534;
+  --color-warning: #D97706;
+  --color-info: #2563EB;
+
+  --radius-default: 14px;
+  --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
+
+  /* KIVOR específicos */
+  --kivor-error-border: #B91C1C;
+  --kivor-error-bg: #FEF2F2;
+  --kivor-error-text: #991B1B;
+}
+
+/* =========================
+   DARK MODE (KIVOR LOGIN)
+========================= */
+
+[data-theme="dark"] {
+  --color-background: #0f1115;
+  --color-surface: #15181e;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a0a4ab;
+
+  --color-primary: #f2b84b;
+  --color-primary-hover: #e0a93f;
+  --color-primary-active: #c98f2f;
+
+  --color-border-default: #2a2f38;
+  --color-border-focus: #f2b84b;
+  --color-border-error: #ff4d4f;
+
+  --color-input-background: transparent;
+  --color-input-text: #ffffff;
+  --color-input-placeholder: #6b7280;
+
+  --color-error: #ff4d4f;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  --shadow-soft: none;
+
+  /* KIVOR específicos (dark) */
+  --kivor-error-border: #ff4d4f;
+  --kivor-error-bg: transparent;
+  --kivor-error-text: #ff4d4f;
+}
+/*
+:root {
   --color-background: #F4F4F5;
   --color-surface: #FFFFFF;
   --color-text-primary: #111111;
@@ -22,3 +95,5 @@
   --kivor-error-bg: #FEF2F2;          /* fondo sutil */
   --kivor-error-text: #991B1B;        /* texto */
 }
+*/
+*/
