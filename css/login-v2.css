@@ -18,9 +18,9 @@ body {
     background:
         radial-gradient(
             ellipse at center,
-            #12141a 0%,
-            #0f1115 40%,
-            #0a0c10 70%,
+            #1a1d24 0%,     /* centro más vivo */
+            #12141a 40%,
+            #0b0d11 70%,
             #050608 100%
         );
 }
@@ -33,11 +33,13 @@ body::before {
 
     background:
         radial-gradient(
-            ellipse at center,
-            transparent 55%,
-            rgba(0,0,0,0.35) 75%,
-            rgba(0,0,0,0.8) 100%
+            ellipse at 50% 30%,
+            rgba(255,255,255,0.08),
+            transparent 60%
         );
+
+    mix-blend-mode: overlay;
+    opacity: 0.4;
 }
 
 
@@ -47,24 +49,19 @@ body::after {
     inset: 0;
     pointer-events: none;
 
-    background-image:
-        repeating-linear-gradient(
-            0deg,
-            rgba(255,255,255,0.01),
-            rgba(255,255,255,0.01) 1px,
-            transparent 1px,
-            transparent 3px
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 55%,
+            rgba(0,0,0,0.25) 75%,
+            rgba(0,0,0,0.6) 100%
         );
-
-    opacity: 0.05;
 }
 
 /* CONTENEDOR */
 .kivor-container {
-    width: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;   /* antes 24 */
+    position: relative;
+    z-index: 2;
 }
 
 /* MARCA */
