@@ -18,11 +18,10 @@ body {
     background:
         radial-gradient(
             ellipse at center,
-            rgba(255,255,255,0.04) 0%,
-            rgba(255,255,255,0.02) 20%,
-            rgba(15,17,21,1) 45%,
-            rgba(8,10,12,1) 70%,
-            rgba(0,0,0,1) 100%
+            #12141a 0%,
+            #0f1115 40%,
+            #0a0c10 70%,
+            #050608 100%
         );
 }
 
@@ -36,11 +35,9 @@ body::before {
         radial-gradient(
             ellipse at center,
             transparent 55%,
-            rgba(0,0,0,0.25) 75%,
-            rgba(0,0,0,0.6) 100%
+            rgba(0,0,0,0.35) 75%,
+            rgba(0,0,0,0.8) 100%
         );
-
-    mix-blend-mode: multiply;
 }
 
 
@@ -53,13 +50,13 @@ body::after {
     background-image:
         repeating-linear-gradient(
             0deg,
-            rgba(255,255,255,0.02),
-            rgba(255,255,255,0.02) 1px,
+            rgba(255,255,255,0.01),
+            rgba(255,255,255,0.01) 1px,
             transparent 1px,
-            transparent 2px
+            transparent 3px
         );
 
-    opacity: 0.15;
+    opacity: 0.05;
 }
 
 /* CONTENEDOR */
