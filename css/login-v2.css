@@ -159,9 +159,10 @@ body::after {
     justify-content: center;
 
     background: radial-gradient(
-        circle at center,
-        #0f1115 0%,
-        #050608 100%
+    circle at center,
+    #202633 0%,
+    #12161d 50%,
+    #050608 100%
     );
 }
 
