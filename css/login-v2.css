@@ -157,37 +157,61 @@ body::after {
 .kivor-device {
     width: 360px;
     height: 520px;
+
+    border-radius: 22px;
+
     background: linear-gradient(
         145deg,
-        #1a1d24,
-        #0d0f13
+        #2a2e36 0%,
+        #1a1d24 40%,
+        #0d0f13 100%
     );
 
-    border-radius: 18px;
-
     box-shadow:
-        0 20px 60px rgba(0,0,0,0.8),
-        inset 0 0 20px rgba(255,255,255,0.03);
-    
+        /* sombra externa fuerte */
+        0 30px 80px rgba(0,0,0,0.9),
+
+        /* borde inferior profundo */
+        inset 0 -8px 20px rgba(0,0,0,0.6),
+
+        /* luz superior */
+        inset 0 4px 10px rgba(255,255,255,0.05),
+
+        /* volumen lateral */
+        inset 6px 0 12px rgba(255,255,255,0.03),
+        inset -6px 0 12px rgba(0,0,0,0.5);
+
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+
 .kivor-frame {
-    width: 90%;
-    height: 85%;
+    width: 88%;
+    height: 82%;
 
-    background: #050608;
+    border-radius: 14px;
 
-    border-radius: 12px;
+    background: linear-gradient(
+        180deg,
+        #0a0c10,
+        #050608
+    );
 
-    padding: 12px;
+    padding: 14px;
 
     box-shadow:
-        inset 0 0 25px rgba(0,0,0,0.9),
-        inset 0 0 8px rgba(255,255,255,0.02);
+        /* hundimiento */
+        inset 0 0 30px rgba(0,0,0,0.9),
+
+        /* borde interno brillante */
+        inset 0 2px 6px rgba(255,255,255,0.04),
+
+        /* sombra de transición */
+        inset 0 -4px 10px rgba(0,0,0,0.8);
 }
+
 
 .kivor-screen {
     width: 100%;
@@ -201,10 +225,14 @@ body::after {
     background:
         radial-gradient(
             ellipse at center,
-            #1a1d24 0%,
+            #1c1f26 0%,
             #0f1115 50%,
             #050608 100%
         );
+
+    box-shadow:
+        /* profundidad */
+        inset 0 0 20px rgba(0,0,0,0.9);
 }
 
 .kivor-screen::before {
