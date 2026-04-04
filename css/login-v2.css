@@ -8,13 +8,34 @@
 /* BODY */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--color-background);
     color: var(--color-text-primary);
     height: 100vh;
     display: flex;
-    align-items: flex-start;   /* antes center */
+    align-items: flex-start;
     justify-content: center;
-    padding-top: 120px;        /* agrega esto */
+    padding-top: 120px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #111318 0%,
+            #0f1115 40%,
+            #0a0c10 70%,
+            #050608 100%
+        );
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+
+    background: radial-gradient(
+        circle at center,
+        transparent 60%,
+        rgba(0,0,0,0.6) 100%
+    );
 }
 
 /* CONTENEDOR */
@@ -27,10 +48,10 @@ body {
 
 /* MARCA */
 .kivor-brand {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 700;
-    letter-spacing: 4px;
-    color: var(--color-text-primary);
+    letter-spacing: 6px;
+    color: var(--color-primary); /* ahora sí protagonista */
 }
 
 /* MENSAJE */
