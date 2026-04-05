@@ -2,69 +2,46 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIVOR</title>
 
-    <!-- THEME -->
     <link rel="stylesheet" href="/css/theme.css">
-
-    <!-- ESTILO LOGIN -->
     <link rel="stylesheet" href="/css/login-v2.css">
 </head>
-
 <body data-theme="dark">
 
-    <!-- ENTORNO -->
     <div class="kivor-world">
-
-        <!-- OBJETO -->
         <div class="kivor-device">
-
-            <!-- MARCO -->
             <div class="kivor-frame">
-
-                <!-- PANTALLA -->
                 <div class="kivor-screen">
-
-                    <!-- CONTENIDO -->
                     <div class="kivor-container">
-                    <div class="kivor-content-box">
+                        <div class="kivor-content-box">
+                            <div class="kivor-message">Acceso a tu operación</div>
 
-                        <div class="kivor-brand">KIVOR</div>
+                            <div class="kivor-input-container">
+                                <label class="kivor-label" for="kivor-input">Usuario</label>
+                                <input
+                                    type="text"
+                                    id="kivor-input"
+                                    class="kivor-input"
+                                    autocomplete="off"
+                                    autofocus
+                                >
+                                <div class="kivor-error" id="kivor-error"></div>
+                            </div>
 
-                        <div class="kivor-message">
-                            Acceso a tu operación
+                            <button class="kivor-button" id="kivor-button">
+                                Siguiente
+                            </button>
                         </div>
-
-                        <div class="kivor-input-container">
-                            <label class="kivor-label">Usuario</label>
-
-                            <input 
-                                type="text" 
-                                id="kivor-input"
-                                class="kivor-input"
-                                autocomplete="off"
-                                autofocus
-                            >
-
-                            <div class="kivor-error" id="kivor-error"></div>
-                        </div>
-
-                        <button class="kivor-button" id="kivor-button">
-                            Siguiente
-                        </button>
                     </div>
-                    </div>
-
                 </div>
-
             </div>
-        <img src="/assets/images/logo-kivor.svg" class="kivor-logo">
-        </div>
 
+            <img src="/assets/images/logo-kivor.svg" alt="KIVOR" class="kivor-logo">
+        </div>
     </div>
 
     <script src="/js/login-v2.js"></script>
-    
-
 </body>
 </html>
