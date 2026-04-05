@@ -11,8 +11,7 @@
    BASE
 ========================= */
 html {
-    font-size: clamp(14px, 1.2vw, 18px);
-    height: 100%;
+    font-size: 16px; /* 🔥 fijo */
 }
 
 body {
@@ -33,17 +32,12 @@ body {
     align-items: center;
     justify-content: center;
 
-    background: radial-gradient(
-        circle at center,
-        #0f141a 0%,
-        #080b0f 60%,
-        #000000 100%
-    );
+    background: #050608; /* 🔥 plano total */
 }
 
 
 .kivor-content-box {
-    width: min(90%, 420px);
+    width: 100%;
     max-width: 420px;
 
     display: flex;
@@ -199,6 +193,8 @@ body {
 ========================= */
 .kivor-input-container {
     width: 100%;
+    max-width: 280px; /* 🔥 clave */
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -238,6 +234,8 @@ body {
 ========================= */
 .kivor-button {
     width: 100%;
+    max-width: 280px; /* igual al input */
+    margin: 8px auto 0 auto;
 
     background-color: var(--color-primary);
     border: none;
@@ -248,7 +246,6 @@ body {
     font-size: 0.9rem;
     cursor: pointer;
 
-    margin-top: 8px;
 }
 
 .kivor-button:hover {
@@ -257,12 +254,13 @@ body {
 
 .kivor-logo {
     position: absolute;
+    bottom: 14px;
+    left: 20px;
 
-    filter: brightness(1.4) contrast(1.1);
-    bottom: 18px;
-    left: 24px;
-    width: 132px;
-    opacity: 0.9;
+    width: 150px; /* 🔥 +20% como pediste */
+    opacity: 0.8;
+
+    filter: brightness(1.6) contrast(1.2);
 }
 
 
