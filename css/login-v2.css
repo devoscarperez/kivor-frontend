@@ -35,9 +35,9 @@ body {
 
     background: radial-gradient(
         circle at center,
-        #1c2530 0%,
-        #0e1217 60%,
-        #020304 100%
+        #1a222c 0%,
+        #0b0f14 60%,
+        #000000 100%
     );
 }
 
@@ -64,7 +64,7 @@ body {
         #5a6168,
         #3f454c
     );
-
+    background: #6b737c; /* 🔥 más claro */
     border-radius: 6px;
     border: 4px solid #2c3136;
 
@@ -254,12 +254,10 @@ body {
 
 .kivor-logo {
     position: absolute;
-    bottom: 14px;
-    left: 20px;
-
-    width: 90px; /* 🔥 más visible */
-
-    opacity: 0.85;
 
     filter: brightness(1.4) contrast(1.1);
+    bottom: 18px;
+    left: 24px;
+    width: 110px;
+    opacity: 0.9;
 }
