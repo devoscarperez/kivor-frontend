@@ -37,16 +37,15 @@ body {
 }
 
 #login-texture {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
+    position: fixed;
+    top: 0;
+    left: 0;
 
     width: 800px;
     height: 600px;
-}
 
-body > #login-texture {
-    display: none;
+    opacity: 0;          /* 👈 invisible */
+    pointer-events: none;
 }
 
 /* =========================
