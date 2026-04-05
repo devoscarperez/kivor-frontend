@@ -58,20 +58,6 @@ body {
     position: relative; /* 👈 necesario para la marca */
 }
 
-.kivor-device::before {
-    content: "KIVOR";
-
-    position: absolute;
-    bottom: 10px;
-    left: 14px;
-
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-
-    color: #1a1d22; /* oscuro sobre plástico */
-    opacity: 0.8;
-}
-
 .kivor-device::after {
     content: "";
     position: absolute;
@@ -255,4 +241,13 @@ body {
 
 .kivor-button:hover {
     opacity: 0.9;
+}
+
+.kivor-logo {
+    position: absolute;
+    bottom: 12px;
+    left: 16px;
+
+    width: 80px;
+    opacity: 0.85;
 }
