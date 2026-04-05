@@ -33,32 +33,43 @@ body {
     align-items: center;
     justify-content: center;
 
-    background: #1f2933;
-
-    /* 🔥 FIX MOBILE REAL */
-    height: 100dvh;
+    background: #27303a; /* 🔥 más plano y más claro */
 }
 
 /* =========================
    MONITOR (PLÁSTICO CRT)
 ========================= */
 .kivor-device {
-    width: min(92vw, 700px);
+    width: min(96vw, 900px); /* 🔥 más grande */
     aspect-ratio: 4 / 3;
 
-    /* 🔥 PLÁSTICO SUCIO CRT */
     background: #3a3f46;
 
     border-radius: 6px;
-
     border: 4px solid #2a2e34;
 
     box-shadow:
-        0 18px 30px rgba(0,0,0,0.5);
+        0 25px 50px rgba(0,0,0,0.6);
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    position: relative; /* 👈 necesario para la marca */
+}
+
+.kivor-device::before {
+    content: "KIVOR";
+
+    position: absolute;
+    bottom: 10px;
+    left: 14px;
+
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+
+    color: #1a1d22; /* oscuro sobre plástico */
+    opacity: 0.8;
 }
 
 .kivor-device::after {
@@ -168,6 +179,7 @@ body {
 
     text-shadow:
         0 0 6px rgba(242,184,75,0.4);
+   display: none;
 }
 
 .kivor-message {
