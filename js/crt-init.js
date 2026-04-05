@@ -31,8 +31,9 @@ document.body.appendChild(renderer.domElement);
 const geometry = new THREE.PlaneGeometry(1.6, 1.2);
 
 const material = new THREE.MeshBasicMaterial({
-    color: 0x000000
+    map: new THREE.Texture() // 🔥 clave
 });
+material.map.needsUpdate = true;
 
 const plane = new THREE.Mesh(geometry, material);
 scene.add(plane);
