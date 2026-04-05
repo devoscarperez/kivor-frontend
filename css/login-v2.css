@@ -10,19 +10,24 @@
 /* =========================
    BASE
 ========================= */
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
 html {
-    font-size: 16px; /* 🔥 fijo */
+    font-size: 16px;
 }
 
 body {
-    height: 100%;
     font-family: 'Inter', sans-serif;
     color: var(--color-text-primary);
-    background: #1f2933;
+    background: #050608;
 }
 
 /* =========================
-   ENTORNO (CENTRADO REAL)
+   ENTORNO
 ========================= */
 .kivor-world {
     position: fixed;
@@ -32,61 +37,44 @@ body {
     align-items: center;
     justify-content: center;
 
-    background: #050608; /* 🔥 plano total */
+    background: #050608;
 }
-
-
-.kivor-content-box {
-    width: 100%;
-    max-width: 420px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
 
 /* =========================
-   MONITOR (PLÁSTICO CRT)
+   MONITOR
 ========================= */
 .kivor-device {
-    width: min(92vw, 820px);
+    position: relative;
+
+    width: min(94vw, 820px);
     aspect-ratio: 4 / 3;
-
-    background: linear-gradient(
-        145deg,
-        #5a6168,
-        #3f454c
-    );
-    background: #6b737c; /* 🔥 más claro */
-    border-radius: 6px;
-    border: 4px solid #2c3136;
-
-    box-shadow:
-        inset 0 2px 6px rgba(255,255,255,0.08),
-        inset 0 -4px 10px rgba(0,0,0,0.6),
-        0 25px 60px rgba(0,0,0,0.7);
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    position: relative;
+    background: #717983;
+    border: 4px solid #2f353c;
+    border-radius: 6px;
+
+    box-shadow:
+        inset 0 2px 4px rgba(255,255,255,0.08),
+        inset 0 -4px 10px rgba(0,0,0,0.45),
+        0 18px 40px rgba(0,0,0,0.55);
 }
 
 /* =========================
    BISEL
 ========================= */
 .kivor-frame {
-    width: 82%;
-    height: 78%;
+    width: 84%;
+    height: 80%;
 
-    background: #111418;
+    padding: 14px;
 
+    background: #14181d;
     border: 4px solid #000;
-    border-radius: 4px;
-
-    padding: 16px;
+    border-radius: 3px;
 }
 
 /* =========================
@@ -98,51 +86,44 @@ body {
     width: 100%;
     height: 100%;
 
-    background: #020304; /* 🔥 más oscuro (ver punto 3) */
-
-    border-radius: 2px;
-
-    box-shadow:
-        inset 0 0 30px rgba(0,0,0,1);
-
-    /* 🔥 CENTRADO REAL */
     display: flex;
     align-items: center;
     justify-content: center;
+
+    background: #010203;
+    border-radius: 1px;
+
+    box-shadow: inset 0 0 18px rgba(0,0,0,0.95);
 }
 
-
-/* VIDRIO CRT */
+/* Vidrio muy sutil */
 .kivor-screen::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
 
-    background:
-        radial-gradient(
-            ellipse at 50% 20%,
-            rgba(255,255,255,0.15),
-            transparent 60%
-        );
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.04),
+        rgba(255,255,255,0.00) 22%
+    );
 
-    opacity: 0.3;
+    opacity: 0.35;
 }
 
-/* VIÑETA */
+/* Viñeta muy sutil */
 .kivor-screen::after {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
 
-    background:
-        radial-gradient(
-            ellipse at center,
-            transparent 60%,
-            rgba(0,0,0,0.4) 85%,
-            rgba(0,0,0,0.8) 100%
-        );
+    background: radial-gradient(
+        ellipse at center,
+        transparent 72%,
+        rgba(0,0,0,0.22) 100%
+    );
 }
 
 /* =========================
@@ -152,40 +133,34 @@ body {
     position: relative;
     z-index: 2;
 
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kivor-content-box {
+    width: min(88%, 420px);
+
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center; /* 🔥 clave */
-
     gap: 18px;
-
-    width: 100%;
-    height: 100%; /* 🔥 clave */
 }
 
 /* =========================
    TEXTO
 ========================= */
-.kivor-brand {
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 8px;
-    color: var(--color-primary);
-
-    text-shadow:
-        0 0 6px rgba(242,184,75,0.4);
-    display: none;
-}
-
 .kivor-message {
-    font-size: 0.8rem;
+    text-align: center;
+    font-size: 0.9rem;
     color: var(--color-text-secondary);
 }
 
 .kivor-label {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.6);
-    align-self: flex-start;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.62);
 }
 
 /* =========================
@@ -193,17 +168,13 @@ body {
 ========================= */
 .kivor-input-container {
     width: 100%;
-    max-width: 280px; /* 🔥 clave */
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 6px;
-    align-items: stretch;
 }
 
 .kivor-input {
     width: 100%;
-    max-width: 100%;
 
     background: transparent;
     border: none;
@@ -211,22 +182,21 @@ body {
 
     color: var(--color-input-text);
     font-size: 1rem;
+    line-height: 1.2;
 
     padding: 6px 0;
     outline: none;
-
     text-align: left;
 }
 
 .kivor-input:focus {
-    border-bottom: 2px solid var(--color-primary);
+    border-bottom-color: var(--color-primary);
 }
 
-/* ERROR */
 .kivor-error {
+    min-height: 16px;
     font-size: 12px;
     color: var(--kivor-error-text);
-    min-height: 16px;
 }
 
 /* =========================
@@ -234,40 +204,76 @@ body {
 ========================= */
 .kivor-button {
     width: 100%;
-    max-width: 280px; /* igual al input */
-    margin: 8px auto 0 auto;
 
     background-color: var(--color-primary);
     border: none;
 
     color: #000;
-    padding: 10px;
+    font-size: 0.95rem;
+    padding: 10px 12px;
 
-    font-size: 0.9rem;
     cursor: pointer;
-
+    transition: opacity 120ms ease;
 }
 
 .kivor-button:hover {
     opacity: 0.9;
 }
 
+/* =========================
+   LOGO EN EL MARCO
+========================= */
 .kivor-logo {
     position: absolute;
-    bottom: 14px;
-    left: 20px;
+    left: 18px;
+    bottom: 12px;
 
-    width: 150px; /* 🔥 +20% como pediste */
-    opacity: 0.8;
+    width: 180px;
+    max-width: 24%;
 
-    filter: brightness(1.6) contrast(1.2);
+    opacity: 0.92;
+    filter: brightness(1.18) contrast(1.08);
 }
 
-
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 480px) {
+    .kivor-device {
+        width: 96vw;
+    }
+
+    .kivor-frame {
+        width: 86%;
+        height: 80%;
+        padding: 12px;
+    }
+
     .kivor-content-box {
-        width: 100%;
-        max-width: none;
-        padding: 0 12px;
+        width: min(90%, 340px);
+        gap: 16px;
+    }
+
+    .kivor-message {
+        font-size: 0.85rem;
+    }
+
+    .kivor-label {
+        font-size: 0.78rem;
+    }
+
+    .kivor-input {
+        font-size: 16px; /* evita autoshrink perceptual en móvil */
+    }
+
+    .kivor-button {
+        font-size: 16px;
+    }
+
+    .kivor-logo {
+        width: 150px;
+        max-width: 28%;
+        left: 14px;
+        bottom: 10px;
     }
 }
