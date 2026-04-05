@@ -36,6 +36,15 @@ body {
     color: var(--color-text-primary);
 }
 
+#login-texture {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+
+    width: 800px;
+    height: 600px;
+}
+
 /* =========================
    ENTORNO
 ========================= */
