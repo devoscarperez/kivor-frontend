@@ -35,8 +35,8 @@ body {
 
     background: radial-gradient(
         circle at center,
-        #1a222c 0%,
-        #0b0f14 60%,
+        #0f141a 0%,
+        #080b0f 60%,
         #000000 100%
     );
 }
@@ -202,6 +202,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    align-items: stretch;
 }
 
 .kivor-input {
@@ -262,4 +263,13 @@ body {
     left: 24px;
     width: 132px;
     opacity: 0.9;
+}
+
+
+@media (max-width: 480px) {
+    .kivor-content-box {
+        width: 100%;
+        max-width: none;
+        padding: 0 12px;
+    }
 }
