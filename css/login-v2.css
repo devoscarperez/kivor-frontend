@@ -41,6 +41,17 @@ body {
     );
 }
 
+
+.kivor-content-box {
+    width: 90%;
+    max-width: 420px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
 /* =========================
    MONITOR (PLÁSTICO CRT)
 ========================= */
