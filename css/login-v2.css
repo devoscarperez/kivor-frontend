@@ -40,18 +40,11 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-
     width: 1024px;
     height: 768px;
-
-    background: #000; /* importante */
-
-    visibility: visible;
-    opacity: 1;
-
+    background: #000;
+    z-index: -9999;
     pointer-events: none;
-
-    z-index: -9999; /* lo saca visualmente pero sigue renderizable */
 }
 
 /* =========================
