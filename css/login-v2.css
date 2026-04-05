@@ -37,15 +37,15 @@ body {
 }
 
 #login-texture {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
 
     width: 800px;
     height: 600px;
 
-    opacity: 0;          /* 👈 invisible */
-    pointer-events: none;
+    transform: scale(0); /* 🔥 clave */
+    transform-origin: top left;
 }
 
 /* =========================
