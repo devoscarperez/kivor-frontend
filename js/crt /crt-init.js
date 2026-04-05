@@ -45,7 +45,7 @@ html2canvas(element, {
 }
 
 // Primera captura
-updateTexture();
+setTimeout(updateTexture, 300);
 
 // Loop
 function animate() {
