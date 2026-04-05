@@ -67,6 +67,9 @@ function captureOnceStable() {
         material.map = texture;
         material.needsUpdate = true;
 
+        // 🔥 ESTA LÍNEA ES LA CLAVE
+        element.style.visibility = "hidden";
+
         textureApplied = true;
     });
 }
