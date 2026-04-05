@@ -43,7 +43,7 @@ body {
 
 
 .kivor-content-box {
-    width: 90%;
+    width: min(90%, 420px);
     max-width: 420px;
 
     display: flex;
@@ -198,14 +198,15 @@ body {
    INPUT
 ========================= */
 .kivor-input-container {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
 .kivor-input {
-    width: clamp(240px, 70%, 360px); /* 🔥 limpio */
-
+    width: 100% /* 🔥 limpio */
+    max-width 100%
     background: transparent;
     border: none;
     border-bottom: 2px solid var(--color-primary);
@@ -234,7 +235,7 @@ body {
    BOTÓN
 ========================= */
 .kivor-button {
-    width: clamp(240px, 70%, 360px);
+    width: 100%;
 
     background-color: var(--color-primary);
     border: none;
@@ -258,6 +259,6 @@ body {
     filter: brightness(1.4) contrast(1.1);
     bottom: 18px;
     left: 24px;
-    width: 110px;
+    width: 132px;
     opacity: 0.9;
 }
