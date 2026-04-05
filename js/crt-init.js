@@ -38,14 +38,14 @@ scene.add(plane);
 // 🔥 FUNCIÓN PARA CAPTURAR HTML
 function updateTexture() {
 html2canvas(element, {
-    backgroundColor: "#000",
+    backgroundColor: null,
     useCORS: true,
-    scale: 1
+    logging: true
 })
 }
 
 // Primera captura
-setTimeout(updateTexture, 300);
+setTimeout(updateTexture, 800);
 
 // Loop
 function animate() {
