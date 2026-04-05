@@ -205,8 +205,9 @@ body {
 }
 
 .kivor-input {
-    width: 100% /* 🔥 limpio */
-    max-width 100%
+    width: 100%;
+    max-width: 100%;
+
     background: transparent;
     border: none;
     border-bottom: 2px solid var(--color-primary);
