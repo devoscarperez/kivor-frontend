@@ -37,11 +37,20 @@ scene.add(plane);
 
 // 🔥 FUNCIÓN PARA CAPTURAR HTML
 function updateTexture() {
-html2canvas(element, {
-    backgroundColor: null,
-    useCORS: true,
-    logging: true
-})
+    const element = document.getElementById("login-texture");
+
+    html2canvas(element, {
+        backgroundColor: "#000",
+        useCORS: true
+    }).then(canvas => {
+        console.log("TEXTURA OK");
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+
+        material.map = texture;
+        material.needsUpdate = true;
+    });
 }
 
 // Primera captura
