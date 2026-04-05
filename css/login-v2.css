@@ -34,7 +34,6 @@ html {
 body {
     font-family: 'Inter', sans-serif;
     color: var(--color-text-primary);
-    background: #050608;
 }
 
 /* =========================
@@ -47,8 +46,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background: #050608;
 }
 
 /* =========================
@@ -66,22 +63,21 @@ body {
 
     border-radius: 6px;
 
-    /* 🔥 TODO el monitor en UN SOLO background */
+    border: 22px solid transparent; /* 🔥 CLAVE */
+
     background:
         linear-gradient(
             160deg,
             #3a4046 0%,
             #1a1f24 40%,
             #0b0e11 100%
-        ) content-box,
+        ) padding-box,
 
         linear-gradient(
-          180deg,
-          #8a9198,
-          #6f777f
+            180deg,
+            #8a9198,
+            #6f777f
         ) border-box;
-
-    padding: 22px; /* 👈 esto define el grosor del marco + bisel */
 
     box-shadow:
         inset 0 2px 3px rgba(255,255,255,0.15),
@@ -90,38 +86,14 @@ body {
 }
 
 
-.kivor-device::before {
-    content: "";
-    position: absolute;
-
-    top: 12%;
-    left: 8%;
-    right: 8%;
-    bottom: 12%;
-
-    border-radius: 4px;
-
-    /* 🔥 este es el bisel real */
-    background: linear-gradient(
-        145deg,
-        #2b3035,
-        #0f1215
-    );
-
-    box-shadow:
-        inset 0 2px 4px rgba(255,255,255,0.08),
-        inset 0 -6px 12px rgba(0,0,0,0.9);
-}
-
 
 /* =========================
    BISEL
 ========================= */
 .kivor-frame {
-    width: 84%;
-    height: 80%;
-
-    padding: 14px;
+    width: 100%;
+    height: 100%;
+    padding: 0;
 
     background: transparent; /* 🔥 clave */
     border: none;
@@ -202,8 +174,9 @@ body {
 }
 
 .kivor-content-box {
-    width: min(88%, 420px);
-
+    width: 100%;
+    max-width: 420px;
+    padding: 0 16px; /* 👈 clave */
     display: flex;
     flex-direction: column;
     gap: 18px;
