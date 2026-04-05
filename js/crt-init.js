@@ -14,6 +14,9 @@ camera.position.z = 2;
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 
+// 🔥 ESTA LÍNEA ES LA CLAVE
+renderer.setClearColor(0x000000, 0);
+
 // Canvas arriba de todo
 renderer.domElement.style.position = "fixed";
 renderer.domElement.style.top = "0";
