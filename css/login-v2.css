@@ -58,21 +58,25 @@ body {
     position: relative; /* 👈 necesario para la marca */
 }
 
-.kivor-device::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+.kivor-device {
+    width: min(96vw, 900px);
+    aspect-ratio: 4 / 3;
 
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(255,255,255,0.01),
-        rgba(255,255,255,0.01) 1px,
-        transparent 1px,
-        transparent 2px
-    );
+    /* 🔥 más claro, plástico viejo */
+    background: #4a5057;
 
-    opacity: 0.2;
+    border-radius: 6px;
+
+    border: 4px solid #2f343a;
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,0.5);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
 }
 
 /* =========================
@@ -99,13 +103,19 @@ body {
     width: 100%;
     height: 100%;
 
-    background: #050608;
+    background: #020304; /* 🔥 más oscuro (ver punto 3) */
 
     border-radius: 2px;
 
     box-shadow:
-        inset 0 0 20px rgba(0,0,0,1);
+        inset 0 0 30px rgba(0,0,0,1);
+
+    /* 🔥 CENTRADO REAL */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 
 /* VIDRIO CRT */
 .kivor-screen::before {
@@ -147,14 +157,12 @@ body {
     position: relative;
     z-index: 2;
 
-    padding: 32px 20px;
-
     display: flex;
     flex-direction: column;
-    align-items: center; /* 🔥 clave */
+    align-items: center;
     gap: 18px;
 
-    text-align: center;
+    width: 100%;
 }
 
 /* =========================
@@ -192,7 +200,8 @@ body {
 }
 
 .kivor-input {
-    width: min(280px, 80vw); /* 🔥 clave */
+    width: 90%;
+    max-width: 320px;
 
     background: transparent;
     border: none;
