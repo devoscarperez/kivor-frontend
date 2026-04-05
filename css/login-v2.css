@@ -41,11 +41,17 @@ body {
     top: 0;
     left: 0;
 
-    width: 800px;
-    height: 600px;
+    width: 1024px;
+    height: 768px;
 
-    transform: scale(0); /* 🔥 clave */
-    transform-origin: top left;
+    background: #000; /* importante */
+
+    visibility: visible;
+    opacity: 1;
+
+    pointer-events: none;
+
+    z-index: -9999; /* lo saca visualmente pero sigue renderizable */
 }
 
 /* =========================
