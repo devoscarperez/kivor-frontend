@@ -1,4 +1,4 @@
-// Escena básica
+// Escena
 const scene = new THREE.Scene();
 
 // Cámara
@@ -15,19 +15,41 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Geometría simple (pantalla)
+// 📦 CAPTURAR HTML
+const element = document.getElementById("login-texture");
+
+// Crear canvas
+const canvas = document.createElement("canvas");
+canvas.width = 800;
+canvas.height = 600;
+
+const ctx = canvas.getContext("2d");
+
+// Dibujar fondo (temporal)
+ctx.fillStyle = "#000";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+// Crear textura
+const texture = new THREE.CanvasTexture(canvas);
+
+// Geometría
 const geometry = new THREE.PlaneGeometry(1.6, 1.2);
 
-// Material básico (negro por ahora)
-const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+// Material con textura
+const material = new THREE.MeshBasicMaterial({
+    map: texture
+});
 
 // Mesh
 const plane = new THREE.Mesh(geometry, material);
 scene.add(plane);
 
-// Render loop
+// Loop
 function animate() {
     requestAnimationFrame(animate);
+
+    texture.needsUpdate = true;
+
     renderer.render(scene, camera);
 }
 
