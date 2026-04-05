@@ -44,18 +44,18 @@ function animate() {
 
 animate();
 
-// ==========================
-// CAPTURA HTML (CORREGIDA)
-// ==========================
-window.addEventListener("load", () => {
-    console.log("WINDOW LOADED");
+let textureApplied = false;
 
+function captureOnceStable() {
     const element = document.getElementById("login-texture");
 
     html2canvas(element, {
         backgroundColor: "#000",
         useCORS: true
     }).then(canvas => {
+
+        if (textureApplied) return;
+
         console.log("CAPTURA FINAL OK");
 
         const texture = new THREE.CanvasTexture(canvas);
@@ -63,5 +63,16 @@ window.addEventListener("load", () => {
 
         material.map = texture;
         material.needsUpdate = true;
+
+        textureApplied = true;
+    });
+}
+
+// 🔥 clave: esperar 2 frames reales de render
+window.addEventListener("load", () => {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            captureOnceStable();
+        });
     });
 });
