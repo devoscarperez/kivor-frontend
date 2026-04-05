@@ -151,7 +151,10 @@ body {
 
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    align-items: center; /* 🔥 clave */
+    gap: 18px;
+
+    text-align: center;
 }
 
 /* =========================
@@ -165,7 +168,7 @@ body {
 
     text-shadow:
         0 0 6px rgba(242,184,75,0.4);
-   display: none;
+    display: none;
 }
 
 .kivor-message {
@@ -176,6 +179,7 @@ body {
 .kivor-label {
     font-size: 0.7rem;
     color: rgba(255,255,255,0.6);
+    align-self: flex-start;
 }
 
 /* =========================
@@ -188,8 +192,7 @@ body {
 }
 
 .kivor-input {
-    width: 65%;
-    max-width: 280px;
+    width: min(280px, 80vw); /* 🔥 clave */
 
     background: transparent;
     border: none;
@@ -201,10 +204,10 @@ body {
     padding: 6px 0;
     outline: none;
 
+    text-align: left;
+
     text-shadow:
         0 0 4px rgba(255,255,255,0.2);
-
-    transition: all 120ms ease;
 }
 
 .kivor-input:focus {
@@ -222,7 +225,7 @@ body {
    BOTÓN
 ========================= */
 .kivor-button {
-    width: 65%;
+    width: min(280px, 80vw);
     max-width: 280px;
 
     background-color: var(--color-primary);
