@@ -189,9 +189,9 @@ body {
 
         /* leve tinte CRT */
         radial-gradient(
-            circle at center,
-            rgba(120,255,120,0.06),
-            rgba(0,0,0,0) 60%
+             circle at center,
+             rgba(120,255,120,0.12),
+             rgba(0,0,0,0) 65%
         );
 
     opacity: 0.55;
@@ -225,7 +225,7 @@ body {
         100% 3px,
         2px 2px;
 
-    opacity: 0.18;
+    opacity: 0.28;
     mix-blend-mode: soft-light;
 }
 /* =========================
@@ -397,10 +397,10 @@ body {
 }
 
 @keyframes kivorScreenFlicker {
-    0% { opacity: 1; }
-    96% { opacity: 1; }
-    97% { opacity: 0.98; }
-    98% { opacity: 1; }
-    99% { opacity: 0.985; }
-    100% { opacity: 1; }
+0% { opacity: 1; }
+95% { opacity: 1; }
+96% { opacity: 0.97; }
+97% { opacity: 1; }
+98% { opacity: 0.965; }
+100% { opacity: 1; }
 }
