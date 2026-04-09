@@ -156,6 +156,7 @@ body {
     height: 100%;
     border-radius: 10px;
     overflow: hidden;
+    font-family: "Courier New", monospace;
 
     background:
     radial-gradient(
@@ -286,22 +287,37 @@ body {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    position: relative;
 }
+
+.kivor-input-container::after {
+    content: "_";
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+
+    color: #b6fcb6;
+
+    animation: kivorCursorBlink 1s infinite;
+}
+
 
 .kivor-input {
     width: 100%;
 
     background: transparent;
     border: none;
-    border-bottom: 2px solid var(--color-primary);
 
-    color: var(--color-input-text);
+    color: #b6fcb6;
+
+    font-family: inherit;
     font-size: 1rem;
-    line-height: 1.2;
 
-    padding: 6px 0;
+    padding: 4px 0;
+
     outline: none;
-    text-align: left;
+
+    caret-color: transparent; /* ocultamos cursor real */
 }
 
 .kivor-input:focus {
@@ -409,4 +425,9 @@ body {
 97% { opacity: 1; }
 98% { opacity: 0.965; }
 100% { opacity: 1; }
+}
+
+@keyframes kivorCursorBlink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
 }
