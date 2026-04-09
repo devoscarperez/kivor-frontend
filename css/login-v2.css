@@ -158,7 +158,13 @@ body {
     overflow: hidden;
 
     background:
-        radial-gradient(circle at 50% 46%, #0a0d0c 0%, #050605 55%, #010101 100%);
+    radial-gradient(
+        circle at 50% 50%,
+        #0f1f14 0%,
+        #08130d 40%,
+        #020403 75%,
+        #000000 100%
+    );
 
     transform: perspective(1200px) scaleY(0.985);
 
