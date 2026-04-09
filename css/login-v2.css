@@ -61,113 +61,147 @@ body {
 }
 
 /* =========================
-   MONITOR
+   MONITOR - CUERPO REAL
 ========================= */
 .kivor-device {
     position: relative;
 
-    width: min(94vw, 820px);
+    width: min(94vw, 860px);
     aspect-ratio: 4 / 3;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 6px;
-
-    border: 22px solid transparent; /* 🔥 CLAVE */
+    padding: 34px;
+    border-radius: 24px;
 
     background:
-        linear-gradient(
-            160deg,
-            #3a4046 0%,
-            #1a1f24 40%,
-            #0b0e11 100%
-        ) padding-box,
-
-        linear-gradient(
-            180deg,
-            #8a9198,
-            #6f777f
-        ) border-box;
+        radial-gradient(circle at 18% 14%, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.03) 18%, transparent 34%),
+        radial-gradient(circle at 82% 18%, rgba(255,255,255,0.08) 0%, transparent 28%),
+        linear-gradient(145deg, #7a807f 0%, #666b6a 14%, #575b59 34%, #4a4d4b 58%, #3d403f 78%, #313332 100%);
 
     box-shadow:
-        inset 0 2px 3px rgba(255,255,255,0.15),
-        inset 0 -10px 20px rgba(0,0,0,0.6),
-        0 25px 60px rgba(0,0,0,0.7);
+        inset 0 2px 1px rgba(255,255,255,0.20),
+        inset 0 -2px 1px rgba(0,0,0,0.35),
+        inset 16px 0 28px rgba(255,255,255,0.04),
+        inset -18px 0 30px rgba(0,0,0,0.18),
+        0 28px 70px rgba(0,0,0,0.58),
+        0 8px 20px rgba(0,0,0,0.34);
+    overflow: hidden;
 }
 
+/* Textura plástica fina */
+.kivor-device::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    pointer-events: none;
+    opacity: 0.22;
+    background-image:
+        radial-gradient(rgba(255,255,255,0.09) 0.7px, transparent 0.9px),
+        radial-gradient(rgba(0,0,0,0.10) 0.7px, transparent 0.9px);
+    background-size: 4px 4px, 5px 5px;
+    background-position: 0 0, 1px 1px;
+    mix-blend-mode: overlay;
+}
 
+/* Relieve exterior / borde duro */
+.kivor-device::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    pointer-events: none;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.30),
+        inset 0 -1px 0 rgba(0,0,0,0.35),
+        inset 10px 10px 18px rgba(255,255,255,0.04),
+        inset -14px -18px 24px rgba(0,0,0,0.28);
+}
 
 /* =========================
-   BISEL
+   BISEL INTERIOR
 ========================= */
 .kivor-frame {
+    position: relative;
     width: 100%;
     height: 100%;
-    padding: 0;
+    padding: 18px;
+    border-radius: 16px;
 
-    background: transparent; /* 🔥 clave */
-    border: none;
+    background:
+        linear-gradient(145deg, #4d514f 0%, #3f4341 22%, #343735 52%, #2b2d2c 100%);
 
-    position: relative;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        inset 0 -2px 4px rgba(0,0,0,0.45),
+        inset 10px 0 14px rgba(255,255,255,0.03),
+        inset -12px 0 18px rgba(0,0,0,0.22);
+}
+
+/* Línea interior del bisel */
+.kivor-frame::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border-radius: 10px;
+    pointer-events: none;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.06),
+        inset 0 -1px 0 rgba(0,0,0,0.25);
 }
 
 /* =========================
    PANTALLA
 ========================= */
 .kivor-screen {
+    position: relative;
     width: 100%;
     height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
 
-    border-radius: 6px;
+    background:
+        radial-gradient(circle at 50% 46%, #0a0d0c 0%, #050605 55%, #010101 100%);
 
-    background: radial-gradient(
-        circle at center,
-        #050608 0%,
-        #000 60%,
-        #000 100%
-    );
-
-    /* 🔥 CURVATURA VISUAL */
-    transform: perspective(900px) scaleY(0.98);
+    transform: perspective(1200px) scaleY(0.985);
 
     box-shadow:
-        inset 0 0 60px rgba(0,0,0,1),
-        inset 0 0 120px rgba(0,0,0,0.9);
+        inset 0 0 0 1px rgba(255,255,255,0.03),
+        inset 0 0 22px rgba(0,0,0,0.85),
+        inset 0 0 80px rgba(0,0,0,1),
+        0 0 0 2px rgba(0,0,0,0.55);
 }
 
-/* Vidrio muy sutil */
+/* Reflejo de vidrio */
 .kivor-screen::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.04),
-        rgba(255,255,255,0.00) 22%
-    );
-
-    opacity: 0.35;
+    background:
+        linear-gradient(to bottom,
+            rgba(255,255,255,0.10) 0%,
+            rgba(255,255,255,0.035) 10%,
+            rgba(255,255,255,0.00) 24%,
+            rgba(255,255,255,0.00) 100%);
+    opacity: 0.55;
 }
 
-/* Viñeta muy sutil */
+/* Viñeta y profundidad */
 .kivor-screen::after {
     content: "";
     position: absolute;
     inset: 0;
-
-    border-radius: 6px;
-
-    background: radial-gradient(
-        circle at 50% 30%,
-        rgba(255,255,255,0.08),
-        transparent 60%
-    );
-
     pointer-events: none;
+    background:
+        radial-gradient(circle at center,
+            transparent 50%,
+            rgba(0,0,0,0.18) 72%,
+            rgba(0,0,0,0.42) 100%);
 }
 
 /* =========================
