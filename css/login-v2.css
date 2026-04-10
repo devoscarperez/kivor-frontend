@@ -350,3 +350,11 @@ body {
 
     animation: kivorCursorBlink 1s infinite;
 }
+
+@keyframes kivorCursorBlink {
+    0%   { opacity: 1; }
+    40%  { opacity: 1; }
+    50%  { opacity: 0.2; }
+    60%  { opacity: 1; }
+    100% { opacity: 1; }
+}
