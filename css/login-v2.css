@@ -44,21 +44,19 @@ body {
    ENTORNO
 ========================= */
 .kivor-world {
-    position: relative; /* 🔥 CLAVE */
+    position: relative;
     width: 100%;
     height: 100%;
-
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 /* =========================
-   MONITOR - CUERPO REAL
+   MONITOR
 ========================= */
 .kivor-device {
     position: relative;
-
     width: min(94vw, 860px);
     aspect-ratio: 4 / 3;
 
@@ -81,10 +79,10 @@ body {
         inset -18px 0 30px rgba(0,0,0,0.18),
         0 28px 70px rgba(0,0,0,0.58),
         0 8px 20px rgba(0,0,0,0.34);
+
     overflow: hidden;
 }
 
-/* Textura plástica fina */
 .kivor-device::before {
     content: "";
     position: absolute;
@@ -100,7 +98,6 @@ body {
     mix-blend-mode: overlay;
 }
 
-/* Relieve exterior / borde duro */
 .kivor-device::after {
     content: "";
     position: absolute;
@@ -115,7 +112,7 @@ body {
 }
 
 /* =========================
-   BISEL INTERIOR
+   BISEL
 ========================= */
 .kivor-frame {
     position: relative;
@@ -134,7 +131,6 @@ body {
         inset -12px 0 18px rgba(0,0,0,0.22);
 }
 
-/* Línea interior del bisel */
 .kivor-frame::before {
     content: "";
     position: absolute;
@@ -142,9 +138,6 @@ body {
     border-radius: 10px;
     pointer-events: none;
     border: 1px solid rgba(255,255,255,0.06);
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.06),
-        inset 0 -1px 0 rgba(0,0,0,0.25);
 }
 
 /* =========================
@@ -156,29 +149,30 @@ body {
     height: 100%;
     border-radius: 10px;
     overflow: hidden;
+
     font-family: "Courier New", monospace;
 
     background:
-    radial-gradient(
-        circle at 50% 50%,
-        #0f1f14 0%,
-        #08130d 40%,
-        #020403 75%,
-        #000000 100%
-    );
+        radial-gradient(
+            circle at 50% 50%,
+            #0f1f14 0%,
+            #08130d 40%,
+            #020403 75%,
+            #000000 100%
+        );
 
     transform: perspective(1200px) scaleY(0.985);
 
     box-shadow:
         inset 0 0 0 1px rgba(255,255,255,0.03),
         inset 0 0 22px rgba(0,0,0,0.85),
-        inset 0 0 80px rgba(0,0,0,1),
-        0 0 0 2px rgba(0,0,0,0.55);
-   animation: kivorScreenFlicker 6s infinite;
+        inset 0 0 80px rgba(0,0,0,1);
+
+    animation: kivorScreenFlicker 6s infinite;
+    isolation: isolate;
 }
 
-
-/* Reflejo de vidrio */
+/* vidrio */
 .kivor-screen::before {
     content: "";
     position: absolute;
@@ -186,26 +180,22 @@ body {
     pointer-events: none;
 
     background:
-        /* brillo superior del vidrio */
         linear-gradient(
             to bottom,
             rgba(255,255,255,0.10) 0%,
             rgba(255,255,255,0.04) 12%,
-            rgba(255,255,255,0.00) 30%
+            transparent 30%
         ),
-
-        /* leve tinte CRT */
         radial-gradient(
-             circle at center,
-             rgba(120,255,120,0.12),
-             rgba(0,0,0,0) 65%
+            circle at center,
+            rgba(120,255,120,0.12),
+            transparent 65%
         );
 
     opacity: 0.55;
 }
 
-
-/* Viñeta y profundidad */
+/* scanlines */
 .kivor-screen::after {
     content: "";
     position: absolute;
@@ -213,35 +203,23 @@ body {
     pointer-events: none;
 
     background:
-        /* scanlines más finas */
         repeating-linear-gradient(
             to bottom,
             rgba(255,255,255,0.025) 0px,
             rgba(255,255,255,0.025) 1px,
             transparent 1px,
             transparent 3px
-        ),
-
-        /* ruido muy sutil */
-        radial-gradient(
-            rgba(255,255,255,0.02) 1px,
-            transparent 1px
         );
 
-    background-size:
-        100% 3px,
-        2px 2px;
-
     opacity: 0.28;
-    mix-blend-mode: soft-light;
 }
+
 /* =========================
    CONTENIDO
 ========================= */
 .kivor-container {
     position: relative;
     z-index: 2;
-
     width: 100%;
     height: 100%;
 
@@ -253,7 +231,8 @@ body {
 .kivor-content-box {
     width: 100%;
     max-width: 420px;
-    padding: 0 16px; /* 👈 clave */
+    padding: 0 16px;
+
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -268,47 +247,22 @@ body {
     color: var(--color-text-secondary);
 }
 
-.kivor-label {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.62);
-}
-
-.kivor-form {
-    width: 100%;
-    max-width: 420px; /* 🔥 límite real */
-}
-
-
 /* =========================
-   INPUT
+   INPUT TERMINAL REAL
 ========================= */
-
 .kivor-input-container {
-    width: 100%;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 6px;
-    position: relative;
 }
 
-
-.kivor-input-container::before {
-    content: "> ";
+.kivor-prompt {
     color: #b6fcb6;
-}
-
-.kivor-input-container::after {
-    content: "█";
-    margin-left: 2px;
-
-    color: #b6fcb6;
-
-    animation: kivorCursorBlink 1s infinite;
+    white-space: nowrap;
 }
 
 .kivor-input {
     flex: 1;
-
     background: transparent;
     border: none;
 
@@ -317,15 +271,9 @@ body {
     font-family: inherit;
     font-size: 1rem;
 
-    padding: 0;
-
     outline: none;
 
-    caret-color: transparent;
-}
-
-.kivor-input:focus {
-    border-bottom-color: var(--color-primary);
+    caret-color: #b6fcb6;
 }
 
 .kivor-error {
@@ -335,103 +283,35 @@ body {
 }
 
 /* =========================
-   BOTÓN
+   BOTÓN (temporal)
 ========================= */
 .kivor-button {
     width: 100%;
-
     background-color: var(--color-primary);
     border: none;
-
     color: #000;
     font-size: 0.95rem;
     padding: 10px 12px;
-
-    cursor: pointer;
-    transition: opacity 120ms ease;
-}
-
-.kivor-button:hover {
-    opacity: 0.9;
-}
-
-.kivor-input,
-.kivor-button {
-    width: 100%;
 }
 
 /* =========================
-   LOGO EN EL MARCO
+   LOGO
 ========================= */
 .kivor-logo {
     position: absolute;
     left: 18px;
     bottom: 12px;
-
     width: 180px;
-    max-width: 24%;
-
-    opacity: 0.92;
-    filter: brightness(1.18) contrast(1.08);
 }
 
 /* =========================
-   MOBILE
+   ANIMACIÓN CRT
 ========================= */
-@media (max-width: 480px) {
-    .kivor-device {
-        width: 96vw;
-    }
-
-    .kivor-frame {
-        width: 86%;
-        height: 80%;
-        padding: 12px;
-    }
-
-    .kivor-content-box {
-        width: min(90%, 340px);
-        gap: 16px;
-    }
-
-    .kivor-message {
-        font-size: 0.85rem;
-    }
-
-    .kivor-label {
-        font-size: 0.78rem;
-    }
-
-    .kivor-input {
-        font-size: 16px; /* evita autoshrink perceptual en móvil */
-    }
-
-    .kivor-button {
-        font-size: 16px;
-    }
-
-    .kivor-logo {
-        width: 150px;
-        max-width: 28%;
-        left: 14px;
-        bottom: 10px;
-    }
-}
-
-.kivor-screen {
-    isolation: isolate; /* 🔥 CLAVE */
-}
-
 @keyframes kivorScreenFlicker {
-0% { opacity: 1; }
-95% { opacity: 1; }
-96% { opacity: 0.97; }
-97% { opacity: 1; }
-98% { opacity: 0.965; }
-100% { opacity: 1; }
-}
-
-@keyframes kivorCursorBlink {
-    0%, 50%, 100% { opacity: 1; }
-    25%, 75% { opacity: 0; }
+    0% { opacity: 1; }
+    95% { opacity: 1; }
+    96% { opacity: 0.97; }
+    97% { opacity: 1; }
+    98% { opacity: 0.965; }
+    100% { opacity: 1; }
 }
