@@ -264,11 +264,11 @@ body {
 }
 
 .kivor-input {
+    flex: 1;
+
     background: transparent;
     border: none;
-    flex: none;
-    width: auto;
-    min-width: 10px;
+
     color: #b6fcb6;
 
     font-family: inherit;
@@ -325,10 +325,13 @@ body {
 
 .kivor-caret {
     width: 10px;
-    height: 18px;
+    height: 16px;
+
     background: #b6fcb6;
 
     margin-left: 2px;
+
+    display: inline-block;
 
     animation: kivorCursorBlink 1s infinite;
 }
