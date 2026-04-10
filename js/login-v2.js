@@ -1,56 +1,60 @@
-// Elementos
-const input = document.getElementById("kivor-input");
-const button = document.getElementById("kivor-button");
-const error = document.getElementById("kivor-error");
-
 const input = document.getElementById('kivor-input');
 const text = document.getElementById('kivor-text');
+const terminal = document.querySelector('.kivor-terminal');
 
+let stage = "login";
+let loginValue = "";
+
+input.focus();
+
+/* escribir */
 input.addEventListener('input', () => {
     text.textContent = input.value;
 });
 
-/* mantener foco siempre */
+/* ENTER */
+input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        if (stage === "login") {
+            loginValue = input.value;
+
+            appendLine(`login: ${loginValue}`);
+            input.value = "";
+            text.textContent = "";
+
+            changePrompt("password:");
+
+            stage = "password";
+        } else {
+            appendLine("password: ********");
+            appendLine("Authenticating...");
+
+            input.value = "";
+            text.textContent = "";
+        }
+    }
+});
+
+/* mantener foco */
 document.addEventListener('click', () => {
     input.focus();
 });
 
-// Función de validación
-function validateInput() {
-    const value = input.value.trim();
+/* helpers */
 
-    // Si está vacío
-    if (value === "") {
-        showError("Campo requerido");
-        return false;
-    }
+function appendLine(content) {
+    const line = document.createElement('div');
+    line.className = 'kivor-line';
+    line.textContent = content;
 
-    // Si es válido
-    clearError();
-    return true;
+    terminal.insertBefore(line, input);
 }
 
-// Mostrar error
-function showError(message) {
-    error.textContent = message;
-    input.classList.add("error");
-    input.focus();
+function changePrompt(newPrompt) {
+    const firstLine = terminal.querySelector('.kivor-line');
+    firstLine.innerHTML = `
+        <span>${newPrompt}</span>
+        <span id="kivor-text"></span>
+        <span id="kivor-caret" class="kivor-caret"></span>
+    `;
 }
-
-// Limpiar error
-function clearError() {
-    error.textContent = "";
-    input.classList.remove("error");
-}
-
-// Evento botón
-button.addEventListener("click", () => {
-    validateInput();
-});
-
-// Evento ENTER
-input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-        validateInput();
-    }
-});
