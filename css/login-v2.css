@@ -70,20 +70,29 @@ body {
     background:
         radial-gradient(circle at 18% 14%, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.03) 18%, transparent 34%),
         radial-gradient(circle at 82% 18%, rgba(255,255,255,0.08) 0%, transparent 28%),
-        linear-gradient(145deg, #7a807f 0%, #666b6a 14%, #575b59 34%, #4a4d4b 58%, #3d403f 78%, #313332 100%);
+        linear-gradient(
+            145deg,
+            #6f7574 0%,
+            #666b6a 20%,
+            #5c605f 40%,
+            #555958 60%,
+            #4d504f 80%,
+            #464948 100%
+        )
 
-   box-shadow:
-       inset 0 2px 1px rgba(255,255,255,0.20),
-       inset 0 -2px 1px rgba(0,0,0,0.35),
-       inset 0 -12px 24px rgba(0,0,0,0.35), /* 👈 NUEVO */
-       inset 0 8px 16px rgba(255,255,255,0.06), /* 👈 NUEVO */
-       inset 16px 0 28px rgba(255,255,255,0.04),
-       inset -18px 0 30px rgba(0,0,0,0.18),
-       0 28px 70px rgba(0,0,0,0.58),
-       0 8px 20px rgba(0,0,0,0.34),
-       inset 0 22px 40px rgba(0,0,0,0.55),
-       inset 0 -12px 18px rgba(0,0,0,0.45),
-       inset 0 0 0 14px rgba(0,0,0,0.65);
+    box-shadow:
+        inset 0 2px 1px rgba(255,255,255,0.20),
+        inset 0 -2px 1px rgba(0,0,0,0.35),
+        inset 0 -12px 24px rgba(0,0,0,0.35),
+        inset 0 8px 16px rgba(255,255,255,0.06),
+        inset 16px 0 28px rgba(255,255,255,0.04),
+        inset -18px 0 30px rgba(0,0,0,0.18),
+        inset 0 18px 30px rgba(0,0,0,0.25),   /* 👈 reemplazo */
+        inset 0 -10px 18px rgba(0,0,0,0.22),  /* 👈 reemplazo */
+        0 28px 70px rgba(0,0,0,0.58),
+        0 8px 20px rgba(0,0,0,0.34),
+        inset 0 22px 40px rgba(0,0,0,0.55),
+        inset 0 -12px 18px rgba(0,0,0,0.45);
 
     overflow: hidden;
 }
