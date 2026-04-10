@@ -359,3 +359,54 @@ body {
     60%  { opacity: 1; }
     100% { opacity: 1; }
 }
+
+/* =========================
+   TERMINAL REAL UNIX
+========================= */
+.kivor-terminal {
+    width: 100%;
+    max-width: 500px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start; /* 👈 izquierda */
+    justify-content: flex-start;
+
+    gap: 12px;
+
+    margin-top: 40px;
+}
+
+/* línea tipo terminal */
+.kivor-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #a8ff9e;
+
+    font-family: "Courier New", monospace;
+    font-size: 1rem;
+}
+
+/* input invisible */
+.kivor-hidden-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* cursor CRT */
+.kivor-caret {
+    width: 10px;
+    height: 16px;
+
+    background: #a8ff9e;
+
+    margin-left: 2px;
+
+    animation: kivorCursorBlink 1.8s infinite;
+
+    box-shadow: 0 0 6px rgba(168, 255, 158, 0.6);
+}
