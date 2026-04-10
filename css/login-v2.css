@@ -282,6 +282,7 @@ body {
 /* =========================
    INPUT
 ========================= */
+
 .kivor-input-container {
     width: 100%;
     display: flex;
@@ -289,6 +290,7 @@ body {
     gap: 6px;
     position: relative;
 }
+
 
 .kivor-input-container::before {
     content: "> ";
@@ -303,7 +305,6 @@ body {
 
     animation: kivorCursorBlink 1s infinite;
 }
-
 
 .kivor-input {
     flex: 1;
