@@ -321,3 +321,32 @@ body {
     gap: 28px; /* antes 18px */
 }
 
+.kivor-input-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* input invisible pero funcional */
+.kivor-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* texto visible */
+#kivor-text {
+    color: #b6fcb6;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+/* cursor CRT REAL */
+.kivor-caret {
+    width: 10px;
+    height: 16px;
+    background: #b6fcb6;
+    margin-left: 2px;
+
+    animation: kivorCursorBlink 1s infinite;
+}
