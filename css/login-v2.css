@@ -259,7 +259,7 @@ body {
 }
 
 .kivor-prompt {
-    color: #b6fcb6;
+    color: #a8ff9e;
     white-space: nowrap;
 }
 
@@ -267,14 +267,14 @@ body {
     background: transparent;
     border: none;
 
-    color: #b6fcb6;
+    color: #a8ff9e;
 
     font-family: inherit;
     font-size: 1rem;
 
     outline: none;
 
-    caret-color: #b6fcb6;
+    caret-color: #a8ff9e;
 }
 
 .kivor-error {
@@ -336,7 +336,7 @@ body {
 
 /* texto visible */
 #kivor-text {
-    color: #b6fcb6;
+    color: #a8ff9e;
     font-family: inherit;
     font-size: 1rem;
 }
@@ -345,8 +345,9 @@ body {
 .kivor-caret {
     width: 10px;
     height: 16px;
-    background: #b6fcb6;
+    background: #a8ff9e;
     margin-left: 2px;
+    box-shadow: 0 0 6px rgba(168, 255, 158, 0.6);
 
     animation: kivorCursorBlink 1s infinite;
 }
