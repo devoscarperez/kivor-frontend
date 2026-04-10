@@ -132,12 +132,13 @@ body {
 
     /* 👇 MISMO MATERIAL QUE EL MARCO EXTERNO */
     background:
-       linear-gradient(
-           145deg,
-           #f0eadc 0%,
-           #e2dccb 40%,
-           #d4cebd 100%
-       );
+        linear-gradient(
+            145deg,
+            #f5efe2 0%,
+            #e6e0cf 48%,
+            #d2cbb8 49%,
+            #c6bfa9 100%
+        );
       
     box-shadow:
         /* borde interno duro (clave CRT) */
