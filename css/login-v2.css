@@ -253,7 +253,7 @@ body {
    INPUT TERMINAL REAL
 ========================= */
 .kivor-input-container {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
 }
@@ -264,8 +264,6 @@ body {
 }
 
 .kivor-input {
-    flex: 1;
-
     background: transparent;
     border: none;
 
@@ -276,7 +274,7 @@ body {
 
     outline: none;
 
-    caret-color: transparent;
+    caret-color: #b6fcb6;
 }
 
 .kivor-error {
@@ -323,15 +321,3 @@ body {
     gap: 28px; /* antes 18px */
 }
 
-.kivor-caret {
-    width: 10px;
-    height: 16px;
-
-    background: #b6fcb6;
-
-    margin-left: 2px;
-
-    display: inline-block;
-
-    animation: kivorCursorBlink 1s infinite;
-}
