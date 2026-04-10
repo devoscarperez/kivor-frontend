@@ -290,11 +290,14 @@ body {
     position: relative;
 }
 
+.kivor-input-container::before {
+    content: "> ";
+    color: #b6fcb6;
+}
+
 .kivor-input-container::after {
-    content: "_";
-    position: absolute;
-    left: 0;
-    bottom: 4px;
+    content: "█";
+    margin-left: 2px;
 
     color: #b6fcb6;
 
@@ -303,7 +306,7 @@ body {
 
 
 .kivor-input {
-    width: 100%;
+    flex: 1;
 
     background: transparent;
     border: none;
@@ -313,11 +316,11 @@ body {
     font-family: inherit;
     font-size: 1rem;
 
-    padding: 4px 0;
+    padding: 0;
 
     outline: none;
 
-    caret-color: transparent; /* ocultamos cursor real */
+    caret-color: transparent;
 }
 
 .kivor-input:focus {
