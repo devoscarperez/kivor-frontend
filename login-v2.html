@@ -18,16 +18,22 @@
                         <div class="kivor-content-box">
                             <div class="kivor-message">KIVOR SYSTEM v1.0</div>
 
-                           <div class="kivor-input-container">
-                               <span class="kivor-prompt">> IDENTIFICADOR:</span>
-                               <input
-                                    type="text"
-                                    id="kivor-input"
-                                    class="kivor-input"
-                                    autocomplete="off"
-                                    autofocus
-                                >
-                            </div>
+                                <div class="kivor-input-container">
+                                    <span class="kivor-prompt">> IDENTIFICADOR:</span>
+                                
+                                    <div class="kivor-input-wrapper">
+                                        <span id="kivor-text"></span>
+                                        <span id="kivor-caret" class="kivor-caret"></span>
+                                
+                                        <input
+                                            type="text"
+                                            id="kivor-input"
+                                            class="kivor-input"
+                                            autocomplete="off"
+                                            autofocus
+                                        >
+                                    </div>
+                                </div>
                             <div class="kivor-error" id="kivor-error"></div>
 
                             <button class="kivor-button" id="kivor-button">
