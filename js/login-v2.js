@@ -3,6 +3,18 @@ const input = document.getElementById("kivor-input");
 const button = document.getElementById("kivor-button");
 const error = document.getElementById("kivor-error");
 
+const input = document.getElementById('kivor-input');
+const text = document.getElementById('kivor-text');
+
+input.addEventListener('input', () => {
+    text.textContent = input.value;
+});
+
+/* mantener foco siempre */
+document.addEventListener('click', () => {
+    input.focus();
+});
+
 // Función de validación
 function validateInput() {
     const value = input.value.trim();
