@@ -139,15 +139,27 @@ body {
     width: 100%;
     height: 100%;
 
-    /* ❗ SIN padding estructural */
-    padding: 0;
+    /* 👇 AQUÍ ESTÁ LA GEOMETRÍA REAL */
+    padding: 28px 22px 48px 22px;
 
     border-radius: 18px 18px 22px 22px;
 
-    background: transparent;
+    /* 👇 MISMO MATERIAL QUE EL MARCO EXTERNO */
+    background:
+        linear-gradient(
+            145deg,
+            #5a5f5e 0%,
+            #4e5352 40%,
+            #444847 100%
+        );
 
-    /* ❗ SIN sombras */
-    box-shadow: none;
+    /* 👇 CONEXIÓN REAL ENTRE EXTERIOR E INTERIOR */
+    box-shadow:
+        inset 0 2px 2px rgba(255,255,255,0.12),
+        inset 0 -6px 12px rgba(0,0,0,0.6),
+        inset 12px 0 18px rgba(0,0,0,0.25),
+        inset -12px 0 18px rgba(0,0,0,0.25),
+        0 6px 14px rgba(0,0,0,0.4);
 }
 
 /* =========================
