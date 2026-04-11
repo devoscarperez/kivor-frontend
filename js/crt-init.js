@@ -133,10 +133,11 @@ let textureApplied = false;
 
 function captureOnceStable() {
     console.log("CAPTURANDO CRT...");
-    const element = document.getElementById("login-texture");
+    const element = document.getElementById(".kivor-screen");
+    console.log("CAPTURANDO:", element);
 
     html2canvas(element, {
-        backgroundColor: "#000000",
+        backgroundColor: null,
         useCORS: true,
         scale: 1
     }).then((canvas) => {
