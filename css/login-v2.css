@@ -93,7 +93,17 @@ body {
         0 0 4px rgba(168,255,158,0.3),
         0 0 8px rgba(120,255,120,0.2);
 }
+.kivor-world {
+    position: static;
 
+    width: auto;
+    min-height: auto;
+
+    display: block;
+
+    background: none;
+}
+/* Cambio 2
 .kivor-world {
     position: relative;
     width: 100%;
@@ -105,7 +115,7 @@ body {
 
     background: transparent;
 }
-/*
+
 .kivor-world {
     position: relative;
     width: 100%;
