@@ -237,7 +237,11 @@ Cambio 2
 ========================= */
 .kivor-device {
     position: relative;
+
+    /* 👇 clave: limitar por viewport completo */
     width: min(92vw, 780px);
+    height: min(92vh, 585px);
+
     aspect-ratio: 4 / 3;
 
     display: flex;
@@ -245,10 +249,8 @@ Cambio 2
     justify-content: center;
 
     padding: 0;
-
     background: transparent;
 
-    /* 👇 AQUÍ ESTÁ LA MAGIA */
     box-shadow:
         0 60px 140px rgba(0, 0, 0, 0.65),
         0 25px 60px rgba(0, 0, 0, 0.45),
@@ -258,9 +260,8 @@ Cambio 2
 
     overflow: visible;
 }
-
-
-/* CAmbio 1
+/*
+Cambio 2
 .kivor-device {
     position: relative;
     width: min(92vw, 780px);
@@ -272,8 +273,32 @@ Cambio 2
 
     padding: 0;
 
-    border-radius: 0; /* 👈 eliminamos efecto tarjeta */
+    background: transparent;
 
+    box-shadow:
+        0 60px 140px rgba(0, 0, 0, 0.65),
+        0 25px 60px rgba(0, 0, 0, 0.45),
+        0 0 80px rgba(0, 0, 0, 0.35);
+
+    transform: translateY(-10px);
+
+    overflow: visible;
+}
+
+
+CAmbio 1
+.kivor-device {
+    position: relative;
+    width: min(92vw, 780px);
+    aspect-ratio: 4 / 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border-radius: 0; 
     background: transparent;
     box-shadow: none;
 
@@ -610,4 +635,13 @@ Cambio 2
     animation: kivorCursorBlink 1.8s infinite;
 
     box-shadow: 0 0 6px rgba(168, 255, 158, 0.6);
+}
+
+@media (max-width: 600px) {
+    .kivor-device {
+        width: 95vw;
+        height: 80vh;
+
+        transform: none; /* evita recorte arriba */
+    }
 }
