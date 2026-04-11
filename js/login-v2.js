@@ -62,11 +62,11 @@ function changePrompt(newPrompt) {
 
 const bootText = `
 
-K   K  III  V   V  OOO   RRRR
-K  K    I    V V  O   O  R   R
-KKK     I     V   O   O  RRRR
-K  K    I     V   O   O  R  R
-K   K  III    V    OOO   R   R
+K   K  III  V       V  OOO   RRRR
+K  K    I    V     V  O   O  R   R
+KKK     I     V   V   O   O  RRRR
+K  K    I      V V    O   O  R  R
+K   K  III      V      OOO   R   R
 
 KIVOR SYSTEM TERMINAL v1.0
 MEMORY CHECK ............. OK
