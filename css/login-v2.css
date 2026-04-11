@@ -159,7 +159,14 @@ body {
     overflow: hidden;
 
     font-family: "Courier New", monospace;
+    background: radial-gradient(
+        ellipse at center,
+        #07101a 0%,
+        #050a12 50%,
+        #020406 100%
+    );
 
+   /*
     background:
         radial-gradient(
             ellipse at center,
@@ -168,7 +175,7 @@ body {
             #020403 75%,
             #000000 100%
         );
-
+*/
     /* eliminamos deformación artificial */
     transform: none;
 
