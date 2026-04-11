@@ -152,31 +152,30 @@ body {
     justify-content: center;
 
     background:
-        /* luz moderna suave (no compite con CRT) */
+        /* 👇 glow moderno AZUL (clave para contraste con verde CRT) */
         radial-gradient(
             circle at 50% 50%,
-            rgba(0, 120, 255, 0.10) 0%,
-            rgba(0, 80, 200, 0.06) 25%,
-            rgba(0, 40, 120, 0.04) 40%,
-            transparent 60%
+            rgba(0, 140, 255, 0.18) 0%,
+            rgba(0, 90, 200, 0.12) 20%,
+            rgba(0, 40, 120, 0.08) 35%,
+            transparent 55%
         ),
 
-        /* viñeteo limpio */
+        /* 👇 viñeteo más fuerte (separación de planos) */
         radial-gradient(
             circle at center,
-            transparent 55%,
-            #05070c 85%,
-            #020305 100%
+            transparent 45%,
+            #03060a 75%,
+            #010203 100%
         ),
 
-        /* base moderna */
+        /* 👇 base MUY oscura (para que CRT explote) */
         linear-gradient(
             180deg,
-            #0a1420 0%,
-            #030507 100%
+            #08101a 0%,
+            #020305 100%
         );
 }
-
 
 /* =========================
    ENTORNO
