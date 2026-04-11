@@ -10,6 +10,7 @@
 /* =========================
    BASE
 ========================= */
+/*
 html,
 body {
     margin: 0;
@@ -33,6 +34,27 @@ html {
 body {
     font-family: 'Inter', sans-serif;
     color: var(--color-text-primary);
+}
+
+*/
+
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 40%,
+            rgba(20, 40, 60, 0.35) 0%,
+            rgba(10, 20, 30, 0.6) 35%,
+            rgba(5, 10, 15, 0.9) 70%,
+            #020406 100%
+        );
 }
 
 #login-texture {
