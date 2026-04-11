@@ -52,9 +52,9 @@ body {
     white-space: pre;
 
     text-shadow:
-        0 0 2px rgba(168,255,158,0.6),
-        0 0 6px rgba(168,255,158,0.4),
-        0 0 12px rgba(120,255,120,0.25);
+        0 0 1px rgba(168,255,158,0.5),
+        0 0 4px rgba(168,255,158,0.3),
+        0 0 8px rgba(120,255,120,0.2);
 }
 
 .kivor-world {
