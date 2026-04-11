@@ -15,21 +15,24 @@
             <div class="kivor-frame">
                 <div class="kivor-screen">
                     <div class="kivor-container">
-                        <div class="kivor-terminal">
-                            <div class="kivor-line">
-                                <span>login:</span>
-                                <span id="kivor-text"></span>
-                                <span id="kivor-caret" class="kivor-caret"></span>
-                            </div>
-                        
-                            <input
-                                type="text"
-                                id="kivor-input"
-                                class="kivor-hidden-input"
-                                autocomplete="off"
-                                autofocus
-                            >
+                    <div class="kivor-terminal">
+                    
+                        <pre id="kivor-boot" class="kivor-boot"></pre>
+                    
+                        <div class="kivor-line" id="kivor-login" style="display:none;">
+                            <span>login:</span>
+                            <span id="kivor-text"></span>
+                            <span id="kivor-caret" class="kivor-caret"></span>
                         </div>
+                    
+                        <input
+                            type="text"
+                            id="kivor-input"
+                            class="kivor-hidden-input"
+                            autocomplete="off"
+                        >
+                    
+                    </div>
                     </div>
                 </div>
             </div>
