@@ -40,6 +40,22 @@ document.addEventListener('click', () => {
     input.focus();
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const screen = document.querySelector(".kivor-screen");
+
+    // estado inicial apagado
+    screen.classList.add("off");
+
+    // forzar reflow
+    screen.offsetHeight;
+
+    // encender
+    setTimeout(() => {
+        screen.classList.remove("off");
+    }, 50);
+});
+
+
 /* helpers */
 
 function appendLine(content) {
