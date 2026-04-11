@@ -12,18 +12,16 @@
 ========================= */
 html,
 body {
-    margin: 0;
-    min-height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    color: var(--color-text-primary);
 
     background:
-        linear-gradient(
-            180deg,
-            #0f1722 0%,
-            #0c131c 100%
+        radial-gradient(
+            ellipse at center,
+            #0e1621 0%,
+            #0b121a 40%,
+            #080d13 70%,
+            #05080c 100%
         );
 }
 
