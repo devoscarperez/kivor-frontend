@@ -665,6 +665,27 @@ CAmbio 1
     opacity: 0;
 }
 
+
+.kivor-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.02) 0px,
+            rgba(255,255,255,0.02) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+
+    opacity: 0.18;
+    mix-blend-mode: soft-light;
+}
+
+
 @media (max-width: 600px) {
     .kivor-device {
         width: 95vw;
