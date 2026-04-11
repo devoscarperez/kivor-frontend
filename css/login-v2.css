@@ -385,7 +385,10 @@ body {
 ========================= */
 .kivor-terminal {
     width: 100%;
+    max-width: 90%;
     max-width: 500px;
+    padding-left: 42px;
+    padding-top: 26px;
 
     display: flex;
     flex-direction: column;
