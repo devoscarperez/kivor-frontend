@@ -91,7 +91,6 @@ function typeBoot() {
         setTimeout(typeBoot, 8);
     } else {
         setTimeout(() => {
-            bootEl.style.display = "none";
             loginEl.style.display = "flex";
             inputEl.focus();
         
