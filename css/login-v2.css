@@ -54,8 +54,9 @@ body {
 #login-texture {
     display: contents;
 }
-*/
 
+
+Cambio 3
 
 html,
 body {
@@ -65,6 +66,22 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            #102033 0%,
+            #0b1623 42%,
+            #08111b 72%,
+            #05080c 100%
+        );
+}
+*/
+
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
 
     background:
         radial-gradient(
