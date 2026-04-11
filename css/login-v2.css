@@ -204,6 +204,8 @@ Cambio 1
         0 0 1px rgba(168,255,158,0.5),
         0 0 4px rgba(168,255,158,0.3),
         0 0 8px rgba(120,255,120,0.2);
+   
+    animation: kivorPowerOn 0.6s ease-out;
 }
 
 .kivor-world {
@@ -679,5 +681,21 @@ CAmbio 1
 @media (max-width: 420px) {
     .kivor-boot {
         font-size: 0.5rem;
+    }
+}
+
+
+@keyframes kivorPowerOn {
+    0% {
+        transform: scaleY(0.05);
+        opacity: 0;
+        filter: brightness(2);
+    }
+    60% {
+        transform: scaleY(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: scaleY(1);
     }
 }
