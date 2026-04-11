@@ -155,20 +155,21 @@ body {
 
     background:
         radial-gradient(
-            circle at 50% 50%,
-            #0f1f14 0%,
-            #08130d 40%,
+            ellipse at center,
+            #13301c 0%,
+            #08130d 45%,
             #020403 75%,
             #000000 100%
         );
 
-    transform: perspective(1200px) scaleY(0.985);
-   
+    /* 👇 CURVATURA CRT */
+    transform: perspective(900px) scaleY(0.97) scaleX(1.02);
+
     box-shadow:
         inset 0 0 0 1px rgba(255,255,255,0.02),
-        inset 0 0 50px rgba(0,0,0,0.95),
-        inset 0 0 140px rgba(0,0,0,1.2),
-        0 4px 10px rgba(0,0,0,0.7);
+        inset 0 0 60px rgba(0,0,0,0.95),
+        inset 0 0 160px rgba(0,0,0,1.2),
+        0 6px 18px rgba(0,0,0,0.7);
 
     animation: kivorScreenFlicker 6s infinite;
     isolation: isolate;
