@@ -71,37 +71,20 @@ body {
 ========================= */
 .kivor-device {
     position: relative;
-    width: min(94vw, 860px);
+    width: min(92vw, 780px);
     aspect-ratio: 4 / 3;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    padding: 34px 48px 96px 48px;
-    border-radius: 24px;
+    padding: 0;
+    border-radius: 18px;
 
-    background:
-        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.35), transparent 30%),
-        radial-gradient(circle at 80% 90%, rgba(0,0,0,0.25), transparent 40%),
-        linear-gradient(
-            145deg,
-            #e6dfcf 0%,
-            #d8d2c4 25%,
-            #cfc7b6 50%,
-            #c4bca9 75%,
-            #b8b09c 100%
-        );
+    background: transparent;
+    box-shadow: none;
 
-    box-shadow:
-        inset 0 2px 2px rgba(255,255,255,0.6),
-        inset 0 -8px 16px rgba(0,0,0,0.35),
-        inset 20px 0 30px rgba(0,0,0,0.15),
-        inset -20px 0 30px rgba(0,0,0,0.15),
-        inset 0 -30px 40px rgba(0,0,0,0.25),
-        0 30px 80px rgba(0,0,0,0.6);
-
-    overflow: hidden;
+    overflow: visible;
 }
 
 
