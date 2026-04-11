@@ -237,8 +237,9 @@ body {
 
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 6px;
 }
+
 
 /* =========================
    TEXTO
@@ -319,9 +320,6 @@ body {
     100% { opacity: 1; }
 }
 
-.kivor-content-box {
-    gap: 28px; /* antes 18px */
-}
 
 .kivor-input-wrapper {
     position: relative;
