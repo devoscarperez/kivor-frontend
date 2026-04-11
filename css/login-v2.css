@@ -217,6 +217,32 @@ Cambio 2
 
     padding: 0;
 
+    background: transparent;
+
+    /* 👇 AQUÍ ESTÁ LA MAGIA */
+    box-shadow:
+        0 60px 140px rgba(0, 0, 0, 0.65),
+        0 25px 60px rgba(0, 0, 0, 0.45),
+        0 0 80px rgba(0, 0, 0, 0.35);
+
+    transform: translateY(-10px);
+
+    overflow: visible;
+}
+
+
+/* CAmbio 1
+.kivor-device {
+    position: relative;
+    width: min(92vw, 780px);
+    aspect-ratio: 4 / 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
     border-radius: 0; /* 👈 eliminamos efecto tarjeta */
 
     background: transparent;
@@ -224,6 +250,7 @@ Cambio 2
 
     overflow: visible;
 }
+*/
 
 .kivor-device::after {
     content: none;
