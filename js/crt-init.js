@@ -149,7 +149,7 @@ function captureOnceStable() {
         material.uniforms.uTexture.value = texture;
         material.needsUpdate = true;
 
-        element.style.visibility = "hidden";
+        // element.style.visibility = "hidden";
         textureApplied = true;
 
         console.log("CRT TEXTURA OK");
