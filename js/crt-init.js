@@ -158,13 +158,14 @@ function captureOnceStable() {
     });
 }
 
-window.addEventListener("load", () => {
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            captureOnceStable();
-        });
-    });
-});
+//window.addEventListener("load", () => {
+//    requestAnimationFrame(() => {
+//        requestAnimationFrame(() => {
+//            captureOnceStable();
+//        });
+//    });
+//});
+window.startCRT = captureOnceStable;
 
 // ==========================
 // RESIZE
