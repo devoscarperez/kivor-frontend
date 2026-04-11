@@ -75,7 +75,7 @@ I/O CHANNELS ............. OK
 
 UNAUTHORIZED ACCESS PROHIBITED
 
-login:
+
 `;
 
 const bootEl = document.getElementById("kivor-boot");
