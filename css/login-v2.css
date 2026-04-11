@@ -371,6 +371,8 @@ CAmbio 1
     height: 100%;
     border-radius: 14px;
     overflow: hidden;
+    transform-origin: center;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 
     font-family: "Courier New", monospace;
 
@@ -383,30 +385,17 @@ CAmbio 1
             #000000 100%
         );
 
-    /* eliminamos deformación artificial */
-    / * transform: none; */
-
     box-shadow:
         inset 0 0 0 1px rgba(255,255,255,0.03),
         inset 0 0 80px rgba(0,0,0,0.95),
         inset 0 0 180px rgba(0,0,0,1),
         0 20px 60px rgba(0,0,0,0.35);
 
-    /* 👇 vidrio CRT real */
-/*
-    box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.03),
-        inset 0 0 80px rgba(0,0,0,0.95),
-        inset 0 0 180px rgba(0,0,0,1),
-        0 10px 40px rgba(0,0,0,0.6);
-*/
-    /* animation: kivorPowerOn 0.5s ease-out, kivorScreenFlicker 6s infinite; */
-   
     animation: kivorPowerOn 1s ease-out, kivorScreenFlicker 6s infinite;
     isolation: isolate;
 
-    /* micro difuminado CRT */
     filter: blur(0.25px);
+
 }
 
 /* vidrio */
@@ -700,4 +689,9 @@ CAmbio 1
     100% {
         transform: scaleY(1);
     }
+}
+
+.kivor-screen.off {
+    transform: scaleY(0.02);
+    opacity: 0;
 }
