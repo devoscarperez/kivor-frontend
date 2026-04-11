@@ -60,21 +60,22 @@ function changePrompt(newPrompt) {
 }
 
 
-const bootText = `KIVOR SYSTEM TERMINAL v1.0
+const bootText = `
+
+K   K  III  V   V  OOO   RRRR
+K  K    I    V V  O   O  R   R
+KKK     I     V   O   O  RRRR
+K  K    I     V   O   O  R  R
+K   K  III    V    OOO   R   R
+
+KIVOR SYSTEM TERMINAL v1.0
 MEMORY CHECK ............. OK
 CPU INIT ................. OK
 I/O CHANNELS ............. OK
 
-----------------------------------------
-   _  ___ _   _  ___  ____ 
-  | |/ (_) |_| |/ _ \\|  _ \\
-  | ' /| | __| | | | | |_) |
-  | . \\| | |_| | |_| |  _ <
-  |_|\\_\\_|\\__|_|\\___/|_| \\_\\
-----------------------------------------
-
 UNAUTHORIZED ACCESS PROHIBITED
 
+login:
 `;
 
 const bootEl = document.getElementById("kivor-boot");
