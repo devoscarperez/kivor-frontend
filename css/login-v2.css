@@ -123,7 +123,7 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 14px;
     overflow: hidden;
 
     font-family: "Courier New", monospace;
@@ -137,17 +137,21 @@ body {
             #000000 100%
         );
 
-    /* 👇 CURVATURA CRT */
-    transform: perspective(900px) scaleY(0.97) scaleX(1.02);
+    /* eliminamos deformación artificial */
+    transform: none;
 
+    /* 👇 vidrio CRT real */
     box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.02),
-        inset 0 0 60px rgba(0,0,0,0.95),
-        inset 0 0 160px rgba(0,0,0,1.2),
-        0 6px 18px rgba(0,0,0,0.7);
+        inset 0 0 0 1px rgba(255,255,255,0.03),
+        inset 0 0 80px rgba(0,0,0,0.95),
+        inset 0 0 180px rgba(0,0,0,1),
+        0 10px 40px rgba(0,0,0,0.6);
 
     animation: kivorScreenFlicker 6s infinite;
     isolation: isolate;
+
+    /* micro difuminado CRT */
+    filter: blur(0.25px);
 }
 
 /* vidrio */
