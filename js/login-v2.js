@@ -95,9 +95,11 @@ function typeBoot() {
             inputEl.focus();
         
             // 🔥 activar CRT AQUÍ
-            if (window.startCRT) {
-                window.startCRT();
-            }
+            setTimeout(() => {
+                if (window.startCRT) {
+                    window.startCRT();
+                }
+            }, 300);
         
         }, 400);
     }
