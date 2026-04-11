@@ -164,29 +164,29 @@ body {
     pointer-events: none;
 
     background:
-        /* brillo superior */
+        /* brillo superior más difuso */
         linear-gradient(
             to bottom,
-            rgba(255,255,255,0.18) 0%,
-            rgba(255,255,255,0.08) 10%,
-            transparent 25%
+            rgba(255,255,255,0.12) 0%,
+            rgba(255,255,255,0.05) 8%,
+            transparent 20%
         ),
 
-        /* brillo lateral suave */
+        /* glow central más orgánico */
         radial-gradient(
             ellipse at 50% 50%,
-            rgba(120,255,120,0.10),
-            transparent 60%
+            rgba(120,255,120,0.08),
+            transparent 65%
         ),
 
-        /* sombreado bordes tipo tubo */
+        /* 👇 viñeteo NO uniforme (clave) */
         radial-gradient(
-            ellipse at center,
-            transparent 60%,
+            ellipse at 52% 48%,
+            transparent 58%,
             rgba(0,0,0,0.55) 100%
         );
 
-    opacity: 0.7;
+    opacity: 0.85;
 }
 
 /* scanlines */
