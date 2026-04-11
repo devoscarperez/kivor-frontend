@@ -173,6 +173,9 @@ body {
    ENTORNO
 ========================= */
 
+/* 
+Cambio 1
+
 .kivor-boot {
     color: #a8ff9e;
     font-family: "Courier New", monospace;
@@ -185,6 +188,24 @@ body {
         0 0 4px rgba(168,255,158,0.3),
         0 0 8px rgba(120,255,120,0.2);
 }
+*/
+
+.kivor-boot {
+    color: #a8ff9e;
+    font-family: "Courier New", monospace;
+
+    /* 👇 clave: tamaño adaptable */
+    font-size: clamp(0.55rem, 1.8vw, 0.95rem);
+
+    line-height: 1.15;
+    white-space: pre;
+
+    text-shadow:
+        0 0 1px rgba(168,255,158,0.5),
+        0 0 4px rgba(168,255,158,0.3),
+        0 0 8px rgba(120,255,120,0.2);
+}
+
 .kivor-world {
     position: relative;
     width: 100%;
@@ -643,5 +664,11 @@ CAmbio 1
         height: 80vh;
 
         transform: none; /* evita recorte arriba */
+    }
+}
+
+@media (max-width: 420px) {
+    .kivor-boot {
+        font-size: 0.5rem;
     }
 }
