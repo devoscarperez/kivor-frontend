@@ -132,6 +132,7 @@ scene.add(plane);
 let textureApplied = false;
 
 function captureOnceStable() {
+    console.log("CAPTURANDO CRT...");
     const element = document.getElementById("login-texture");
 
     html2canvas(element, {
