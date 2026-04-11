@@ -50,6 +50,11 @@ body {
     font-size: 0.95rem;
     line-height: 1.15;
     white-space: pre;
+
+    text-shadow:
+        0 0 2px rgba(168,255,158,0.6),
+        0 0 6px rgba(168,255,158,0.4),
+        0 0 12px rgba(120,255,120,0.25);
 }
 
 .kivor-world {
