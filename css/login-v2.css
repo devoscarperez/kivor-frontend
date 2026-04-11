@@ -384,7 +384,7 @@ CAmbio 1
         );
 
     /* eliminamos deformación artificial */
-    transform: none;
+    / * transform: none; */
 
     box-shadow:
         inset 0 0 0 1px rgba(255,255,255,0.03),
@@ -400,7 +400,9 @@ CAmbio 1
         inset 0 0 180px rgba(0,0,0,1),
         0 10px 40px rgba(0,0,0,0.6);
 */
-    animation: kivorPowerOn 0.5s ease-out, kivorScreenFlicker 6s infinite;
+    /* animation: kivorPowerOn 0.5s ease-out, kivorScreenFlicker 6s infinite; */
+   
+    animation: kivorPowerOn 1s ease-out, kivorScreenFlicker 6s infinite;
     isolation: isolate;
 
     /* micro difuminado CRT */
