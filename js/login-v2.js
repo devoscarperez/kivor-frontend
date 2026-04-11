@@ -58,3 +58,45 @@ function changePrompt(newPrompt) {
         <span id="kivor-caret" class="kivor-caret"></span>
     `;
 }
+
+
+const bootText = `KIVOR SYSTEM TERMINAL v1.0
+MEMORY CHECK ............. OK
+CPU INIT ................. OK
+I/O CHANNELS ............. OK
+
+----------------------------------------
+   _  ___ _   _  ___  ____ 
+  | |/ (_) |_| |/ _ \\|  _ \\
+  | ' /| | __| | | | | |_) |
+  | . \\| | |_| | |_| |  _ <
+  |_|\\_\\_|\\__|_|\\___/|_| \\_\\
+----------------------------------------
+
+UNAUTHORIZED ACCESS PROHIBITED
+
+`;
+
+const bootEl = document.getElementById("kivor-boot");
+const loginEl = document.getElementById("kivor-login");
+const inputEl = document.getElementById("kivor-input");
+
+let i = 0;
+
+function typeBoot() {
+    if (i < bootText.length) {
+        bootEl.textContent += bootText[i];
+        i++;
+        setTimeout(typeBoot, 8);
+    } else {
+        setTimeout(() => {
+            bootEl.style.display = "none";
+            loginEl.style.display = "flex";
+            inputEl.focus();
+        }, 400);
+    }
+}
+
+window.addEventListener("load", () => {
+    setTimeout(typeBoot, 300);
+});
