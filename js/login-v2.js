@@ -93,6 +93,12 @@ function typeBoot() {
             bootEl.style.display = "none";
             loginEl.style.display = "flex";
             inputEl.focus();
+        
+            // 🔥 activar CRT AQUÍ
+            if (window.startCRT) {
+                window.startCRT();
+            }
+        
         }, 400);
     }
 }
