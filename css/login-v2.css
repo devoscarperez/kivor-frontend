@@ -92,7 +92,7 @@ body {
             #05080c 100%
         );
 }
-*/
+Cambio 5
 html,
 body {
     margin: 0;
@@ -105,6 +105,38 @@ body {
             #0e1c2b 35%,
             #08121c 65%,
             #04070b 100%
+        );
+}
+*/
+
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        /* luz central muy sutil (donde vive la CRT) */
+        radial-gradient(
+            ellipse at 50% 45%,
+            rgba(40, 80, 120, 0.25) 0%,
+            rgba(20, 40, 70, 0.18) 25%,
+            rgba(10, 20, 35, 0.12) 45%,
+            transparent 60%
+        ),
+
+        /* viñeteo fuerte (separa la escena) */
+        radial-gradient(
+            ellipse at center,
+            transparent 40%,
+            #060a0f 75%,
+            #020305 100%
+        ),
+
+        /* base profunda */
+        linear-gradient(
+            180deg,
+            #0a1622 0%,
+            #05080c 100%
         );
 }
 
