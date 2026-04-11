@@ -371,8 +371,6 @@ CAmbio 1
     height: 100%;
     border-radius: 14px;
     overflow: hidden;
-    transform-origin: center;
-    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 
     font-family: "Courier New", monospace;
 
@@ -391,11 +389,16 @@ CAmbio 1
         inset 0 0 180px rgba(0,0,0,1),
         0 20px 60px rgba(0,0,0,0.35);
 
-    animation: kivorPowerOn 1s ease-out, kivorScreenFlicker 6s infinite;
+    /* 👇 ESTO ES LO IMPORTANTE */
+    transform-origin: center;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+
+    /* 👇 SOLO flicker, SIN powerOn */
+    animation: kivorScreenFlicker 6s infinite;
+    animation-delay: 0.5s;
+
     isolation: isolate;
-
     filter: blur(0.25px);
-
 }
 
 /* vidrio */
@@ -660,6 +663,11 @@ CAmbio 1
     box-shadow: 0 0 6px rgba(168, 255, 158, 0.6);
 }
 
+.kivor-screen.off {
+    transform: scaleY(0.02);
+    opacity: 0;
+}
+
 @media (max-width: 600px) {
     .kivor-device {
         width: 95vw;
@@ -691,7 +699,6 @@ CAmbio 1
     }
 }
 
-.kivor-screen.off {
-    transform: scaleY(0.02);
-    opacity: 0;
-}
+
+
+
