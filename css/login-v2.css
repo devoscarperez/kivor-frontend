@@ -594,9 +594,18 @@ CAmbio 1
     margin-left: 2px;
     box-shadow: 0 0 6px rgba(168, 255, 158, 0.6);
 
-    animation: kivorCursorBlink 1s infinite;
+    animation: kivorCursorBlink 1s steps(2, start) infinite;
 }
 
+@keyframes kivorCursorBlink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+/*
 @keyframes kivorCursorBlink {
     0%   { opacity: 1; }
     40%  { opacity: 1; }
@@ -604,7 +613,7 @@ CAmbio 1
     60%  { opacity: 1; }
     100% { opacity: 1; }
 }
-
+*/
 /* =========================
    TERMINAL REAL UNIX
 ========================= */
