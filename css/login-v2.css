@@ -766,13 +766,13 @@ CAmbio 1
         opacity: 1;
     }
 
-    40% {
-        transform: scaleY(0.02); /* 👈 pausa visual */
+    30% {
+        transform: scaleY(0.01); /* 👈 línea se mantiene */
         opacity: 1;
     }
 
     100% {
-        transform: scaleY(1);
+        transform: scaleY(1); /* 👈 aquí crece */
         opacity: 1;
     }
 }
