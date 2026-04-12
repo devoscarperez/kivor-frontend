@@ -116,5 +116,5 @@ function typeBoot() {
 }
 
 window.addEventListener("load", () => {
-    setTimeout(typeBoot, 1200);
+    setTimeout(typeBoot, 1600);
 });
