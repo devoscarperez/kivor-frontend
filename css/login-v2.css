@@ -428,7 +428,9 @@ CAmbio 1
     transform: translateY(-50%) scaleY(1);
     transform-origin: center;
 
-    animation: kivorLineExpand 1.2s ease-out forwards;
+    animation:
+        kivorLinePulse 0.4s ease-in-out 2,
+        kivorLineExpand 1.2s ease-out 0.8s forwards;
 }
 /* Cambiado por problema de transcion de la linea a crt
 .kivor-screen::before {
@@ -854,5 +856,21 @@ CAmbio 1
     100% {
         transform: translateY(-50%) scaleY(160);
         opacity: 0;
+    }
+}
+
+
+@keyframes kivorLinePulse {
+    0% {
+        opacity: 0.4;
+        filter: blur(0.5px);
+    }
+    50% {
+        opacity: 1;
+        filter: blur(1.2px);
+    }
+    100% {
+        opacity: 0.6;
+        filter: blur(0.6px);
     }
 }
