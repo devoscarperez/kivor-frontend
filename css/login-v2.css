@@ -439,7 +439,7 @@ CAmbio 1
     pointer-events: none;
     z-index: 5;
 
-    background: white;
+    background: rgba(168, 255, 158, 0.9);
 
     opacity: 0;
     transform: scaleY(0);
@@ -469,6 +469,17 @@ CAmbio 1
 /* =========================
    CONTENIDO
 ========================= */
+
+.kivor-container {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: 
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+/* Cambio drastico version TOP-DOWN
 .kivor-container {
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -481,9 +492,11 @@ CAmbio 1
     align-items: center;
     justify-content: center;
 }
+*/
 
 .kivor-screen.on .kivor-container {
     opacity: 1;
+    transform: scaleY(1);
 }
 
 
