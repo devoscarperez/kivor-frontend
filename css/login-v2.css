@@ -441,8 +441,17 @@ CAmbio 1
     pointer-events: none;
     z-index: 5;
 
-    background: rgba(168, 255, 158, 0.95);
-    filter: brightness(5);
+    background:
+        linear-gradient(
+            to bottom,
+            transparent 48%,
+            rgba(168, 255, 158, 0.95) 49%,
+            rgba(168, 255, 158, 1) 50%,
+            rgba(168, 255, 158, 0.95) 51%,
+            transparent 52%
+        );
+
+    filter: blur(0.6px) brightness(2.5);
 
     opacity: 0;
     transform: scaleY(0);
