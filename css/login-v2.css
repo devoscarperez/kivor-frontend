@@ -441,7 +441,8 @@ CAmbio 1
     pointer-events: none;
     z-index: 5;
 
-    background: rgba(168, 255, 158, 0.9);
+    background: rgba(168, 255, 158, 0.95);
+    filter: brightness(5);
 
     opacity: 0;
     transform: scaleY(0);
@@ -770,15 +771,27 @@ CAmbio 1
     0% {
         opacity: 1;
         transform: scaleY(0.02);
+        filter: brightness(6);
     }
 
-    50% {
-        transform: scaleY(0.3);
+    /* 🔥 PAUSA — línea visible */
+    30% {
+        opacity: 1;
+        transform: scaleY(0.02);
+        filter: brightness(6);
     }
 
+    /* expansión */
+    70% {
+        transform: scaleY(0.5);
+        filter: brightness(3);
+    }
+
+    /* apertura completa */
     100% {
         opacity: 0;
         transform: scaleY(1);
+        filter: brightness(1);
     }
 }
 
