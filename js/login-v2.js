@@ -106,26 +106,11 @@ const inputEl = document.getElementById("kivor-input");
 let i = 0;
 
 function typeBoot() {
-    if (i < bootText.length) {
-        bootEl.textContent += bootText[i];
-        i++;
-        setTimeout(typeBoot, 8);
-    } else {
-        setTimeout(() => {
-            loginEl.style.display = "flex";
-            inputEl.focus();
-        
-            // 🔥 activar CRT AQUÍ
-            setTimeout(() => {
-                if (window.startCRT) {
-                    window.startCRT();
-                }
-            }, 300);
-        
-        }, 400);
-    }
-}
+    // 💥 mostrar TODO de una vez
+    bootEl.textContent = bootText;
 
-window.addEventListener("load", () => {
-    setTimeout(typeBoot, 300);
-});
+    setTimeout(() => {
+        loginEl.style.display = "flex";
+        inputEl.focus();
+    }, 300);
+}
