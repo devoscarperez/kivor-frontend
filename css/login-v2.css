@@ -864,7 +864,7 @@ CAmbio 1
     0% {
         opacity: 0.35;
         filter: blur(0.4px);
-        transform: translateY(-50%); /* ❌ SIN scale */
+        transform: translateY(-50%);
     }
 
     50% {
@@ -881,7 +881,7 @@ CAmbio 1
 
     100% {
         opacity: 1;
-        filter: blur(2.4px); /* 🔥 brillo fuerte */
+        filter: blur(2.4px);
         transform: translateY(-50%);
     }
 }
