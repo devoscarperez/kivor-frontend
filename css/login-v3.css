@@ -209,15 +209,12 @@ Cambio 1
 }
 
 .kivor-world {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
 
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background: none;
 }
 /*
 Cambio 3
