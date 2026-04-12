@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIVOR</title>
+
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/login-v3.css">
+</head>
+<body data-theme="dark">
+<div id="login-texture">
+    <div class="kivor-world">
+        <div class="kivor-device">
+            <div class="kivor-frame">
+                <div class="kivor-screen">
+                    <div class="kivor-scanlines"></div>
+                    <div class="kivor-container">
+                    <div class="kivor-terminal">
+                    
+                        <pre id="kivor-boot" class="kivor-boot"></pre>
+                    
+                        <div class="kivor-line" id="kivor-login" style="display:none;">
+                            <span>login:</span>
+                            <span id="kivor-text"></span>
+                            <span id="kivor-caret" class="kivor-caret"></span>
+                        </div>
+                    
+                        <input
+                            type="text"
+                            id="kivor-input"
+                            class="kivor-hidden-input"
+                            autocomplete="off"
+                        >
+                    
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <img src="/assets/images/logo-kivor.svg" alt="KIVOR" class="kivor-logo"> -->
+        </div>
+    </div>
+
+
+    
+</div>    
+    <script src="/js/login-v3.js"></script>
+    <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- <script src="/js/crt-init.js"></script> -->
+</body>
+</html>
