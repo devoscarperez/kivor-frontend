@@ -437,18 +437,11 @@ CAmbio 1
     position: absolute;
     inset: 0;
     pointer-events: none;
+    z-index: 9999;
 
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.02) 0px,
-            rgba(255,255,255,0.02) 1px,
-            transparent 1px,
-            transparent 3px
-        );
+    background: red; /* 👈 prueba extrema */
 
-    opacity: 0.18;
-    mix-blend-mode: soft-light;
+    opacity: 0.8;
 }
 
 /* =========================
