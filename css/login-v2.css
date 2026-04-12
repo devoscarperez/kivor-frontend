@@ -439,6 +439,21 @@ CAmbio 1
     pointer-events: none;
     z-index: 5;
 
+    background: white;
+
+    opacity: 0;
+    transform: scaleY(0);
+
+    animation: kivorTurnOn 1s ease-out forwards;
+}
+/* Cambio 0
+.kivor-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+
     background:
         radial-gradient(
             ellipse at center,
@@ -450,6 +465,7 @@ CAmbio 1
     opacity: 0;
     animation: kivorTurnOn 1.2s ease-out forwards;
 }
+*/
 /* =========================
    CONTENIDO
 ========================= */
@@ -720,19 +736,16 @@ CAmbio 1
 @keyframes kivorTurnOn {
     0% {
         opacity: 1;
-        transform: scaleY(0.05);
-        filter: brightness(4);
+        transform: scaleY(0.02);
     }
 
-    40% {
-        transform: scaleY(0.2);
-        filter: brightness(2);
+    50% {
+        transform: scaleY(0.3);
     }
 
     100% {
         opacity: 0;
         transform: scaleY(1);
-        filter: brightness(1);
     }
 }
 
