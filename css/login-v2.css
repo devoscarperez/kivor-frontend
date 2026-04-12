@@ -876,7 +876,7 @@ CAmbio 1
     75% {
         opacity: 1;
         filter: blur(1.6px);
-        transform: translateY(-50%) scaleY(1.6); /* 🔥 PEAK */
+        transform: translateY(-50%) scaleY(1.6);
     }
 
     100% {
