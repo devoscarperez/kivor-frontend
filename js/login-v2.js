@@ -57,7 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // encender
     setTimeout(() => {
         screen.classList.remove("off");
-    }, 50);
+    
+        // ⏳ esperar a que termine la animación de la línea
+        setTimeout(() => {
+            typeBoot(); // 💥 recién aquí aparece KIVOR
+        }, 1200); // ajustable (1000–1600)
+        
+    }, 200);
 });
 
 
