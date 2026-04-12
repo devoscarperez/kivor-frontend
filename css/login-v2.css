@@ -800,7 +800,7 @@ CAmbio 1
 
     /* apertura completa */
     100% {
-        opacity: 1;
+        opacity: 0;
         transform: scaleY(1);
         filter: brightness(1);
     }
