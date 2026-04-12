@@ -864,34 +864,24 @@ CAmbio 1
     0% {
         opacity: 0.35;
         filter: blur(0.4px);
-        transform: translateY(-50%) scaleY(1);
+        transform: translateY(-50%); /* ❌ SIN scale */
     }
 
-    /* 🔒 línea estable (no pasa nada aún) */
-    40% {
-        opacity: 0.35;
-        filter: blur(0.4px);
-        transform: translateY(-50%) scaleY(1);
+    50% {
+        opacity: 0.4;
+        filter: blur(0.5px);
+        transform: translateY(-50%);
     }
 
-    /* ⚡ empieza a cargar energía */
-    70% {
+    80% {
         opacity: 0.7;
-        filter: blur(0.8px);
-        transform: translateY(-50%) scaleY(1);
+        filter: blur(1px);
+        transform: translateY(-50%);
     }
 
-    /* ⚡⚡ casi lista */
-    85% {
-        opacity: 0.9;
-        filter: blur(1.4px);
-        transform: translateY(-50%) scaleY(1);
-    }
-
-    /* 💥 DESTELLO FINAL */
     100% {
         opacity: 1;
-        filter: blur(2.6px);
-        transform: translateY(-50%) scaleY(1);
+        filter: blur(2.4px); /* 🔥 brillo fuerte */
+        transform: translateY(-50%);
     }
 }
