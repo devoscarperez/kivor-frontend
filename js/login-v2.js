@@ -3,9 +3,11 @@ const text = document.getElementById('kivor-text');
 const terminal = document.querySelector('.kivor-terminal');
 const screen = document.querySelector('.kivor-screen');
 
+/*
 setTimeout(() => {
     screen.classList.add('on');
-}, 900); // 👈 ajustable (prueba 700–1200)
+}, 900); 
+*/
 
 let stage = "login";
 let loginValue = "";
