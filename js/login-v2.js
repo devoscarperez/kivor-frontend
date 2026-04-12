@@ -50,21 +50,29 @@ document.addEventListener('click', () => {
 document.addEventListener("DOMContentLoaded", () => {
     const screen = document.querySelector(".kivor-screen");
 
-    // estado inicial apagado
+    // estado inicial: apagado
     screen.classList.add("off");
 
     // forzar reflow
     screen.offsetHeight;
 
-    // encender
+    // 🔥 1. aparece la línea
     setTimeout(() => {
         screen.classList.remove("off");
-    
-        // ⏳ esperar a que termine la animación de la línea
+
+        // 🔥 2. esperar crecimiento de línea
         setTimeout(() => {
-            typeBoot(); // 💥 recién aquí aparece KIVOR
-        }, 1200); // ajustable (1000–1600)
-        
+
+            // 💥 3. encender CRT (background verde)
+            screen.classList.add("on");
+
+            // 💥 4. mostrar contenido
+            setTimeout(() => {
+                typeBoot();
+            }, 200);
+
+        }, 1000); // ← duración de la expansión de línea
+
     }, 200);
 });
 
