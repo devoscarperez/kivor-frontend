@@ -114,3 +114,7 @@ function typeBoot() {
         inputEl.focus();
     }, 300);
 }
+
+window.addEventListener("load", () => {
+    setTimeout(typeBoot, 1200);
+});
