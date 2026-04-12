@@ -823,3 +823,26 @@ CAmbio 1
     }
 }
 
+
+
+@keyframes kivorLineExpand {
+    0% {
+        transform: translateY(-50%) scaleY(1);
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateY(-50%) scaleY(25);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translateY(-50%) scaleY(120);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateY(-50%) scaleY(160);
+        opacity: 0;
+    }
+}
