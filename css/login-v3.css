@@ -350,11 +350,22 @@ CAmbio 1
     width: 100%;
     height: 100%;
 
-    padding: 0;
-    border-radius: 0;
+    border-radius: 14px;
 
-    background: transparent;
-    box-shadow: none;
+    /* 🔥 borde interno (clave para cavidad) */
+    background: linear-gradient(
+        145deg,
+        #05080c,
+        #0b1118
+    );
+
+    /* 🔥 profundidad real hacia adentro */
+    box-shadow:
+        inset 0 8px 18px rgba(0,0,0,0.8),
+        inset 0 -4px 10px rgba(255,255,255,0.04),
+        inset 0 0 0 2px rgba(0,0,0,0.9); /* 🔥 define borde */
+
+    padding: 12px; /* 🔥 separación entre borde y CRT */
 }
 
 /* =========================
