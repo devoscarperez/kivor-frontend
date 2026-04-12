@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // 💥 4. mostrar contenido
             setTimeout(() => {
                 typeBoot();
-            }, 900);
+            }, 1400);
 
         }, 1000); // ← duración de la expansión de línea
 
