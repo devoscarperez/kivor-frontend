@@ -258,7 +258,14 @@ Cambio 2
 .kivor-device {
     position: relative;
 
-    /* 🔥 fondo base moderno */
+    width: min(92vw, 780px);
+    aspect-ratio: 4 / 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* 🔥 fondo base */
     background: linear-gradient(
         145deg,
         #0f1722,
@@ -273,7 +280,7 @@ Cambio 2
 
     border-radius: 18px;
 
-    padding: 24px; /* 🔥 esto crea el espacio donde “vive” la CRT */
+    padding: 24px; /* 👈 ahora sí funciona */
 }
 /*
 Cambio 2
