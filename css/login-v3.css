@@ -404,6 +404,7 @@ CAmbio 1
     /* 👇 ESTO ES LO IMPORTANTE */
     transform-origin: center;
     transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    transform: scale(0.96); /* 👈 CRT más pequeña = más profunda */
 
     /* 👇 SOLO flicker, SIN powerOn */
     animation: kivorScreenFlicker 6s infinite;
