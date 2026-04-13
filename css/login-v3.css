@@ -280,7 +280,7 @@ Cambio 2
 
     border-radius: 18px;
 
-    padding: 24px; /* 👈 ahora sí funciona */
+    padding: 0; /* 👈 ahora sí funciona */
 }
 /*
 Cambio 2
