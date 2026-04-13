@@ -401,7 +401,7 @@ CAmbio 1
     animation-delay: 0.5s;
 
     isolation: isolate;
-    filter: blur(0.25px);
+    /* filter: blur(0.25px); */
 }
 
 /* vidrio */
