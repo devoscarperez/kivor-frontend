@@ -32,13 +32,16 @@ input.addEventListener('keydown', (e) => {
             text.textContent = "";
         
             validateUser(loginValue);
-            } else {
-                appendLine("password: ********");
-                appendLine("Authenticating...");
-
-                input.value = "";
-                text.textContent = "";
-            }
+            } else if (stage === "password") {
+                        const passwordValue = input.value;
+                    
+                        appendLine("password: ********");
+                       
+                        input.value = "";
+                        text.textContent = "";
+                        
+                        authenticate(loginValue, passwordValue);
+                   }
     }
 });
 
@@ -152,8 +155,7 @@ async function validateUser(username) {
             clearTerminal();
             
             appendLine(`login: ${username}`);
-            appendLine("User not found");
-            appendLine(msg);
+            appendLine("Invalid username");
             
             resetToLogin();
             return;
@@ -162,7 +164,6 @@ async function validateUser(username) {
         clearTerminal();
 
         appendLine(`login: ${username}`);
-        appendLine("User OK");
         
         changePrompt("password:");
         stage = "password";
@@ -192,4 +193,40 @@ function clearTerminal() {
             line.remove();
         }
     });
+}
+
+async function authenticate(username, password) {
+    try {
+        const response = await fetch(`${API_BASE}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Invalid credentials");
+        }
+
+        clearTerminal();
+        appendLine("Access granted");
+
+        sessionStorage.setItem("access_token", data.access_token);
+
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 800);
+
+    } catch (error) {
+        clearTerminal();
+        appendLine("Invalid credentials");
+
+        console.error("LOGIN ERROR:", error);
+    }
 }
