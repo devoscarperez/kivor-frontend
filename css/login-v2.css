@@ -706,7 +706,7 @@ CAmbio 1
 .kivor-line {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 2px;
 
     color: #a8ff9e;
 
@@ -729,7 +729,7 @@ CAmbio 1
 
     background: #a8ff9e;
 
-    margin-left: 2px;
+    margin-left: 0;
 
     animation: kivorCursorBlink 1.8s infinite;
 
