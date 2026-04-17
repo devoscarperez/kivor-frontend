@@ -79,9 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* helpers */
 
-function appendLine(content) {
+function appendLine(content, type = "normal") {
     const line = document.createElement('div');
-    line.className = 'kivor-line';
+
+    line.className = type === "system"
+        ? 'kivor-line kivor-system'
+        : 'kivor-line';
+
     line.textContent = content;
 
     terminal.insertBefore(line, input);
@@ -153,9 +157,10 @@ async function validateUser(username) {
                 if (data.detail) msg = data.detail;
             } catch {}
             
+            clearSystemMessages();
             
-            appendLine(`login: ${username}`);
-            appendLine("Invalid username");
+            appendLine("ACCESS DENIED", "system");
+            appendLine("INVALID USER", "system");
             
             resetToLogin();
             return;
@@ -186,9 +191,13 @@ async function validateUser(username) {
 
 function resetToLogin() {
     setTimeout(() => {
-        appendLine("");
+        clearSystemMessages();
         changePrompt("login:");
         stage = "login";
+
+        input.value = "";
+        text.textContent = "";
+        input.focus();
     }, 1000);
 }
 
@@ -221,7 +230,8 @@ async function authenticate(username, password) {
         }, 800);
 
     } catch (error) {
-        appendLine("Invalid credentials");
+        clearSystemMessages();
+        appendLine("INVALID CREDENTIALS", "system");
         setTimeout(() => {
             changePrompt("login:");
             stage = "login";
@@ -229,4 +239,12 @@ async function authenticate(username, password) {
 
         console.error("LOGIN ERROR:", error);
     }
+}
+
+function clearSystemMessages() {
+    const messages = document.querySelectorAll('.kivor-system');
+    messages.forEach(m => m.remove());
+}function clearSystemMessages() {
+    const messages = document.querySelectorAll('.kivor-system');
+    messages.forEach(m => m.remove());
 }
