@@ -25,8 +25,6 @@ input.addEventListener('keydown', (e) => {
         if (stage === "login") {
             loginValue = input.value.trim().toLowerCase();
         
-            appendLine(`login: ${loginValue}`);
-        
             input.value = "";
             text.textContent = "";
         
@@ -155,7 +153,6 @@ async function validateUser(username) {
                 if (data.detail) msg = data.detail;
             } catch {}
             
-            clearTerminal();
             
             appendLine(`login: ${username}`);
             appendLine("Invalid username");
@@ -164,7 +161,6 @@ async function validateUser(username) {
             return;
         }
 
-        clearTerminal();
 
         appendLine(`login: ${username}`);
         
@@ -172,7 +168,6 @@ async function validateUser(username) {
         stage = "password";
 
     } catch (error) {
-        clearTerminal();
         appendLine("Connection error");
         
         setTimeout(() => {
@@ -197,17 +192,6 @@ function resetToLogin() {
     }, 1000);
 }
 
-function clearTerminal() {
-    return;
-    const lines = terminal.querySelectorAll('.kivor-line');
-
-    lines.forEach(line => {
-        // mantener solo la línea activa (prompt)
-        if (!line.contains(input)) {
-            line.remove();
-        }
-    });
-}
 
 async function authenticate(username, password) {
     try {
@@ -228,7 +212,6 @@ async function authenticate(username, password) {
             throw new Error(data.detail || "Invalid credentials");
         }
 
-        clearTerminal();
         appendLine("Access granted");
 
         sessionStorage.setItem("access_token", data.access_token);
@@ -238,7 +221,6 @@ async function authenticate(username, password) {
         }, 800);
 
     } catch (error) {
-        clearTerminal();
         appendLine("Invalid credentials");
         setTimeout(() => {
             changePrompt("login:");
