@@ -1,5 +1,5 @@
 const input = document.getElementById('kivor-input');
-const text = document.getElementById('kivor-text');
+let text = document.getElementById('kivor-text');
 const terminal = document.querySelector('.kivor-terminal');
 const screen = document.querySelector('.kivor-screen');
 
@@ -91,12 +91,16 @@ function appendLine(content) {
 }
 
 function changePrompt(newPrompt) {
-    const firstLine = terminal.querySelector('.kivor-line');
-    firstLine.innerHTML = `
+    const line = document.getElementById("kivor-login");
+
+    line.innerHTML = `
         <span>${newPrompt}</span>
         <span id="kivor-text"></span>
         <span id="kivor-caret" class="kivor-caret"></span>
     `;
+
+    // 🔥 RE-ASIGNAR referencia (CLAVE)
+    text = document.getElementById("kivor-text");
 }
 
 
