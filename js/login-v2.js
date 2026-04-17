@@ -148,16 +148,22 @@ async function validateUser(username) {
                 const data = await response.json();
                 if (data.detail) msg = data.detail;
             } catch {}
-
+            
+            clearTerminal();
+            
+            appendLine(`login: ${username}`);
             appendLine("User not found");
             appendLine(msg);
-
+            
             resetToLogin();
             return;
         }
 
-        appendLine("User OK");
+        clearTerminal();
 
+        appendLine(`login: ${username}`);
+        appendLine("User OK");
+        
         changePrompt("password:");
         stage = "password";
 
@@ -175,4 +181,15 @@ function resetToLogin() {
         changePrompt("login:");
         stage = "login";
     }, 1000);
+}
+
+function clearTerminal() {
+    const lines = terminal.querySelectorAll('.kivor-line');
+
+    lines.forEach(line => {
+        // mantener solo la línea activa (prompt)
+        if (!line.contains(input)) {
+            line.remove();
+        }
+    });
 }
