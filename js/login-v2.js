@@ -198,6 +198,7 @@ function resetToLogin() {
 }
 
 function clearTerminal() {
+    return;
     const lines = terminal.querySelectorAll('.kivor-line');
 
     lines.forEach(line => {
