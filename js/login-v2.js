@@ -23,22 +23,22 @@ input.addEventListener('input', () => {
 input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         if (stage === "login") {
-            loginValue = input.value;
-
+            loginValue = input.value.trim().toLowerCase();
+        
             appendLine(`login: ${loginValue}`);
+            appendLine("Validating user...");
+        
             input.value = "";
             text.textContent = "";
+        
+            validateUser(loginValue);
+            } else {
+                appendLine("password: ********");
+                appendLine("Authenticating...");
 
-            changePrompt("password:");
-
-            stage = "password";
-        } else {
-            appendLine("password: ********");
-            appendLine("Authenticating...");
-
-            input.value = "";
-            text.textContent = "";
-        }
+                input.value = "";
+                text.textContent = "";
+            }
     }
 });
 
@@ -131,3 +131,48 @@ function typeBoot() {
     }, 300);
 }
 
+async function validateUser(username) {
+    try {
+        const response = await fetch(`${API_BASE}/login-username`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username })
+        });
+
+        if (!response.ok) {
+            let msg = "Usuario no encontrado";
+
+            try {
+                const data = await response.json();
+                if (data.detail) msg = data.detail;
+            } catch {}
+
+            appendLine("User not found");
+            appendLine(msg);
+
+            resetToLogin();
+            return;
+        }
+
+        appendLine("User OK");
+
+        changePrompt("password:");
+        stage = "password";
+
+    } catch (error) {
+        appendLine("Connection error");
+        console.error(error);
+
+        resetToLogin();
+    }
+}
+
+function resetToLogin() {
+    setTimeout(() => {
+        appendLine("");
+        changePrompt("login:");
+        stage = "login";
+    }, 1000);
+}
