@@ -26,7 +26,6 @@ input.addEventListener('keydown', (e) => {
             loginValue = input.value.trim().toLowerCase();
         
             appendLine(`login: ${loginValue}`);
-            appendLine("Validating user...");
         
             input.value = "";
             text.textContent = "";
@@ -230,6 +229,10 @@ async function authenticate(username, password) {
     } catch (error) {
         clearTerminal();
         appendLine("Invalid credentials");
+        setTimeout(() => {
+            changePrompt("login:");
+            stage = "login";
+        }, 800);
 
         console.error("LOGIN ERROR:", error);
     }
