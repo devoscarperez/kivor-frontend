@@ -172,10 +172,20 @@ async function validateUser(username) {
         stage = "password";
 
     } catch (error) {
+        clearTerminal();
         appendLine("Connection error");
+        
+        setTimeout(() => {
+            changePrompt("login:");
+            stage = "login";
+        
+            input.value = "";
+            text.textContent = "";
+        
+            input.focus(); // 🔥 CLAVE
+        }, 800);
+        
         console.error(error);
-
-        resetToLogin();
     }
 }
 
