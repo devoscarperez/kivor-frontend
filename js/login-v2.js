@@ -10,19 +10,26 @@ setTimeout(() => {
 */
 
 let stage = "login";
+let isProcessing = false;
 let loginValue = "";
 
 input.focus();
 
 /* escribir */
 input.addEventListener('input', () => {
-    text.textContent = input.value;
+    if (stage === "password") {
+        text.textContent = "*".repeat(input.value.length);
+    } else {
+        text.textContent = input.value;
+    }
 });
 
 /* ENTER */
 input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         if (stage === "login") {
+            isProcessing = true;
+            showProcessingMessage("Checking user...");
             loginValue = input.value.trim().toLowerCase();
         
             input.value = "";
@@ -30,10 +37,10 @@ input.addEventListener('keydown', (e) => {
         
             validateUser(loginValue);
             } else if (stage === "password") {
+                        isProcessing = true;
+                        showProcessingMessage("Authenticating...");
                         const passwordValue = input.value;
                     
-                        appendLine("password: ********");
-                       
                         input.value = "";
                         text.textContent = "";
                         
@@ -91,6 +98,11 @@ function appendLine(content, type = "normal") {
     terminal.insertBefore(line, input);
 }
 
+function showProcessingMessage(message = "Validating...") {
+    clearSystemMessages();
+    appendLine(message, "system");
+}
+
 function changePrompt(newPrompt) {
     const line = document.getElementById("kivor-login");
 
@@ -141,6 +153,7 @@ function typeBoot() {
 
 async function validateUser(username) {
     try {
+        await delay(400);
         const response = await fetch(`${API_BASE}/login-username`, {
             method: "POST",
             headers: {
@@ -159,18 +172,21 @@ async function validateUser(username) {
             
             clearSystemMessages();
             
-            appendLine("ACCESS DENIED", "system");
-            appendLine("INVALID USER", "system");
+            appendLine("Invalid username", "system");
             
             resetToLogin();
             return;
         }
 
 
-        appendLine(`login: ${username}`);
+        clearSystemMessages();
+        
+        input.value = "";
+        text.textContent = "";
         
         changePrompt("password:");
         stage = "password";
+        input.focus();
 
     } catch (error) {
         appendLine("Connection error");
@@ -204,6 +220,7 @@ function resetToLogin() {
 
 async function authenticate(username, password) {
     try {
+        await delay(400);
         const response = await fetch(`${API_BASE}/login`, {
             method: "POST",
             headers: {
@@ -231,10 +248,17 @@ async function authenticate(username, password) {
 
     } catch (error) {
         clearSystemMessages();
-        appendLine("INVALID CREDENTIALS", "system");
+        appendLine("Invalid credentials", "system");
+        
         setTimeout(() => {
+            clearSystemMessages();
+        
             changePrompt("login:");
             stage = "login";
+        
+            input.value = "";
+            text.textContent = "";
+            input.focus();
         }, 800);
 
         console.error("LOGIN ERROR:", error);
@@ -247,4 +271,8 @@ function clearSystemMessages() {
 }function clearSystemMessages() {
     const messages = document.querySelectorAll('.kivor-system');
     messages.forEach(m => m.remove());
+}
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
