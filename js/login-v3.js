@@ -9,6 +9,8 @@ setTimeout(() => {
 }, 900); 
 */
 
+
+let passwordValue = "";
 let stage = "login";
 let loginValue = "";
 
@@ -32,13 +34,17 @@ input.addEventListener('keydown', (e) => {
             changePrompt("password:");
 
             stage = "password";
-        } else {
-            appendLine("password: ********");
-            appendLine("Authenticating...");
+    } else if (stage === "password") {
+        passwordValue = input.value;
+    
+        appendLine("password: ********");
+        appendLine("Authenticating...");
+    
+        input.value = "";
+        text.textContent = "";
 
-            input.value = "";
-            text.textContent = "";
-        }
+        authenticate(loginValue, passwordValue);
+    }
     }
 });
 
@@ -129,4 +135,39 @@ function typeBoot() {
         loginEl.style.display = "flex";
         inputEl.focus();
     }, 300);
+}
+
+async function authenticate(username, password) {
+    try {
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Error de autenticación");
+        }
+
+        appendLine("Access granted");
+
+        // guardar token
+        localStorage.setItem("access_token", data.access_token);
+
+        // redirección (temporal)
+        setTimeout(() => {
+            window.location.href = "/"; 
+        }, 800);
+
+    } catch (error) {
+        appendLine("Access denied");
+        appendLine(error.message);
+    }
 }
