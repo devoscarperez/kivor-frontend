@@ -442,6 +442,11 @@ function renderState(showHistory = true) {
             break;
     }
 
+    if (stage === "password") {
+        text.textContent = "*".repeat(input.value.length);
+    } else {
+        text.textContent = input.value;
+    }
     input.focus();
 }
 
