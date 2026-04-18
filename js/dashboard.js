@@ -4,6 +4,24 @@ if (!token) {
     window.location.href = "login.html";
 }
 
+async function validateSession() {
+    try {
+        const response = await fetch(`${API_BASE}/sessions`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Sesión inválida");
+        }
+
+    } catch (error) {
+        sessionStorage.removeItem("access_token");
+        window.location.href = "login.html";
+    }
+}
+
 async function cargarMenu() {
 
     const response = await fetch(`${API_BASE}/menu`, {
@@ -97,4 +115,25 @@ function renderMenuItem(menu) {
     }
 }
 
-cargarMenu();
+document.addEventListener("DOMContentLoaded", async () => {
+    await validateSession();
+    cargarMenu();
+    cargarSesiones();
+});
+
+async function cargarSesiones() {
+    try {
+        const response = await fetch(`${API_BASE}/sessions`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const sessions = await response.json();
+
+        console.log("Sesiones activas:", sessions);
+
+    } catch (error) {
+        console.error("Error cargando sesiones:", error);
+    }
+}
