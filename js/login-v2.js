@@ -297,3 +297,125 @@ async function logout() {
 
     window.location.href = "index.html";
 }
+
+// ===============================
+// KIVOR STATE ENGINE BASE
+// ===============================
+
+// Estado actual
+let currentState = null;
+
+// Historial de estados (para volver)
+let stateHistory = [];
+
+// Datos del flujo (draft)
+let userDraft = {
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
+    group_id: "",
+    organization_id: ""
+};
+
+// Configuración del flujo
+const flowConfig = {
+    steps: [
+        "CREATE_USER_FIRST_NAME",
+        "CREATE_USER_LAST_NAME",
+        "CREATE_USER_USERNAME",
+        "CREATE_USER_PASSWORD",
+        "CREATE_USER_CONFIRM_PASSWORD",
+        "CREATE_USER_GROUP",
+        "CREATE_USER_ORGANIZATION"
+    ]
+};
+
+function goToState(newState, saveHistory = true) {
+    if (saveHistory && currentState) {
+        stateHistory.push(currentState);
+    }
+
+    currentState = newState;
+
+    renderState();
+}
+
+function goBack() {
+    if (stateHistory.length === 0) return;
+
+    currentState = stateHistory.pop();
+
+    renderState(false);
+}
+
+
+function getProgress() {
+    let completed = 0;
+
+    if (userDraft.first_name) completed++;
+    if (userDraft.last_name) completed++;
+    if (userDraft.username) completed++;
+    if (userDraft.password) completed++;
+    if (userDraft.group_id) completed++;
+    if (userDraft.organization_id) completed++;
+
+    return completed;
+}
+
+function getStepIndex(state) {
+    return flowConfig.steps.indexOf(state) + 1;
+}
+
+function renderState(showHistory = true) {
+
+    clearSystemMessages();
+
+    const stepIndex = getStepIndex(currentState);
+    const totalSteps = flowConfig.steps.length;
+    const progress = getProgress();
+
+    // 🔥 CONTEXTO (ARRIBA)
+    appendLine(`Paso ${stepIndex} de ${totalSteps} — ${progress} completados`, "system");
+
+    // 🔥 INPUT (ABAJO)
+    switch (currentState) {
+
+        case "CREATE_USER_FIRST_NAME":
+            changePrompt(t("field_first_name"));
+            input.value = userDraft.first_name || "";
+            break;
+
+        case "CREATE_USER_LAST_NAME":
+            changePrompt(t("field_last_name"));
+            input.value = userDraft.last_name || "";
+            break;
+
+        case "CREATE_USER_USERNAME":
+            changePrompt(t("field_username"));
+            input.value = userDraft.username || "";
+            break;
+
+        case "CREATE_USER_PASSWORD":
+            changePrompt(t("field_password"));
+            input.value = "";
+            break;
+
+        case "CREATE_USER_CONFIRM_PASSWORD":
+            changePrompt(t("field_confirm_password"));
+            input.value = "";
+            break;
+
+        case "CREATE_USER_GROUP":
+            changePrompt(t("field_group_id"));
+            input.value = userDraft.group_id || "";
+            break;
+
+        case "CREATE_USER_ORGANIZATION":
+            changePrompt(t("field_organization_id"));
+            input.value = userDraft.organization_id || "";
+            break;
+    }
+
+    input.focus();
+}
