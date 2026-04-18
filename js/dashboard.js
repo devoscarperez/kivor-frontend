@@ -131,9 +131,48 @@ async function cargarSesiones() {
 
         const sessions = await response.json();
 
-        console.log("Sesiones activas:", sessions);
+        const container = document.getElementById("sessions-list");
+        container.innerHTML = "";
+        
+        sessions.forEach(s => {
+            const item = document.createElement("div");
+            item.classList.add("session-item");
+        
+            item.innerHTML = `
+                <div><strong>ID:</strong> ${s.session_id}</div>
+                <div><strong>Inicio:</strong> ${new Date(s.created_at).toLocaleString()}</div>
+                <div><strong>Expira:</strong> ${new Date(s.expires_at).toLocaleString()}</div>
+                <button onclick="cerrarSesion('${s.session_id}')">Cerrar sesión</button>
+            `;
+        
+            container.appendChild(item);
+        });
 
     } catch (error) {
         console.error("Error cargando sesiones:", error);
+    }
+}
+
+
+async function cerrarSesion(sessionId) {
+    const confirmacion = confirm("¿Cerrar esta sesión?");
+
+    if (!confirmacion) return;
+
+    try {
+        await fetch(`${API_BASE}/logout-session`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ session_id: sessionId })
+        });
+
+        // recargar sesiones
+        cargarSesiones();
+
+    } catch (error) {
+        console.error("Error cerrando sesión:", error);
     }
 }
