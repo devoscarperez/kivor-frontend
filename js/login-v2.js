@@ -445,6 +445,7 @@ function renderState(showHistory = true) {
             changePrompt(t("msg_confirm_create_user"));
             input.value = "";
             break;
+        
     }
 
     if (stage === "password") {
@@ -513,6 +514,23 @@ function validateAndStore(value) {
             }
             userDraft.organization_id = value;
             return true;
+            
+        case "CREATE_USER_CONFIRMATION":
+            if (value.toLowerCase() === "n") {
+                appendLine(t("msg_operation_cancelled"), "system");
+                return false;
+            }
+        
+            if (value.toLowerCase() === "s" || value.toLowerCase() === "y") {
+                appendLine(t("msg_processing"), "system");
+            
+                createUser();
+            
+                return false;
+            }
+        
+            appendLine(t("msg_confirm_create_user"), "system");
+            return false;
     }
 
     return false;
@@ -590,4 +608,36 @@ function updateNextButton() {
     const isValid = isCurrentValid(value);
 
     btnNext.disabled = !(hasNext && isValid);
+}
+
+async function createUser() {
+
+    try {
+
+        const response = await fetch(`${API_BASE}/users`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("access_token")}`
+            },
+            body: JSON.stringify({
+                user_name: userDraft.username,
+                user_password: userDraft.password,
+                user_firstname: userDraft.first_name,
+                user_lastname: userDraft.last_name,
+                user_group_id: userDraft.group_id,
+                organization_id: userDraft.organization_id
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("error_create_user");
+        }
+
+        appendLine(t("msg_user_created"), "system");
+
+    } catch (error) {
+        appendLine(t("msg_error_generic"), "system");
+        console.error("CREATE USER ERROR:", error);
+    }
 }
