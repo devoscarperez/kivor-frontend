@@ -38,6 +38,14 @@ es: {
   error_invalid_identifier: "Identificación no válida",
   error_invalid_rut: "RUT no válido",
 
+  // ===== USERS FLOW =====
+  msg_confirm_create_user: "¿Crear usuario? (s/n)",
+  msg_processing: "Procesando...",
+  msg_error_generic: "Error al crear usuario",
+  msg_user_created: "Usuario creado correctamente",
+  msg_operation_cancelled: "Operación cancelada",
+  msg_username_exists: "El usuario ya existe",
+
   step_label: "Paso",
   step_of: "de"
 },
@@ -78,6 +86,16 @@ en: {
   error_invalid_phone: "Invalid phone number",
   error_invalid_identifier: "Invalid identification",
   error_invalid_rut: "Invalid RUT",
+
+  // ===== USERS FLOW =====
+msg_confirm_create_user: "Create user? (y/n)",
+msg_processing: "Processing...",
+msg_error_generic: "Error creating user",
+msg_user_created: "User created successfully",
+msg_operation_cancelled: "Operation cancelled",
+msg_username_exists: "User already exists",
+
+  
 
   step_label: "Step",
   step_of: "of"
