@@ -556,9 +556,14 @@ document.getElementById("btn-next").addEventListener("click", () => {
 function updateNextButton() {
 
     const btnNext = document.getElementById("btn-next");
+    const btnBack = document.getElementById("btn-back");
 
-    if (!btnNext) return;
+    if (!btnNext || !btnBack) return;
 
+    // 🔹 CONTROL VOLVER
+    btnBack.disabled = stateHistory.length === 0;
+
+    // 🔹 CONTROL SIGUIENTE
     if (!currentState || !flowConfig.steps.includes(currentState)) {
         btnNext.disabled = true;
         return;
