@@ -521,3 +521,12 @@ function goNext() {
 document.getElementById("btn-back").addEventListener("click", () => {
     goBack();
 });
+document.getElementById("btn-next").addEventListener("click", () => {
+
+    const value = input.value.trim();
+    const isValid = validateAndStore(value);
+
+    if (!isValid) return;
+
+    goNext();
+});
