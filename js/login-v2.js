@@ -26,6 +26,27 @@ input.addEventListener('input', () => {
 
 /* ENTER */
 input.addEventListener('keydown', (e) => {
+    // 🔹 NUEVO: navegación con flecha izquierda
+    if (currentState && flowConfig.steps.includes(currentState)) {
+        if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            goBack();
+            return;
+        }
+        if (e.key === "ArrowRight") {
+            e.preventDefault();
+
+            const value = input.value.trim();
+            const isValid = validateAndStore(value);
+
+            if (!isValid) return;
+
+            goNext();
+            return;
+        }
+    }
+
+    // 🔹 EXISTENTE: ENTER
     if (e.key === 'Enter') {
         if (stage === "login") {
             isProcessing = true;
