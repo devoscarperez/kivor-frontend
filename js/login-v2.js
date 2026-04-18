@@ -76,6 +76,14 @@ input.addEventListener('keydown', (e) => {
             isProcessing = true;
             showProcessingMessage("Checking user...");
             loginValue = input.value.trim().toLowerCase();
+
+            if (loginValue === "users create") {
+                mode = "users";
+                input.value = "";
+                text.textContent = "";
+                goToState("CREATE_USER_FIRST_NAME");
+                return;
+            }
         
             input.value = "";
             text.textContent = "";
