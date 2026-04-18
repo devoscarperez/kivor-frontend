@@ -363,6 +363,11 @@ function goToState(newState, saveHistory = true) {
 }
 
 function goBack() {
+
+    if (currentState && flowConfig.steps.includes(currentState)) {
+        const value = input.value.trim();
+        validateAndStore(value); 
+    }
     if (stateHistory.length === 0) return;
 
     currentState = stateHistory.pop();
@@ -578,8 +583,11 @@ function updateNextButton() {
         return;
     }
 
+    const currentIndex = flowConfig.steps.indexOf(currentState);
+    const hasNext = currentIndex < flowConfig.steps.length - 1;
+
     const value = input.value.trim();
     const isValid = isCurrentValid(value);
 
-    btnNext.disabled = !isValid;
+    btnNext.disabled = !(hasNext && isValid);
 }
