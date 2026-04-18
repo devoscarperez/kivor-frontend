@@ -532,3 +532,7 @@ if (currentState && flowConfig.steps.includes(currentState)) {
     goNext();
     return;
 }
+
+document.getElementById("btn-back").addEventListener("click", () => {
+    goBack();
+});
