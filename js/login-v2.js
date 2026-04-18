@@ -289,9 +289,6 @@ async function authenticate(username, password) {
 function clearSystemMessages() {
     const messages = document.querySelectorAll('.kivor-system');
     messages.forEach(m => m.remove());
-}function clearSystemMessages() {
-    const messages = document.querySelectorAll('.kivor-system');
-    messages.forEach(m => m.remove());
 }
 
 function delay(ms) {
@@ -519,18 +516,6 @@ function goNext() {
     }
 
     goToState(nextState);
-}
-
-if (currentState && flowConfig.steps.includes(currentState)) {
-
-    const value = input.value.trim();
-
-    const isValid = validateAndStore(value);
-
-    if (!isValid) return;
-
-    goNext();
-    return;
 }
 
 document.getElementById("btn-back").addEventListener("click", () => {
