@@ -419,3 +419,95 @@ function renderState(showHistory = true) {
 
     input.focus();
 }
+
+function validateAndStore(value) {
+
+    switch (currentState) {
+
+        case "CREATE_USER_FIRST_NAME":
+            if (!value) {
+                appendLine(t("error_required_field"));
+                return false;
+            }
+            userDraft.first_name = value;
+            return true;
+
+        case "CREATE_USER_LAST_NAME":
+            if (!value) {
+                appendLine(t("error_required_field"));
+                return false;
+            }
+            userDraft.last_name = value;
+            return true;
+
+        case "CREATE_USER_USERNAME":
+            if (!value) {
+                appendLine(t("error_username_required"));
+                return false;
+            }
+            userDraft.username = value;
+            return true;
+
+        case "CREATE_USER_PASSWORD":
+            if (!value) {
+                appendLine(t("error_password_required"));
+                return false;
+            }
+            userDraft.password = value;
+            return true;
+
+        case "CREATE_USER_CONFIRM_PASSWORD":
+            if (value !== userDraft.password) {
+                appendLine(t("msg_password_mismatch"));
+                return false;
+            }
+            return true;
+
+        case "CREATE_USER_GROUP":
+            if (!value) {
+                appendLine(t("error_group_required"));
+                return false;
+            }
+            userDraft.group_id = value;
+            return true;
+
+        case "CREATE_USER_ORGANIZATION":
+            if (!value) {
+                appendLine(t("error_organization_required"));
+                return false;
+            }
+            userDraft.organization_id = value;
+            return true;
+    }
+
+    return false;
+}
+
+function goNext() {
+
+    const currentIndex = flowConfig.steps.indexOf(currentState);
+
+    if (currentIndex === -1) return;
+
+    const nextState = flowConfig.steps[currentIndex + 1];
+
+    if (!nextState) {
+        // último paso → confirmación (vendrá después)
+        appendLine(t("msg_confirm_create_user"));
+        return;
+    }
+
+    goToState(nextState);
+}
+
+if (currentState && flowConfig.steps.includes(currentState)) {
+
+    const value = input.value.trim();
+
+    const isValid = validateAndStore(value);
+
+    if (!isValid) return;
+
+    goNext();
+    return;
+}
