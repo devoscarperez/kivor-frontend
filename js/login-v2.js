@@ -276,3 +276,24 @@ function clearSystemMessages() {
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+async function logout() {
+    const token = sessionStorage.getItem("access_token");
+
+    if (!token) return;
+
+    try {
+        await fetch(`${API_BASE}/logout`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+    } catch (error) {
+        console.error("Logout error:", error);
+    }
+
+    sessionStorage.removeItem("access_token");
+
+    window.location.href = "index.html";
+}
