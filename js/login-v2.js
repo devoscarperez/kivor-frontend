@@ -347,7 +347,8 @@ const flowConfig = {
         "CREATE_USER_PASSWORD",
         "CREATE_USER_CONFIRM_PASSWORD",
         "CREATE_USER_GROUP",
-        "CREATE_USER_ORGANIZATION"
+        "CREATE_USER_ORGANIZATION",
+        "CREATE_USER_CONFIRMATION"
     ]
 };
 
@@ -434,6 +435,10 @@ function renderState(showHistory = true) {
         case "CREATE_USER_ORGANIZATION":
             changePrompt(t("field_organization_id"));
             input.value = userDraft.organization_id || "";
+            break;
+        case "CREATE_USER_CONFIRMATION":
+            changePrompt(t("msg_confirm_create_user"));
+            input.value = "";
             break;
     }
 
@@ -531,8 +536,7 @@ function goNext() {
     const nextState = flowConfig.steps[currentIndex + 1];
 
     if (!nextState) {
-        // último paso → confirmación (vendrá después)
-        appendLine(t("msg_confirm_create_user"));
+        goToState("CREATE_USER_CONFIRMATION");
         return;
     }
 
