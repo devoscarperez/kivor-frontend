@@ -22,7 +22,9 @@ input.addEventListener('input', () => {
     } else {
         text.textContent = input.value;
     }
+    updateNextButton();
 });
+
 
 /* ENTER */
 input.addEventListener('keydown', (e) => {
@@ -501,6 +503,25 @@ function validateAndStore(value) {
     return false;
 }
 
+function isCurrentValid(value) {
+
+    switch (currentState) {
+
+        case "CREATE_USER_FIRST_NAME":
+        case "CREATE_USER_LAST_NAME":
+        case "CREATE_USER_USERNAME":
+        case "CREATE_USER_PASSWORD":
+        case "CREATE_USER_GROUP":
+        case "CREATE_USER_ORGANIZATION":
+            return !!value;
+
+        case "CREATE_USER_CONFIRM_PASSWORD":
+            return value === userDraft.password;
+    }
+
+    return false;
+}
+
 function goNext() {
 
     const currentIndex = flowConfig.steps.indexOf(currentState);
@@ -530,3 +551,21 @@ document.getElementById("btn-next").addEventListener("click", () => {
 
     goNext();
 });
+
+
+function updateNextButton() {
+
+    const btnNext = document.getElementById("btn-next");
+
+    if (!btnNext) return;
+
+    if (!currentState || !flowConfig.steps.includes(currentState)) {
+        btnNext.disabled = true;
+        return;
+    }
+
+    const value = input.value.trim();
+    const isValid = isCurrentValid(value);
+
+    btnNext.disabled = !isValid;
+}
