@@ -159,6 +159,8 @@ async function cerrarSesion(sessionId) {
 
     if (!confirmacion) return;
 
+    const currentSessionId = getCurrentSessionId();
+
     try {
         await fetch(`${API_BASE}/logout-session`, {
             method: "POST",
@@ -169,10 +171,30 @@ async function cerrarSesion(sessionId) {
             body: JSON.stringify({ session_id: sessionId })
         });
 
-        // recargar sesiones
+        // 🔥 SI CIERRA SU PROPIA SESIÓN
+        if (sessionId === currentSessionId) {
+            sessionStorage.removeItem("access_token");
+            window.location.href = "login.html";
+            return;
+        }
+
+        // 🔁 recargar lista
         cargarSesiones();
 
     } catch (error) {
         console.error("Error cerrando sesión:", error);
+    }
+}
+
+function getCurrentSessionId() {
+    const token = sessionStorage.getItem("access_token");
+
+    if (!token) return null;
+
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.session_id;
+    } catch (e) {
+        return null;
     }
 }
