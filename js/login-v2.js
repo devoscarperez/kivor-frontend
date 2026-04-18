@@ -631,7 +631,23 @@ async function createUser() {
         });
 
         if (!response.ok) {
-            throw new Error("error_create_user");
+        
+            let message = "msg_error_generic";
+        
+            try {
+                const data = await response.json();
+        
+                if (data.detail) {
+                    // puedes mapear mensajes backend → i18n
+                    if (data.detail.includes("exists")) {
+                        message = "msg_username_exists";
+                    }
+                }
+            } catch {}
+        
+            appendLine(t(message), "system");
+        
+            return;
         }
 
         appendLine(t("msg_user_created"), "system");
