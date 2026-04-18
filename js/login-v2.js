@@ -12,6 +12,7 @@ setTimeout(() => {
 let stage = "login";
 let isProcessing = false;
 let loginValue = "";
+let mode = "login"; // login | users
 
 input.focus();
 
@@ -28,26 +29,47 @@ input.addEventListener('input', () => {
 
 /* ENTER */
 input.addEventListener('keydown', (e) => {
-    // 🔹 NUEVO: navegación con flecha izquierda
-    if (currentState && flowConfig.steps.includes(currentState)) {
-        if (e.key === "ArrowLeft") {
-            e.preventDefault();
-            goBack();
-            return;
+
+    // 🔥 SI ESTAMOS EN USERS → usar state engine
+    if (mode === "users") {
+
+        if (currentState && flowConfig.steps.includes(currentState)) {
+
+            if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                goBack();
+                return;
+            }
+
+            if (e.key === "ArrowRight") {
+                e.preventDefault();
+
+                const value = input.value.trim();
+                const isValid = validateAndStore(value);
+
+                if (!isValid) return;
+
+                goNext();
+                return;
+            }
+
+            if (e.key === "Enter") {
+                e.preventDefault();
+
+                const value = input.value.trim();
+                const isValid = validateAndStore(value);
+
+                if (!isValid) return;
+
+                goNext();
+                return;
+            }
         }
-        if (e.key === "ArrowRight") {
-            e.preventDefault();
 
-            const value = input.value.trim();
-            const isValid = validateAndStore(value);
-
-            if (!isValid) return;
-
-            goNext();
-            return;
-        }
+        return; // 🔥 BLOQUEA LOGIN
     }
 
+    // 🔥 LOGIN NORMAL (lo que ya tienes)
     // 🔹 EXISTENTE: ENTER
     if (e.key === 'Enter') {
         if (stage === "login") {
