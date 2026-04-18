@@ -33,7 +33,7 @@ input.addEventListener('keydown', (e) => {
     // 🔥 SI ESTAMOS EN USERS → usar state engine
     if (mode === "users") {
 
-        if (currentState && flowConfig.steps.includes(currentState)) {
+        if (currentState) {
 
             if (e.key === "ArrowLeft") {
                 e.preventDefault();
