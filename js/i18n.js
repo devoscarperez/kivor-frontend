@@ -48,10 +48,10 @@ es: {
 
   // ===== USER FIELDS =====
   field_user_name: "Usuario",
-  field_user_password: "Clave",
-  field_user_firstname: "Nombre",
-  field_user_lastname: "Apellido",
-  field_user_nickname: "Alias",
+  field_user_password_hash: "Clave",
+  field_user_first_name: "Nombre",
+  field_user_last_name: "Apellido",
+  field_user_nick_name: "Alias",
   field_user_group_id: "Grupo",
 
   step_label: "Paso",
