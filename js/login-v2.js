@@ -53,7 +53,20 @@ input.addEventListener('keydown', (e) => {
 
             showPassword = !showPassword;
 
-            renderState(false);
+            // 🔥 SOLO REFRESCAR VISUAL (NO RESET)
+
+            const isPasswordState =
+                currentState === "CREATE_USER_PASSWORD" ||
+                currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
+                stage === "password";
+            
+            if (isPasswordState) {
+                text.textContent = showPassword
+                    ? input.value
+                    : "*".repeat(input.value.length);
+            
+                input.type = showPassword ? "text" : "password";
+            }
         }
 
         return;
