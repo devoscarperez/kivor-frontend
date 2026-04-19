@@ -47,12 +47,13 @@ es: {
   msg_username_exists: "El usuario ya existe",
 
   // ===== USER FIELDS =====
-  field_user_name: "Usuario",
-  field_user_password_hash: "Clave",
-  field_user_first_name: "Nombre",
-  field_user_last_name: "Apellido",
-  field_user_nick_name: "Alias",
-  field_user_group_id: "Grupo",
+  field_username: "Usuario",
+  field_password: "Clave",
+  field_confirm_password: "Confirmar Clave",
+  field_first_name: "Nombre",
+  field_last_name: "Apellido",
+  field_nick_name: "Alias",
+  field_group_id: "Grupo",
 
   step_label: "Paso",
   step_of: "de"
@@ -104,14 +105,13 @@ en: {
   msg_username_exists: "User already exists",
 
   // ===== USER FIELDS =====
-  field_user_name: "User",
-  field_user_password: "Password",
-  field_user_firstname: "First name",
-  field_user_lastname: "Last name",
-  field_user_nickname: "Nickname",
-  field_user_group_id: "Group",
-
-  
+  field_username: "User",
+  field_password: "Password",
+  field_confirm_password: "Confirm Password",
+  field_first_name: "First name",
+  field_last_name: "Last name",
+  field_nick_name: "Nickname",
+  field_group_id: "Group",
 
   step_label: "Step",
   step_of: "of"
