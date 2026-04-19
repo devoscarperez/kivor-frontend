@@ -496,6 +496,8 @@ function validateAndStore(value) {
                 appendLine(t("error_required_field"));
                 return false;
             }
+            userDraft.nick_name = value;
+            return true;
         
         case "CREATE_USER_FIRST_NAME":
             if (!value) {
