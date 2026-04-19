@@ -46,6 +46,14 @@ es: {
   msg_operation_cancelled: "Operación cancelada",
   msg_username_exists: "El usuario ya existe",
 
+  // ===== USER FIELDS =====
+  field_user_name: "Usuario",
+  field_user_password: "Clave",
+  field_user_firstname: "Nombre",
+  field_user_lastname: "Apellido",
+  field_user_nickname: "Alias",
+  field_user_group_id: "Grupo",
+
   step_label: "Paso",
   step_of: "de"
 },
@@ -88,12 +96,20 @@ en: {
   error_invalid_rut: "Invalid RUT",
 
   // ===== USERS FLOW =====
-msg_confirm_create_user: "Create user? (y/n)",
-msg_processing: "Processing...",
-msg_error_generic: "Error creating user",
-msg_user_created: "User created successfully",
-msg_operation_cancelled: "Operation cancelled",
-msg_username_exists: "User already exists",
+  msg_confirm_create_user: "Create user? (y/n)",
+  msg_processing: "Processing...",
+  msg_error_generic: "Error creating user",
+  msg_user_created: "User created successfully",
+  msg_operation_cancelled: "Operation cancelled",
+  msg_username_exists: "User already exists",
+
+  // ===== USER FIELDS =====
+  field_user_name: "User",
+  field_user_password: "Password",
+  field_user_firstname: "First name",
+  field_user_lastname: "Last name",
+  field_user_nickname: "Nickname",
+  field_user_group_id: "Group",
 
   
 
