@@ -909,8 +909,9 @@ CAmbio 1
 
 /* botón ojo */
 #toggle-password {
-    position: absolute;
-    right: -20px; /* 🔥 ajusta fino luego */
+    position: relative; /* 🔥 NO absoluto */
+
+    margin-left: 6px;   /* 👈 separación natural */
 
     background: none;
     border: none;
