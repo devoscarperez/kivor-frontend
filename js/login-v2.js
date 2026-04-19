@@ -237,7 +237,7 @@ function changePrompt(newPrompt) {
         const btn = document.createElement("button");
         btn.id = "toggle-password";
         btn.type = "button";
-        btn.textContent = "👁";
+        btn.textContent = showPassword ? "👁‍🗨" : "👁";
 
         line.appendChild(btn);
     }
@@ -259,15 +259,21 @@ document.addEventListener("click", (e) => {
         showPassword = !showPassword;
 
         // 🔥 refrescar visual SIN perder input
+        const btn = document.getElementById("toggle-password");
+        
         if (showPassword) {
             text.textContent = input.value;
             input.type = "text";
+        
+            if (btn) btn.textContent = "👁‍🗨"; // 👁 cerrado
         } else {
             text.textContent = "*".repeat(input.value.length);
             input.type = "password";
+        
+            if (btn) btn.textContent = "👁"; // 👁 abierto
         }
-    }
-});
+            }
+        });
 
 const bootText = `
 
