@@ -360,6 +360,7 @@ let stateHistory = [];
 
 // Datos del flujo (draft)
 let userDraft = {
+    nick_name: "",
     first_name: "",
     last_name: "",
     username: "",
@@ -370,6 +371,7 @@ let userDraft = {
 // Configuración del flujo
 const flowConfig = {
     steps: [
+        "CREATE_USER_NICK_NAME",
         "CREATE_USER_FIRST_NAME",
         "CREATE_USER_LAST_NAME",
         "CREATE_USER_USERNAME",
@@ -407,6 +409,7 @@ function goBack() {
 function getProgress() {
     let completed = 0;
 
+    if (userDraft.nick_name) completed++;
     if (userDraft.first_name) completed++;
     if (userDraft.last_name) completed++;
     if (userDraft.username) completed++;
@@ -433,6 +436,11 @@ function renderState(showHistory = true) {
 
     // 🔥 INPUT (ABAJO)
     switch (currentState) {
+
+        case "CREATE_USER_NICK_NAME":
+            changePrompt(t("field_nick_name"));
+            input.value = userDraft.nick_name || "";
+            break;
 
         case "CREATE_USER_FIRST_NAME":
             changePrompt(t("field_first_name"));
@@ -483,6 +491,12 @@ function validateAndStore(value) {
 
     switch (currentState) {
 
+        case "CREATE_USER_NICK_NAME":
+            if (!value) {
+                appendLine(t("error_required_field"));
+                return false;
+            }
+        
         case "CREATE_USER_FIRST_NAME":
             if (!value) {
                 appendLine(t("error_required_field"));
@@ -555,7 +569,8 @@ function isCurrentValid(value) {
 
     switch (currentState) {
 
-        case "CREATE_USER_FIRST_NAME":
+        case "CREATE_USER_NICK_NAME":
+        case "CREATE_USER_FIRST_NAME":    
         case "CREATE_USER_LAST_NAME":
         case "CREATE_USER_USERNAME":
         case "CREATE_USER_PASSWORD":
@@ -635,6 +650,7 @@ async function createUser() {
                 "Authorization": `Bearer ${sessionStorage.getItem("access_token")}`
             },
             body: JSON.stringify({
+                user_nickname: userDraft.nick_name,
                 user_name: userDraft.username,
                 user_password: userDraft.password,
                 user_firstname: userDraft.first_name,
