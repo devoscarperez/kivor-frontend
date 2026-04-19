@@ -719,7 +719,7 @@ CAmbio 1
 .kivor-hidden-input {
     position: absolute;
     opacity: 0;
-    pointer-events: none;
+    pointer-events: auto;
 }
 
 /* cursor CRT */
