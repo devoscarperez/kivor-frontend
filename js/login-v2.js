@@ -16,6 +16,9 @@ let mode = "login"; // login | users
 let showPassword = false; // 🔥 control visual password
 
 input.focus();
+setTimeout(() => {
+    input.focus();
+}, 0);
 
 /* escribir */
 input.addEventListener('input', () => {
