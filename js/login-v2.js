@@ -205,13 +205,18 @@ function showProcessingMessage(message = "Validating...") {
 function changePrompt(newPrompt) {
     const line = document.getElementById("kivor-login");
 
+    const isPasswordPrompt =
+        currentState === "CREATE_USER_PASSWORD" ||
+        currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
+        stage === "password";
+
     line.innerHTML = `
         <span>${newPrompt}</span>
         <span id="kivor-text"></span>
         <span id="kivor-caret" class="kivor-caret"></span>
+        ${isPasswordPrompt ? '<button id="toggle-password" type="button">👁</button>' : ''}
     `;
 
-    // 🔥 RE-ASIGNAR referencia (CLAVE)
     text = document.getElementById("kivor-text");
 }
 
