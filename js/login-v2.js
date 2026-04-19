@@ -18,11 +18,17 @@ input.focus();
 
 /* escribir */
 input.addEventListener('input', () => {
-    if (stage === "password") {
+    const isPasswordState =
+        currentState === "CREATE_USER_PASSWORD" ||
+        currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
+        stage === "password";
+
+    if (isPasswordState) {
         text.textContent = "*".repeat(input.value.length);
     } else {
         text.textContent = input.value;
     }
+
     updateNextButton();
 });
 
