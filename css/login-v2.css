@@ -895,3 +895,35 @@ CAmbio 1
         transform: translateY(-50%);
     }
 }
+
+
+/* =========================
+   👁 PASSWORD TOGGLE
+========================= */
+
+.kivor-input-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* botón ojo */
+#toggle-password {
+    position: absolute;
+    right: -20px; /* 🔥 ajusta fino luego */
+
+    background: none;
+    border: none;
+
+    color: #a8ff9e;
+    font-size: 0.8rem;
+
+    cursor: pointer;
+    opacity: 0.6;
+
+    transition: opacity 0.2s ease;
+}
+
+#toggle-password:hover {
+    opacity: 1;
+}
