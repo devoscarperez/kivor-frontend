@@ -220,6 +220,29 @@ function changePrompt(newPrompt) {
     text = document.getElementById("kivor-text");
 }
 
+document.addEventListener("click", (e) => {
+
+    if (e.target.id === "toggle-password") {
+
+        const isPasswordState =
+            currentState === "CREATE_USER_PASSWORD" ||
+            currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
+            stage === "password";
+
+        if (!isPasswordState) return;
+
+        showPassword = !showPassword;
+
+        // 🔥 refrescar visual SIN perder input
+        if (showPassword) {
+            text.textContent = input.value;
+            input.type = "text";
+        } else {
+            text.textContent = "*".repeat(input.value.length);
+            input.type = "password";
+        }
+    }
+});
 
 const bootText = `
 
