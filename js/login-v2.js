@@ -99,15 +99,55 @@ input.addEventListener('keydown', (e) => {
             }
 
             if (e.key === "Enter") {
-                e.preventDefault();
-
-                const value = input.value.trim();
-                const isValid = validateAndStore(value);
-
-                if (!isValid) return;
-
-                goNext();
-                return;
+            
+                e.preventDefault(); // 🔥 CRÍTICO
+            
+                // 🔥 BLOQUEAR comportamiento de botones (👁)
+                e.stopPropagation();
+            
+                if (mode === "users") {
+            
+                    if (currentState) {
+                        const value = input.value.trim();
+                        const isValid = validateAndStore(value);
+            
+                        if (!isValid) return;
+            
+                        goNext();
+                        return;
+                    }
+                }
+            
+                // 🔥 LOGIN NORMAL
+                if (stage === "login") {
+                    isProcessing = true;
+                    showProcessingMessage("Checking user...");
+                    loginValue = input.value.trim().toLowerCase();
+            
+                    if (loginValue === "users create") {
+                        mode = "users";
+                        input.value = "";
+                        text.textContent = "";
+                        goToState("CREATE_USER_NICK_NAME");
+                        return;
+                    }
+            
+                    input.value = "";
+                    text.textContent = "";
+            
+                    validateUser(loginValue);
+            
+                } else if (stage === "password") {
+            
+                    isProcessing = true;
+                    showProcessingMessage("Authenticating...");
+                    const passwordValue = input.value;
+            
+                    input.value = "";
+                    text.textContent = "";
+            
+                    authenticate(loginValue, passwordValue);
+                }
             }
         }
 
