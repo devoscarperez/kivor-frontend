@@ -41,7 +41,7 @@ input.addEventListener('input', () => {
 input.addEventListener('keydown', (e) => {
 
     // 🔥 1. TOGGLE PASSWORD (PRIMERO)
-    if (e.ctrlKey && e.key.toLowerCase() === "h") {
+    if (e.key === "F2") {
 
         const isPasswordState =
             currentState === "CREATE_USER_PASSWORD" ||
