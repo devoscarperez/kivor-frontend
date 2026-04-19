@@ -214,12 +214,33 @@ function changePrompt(newPrompt) {
         currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
         stage === "password";
 
-    line.innerHTML = `
-        <span>${newPrompt}</span>
-        <span id="kivor-text"></span>
-        <span id="kivor-caret" class="kivor-caret"></span>
-        ${isPasswordPrompt ? '<button id="toggle-password" type="button" tabindex="-1">👁</button>' : ''}
-    `;
+    // 🔥 limpiar completamente
+    line.innerHTML = "";
+
+    // 🔥 construir limpio
+    const promptSpan = document.createElement("span");
+    promptSpan.textContent = newPrompt;
+
+    const textSpan = document.createElement("span");
+    textSpan.id = "kivor-text";
+
+    const caretSpan = document.createElement("span");
+    caretSpan.id = "kivor-caret";
+    caretSpan.className = "kivor-caret";
+
+    line.appendChild(promptSpan);
+    line.appendChild(textSpan);
+    line.appendChild(caretSpan);
+
+    // 👁 SOLO si es password
+    if (isPasswordPrompt) {
+        const btn = document.createElement("button");
+        btn.id = "toggle-password";
+        btn.type = "button";
+        btn.textContent = "👁";
+
+        line.appendChild(btn);
+    }
 
     text = document.getElementById("kivor-text");
 }
