@@ -500,12 +500,12 @@ function renderState(showHistory = true) {
             break;
 
         case "CREATE_USER_PASSWORD":
-            changePrompt(t("field_password")) + "  [F2 👁]");;
+            changePrompt(t("field_password") + "  [F2 👁]");
             input.value = "";
             break;
 
         case "CREATE_USER_CONFIRM_PASSWORD":
-            changePrompt(t("field_confirm_password")) + "  [F2 👁]");;
+            changePrompt(t("field_confirm_password") + "  [F2 👁]");
             input.value = "";
             break;
 
