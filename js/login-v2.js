@@ -584,7 +584,7 @@ function validateAndStore(value) {
 
         case "CREATE_USER_NICK_NAME":
             if (!value) {
-                appendLine(t("error_required_field"));
+                showTempMessage(t("error_required_field"));
                 return false;
             }
             userDraft.nick_name = value;
@@ -592,7 +592,7 @@ function validateAndStore(value) {
         
         case "CREATE_USER_FIRST_NAME":
             if (!value) {
-                appendLine(t("error_required_field"));
+                showTempMessage(t("error_required_field"));
                 return false;
             }
             userDraft.first_name = value;
@@ -600,7 +600,7 @@ function validateAndStore(value) {
 
         case "CREATE_USER_LAST_NAME":
             if (!value) {
-                appendLine(t("error_required_field"));
+                showTempMessage(t("error_required_field"));
                 return false;
             }
             userDraft.last_name = value;
@@ -608,7 +608,7 @@ function validateAndStore(value) {
 
         case "CREATE_USER_USERNAME":
             if (!value) {
-                appendLine(t("error_username_required"));
+                showTempMessage(t("error_username_required"));
                 return false;
             }
             userDraft.username = value;
@@ -616,7 +616,7 @@ function validateAndStore(value) {
 
         case "CREATE_USER_PASSWORD":
             if (!value) {
-                appendLine(t("error_password_required"));
+                showTempMessage(t("error_password_required"));
                 return false;
             }
             userDraft.password = value;
@@ -624,14 +624,14 @@ function validateAndStore(value) {
 
         case "CREATE_USER_CONFIRM_PASSWORD":
             if (value !== userDraft.password) {
-                appendLine(t("msg_password_mismatch"));
+                showTempMessage(t("msg_password_mismatch"));
                 return false;
             }
             return true;
 
         case "CREATE_USER_GROUP":
             if (!value) {
-                appendLine(t("error_group_required"));
+                showTempMessage(t("error_group_required"));
                 return false;
             }
             userDraft.group_id = value;
@@ -639,19 +639,19 @@ function validateAndStore(value) {
             
         case "CREATE_USER_CONFIRMATION":
             if (value.toLowerCase() === "n") {
-                appendLine(t("msg_operation_cancelled"), "system");
+                showTempMessage(t("msg_operation_cancelled"), "system");
                 return false;
             }
         
             if (value.toLowerCase() === "s" || value.toLowerCase() === "y") {
-                appendLine(t("msg_processing"), "system");
+                showTempMessage(t("msg_processing"), "system");
             
                 createUser();
             
                 return false;
             }
         
-            appendLine(t("msg_confirm_create_user"), "system");
+            showTempMessage(t("msg_confirm_create_user"), "system");
             return false;
     }
 
@@ -771,4 +771,15 @@ async function createUser() {
         appendLine(t("msg_error_generic"), "system");
         console.error("CREATE USER ERROR:", error);
     }
+}
+
+function showTempMessage(message, duration = 1500) {
+
+    clearSystemMessages();
+
+    appendLine(message, "system");
+
+    setTimeout(() => {
+        clearSystemMessages();
+    }, duration);
 }
