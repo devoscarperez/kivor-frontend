@@ -484,6 +484,8 @@ function renderState(showHistory = true) {
         currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
         stage === "password";
     
+    input.type = isPasswordState ? "password" : "text";
+    
     if (isPasswordState) {
         text.textContent = "*".repeat(input.value.length);
     } else {
