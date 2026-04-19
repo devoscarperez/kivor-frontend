@@ -13,18 +13,22 @@ let stage = "login";
 let isProcessing = false;
 let loginValue = "";
 let mode = "login"; // login | users
+let showPassword = false; // 🔥 control visual password
 
 input.focus();
 
 /* escribir */
 input.addEventListener('input', () => {
+
     const isPasswordState =
         currentState === "CREATE_USER_PASSWORD" ||
         currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
         stage === "password";
 
     if (isPasswordState) {
-        text.textContent = "*".repeat(input.value.length);
+        text.textContent = showPassword
+            ? input.value
+            : "*".repeat(input.value.length);
     } else {
         text.textContent = input.value;
     }
@@ -36,6 +40,25 @@ input.addEventListener('input', () => {
 /* ENTER */
 input.addEventListener('keydown', (e) => {
 
+    // 🔥 1. TOGGLE PASSWORD (PRIMERO)
+    if (e.ctrlKey && e.key.toLowerCase() === "v") {
+
+        const isPasswordState =
+            currentState === "CREATE_USER_PASSWORD" ||
+            currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
+            stage === "password";
+
+        if (isPasswordState) {
+            e.preventDefault();
+
+            showPassword = !showPassword;
+
+            renderState(false);
+        }
+
+        return;
+    }    
+    
     // 🔥 SI ESTAMOS EN USERS → usar state engine
     if (mode === "users") {
 
@@ -490,10 +513,16 @@ function renderState(showHistory = true) {
         currentState === "CREATE_USER_CONFIRM_PASSWORD" ||
         stage === "password";
     
-    input.type = isPasswordState ? "password" : "text";
+    if (isPasswordState) {
+        input.type = showPassword ? "text" : "password";
+    } else {
+        input.type = "text";
+    }
     
     if (isPasswordState) {
-        text.textContent = "*".repeat(input.value.length);
+        text.textContent = showPassword
+            ? input.value
+            : "*".repeat(input.value.length);
     } else {
         text.textContent = input.value;
     }
