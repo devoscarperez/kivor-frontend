@@ -148,7 +148,11 @@ input.addEventListener('keydown', (e) => {
 });
 
 /* mantener foco */
-document.addEventListener('click', () => {
+document.addEventListener('click', (e) => {
+
+    // 🔥 NO interferir con el botón 👁
+    if (e.target.id === "toggle-password") return;
+
     input.focus();
 });
 
