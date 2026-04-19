@@ -193,7 +193,8 @@ function appendLine(content, type = "normal") {
 
     line.textContent = content;
 
-    terminal.insertBefore(line, input);
+    const inputWrapper = document.querySelector('.kivor-input-wrapper');
+    terminal.insertBefore(line, inputWrapper);
 }
 
 function showProcessingMessage(message = "Validating...") {
