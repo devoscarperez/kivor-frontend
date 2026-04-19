@@ -564,12 +564,12 @@ function renderState(showHistory = true) {
 
         case "CREATE_USER_PASSWORD":
             changePrompt(t("field_password"));
-            input.value = "";
+            input.value = userDraft.password || "";
             break;
 
         case "CREATE_USER_CONFIRM_PASSWORD":
             changePrompt(t("field_confirm_password"));
-            input.value = "";
+            input.value = userDraft.password_confirm || "";
             break;
 
         case "CREATE_USER_GROUP":
@@ -654,6 +654,8 @@ function validateAndStore(value) {
                 showTempMessage(t("msg_password_mismatch"));
                 return false;
             }
+        
+            userDraft.password_confirm = value;
             return true;
 
         case "CREATE_USER_GROUP":
