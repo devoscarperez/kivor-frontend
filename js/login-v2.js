@@ -603,6 +603,7 @@ function renderState(showHistory = true) {
         text.textContent = input.value;
     }
     input.focus();
+    updateNextButton();
 }
 
 function validateAndStore(value) {
