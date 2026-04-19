@@ -660,25 +660,18 @@ async function createUser() {
             })
         });
 
-        if (!response.ok) {
+      if (!response.ok) {
+           const data = await response.json().catch(() => null);
         
-            let message = "msg_error_generic";
+           console.error("CREATE USER BACKEND ERROR:", data);
         
-            try {
-                const data = await response.json();
-        
-                if (data.detail) {
-                    // puedes mapear mensajes backend → i18n
-                    if (data.detail.includes("exists")) {
-                        message = "msg_username_exists";
-                    }
-                }
-            } catch {}
-        
-            appendLine(t(message), "system");
-        
-            return;
-        }
+           if (data?.detail) {
+               appendLine(data.detail, "system");
+           } else {
+               appendLine(t("msg_error_generic"), "system");
+           }
+           return;
+      }
 
         appendLine(t("msg_user_created"), "system");
 
