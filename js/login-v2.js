@@ -364,8 +364,7 @@ let userDraft = {
     last_name: "",
     username: "",
     password: "",
-    group_id: "",
-    organization_id: ""
+    group_id: ""
 };
 
 // Configuración del flujo
@@ -377,7 +376,6 @@ const flowConfig = {
         "CREATE_USER_PASSWORD",
         "CREATE_USER_CONFIRM_PASSWORD",
         "CREATE_USER_GROUP",
-        "CREATE_USER_ORGANIZATION",
         "CREATE_USER_CONFIRMATION"
     ]
 };
@@ -414,7 +412,6 @@ function getProgress() {
     if (userDraft.username) completed++;
     if (userDraft.password) completed++;
     if (userDraft.group_id) completed++;
-    if (userDraft.organization_id) completed++;
 
     return completed;
 }
@@ -467,10 +464,6 @@ function renderState(showHistory = true) {
             input.value = userDraft.group_id || "";
             break;
 
-        case "CREATE_USER_ORGANIZATION":
-            changePrompt(t("field_organization_id"));
-            input.value = userDraft.organization_id || "";
-            break;
         case "CREATE_USER_CONFIRMATION":
             changePrompt(t("msg_confirm_create_user"));
             input.value = "";
@@ -536,14 +529,6 @@ function validateAndStore(value) {
             }
             userDraft.group_id = value;
             return true;
-
-        case "CREATE_USER_ORGANIZATION":
-            if (!value) {
-                appendLine(t("error_organization_required"));
-                return false;
-            }
-            userDraft.organization_id = value;
-            return true;
             
         case "CREATE_USER_CONFIRMATION":
             if (value.toLowerCase() === "n") {
@@ -575,7 +560,6 @@ function isCurrentValid(value) {
         case "CREATE_USER_USERNAME":
         case "CREATE_USER_PASSWORD":
         case "CREATE_USER_GROUP":
-        case "CREATE_USER_ORGANIZATION":
             return !!value;
 
         case "CREATE_USER_CONFIRM_PASSWORD":
@@ -655,8 +639,7 @@ async function createUser() {
                 user_password: userDraft.password,
                 user_firstname: userDraft.first_name,
                 user_lastname: userDraft.last_name,
-                user_group_id: userDraft.group_id,
-                organization_id: userDraft.organization_id
+                user_group_id: userDraft.group_id
             })
         });
 
