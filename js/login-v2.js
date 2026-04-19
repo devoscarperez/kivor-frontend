@@ -81,7 +81,7 @@ input.addEventListener('keydown', (e) => {
                 mode = "users";
                 input.value = "";
                 text.textContent = "";
-                goToState("CREATE_USER_FIRST_NAME");
+                goToState("CREATE_USER_NICK_NAME");
                 return;
             }
         
