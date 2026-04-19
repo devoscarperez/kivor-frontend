@@ -218,7 +218,7 @@ function changePrompt(newPrompt) {
         <span>${newPrompt}</span>
         <span id="kivor-text"></span>
         <span id="kivor-caret" class="kivor-caret"></span>
-        ${isPasswordPrompt ? '<button id="toggle-password" type="button">👁</button>' : ''}
+        ${isPasswordPrompt ? '<button id="toggle-password" type="button" tabindex="-1">👁</button>' : ''}
     `;
 
     text = document.getElementById("kivor-text");
