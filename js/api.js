@@ -198,7 +198,7 @@ async function generarCustomerExpress() {
 
     try {
 
-        const response = await apiFetch(`${API_BASE}/customers-express`, {
+        const response = await apiFetch(`${API_BASE}/customers-express/generate`, {
             method: "POST"
         });
 
