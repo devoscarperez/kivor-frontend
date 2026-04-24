@@ -68,6 +68,10 @@ async function apiFetch(url, options = {}) {
 
     const response = await fetch(url, options);
 
+   const response = await fetch(url, options);
+
+   console.log("API RESPONSE STATUS:", response.status); // 🔥 AGREGAR
+
     if (response.status === 401) {
         sessionStorage.removeItem("access_token");
         window.location.href = "login.html";
