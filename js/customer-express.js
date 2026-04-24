@@ -31,6 +31,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
     console.log("TOKEN:", token);
+
+    async function loadCustomerExpress() {
+
+    try {
+
+        const response = await fetch(`https://kivor-dev.onrender.com/customers-express/${token}`);
+
+        console.log("STATUS:", response.status);
+
+        const data = await response.json();
+
+        console.log("DATA:", data);
+
+        } catch (error) {
+            console.error("ERROR:", error);
+        }
+    }    
+
+    // 🔥 ejecutar
+    loadCustomerExpress();
     loadDraft();
 
     const nextBtn = document.getElementById("express-btn-next");
