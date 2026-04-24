@@ -198,11 +198,11 @@ async function generarCustomerExpress() {
 
     try {
 
-        const response = await apiFetch(`${API_BASE}/customers-express/generate`, {
+        const response = await apiFetch(`${API_BASE}/customers-express`, {
             method: "POST"
         });
 
-        if (!response) return null; // 🔥 importante
+        if (!response) return null;
 
         if (!response.ok) {
             throw new Error("Error generando link");
