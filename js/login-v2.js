@@ -806,11 +806,10 @@ async function createUser() {
 
     try {
 
-        const response = await fetch(`${API_BASE}/users`, {
+        const response = await apiFetch(`${API_BASE}/users`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${sessionStorage.getItem("access_token")}`
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 user_nickname: userDraft.nick_name,
