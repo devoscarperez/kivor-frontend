@@ -2,6 +2,11 @@
 // KIVOR CUSTOMER EXPRESS FORM
 // ===============================
 
+// 🔥 1. obtener token desde URL
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
+
+console.log("TOKEN:", token);
 let fields = [];
 let identifierTypes = [];
 let currentStep = -1;
