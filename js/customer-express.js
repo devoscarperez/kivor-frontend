@@ -2,7 +2,7 @@
 // KIVOR CUSTOMER EXPRESS FORM
 // ===============================
 
-console.log("TOKEN:", token);
+
 let fields = [];
 let identifierTypes = [];
 let currentStep = -1;
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         showError("msg_invalid_link");
         return;
     }
-
+    console.log("TOKEN:", token);
     loadDraft();
 
     const nextBtn = document.getElementById("express-btn-next");
