@@ -186,3 +186,25 @@ function applyTheme(theme) {
         root.style.setProperty("--shadow-soft", theme.shadow.soft);
     }
 }
+
+async function generarCustomerExpress() {
+
+    try {
+
+        const response = await apiFetch(`${API_BASE}/customers-express/generate`, {
+            method: "POST"
+        });
+
+        if (!response) return null; // 🔥 importante
+
+        if (!response.ok) {
+            throw new Error("Error generando link");
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}
