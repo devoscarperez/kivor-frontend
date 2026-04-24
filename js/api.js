@@ -150,13 +150,15 @@ async function obtenerGananciasPorMes(mes) {
 
     try {
 
-        const response = await apiFetch(`${API_BASE}/ganancias-por-mes?mes=${mes}`);
-
-        if (!response.ok) {
-            throw new Error("Error al consultar la API");
-        }
-
-        return await response.json();
+         const response = await apiFetch(`${API_BASE}/ganancias-por-mes?mes=${mes}`);
+         
+         if (!response) return null; // 🔥 IMPORTANTE
+         
+         if (!response.ok) {
+             throw new Error("Error al consultar la API");
+         }
+         
+         return await response.json();
 
     } catch (error) {
 
