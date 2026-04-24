@@ -53,10 +53,8 @@ function isTokenExpired(token) {
 async function apiFetch(url, options = {}) {
 
     const token = sessionStorage.getItem("access_token");
-   
-    if (!token || isTokenExpired(token)) {
-   
-        sessionStorage.removeItem("access_token");
+
+    if (!token) {
         window.location.href = "login.html";
         return;
     }
@@ -66,19 +64,24 @@ async function apiFetch(url, options = {}) {
         "Authorization": `Bearer ${token}`
     };
 
-    const response = await fetch(url, options);
+    try {
 
-   const response = await fetch(url, options);
+        const response = await fetch(url, options);
 
-   console.log("API RESPONSE STATUS:", response.status); // 🔥 AGREGAR
+        console.log("API RESPONSE STATUS:", response.status); // debug OK
 
-    if (response.status === 401) {
-        sessionStorage.removeItem("access_token");
-        window.location.href = "login.html";
-        return;
+        if (response.status === 401) {
+            sessionStorage.removeItem("access_token");
+            window.location.href = "login.html";
+            return;
+        }
+
+        return response;
+
+    } catch (error) {
+        console.error("Fetch error:", error);
+        throw error;
     }
-
-    return response;
 }
 
 /* =========================
