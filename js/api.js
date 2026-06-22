@@ -215,3 +215,24 @@ async function generarCustomerExpress() {
         return null;
     }
 }
+
+
+async function cargarVentasLYL(formData) {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(`${API_BASE}/ventas-lyl/upload`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+        body: formData
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.detail || "Error cargando ventas.");
+    }
+
+    return data;
+}
