@@ -218,17 +218,25 @@ async function generarCustomerExpress() {
 
 
 async function cargarVentasLYL(formData) {
-    const token = localStorage.getItem("access_token");
+    const token = sessionStorage.getItem("access_token");
+
+    console.log("TOKEN ENVIADO:", token);
+
+    if (!token) {
+        throw new Error("No existe token de sesión. Inicie sesión nuevamente.");
+    }
 
     const response = await fetch(`${API_BASE}/ventas-lyl/upload`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`
         },
         body: formData
     });
 
     const data = await response.json();
+
+    console.log("RESPUESTA BACKEND:", data);
 
     if (!response.ok) {
         throw new Error(data.detail || "Error cargando ventas.");
