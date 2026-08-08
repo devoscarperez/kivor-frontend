@@ -67,16 +67,28 @@ function handlePreUploadConfirm(event) {
         return;
     }
 
-    const mesTexto = getMesTexto(mes);
-    const anioMes = `${anio}-${String(mes).padStart(2, "0")}`;
+    const esAnioCompleto = mes === "TODOS";
 
-    document.getElementById("confirmText").innerHTML = `
-        Esta acción eliminará los registros existentes del período
-        <strong>${anioMes} (${mesTexto})</strong> en la tabla staging
-        y cargará los datos del archivo seleccionado.
-        <br><br>
-        ¿Desea continuar?
-    `;
+    if (esAnioCompleto) {
+        document.getElementById("confirmText").innerHTML = `
+            Esta acción eliminará TODOS los registros existentes del año
+            <strong>${anio}</strong> (los 12 meses) en la tabla staging
+            y cargará los datos disponibles del archivo seleccionado para ese año.
+            <br><br>
+            ¿Desea continuar?
+        `;
+    } else {
+        const mesTexto = getMesTexto(mes);
+        const anioMes = `${anio}-${String(mes).padStart(2, "0")}`;
+
+        document.getElementById("confirmText").innerHTML = `
+            Esta acción eliminará los registros existentes del período
+            <strong>${anioMes} (${mesTexto})</strong> en la tabla staging
+            y cargará los datos del archivo seleccionado.
+            <br><br>
+            ¿Desea continuar?
+        `;
+    }
 
     openConfirmModal();
 }
@@ -89,10 +101,13 @@ async function uploadVentas() {
     const anio = document.getElementById("anio").value;
     const mes = document.getElementById("mes").value;
     const fileInput = document.getElementById("archivoVentas");
+    const esAnioCompleto = mes === "TODOS";
 
     const formData = new FormData();
     formData.append("anio", anio);
-    formData.append("mes", mes);
+    if (!esAnioCompleto) {
+        formData.append("mes", mes);
+    }
     formData.append("file", fileInput.files[0]);
 
     try {
@@ -101,9 +116,13 @@ async function uploadVentas() {
 
         const result = await cargarVentasLYL(formData);
 
+        const periodoLabel = result.mes
+            ? `${result.anio_mes} (${getMesTexto(result.mes)})`
+            : `Año completo ${result.anio}`;
+
         showResult(`
             <strong>Carga realizada correctamente.</strong><br>
-            Período: ${result.anio_mes}<br>
+            Período: ${periodoLabel}<br>
             Registros eliminados: ${result.rows_deleted}<br>
             Registros insertados: ${result.rows_inserted}
         `, false);
@@ -139,6 +158,7 @@ function showResult(message, isError = false) {
 
 function getMesTexto(mes) {
     const meses = {
+        "TODOS": "Todos los meses (año completo)",
         "1": "Enero",
         "2": "Febrero",
         "3": "Marzo",

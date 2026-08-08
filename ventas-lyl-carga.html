@@ -23,7 +23,9 @@
             <section class="ventas-warning">
                 <strong>Importante:</strong>
                 al confirmar la carga, KIVOR eliminará primero los registros existentes
-                del año y mes seleccionados en staging, y luego insertará los datos del Excel.
+                del período seleccionado (un mes específico o el año completo, según la
+                opción elegida) en staging, y luego insertará los datos disponibles del
+                Excel para ese período.
             </section>
 
             <form id="ventasUploadForm" class="ventas-form">
@@ -37,6 +39,7 @@
                         <label for="mes">Mes</label>
                         <select id="mes" name="mes" required>
                             <option value="">Seleccione</option>
+                            <option value="TODOS">Todos los meses (año completo)</option>
                             <option value="1">Enero</option>
                             <option value="2">Febrero</option>
                             <option value="3">Marzo</option>
