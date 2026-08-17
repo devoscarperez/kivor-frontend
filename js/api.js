@@ -217,6 +217,50 @@ async function generarCustomerExpress() {
 }
 
 
+/* =========================
+   REPORTE VENTAS LYL
+========================= */
+
+async function obtenerAniosReporteVentas() {
+    const response = await apiFetch(`${API_BASE}/ventas-lyl/filtros/anios`);
+    if (!response || !response.ok) return [];
+    return await response.json();
+}
+
+async function obtenerFamiliasReporteVentas() {
+    const response = await apiFetch(`${API_BASE}/ventas-lyl/filtros/familias`);
+    if (!response || !response.ok) return [];
+    return await response.json();
+}
+
+async function obtenerProfesionalesReporteVentas() {
+    const response = await apiFetch(`${API_BASE}/ventas-lyl/filtros/profesionales`);
+    if (!response || !response.ok) return [];
+    return await response.json();
+}
+
+async function obtenerReporteVentas({ anio1, anio2, metrica, familias, profesionales }) {
+    const params = new URLSearchParams();
+    params.append("anio1", anio1);
+    params.append("anio2", anio2);
+    params.append("metrica", metrica);
+    (familias || []).forEach(f => params.append("familias", f));
+    (profesionales || []).forEach(p => params.append("profesionales", p));
+
+    const response = await apiFetch(`${API_BASE}/ventas-lyl/reporte?${params.toString()}`);
+
+    if (!response) return null;
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.detail || "Error al obtener el reporte de ventas.");
+    }
+
+    return data;
+}
+
+
 async function cargarVentasLYL(formData) {
     const token = sessionStorage.getItem("access_token");
 

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIVOR - Análisis de Ventas</title>
+
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/ventas-lyl.css">
+</head>
+<body>
+
+<script>
+    const token = sessionStorage.getItem("access_token");
+    if (!token) {
+        window.location.href = "login.html";
+    }
+</script>
+
+<main class="reporte-page">
+    <section class="reporte-card">
+
+        <button class="back-btn" onclick="window.location.href='index.html'">← Menú</button>
+
+        <header class="reporte-header">
+            <div>
+                <h1>Análisis de Ventas</h1>
+                <p>Comparativo entre dos años sobre la métrica seleccionada.</p>
+            </div>
+        </header>
+
+        <form id="reporteFiltrosForm" class="reporte-filtros">
+            <div class="reporte-grid">
+                <div class="ventas-field">
+                    <label for="filtroAnio1">Año 1</label>
+                    <select id="filtroAnio1" required></select>
+                </div>
+
+                <div class="ventas-field">
+                    <label for="filtroAnio2">Año 2</label>
+                    <select id="filtroAnio2" required></select>
+                </div>
+
+                <div class="ventas-field">
+                    <label for="filtroMetrica">Métrica</label>
+                    <select id="filtroMetrica" required>
+                        <option value="ganancia_salon">Ganancia Salón</option>
+                        <option value="ganancia_prof">Ganancia Profesional</option>
+                        <option value="precio_web">Precio Web</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="reporte-grid">
+                <div class="ventas-field">
+                    <label for="filtroFamilia">Familia</label>
+                    <select id="filtroFamilia" multiple size="5"></select>
+                    <span class="reporte-hint">Sin selección = todas las familias</span>
+                </div>
+
+                <div class="ventas-field">
+                    <label for="filtroProfesional">Profesional</label>
+                    <select id="filtroProfesional" multiple size="5"></select>
+                    <span class="reporte-hint">Sin selección = todos los profesionales</span>
+                </div>
+            </div>
+
+            <div class="ventas-actions">
+                <button type="submit" id="btnGenerarReporte">Generar reporte</button>
+            </div>
+        </form>
+
+        <section id="reporteResult" class="ventas-result hidden"></section>
+
+        <div id="reporteContenido" class="reporte-contenido hidden">
+
+            <div class="kpis" id="kpiRow"></div>
+
+            <div class="panel">
+                <div class="panel-head">
+                    <h2>Comparación mes a mes</h2>
+                    <p>Mismo mes, dos años — barras agrupadas</p>
+                </div>
+                <div class="chart-box" id="chartBars"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-head">
+                    <h2>Tendencia mensual</h2>
+                    <p>Evolución a lo largo del año</p>
+                </div>
+                <div class="chart-box" id="chartLine"></div>
+            </div>
+
+            <div class="grid-2">
+                <div class="panel">
+                    <div class="panel-head">
+                        <h2>Variación interanual</h2>
+                        <p id="chartYoYSub">% de cambio por mes</p>
+                    </div>
+                    <div class="chart-box" id="chartYoY"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head">
+                        <h2>Acumulado del año</h2>
+                        <p>Valores acumulados mes a mes</p>
+                    </div>
+                    <div class="chart-box" id="chartCum"></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-head">
+                    <h2>Participación por mes dentro del año</h2>
+                    <p>Qué peso tiene cada mes sobre el total anual (%)</p>
+                </div>
+                <div class="chart-box" id="chartShare"></div>
+            </div>
+
+            <p class="reporte-nota">
+                Los meses sin datos para los filtros seleccionados se muestran sin valor (—).
+            </p>
+
+        </div>
+
+    </section>
+</main>
+
+<div id="tooltip"></div>
+
+<script src="js/api.js"></script>
+<script src="js/ventas-lyl-reporte.js"></script>
+</body>
+</html>
