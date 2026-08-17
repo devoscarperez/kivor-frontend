@@ -73,6 +73,13 @@ function llenarSelectMultiple(selectId, valores) {
 function bindReporteEvents() {
     document.getElementById("reporteFiltrosForm")
         .addEventListener("submit", handleGenerarReporte);
+
+    document.querySelectorAll(".reporte-clear-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const target = document.getElementById(btn.dataset.clearTarget);
+            Array.from(target.options).forEach(o => { o.selected = false; });
+        });
+    });
 }
 
 /* =========================

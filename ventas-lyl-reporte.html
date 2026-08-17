@@ -54,15 +54,21 @@
 
             <div class="reporte-grid">
                 <div class="ventas-field">
-                    <label for="filtroFamilia">Familia</label>
+                    <div class="reporte-field-label-row">
+                        <label for="filtroFamilia">Familia</label>
+                        <button type="button" class="reporte-clear-btn" data-clear-target="filtroFamilia">Limpiar</button>
+                    </div>
                     <select id="filtroFamilia" multiple size="5"></select>
-                    <span class="reporte-hint">Sin selección = todas las familias</span>
+                    <span class="reporte-hint">Ctrl/Cmd + clic para elegir varias · sin selección = todas</span>
                 </div>
 
                 <div class="ventas-field">
-                    <label for="filtroProfesional">Profesional</label>
+                    <div class="reporte-field-label-row">
+                        <label for="filtroProfesional">Profesional</label>
+                        <button type="button" class="reporte-clear-btn" data-clear-target="filtroProfesional">Limpiar</button>
+                    </div>
                     <select id="filtroProfesional" multiple size="5"></select>
-                    <span class="reporte-hint">Sin selección = todos los profesionales</span>
+                    <span class="reporte-hint">Ctrl/Cmd + clic para elegir varias · sin selección = todos</span>
                 </div>
             </div>
 
