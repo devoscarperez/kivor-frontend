@@ -516,6 +516,12 @@ function renderReporte(data) {
 
     document.getElementById("reporteContenido").classList.remove("hidden");
 
+    /* Leyenda de colores por año (fija en todos los gráficos) */
+    document.getElementById("reporteLegend").innerHTML = `
+        <span class="legend-item"><span class="legend-dot" style="background:${C1}"></span>Año ${labelA}</span>
+        <span class="legend-item"><span class="legend-dot" style="background:${C2}"></span>Año ${labelB}</span>
+    `;
+
     /* KPIs */
     const totalA = dataA.reduce((acc, v) => acc + (v || 0), 0);
     const totalB = dataB.reduce((acc, v) => acc + (v || 0), 0);
