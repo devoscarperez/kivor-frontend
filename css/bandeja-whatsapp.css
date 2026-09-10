@@ -90,16 +90,19 @@ Nunca depender solo del color: siempre va acompañado de texto.
 
 .tarjeta-ficha-lista {
     border-left-color: var(--color-primary);
+    background: rgba(217, 119, 6, 0.08);
     background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
 }
 
 .tarjeta-en-curso {
     border-left-color: var(--color-info);
+    background: rgba(37, 99, 235, 0.07);
     background: color-mix(in srgb, var(--color-info) 8%, var(--color-surface));
 }
 
 .tarjeta-abandonada {
     border-left-color: var(--color-error);
+    background: rgba(153, 27, 27, 0.08);
     background: color-mix(in srgb, var(--color-error) 10%, var(--color-surface));
 }
 
@@ -191,7 +194,12 @@ No navega ni ocupa espacio en la lista; aparece encima y se cierra.
 
 .ficha-modal {
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 20;
     display: none;
 }
@@ -202,7 +210,12 @@ No navega ni ocupa espacio en la lista; aparece encima y se cierra.
 
 .ficha-backdrop {
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.5);
     opacity: 0;
     transition: opacity 0.2s ease;
