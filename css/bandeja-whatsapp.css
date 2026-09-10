@@ -1,0 +1,255 @@
+/* =========================
+Layout principal
+========================= */
+
+.container-bandeja {
+    padding: 16px;
+    background: var(--color-background);
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.header-bandeja {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.header-bandeja h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.btn-refrescar {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--color-text-secondary);
+    width: auto;
+    padding: 4px 10px;
+}
+
+.bandeja-layout {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+/* =========================
+Lista de conversaciones
+========================= */
+
+.lista-conversaciones {
+    width: 340px;
+    flex-shrink: 0;
+    background: var(--color-surface);
+    border-radius: var(--radius-default);
+    box-shadow: var(--shadow-soft);
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+}
+
+.lista-vacia {
+    padding: 24px 16px;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    text-align: center;
+}
+
+.lista-vacia.hidden {
+    display: none;
+}
+
+.item-conversacion {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-border-default);
+    cursor: pointer;
+}
+
+.item-conversacion:hover {
+    background: var(--color-background);
+}
+
+.item-conversacion.activo {
+    background: var(--color-background);
+    border-left: 3px solid var(--color-primary);
+}
+
+.item-conversacion-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-conversacion-nombre {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-size: 14px;
+}
+
+.item-conversacion-meta {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.item-conversacion-mensaje {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================
+Semáforo ventana 24h
+========================= */
+
+.semaforo {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.semaforo.abierta {
+    background: var(--color-success);
+}
+
+.semaforo.por-vencer {
+    background: var(--color-warning);
+}
+
+.semaforo.vencida {
+    background: var(--color-error);
+}
+
+/* =========================
+Panel de ficha
+========================= */
+
+.panel-ficha {
+    flex: 1;
+    background: var(--color-surface);
+    border-radius: var(--radius-default);
+    box-shadow: var(--shadow-soft);
+    padding: 20px;
+    min-height: 300px;
+}
+
+.ficha-vacia {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.ficha-contenido.hidden {
+    display: none;
+}
+
+.ficha-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.ficha-header h2 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    color: var(--color-text-primary);
+}
+
+.ficha-header .telefono {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+}
+
+.ficha-estado {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--color-background);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+.ficha-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+    margin-bottom: 18px;
+}
+
+.ficha-campo {
+    font-size: 13px;
+}
+
+.ficha-campo .label {
+    display: block;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+}
+
+.ficha-campo .valor {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.ficha-servicios {
+    margin-bottom: 18px;
+}
+
+.ficha-servicios .label {
+    display: block;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.ficha-servicios ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 14px;
+    color: var(--color-text-primary);
+}
+
+.ficha-acciones {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ficha-acciones button {
+    width: auto;
+    padding: 10px 18px;
+    font-size: 14px;
+    border-radius: var(--radius-default);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-tomar {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn-cerrar {
+    background: var(--color-error);
+    color: white;
+}
+
+.btn-volver-bot {
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-default) !important;
+}
