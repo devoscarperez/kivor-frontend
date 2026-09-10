@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Bandeja WhatsApp</title>
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/styles.css">
@@ -10,29 +10,45 @@
 </head>
 <body>
 
-<div class="container-bandeja">
+<div class="app-bandeja">
 
-    <div class="header-bandeja">
-        <button class="back-btn" onclick="goMenu()">←</button>
+    <header class="topbar">
+        <button class="icon-btn" onclick="goMenu()" aria-label="Volver al menú">←</button>
         <h1>Bandeja WhatsApp</h1>
-        <button id="btnRefrescar" class="btn-refrescar" title="Actualizar">⟳</button>
-    </div>
+        <button id="btnRefrescar" class="icon-btn" title="Actualizar" aria-label="Actualizar">⟳</button>
+    </header>
 
-    <div class="bandeja-layout">
-
-        <div class="lista-conversaciones">
-            <div id="listaVacia" class="lista-vacia hidden">No hay conversaciones pendientes.</div>
-            <div id="listaConversaciones"></div>
-        </div>
-
-        <div class="panel-ficha">
-            <div id="fichaVacia" class="ficha-vacia">Selecciona una conversación para ver la ficha.</div>
-            <div id="fichaContenido" class="ficha-contenido hidden"></div>
-        </div>
-
-    </div>
+    <div id="listaVacia" class="lista-vacia hidden">No hay conversaciones pendientes.</div>
+    <div id="listaConversaciones" class="lista-conversaciones"></div>
 
 </div>
+
+<!-- Ficha ampliada: hoja emergente, no ocupa espacio en la lista -->
+<div id="fichaModal" class="ficha-modal">
+    <div id="fichaBackdrop" class="ficha-backdrop"></div>
+
+    <div class="ficha-sheet">
+        <div class="ficha-sheet-handle"></div>
+
+        <header class="ficha-sheet-header">
+            <div class="topbar-ficha-info">
+                <span id="fichaNombre" class="topbar-ficha-nombre"></span>
+                <span id="fichaEstado" class="ficha-estado"></span>
+            </div>
+            <button class="icon-btn" id="btnCerrarFicha" aria-label="Cerrar ficha">✕</button>
+        </header>
+
+        <div id="fichaContenido" class="ficha-contenido"></div>
+
+        <div class="ficha-acciones">
+            <button class="btn-tomar" id="btnTomar">Tomar</button>
+            <button class="btn-cerrar" id="btnCerrar">Cerrar</button>
+            <button class="btn-volver-bot" id="btnVolverBot">Volver al bot</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
 
 <script>
 const token = sessionStorage.getItem("access_token");
