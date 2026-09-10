@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bandeja WhatsApp</title>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/bandeja-whatsapp.css">
+</head>
+<body>
+
+<div class="container-bandeja">
+
+    <div class="header-bandeja">
+        <button class="back-btn" onclick="goMenu()">←</button>
+        <h1>Bandeja WhatsApp</h1>
+        <button id="btnRefrescar" class="btn-refrescar" title="Actualizar">⟳</button>
+    </div>
+
+    <div class="bandeja-layout">
+
+        <div class="lista-conversaciones">
+            <div id="listaVacia" class="lista-vacia hidden">No hay conversaciones pendientes.</div>
+            <div id="listaConversaciones"></div>
+        </div>
+
+        <div class="panel-ficha">
+            <div id="fichaVacia" class="ficha-vacia">Selecciona una conversación para ver la ficha.</div>
+            <div id="fichaContenido" class="ficha-contenido hidden"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const token = sessionStorage.getItem("access_token");
+if (!token) window.location.href = "login.html";
+
+function goMenu() {
+    window.location.href = "index.html";
+}
+</script>
+
+<script src="js/api.js"></script>
+<script src="js/bandeja-whatsapp.js"></script>
+
+</body>
+</html>
