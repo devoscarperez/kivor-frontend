@@ -16,6 +16,7 @@ const CLINE = "#e5e7eb";
 const CDIM = "#6b7280";
 
 let currentReporte = null;
+let mostrarBrecha = false;
 
 /* =========================
    INIT
@@ -79,6 +80,14 @@ function bindReporteEvents() {
             const target = document.getElementById(btn.dataset.clearTarget);
             Array.from(target.options).forEach(o => { o.selected = false; });
         });
+    });
+
+    document.getElementById("btnToggleBrecha").addEventListener("click", () => {
+        mostrarBrecha = !mostrarBrecha;
+        const btn = document.getElementById("btnToggleBrecha");
+        btn.classList.toggle("active", mostrarBrecha);
+        btn.textContent = mostrarBrecha ? "Ocultar brecha" : "Mostrar brecha";
+        if (currentReporte) renderReporte(currentReporte);
     });
 }
 
@@ -235,7 +244,7 @@ function niceScale(maxVal, minVal) {
 }
 
 /* ============ GROUPED BAR CHART (2 series) ============ */
-function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colorB, labelA, labelB, fmtVal, fmtTooltip) {
+function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colorB, labelA, labelB, fmtVal, fmtTooltip, mostrarBrechaFlag) {
     fmtTooltip = fmtTooltip || fmtCLP;
     const container = document.getElementById(containerId);
     const W = 1080, H = 340;
@@ -267,11 +276,14 @@ function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colo
         lbl.textContent = cat;
         svg.appendChild(lbl);
 
+        let topY = null;
+
         [{ v: seriesA[i], color: colorA, label: labelA, idx: 0 }, { v: seriesB[i], color: colorB, label: labelB, idx: 1 }].forEach(s => {
             if (s.v === null) return;
             const barH = (s.v / scale.max) * plotH;
             const bx = gx + groupW / 2 - barW - gap / 2 + s.idx * (barW + gap);
             const by = padT + plotH - barH;
+            if (topY === null || by < topY) topY = by;
             const rect = el('rect', { class: 'bar-shape series-' + s.idx, x: bx, y: by, width: barW, height: Math.max(barH, 1), fill: s.color, rx: 3 });
             rect.addEventListener('mousemove', (evt) => {
                 showTooltip(evt, cat, [
@@ -282,6 +294,27 @@ function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colo
             rect.addEventListener('mouseleave', hideTooltip);
             svg.appendChild(rect);
         });
+
+        if (mostrarBrechaFlag && seriesA[i] !== null && seriesB[i] !== null && topY !== null) {
+            const delta = seriesB[i] - seriesA[i];
+            const deltaPct = seriesA[i] ? (delta / seriesA[i] * 100) : null;
+            const color = delta > 0 ? CUP : (delta < 0 ? CDOWN : CDIM);
+            const pctY = Math.max(topY - 8, padT + 20);
+            const moneyY = pctY - 12;
+
+            const pctText = deltaPct === null ? '' : (deltaPct >= 0 ? '+' : '') + deltaPct.toFixed(1) + '%';
+            const moneyText = (delta > 0 ? '+' : '') + fmtShort(delta);
+
+            const pctEl = el('text', { x: gx + groupW / 2, y: pctY, fill: color, 'font-size': 10.5, 'font-weight': 700, 'text-anchor': 'middle' });
+            pctEl.textContent = pctText || moneyText;
+            svg.appendChild(pctEl);
+
+            if (pctText) {
+                const moneyEl = el('text', { x: gx + groupW / 2, y: moneyY, fill: color, 'font-size': 9, 'text-anchor': 'middle' });
+                moneyEl.textContent = moneyText;
+                svg.appendChild(moneyEl);
+            }
+        }
     });
 
     container.innerHTML = '';
@@ -559,7 +592,7 @@ function renderReporte(data) {
     });
 
     /* Gráficos */
-    drawGroupedBars('chartBars', meses, dataA, dataB, C1, C2, labelA, labelB, fmtShort);
+    drawGroupedBars('chartBars', meses, dataA, dataB, C1, C2, labelA, labelB, fmtShort, undefined, mostrarBrecha);
     drawLines('chartLine', meses, dataA, dataB, C1, C2, labelA, labelB, fmtShort);
 
     document.getElementById('chartYoYSub').textContent = `% de cambio ${labelB} vs ${labelA}, por mes`;

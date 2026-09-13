@@ -400,6 +400,29 @@
     margin: 0;
 }
 
+.reporte-toggle-btn {
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    white-space: nowrap;
+    width: auto;
+}
+
+.reporte-toggle-btn:hover {
+    background: #f3f4f6;
+}
+
+.reporte-toggle-btn.active {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+}
+
 .chart-box {
     position: relative;
     width: 100%;
