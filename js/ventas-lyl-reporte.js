@@ -103,6 +103,8 @@ async function handleGenerarReporte(event) {
     const metrica = document.getElementById("filtroMetrica").value;
     const familias = getSeleccionMultiple("filtroFamilia");
     const profesionales = getSeleccionMultiple("filtroProfesional");
+    const diasSemana = getSeleccionMultiple("filtroDiaSemana").map(Number);
+    const quincenas = getSeleccionMultiple("filtroQuincena").map(Number);
 
     if (!anio1 || !anio2) {
         showReporteResult("Debe seleccionar Año 1 y Año 2.", true);
@@ -127,6 +129,8 @@ async function handleGenerarReporte(event) {
             metrica,
             familias,
             profesionales,
+            diasSemana,
+            quincenas,
         });
 
         if (!data) {
