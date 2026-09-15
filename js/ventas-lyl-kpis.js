@@ -124,6 +124,33 @@ function fmtInt(v) {
 }
 
 /* =========================
+   KPI COMPARATIVO (3 tarjetas: valor Año1, valor Año2, variación)
+========================= */
+
+function renderKpiComparativo(containerId, tituloBase, valorA, valorB, labelA, labelB, fmt) {
+    const variacion = (valorA && valorB) ? ((valorB - valorA) / valorA * 100) : null;
+    const kpis = [
+        { label: `${tituloBase} ${labelA}`, value: fmt(valorA), sub: '' },
+        { label: `${tituloBase} ${labelB}`, value: fmt(valorB), sub: '' },
+        {
+            label: 'Variación',
+            value: variacion === null ? '—' : (variacion >= 0 ? '+' : '') + variacion.toFixed(1) + '%',
+            sub: `${labelB} vs ${labelA}`,
+            cls: variacion === null ? '' : (variacion >= 0 ? 'up' : 'down'),
+        },
+    ];
+
+    const box = document.getElementById(containerId);
+    box.innerHTML = '';
+    kpis.forEach(k => {
+        const d = document.createElement('div');
+        d.className = 'kpi';
+        d.innerHTML = `<div class="label">${k.label}</div><div class="value">${k.value}</div><div class="sub ${k.cls || ''}">${k.sub}</div>`;
+        box.appendChild(d);
+    });
+}
+
+/* =========================
    TABLAS
 ========================= */
 
@@ -239,33 +266,23 @@ function renderKpis(data) {
     );
 
     /* Ticket promedio anual */
-    const anual1 = data.ticket_anual_anio1;
-    const anual2 = data.ticket_anual_anio2;
-    const variacionAnual = (anual1 && anual2) ? ((anual2 - anual1) / anual1 * 100) : null;
-    const kpisAnual = [
-        { label: `Ticket promedio ${labelA}`, value: fmtCLP(anual1), sub: '' },
-        { label: `Ticket promedio ${labelB}`, value: fmtCLP(anual2), sub: '' },
-        {
-            label: 'Variación',
-            value: variacionAnual === null ? '—' : (variacionAnual >= 0 ? '+' : '') + variacionAnual.toFixed(1) + '%',
-            sub: `${labelB} vs ${labelA}`,
-            cls: variacionAnual === null ? '' : (variacionAnual >= 0 ? 'up' : 'down'),
-        },
-    ];
-    const kpiTicketAnualBox = document.getElementById('kpiTicketAnual');
-    kpiTicketAnualBox.innerHTML = '';
-    kpisAnual.forEach(k => {
-        const d = document.createElement('div');
-        d.className = 'kpi';
-        d.innerHTML = `<div class="label">${k.label}</div><div class="value">${k.value}</div><div class="sub ${k.cls || ''}">${k.sub}</div>`;
-        kpiTicketAnualBox.appendChild(d);
-    });
+    renderKpiComparativo(
+        'kpiTicketAnual', 'Ticket promedio',
+        data.ticket_anual_anio1, data.ticket_anual_anio2,
+        labelA, labelB, fmtCLP
+    );
 
     /* Clientas nuevas */
     drawGroupedBars(
         'chartClientasNuevas', meses,
         data.clientas_nuevas_anio1, data.clientas_nuevas_anio2,
         C1, C2, labelA, labelB, fmtInt, fmtInt, false, mostrarValores
+    );
+
+    renderKpiComparativo(
+        'kpiClientasNuevasAnual', 'Clientas nuevas',
+        data.clientas_nuevas_anual_anio1, data.clientas_nuevas_anual_anio2,
+        labelA, labelB, fmtInt
     );
 
     /* Cross-selling */
