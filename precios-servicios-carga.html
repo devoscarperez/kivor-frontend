@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>KIVOR - Carga de Precios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/ventas-lyl.css">
+</head>
+
+<body>
+    <main class="ventas-page">
+        <section class="ventas-card">
+            <header class="ventas-header">
+                <div>
+                    <h1>Carga de Precios</h1>
+                    <p>Importa la hoja PRECIOS del Excel hacia la tabla de precios de servicios.</p>
+                </div>
+            </header>
+
+            <section class="ventas-warning">
+                <strong>Importante:</strong>
+                esta carga no tiene filtros de período: al confirmar, KIVOR eliminará
+                <strong>TODOS</strong> los precios existentes en la tabla y luego insertará
+                completos los datos disponibles en la hoja <strong>PRECIOS</strong> del
+                archivo seleccionado.
+            </section>
+
+            <form id="preciosUploadForm" class="ventas-form">
+                <div class="ventas-field">
+                    <label for="archivoPrecios">Archivo Excel</label>
+                    <input
+                        id="archivoPrecios"
+                        name="archivoPrecios"
+                        type="file"
+                        accept=".xlsx,.xls"
+                        required
+                    >
+                </div>
+
+                <div id="selectedFileBox" class="ventas-file-box hidden"></div>
+
+                <div class="ventas-actions">
+                    <button type="submit" id="btnCargarPrecios">
+                        Cargar precios
+                    </button>
+                </div>
+            </form>
+
+            <section id="preciosResult" class="ventas-result hidden"></section>
+        </section>
+    </main>
+
+    <div id="confirmModal" class="ventas-modal hidden">
+        <div class="ventas-modal-content">
+            <h2>Confirmar carga</h2>
+            <p id="confirmText"></p>
+
+            <div class="ventas-modal-actions">
+                <button id="btnCancelConfirm" type="button">
+                    Cancelar
+                </button>
+
+                <button id="btnConfirmUpload" type="button" class="danger">
+                    Confirmar carga
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/precios-servicios-carga.js"></script>
+</body>
+</html>

@@ -314,3 +314,28 @@ async function cargarVentasLYL(formData) {
 
     return data;
 }
+
+
+async function cargarPreciosServicios(formData) {
+    const token = sessionStorage.getItem("access_token");
+
+    if (!token) {
+        throw new Error("No existe token de sesión. Inicie sesión nuevamente.");
+    }
+
+    const response = await fetch(`${API_BASE}/precios-servicios/upload`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        body: formData
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.detail || "Error cargando precios.");
+    }
+
+    return data;
+}
