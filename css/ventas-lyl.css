@@ -346,11 +346,21 @@
     margin-bottom: 24px;
 }
 
+.kpis--compact {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 0;
+}
+
 .kpi {
     background: #fafafa;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
     padding: 16px 18px;
+}
+
+.kpis--compact .kpi {
+    padding: 10px 12px;
 }
 
 .kpi .label {
@@ -361,10 +371,18 @@
     margin-bottom: 10px;
 }
 
+.kpis--compact .kpi .label {
+    margin-bottom: 6px;
+}
+
 .kpi .value {
     font-size: 22px;
     font-weight: 700;
     color: var(--color-text-primary, #111111);
+}
+
+.kpis--compact .kpi .value {
+    font-size: 17px;
 }
 
 .kpi .sub {
@@ -526,6 +544,19 @@
     gap: 20px;
 }
 
+/* Fila gráfico + panel de KPI compacto: el gráfico ocupa la mayor parte
+   del ancho y el panel de KPI no se estira a la altura del gráfico. */
+.grid-chart-kpi {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    align-items: start;
+    gap: 20px;
+}
+
+.grid-chart-kpi .panel:last-child {
+    padding-bottom: 16px;
+}
+
 .bar-shape,
 .pt-shape {
     cursor: pointer;
@@ -586,5 +617,13 @@
 
     .grid-2 {
         grid-template-columns: 1fr;
+    }
+
+    .grid-chart-kpi {
+        grid-template-columns: 1fr;
+    }
+
+    .kpis--compact {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
