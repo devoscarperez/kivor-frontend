@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KIVOR - Análisis de Ventas</title>
+<title>KIVOR - Análisis de KPIs</title>
 
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/styles.css">
@@ -25,12 +25,12 @@
 
         <header class="reporte-header">
             <div>
-                <h1>Análisis de Ventas</h1>
-                <p>Comparativo entre dos años sobre la métrica seleccionada.</p>
+                <h1>Análisis de KPIs</h1>
+                <p>Ticket promedio, clientas nuevas, servicios, cross-selling y ABC de familias.</p>
             </div>
         </header>
 
-        <form id="reporteFiltrosForm" class="reporte-filtros">
+        <form id="kpisFiltrosForm" class="reporte-filtros">
             <div class="reporte-grid">
                 <div class="ventas-field">
                     <label for="filtroAnio1" class="reporte-year-chip reporte-year-chip--1">Año 1</label>
@@ -43,12 +43,13 @@
                 </div>
 
                 <div class="ventas-field">
-                    <label for="filtroMetrica">Métrica</label>
+                    <label for="filtroMetrica">Métrica (ticket promedio)</label>
                     <select id="filtroMetrica" required>
                         <option value="ganancia_salon">Ganancia Salón</option>
                         <option value="ganancia_prof">Ganancia Profesional</option>
                         <option value="precio_web">Precio Web</option>
                     </select>
+                    <span class="reporte-hint">El análisis ABC siempre usa Ganancia Salón</span>
                 </div>
             </div>
 
@@ -59,7 +60,7 @@
                         <button type="button" class="reporte-clear-btn" data-clear-target="filtroFamilia">Limpiar</button>
                     </div>
                     <select id="filtroFamilia" multiple size="5"></select>
-                    <span class="reporte-hint">Ctrl/Cmd + clic para elegir varias · sin selección = todas</span>
+                    <span class="reporte-hint">Ctrl/Cmd + clic para elegir varias · sin selección = todas · no aplica a Cross-selling ni ABC</span>
                 </div>
 
                 <div class="ventas-field">
@@ -68,7 +69,7 @@
                         <button type="button" class="reporte-clear-btn" data-clear-target="filtroProfesional">Limpiar</button>
                     </div>
                     <select id="filtroProfesional" multiple size="5"></select>
-                    <span class="reporte-hint">Ctrl/Cmd + clic para elegir varias · sin selección = todos</span>
+                    <span class="reporte-hint">Ctrl/Cmd + clic para elegir varios · sin selección = todos</span>
                 </div>
             </div>
 
@@ -104,7 +105,7 @@
             </div>
 
             <div class="ventas-actions">
-                <button type="submit" id="btnGenerarReporte">Generar reporte</button>
+                <button type="submit" id="btnGenerarKpis">Generar KPIs</button>
             </div>
         </form>
 
@@ -114,51 +115,80 @@
 
             <div class="reporte-legend" id="reporteLegend"></div>
 
-            <div class="kpis" id="kpiRow"></div>
-
             <div class="panel">
                 <div class="panel-head">
-                    <div>
-                        <h2>Comparación mes a mes</h2>
-                        <p>Mismo mes, dos años — barras agrupadas</p>
-                    </div>
-                    <button type="button" id="btnToggleBrecha" class="reporte-toggle-btn">Mostrar brecha</button>
+                    <h2>Ticket promedio por mes</h2>
+                    <p id="ticketMensualSub">Suma de la métrica ÷ clientas únicas del mes</p>
                 </div>
-                <div class="chart-box" id="chartBars"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-head">
-                    <h2>Tendencia mensual</h2>
-                    <p>Evolución a lo largo del año</p>
-                </div>
-                <div class="chart-box" id="chartLine"></div>
+                <div class="chart-box" id="chartTicketMensual"></div>
             </div>
 
             <div class="grid-2">
                 <div class="panel">
                     <div class="panel-head">
-                        <h2>Variación interanual</h2>
-                        <p id="chartYoYSub">% de cambio por mes</p>
+                        <h2>Ticket promedio por semestre</h2>
+                        <p>S1: Ene-Jun · S2: Jul-Dic</p>
                     </div>
-                    <div class="chart-box" id="chartYoY"></div>
+                    <div class="chart-box" id="chartTicketSemestral"></div>
                 </div>
 
                 <div class="panel">
                     <div class="panel-head">
-                        <h2>Acumulado del año</h2>
-                        <p>Valores acumulados mes a mes</p>
+                        <h2>Ticket promedio anual</h2>
+                        <p>Total del año</p>
                     </div>
-                    <div class="chart-box" id="chartCum"></div>
+                    <div class="kpis" id="kpiTicketAnual"></div>
                 </div>
             </div>
 
             <div class="panel">
                 <div class="panel-head">
-                    <h2>Participación por mes dentro del año</h2>
-                    <p>Qué peso tiene cada mes sobre el total anual (%)</p>
+                    <h2>Clientas nuevas por mes</h2>
+                    <p>Clientas cuya primera compra histórica cae en ese mes</p>
                 </div>
-                <div class="chart-box" id="chartShare"></div>
+                <div class="chart-box" id="chartClientasNuevas"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-head">
+                    <h2>Cantidad de servicios por mes</h2>
+                    <p>Cantidad de líneas de venta registradas</p>
+                </div>
+                <div class="chart-box" id="chartServicios"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-head">
+                    <h2>Cross-selling entre familias</h2>
+                    <p>Clientas que compraron ambas familias en el año (no considera el filtro de Familia)</p>
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <h3 class="kpi-table-title" id="crossTituloAnio1"></h3>
+                        <div class="kpi-table-wrap" id="crossSellingAnio1"></div>
+                    </div>
+                    <div>
+                        <h3 class="kpi-table-title" id="crossTituloAnio2"></h3>
+                        <div class="kpi-table-wrap" id="crossSellingAnio2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-head">
+                    <h2>Análisis ABC de familias</h2>
+                    <p>Ordenadas por Ganancia Salón, con % acumulado (no considera el filtro de Familia)</p>
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <h3 class="kpi-table-title" id="abcTituloAnio1"></h3>
+                        <div class="kpi-table-wrap" id="abcTablaAnio1"></div>
+                    </div>
+                    <div>
+                        <h3 class="kpi-table-title" id="abcTituloAnio2"></h3>
+                        <div class="kpi-table-wrap" id="abcTablaAnio2"></div>
+                    </div>
+                </div>
             </div>
 
             <p class="reporte-nota">
@@ -175,6 +205,6 @@
 <script src="js/api.js"></script>
 <script src="js/chart-utils.js"></script>
 <script src="js/reporte-filtros.js"></script>
-<script src="js/ventas-lyl-reporte.js"></script>
+<script src="js/ventas-lyl-kpis.js"></script>
 </body>
 </html>

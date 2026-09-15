@@ -423,6 +423,70 @@
     color: #ffffff;
 }
 
+.kpi-table-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    margin: 0 0 10px;
+}
+
+.kpi-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.kpi-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+
+.kpi-table th,
+.kpi-table td {
+    padding: 7px 10px;
+    text-align: center;
+    border-bottom: 1px solid #f0f1f3;
+}
+
+.kpi-table thead th {
+    background: #fafafa;
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+}
+
+.kpi-table tbody th {
+    text-align: left;
+    background: #fafafa;
+    color: var(--color-text-primary, #111111);
+    font-weight: 600;
+}
+
+.kpi-table tbody td:first-child,
+.kpi-table tbody th {
+    text-align: left;
+}
+
+.kpi-table-diag {
+    font-weight: 700;
+    background: #f3f4f6 !important;
+}
+
+.abc-badge {
+    display: inline-block;
+    background: #111827;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    margin: 1px;
+}
+
 .chart-box {
     position: relative;
     width: 100%;

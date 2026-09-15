@@ -263,6 +263,30 @@ async function obtenerReporteVentas({ anio1, anio2, metrica, familias, profesion
 }
 
 
+async function obtenerReporteKpis({ anio1, anio2, metrica, familias, profesionales, diasSemana, quincenas }) {
+    const params = new URLSearchParams();
+    params.append("anio1", anio1);
+    params.append("anio2", anio2);
+    params.append("metrica", metrica);
+    (familias || []).forEach(f => params.append("familias", f));
+    (profesionales || []).forEach(p => params.append("profesionales", p));
+    (diasSemana || []).forEach(d => params.append("dias_semana", d));
+    (quincenas || []).forEach(q => params.append("quincenas", q));
+
+    const response = await apiFetch(`${API_BASE}/ventas-lyl/reporte-kpis?${params.toString()}`);
+
+    if (!response) return null;
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.detail || "Error al obtener el reporte de KPIs.");
+    }
+
+    return data;
+}
+
+
 async function cargarVentasLYL(formData) {
     const token = sessionStorage.getItem("access_token");
 
