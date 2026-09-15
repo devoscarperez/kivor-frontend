@@ -295,6 +295,19 @@
     margin-top: 28px;
 }
 
+.reporte-legend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.reporte-legend-row .reporte-legend {
+    margin-bottom: 0;
+}
+
 .reporte-legend {
     display: flex;
     gap: 20px;
@@ -421,6 +434,14 @@
     background: #111827;
     border-color: #111827;
     color: #ffffff;
+}
+
+.kpi-table-block {
+    margin-bottom: 20px;
+}
+
+.kpi-table-block:last-child {
+    margin-bottom: 0;
 }
 
 .kpi-table-title {

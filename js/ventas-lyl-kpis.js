@@ -11,6 +11,7 @@ const METRICA_LABELS_KPIS = {
 const SEMESTRES = ["S1 (Ene-Jun)", "S2 (Jul-Dic)"];
 
 let currentKpis = null;
+let mostrarValores = false;
 
 /* =========================
    INIT
@@ -44,6 +45,14 @@ function bindKpisEvents() {
             const target = document.getElementById(btn.dataset.clearTarget);
             Array.from(target.options).forEach(o => { o.selected = false; });
         });
+    });
+
+    document.getElementById("btnToggleValores").addEventListener("click", () => {
+        mostrarValores = !mostrarValores;
+        const btn = document.getElementById("btnToggleValores");
+        btn.classList.toggle("active", mostrarValores);
+        btn.textContent = mostrarValores ? "Ocultar cifras" : "Mostrar cifras";
+        if (currentKpis) renderKpis(currentKpis);
     });
 }
 
@@ -219,14 +228,14 @@ function renderKpis(data) {
     drawGroupedBars(
         'chartTicketMensual', meses,
         data.ticket_mensual_anio1, data.ticket_mensual_anio2,
-        C1, C2, labelA, labelB, fmtShort
+        C1, C2, labelA, labelB, fmtShort, undefined, false, mostrarValores
     );
 
     /* Ticket promedio semestral */
     drawGroupedBars(
         'chartTicketSemestral', SEMESTRES,
         data.ticket_semestral_anio1, data.ticket_semestral_anio2,
-        C1, C2, labelA, labelB, fmtShort
+        C1, C2, labelA, labelB, fmtShort, undefined, false, mostrarValores
     );
 
     /* Ticket promedio anual */
@@ -256,14 +265,7 @@ function renderKpis(data) {
     drawGroupedBars(
         'chartClientasNuevas', meses,
         data.clientas_nuevas_anio1, data.clientas_nuevas_anio2,
-        C1, C2, labelA, labelB, fmtInt, fmtInt
-    );
-
-    /* Cantidad de servicios */
-    drawGroupedBars(
-        'chartServicios', meses,
-        data.servicios_anio1, data.servicios_anio2,
-        C1, C2, labelA, labelB, fmtInt, fmtInt
+        C1, C2, labelA, labelB, fmtInt, fmtInt, false, mostrarValores
     );
 
     /* Cross-selling */

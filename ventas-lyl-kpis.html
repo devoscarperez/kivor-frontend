@@ -26,7 +26,7 @@
         <header class="reporte-header">
             <div>
                 <h1>Análisis de KPIs</h1>
-                <p>Ticket promedio, clientas nuevas, servicios, cross-selling y ABC de familias.</p>
+                <p>Ticket promedio, clientas nuevas, cross-selling y ABC de familias.</p>
             </div>
         </header>
 
@@ -113,7 +113,10 @@
 
         <div id="reporteContenido" class="reporte-contenido hidden">
 
-            <div class="reporte-legend" id="reporteLegend"></div>
+            <div class="reporte-legend-row">
+                <div class="reporte-legend" id="reporteLegend"></div>
+                <button type="button" id="btnToggleValores" class="reporte-toggle-btn">Mostrar cifras</button>
+            </div>
 
             <div class="panel">
                 <div class="panel-head">
@@ -151,26 +154,16 @@
 
             <div class="panel">
                 <div class="panel-head">
-                    <h2>Cantidad de servicios por mes</h2>
-                    <p>Cantidad de líneas de venta registradas</p>
-                </div>
-                <div class="chart-box" id="chartServicios"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-head">
                     <h2>Cross-selling entre familias</h2>
                     <p>Clientas que compraron ambas familias en el año (no considera el filtro de Familia)</p>
                 </div>
-                <div class="grid-2">
-                    <div>
-                        <h3 class="kpi-table-title" id="crossTituloAnio1"></h3>
-                        <div class="kpi-table-wrap" id="crossSellingAnio1"></div>
-                    </div>
-                    <div>
-                        <h3 class="kpi-table-title" id="crossTituloAnio2"></h3>
-                        <div class="kpi-table-wrap" id="crossSellingAnio2"></div>
-                    </div>
+                <div class="kpi-table-block">
+                    <h3 class="kpi-table-title" id="crossTituloAnio1"></h3>
+                    <div class="kpi-table-wrap" id="crossSellingAnio1"></div>
+                </div>
+                <div class="kpi-table-block">
+                    <h3 class="kpi-table-title" id="crossTituloAnio2"></h3>
+                    <div class="kpi-table-wrap" id="crossSellingAnio2"></div>
                 </div>
             </div>
 
@@ -179,15 +172,13 @@
                     <h2>Análisis ABC de familias</h2>
                     <p>Ordenadas por Ganancia Salón, con % acumulado (no considera el filtro de Familia)</p>
                 </div>
-                <div class="grid-2">
-                    <div>
-                        <h3 class="kpi-table-title" id="abcTituloAnio1"></h3>
-                        <div class="kpi-table-wrap" id="abcTablaAnio1"></div>
-                    </div>
-                    <div>
-                        <h3 class="kpi-table-title" id="abcTituloAnio2"></h3>
-                        <div class="kpi-table-wrap" id="abcTablaAnio2"></div>
-                    </div>
+                <div class="kpi-table-block">
+                    <h3 class="kpi-table-title" id="abcTituloAnio1"></h3>
+                    <div class="kpi-table-wrap" id="abcTablaAnio1"></div>
+                </div>
+                <div class="kpi-table-block">
+                    <h3 class="kpi-table-title" id="abcTituloAnio2"></h3>
+                    <div class="kpi-table-wrap" id="abcTablaAnio2"></div>
                 </div>
             </div>
 

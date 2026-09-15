@@ -90,7 +90,7 @@ function niceScale(maxVal, minVal) {
 }
 
 /* ============ GROUPED BAR CHART (2 series) ============ */
-function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colorB, labelA, labelB, fmtVal, fmtTooltip, mostrarBrechaFlag) {
+function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colorB, labelA, labelB, fmtVal, fmtTooltip, mostrarBrechaFlag, mostrarValoresFlag) {
     fmtTooltip = fmtTooltip || fmtCLP;
     const container = document.getElementById(containerId);
     const W = 1080, H = 340;
@@ -139,13 +139,19 @@ function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colo
             });
             rect.addEventListener('mouseleave', hideTooltip);
             svg.appendChild(rect);
+
+            if (mostrarValoresFlag) {
+                const valEl = el('text', { x: bx + barW / 2, y: by - 6, fill: s.color, 'font-size': 9.5, 'font-weight': 700, 'text-anchor': 'middle' });
+                valEl.textContent = fmtTooltip(s.v);
+                svg.appendChild(valEl);
+            }
         });
 
         if (mostrarBrechaFlag && seriesA[i] !== null && seriesB[i] !== null && topY !== null) {
             const delta = seriesB[i] - seriesA[i];
             const deltaPct = seriesA[i] ? (delta / seriesA[i] * 100) : null;
             const color = delta > 0 ? CUP : (delta < 0 ? CDOWN : CDIM);
-            const pctY = Math.max(topY - 8, padT + 20);
+            const pctY = Math.max(topY - (mostrarValoresFlag ? 24 : 8), padT + 20);
             const moneyY = pctY - 12;
 
             const pctText = deltaPct === null ? '' : (deltaPct >= 0 ? '+' : '') + deltaPct.toFixed(1) + '%';
@@ -255,7 +261,7 @@ function drawLines(containerId, categories, seriesA, seriesB, colorA, colorB, la
 }
 
 /* ============ SINGLE-SERIES BAR (signed, e.g. YoY %) ============ */
-function drawSignedBars(containerId, categories, series, fmtVal) {
+function drawSignedBars(containerId, categories, series, fmtVal, mostrarValoresFlag) {
     const container = document.getElementById(containerId);
     const W = 520, H = 300;
     const padL = 54, padR = 12, padT = 16, padB = 34;
@@ -304,6 +310,13 @@ function drawSignedBars(containerId, categories, series, fmtVal) {
         });
         rect.addEventListener('mouseleave', hideTooltip);
         svg.appendChild(rect);
+
+        if (mostrarValoresFlag) {
+            const labelY = v >= 0 ? y - 6 : y + Math.max(h, 1) + 12;
+            const valEl = el('text', { x: cx, y: labelY, fill: color, 'font-size': 9.5, 'font-weight': 700, 'text-anchor': 'middle' });
+            valEl.textContent = fmtVal(v);
+            svg.appendChild(valEl);
+        }
     });
 
     container.innerHTML = '';

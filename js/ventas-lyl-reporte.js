@@ -10,6 +10,7 @@ const METRICA_LABELS = {
 
 let currentReporte = null;
 let mostrarBrecha = false;
+let mostrarValores = false;
 
 /* =========================
    INIT
@@ -50,6 +51,14 @@ function bindReporteEvents() {
         const btn = document.getElementById("btnToggleBrecha");
         btn.classList.toggle("active", mostrarBrecha);
         btn.textContent = mostrarBrecha ? "Ocultar brecha" : "Mostrar brecha";
+        if (currentReporte) renderReporte(currentReporte);
+    });
+
+    document.getElementById("btnToggleValores").addEventListener("click", () => {
+        mostrarValores = !mostrarValores;
+        const btn = document.getElementById("btnToggleValores");
+        btn.classList.toggle("active", mostrarValores);
+        btn.textContent = mostrarValores ? "Ocultar cifras" : "Mostrar cifras";
         if (currentReporte) renderReporte(currentReporte);
     });
 }
@@ -167,17 +176,17 @@ function renderReporte(data) {
     });
 
     /* Gráficos */
-    drawGroupedBars('chartBars', meses, dataA, dataB, C1, C2, labelA, labelB, fmtShort, undefined, mostrarBrecha);
+    drawGroupedBars('chartBars', meses, dataA, dataB, C1, C2, labelA, labelB, fmtShort, undefined, mostrarBrecha, mostrarValores);
     drawLines('chartLine', meses, dataA, dataB, C1, C2, labelA, labelB, fmtShort);
 
     document.getElementById('chartYoYSub').textContent = `% de cambio ${labelB} vs ${labelA}, por mes`;
     const yoyData = meses.map((m, i) => dataB[i] !== null && dataA[i] ? ((dataB[i] - dataA[i]) / dataA[i] * 100) : null);
-    drawSignedBars('chartYoY', meses, yoyData, v => Math.round(v) + '%');
+    drawSignedBars('chartYoY', meses, yoyData, v => Math.round(v) + '%', mostrarValores);
 
     drawCumLines('chartCum', meses, cumulative(dataA), cumulative(dataB), C1, C2, labelA, labelB, fmtShort);
 
     const shareA = meses.map((m, i) => dataA[i] !== null && totalA ? dataA[i] / totalA * 100 : null);
     const shareB = meses.map((m, i) => dataB[i] !== null && totalB ? dataB[i] / totalB * 100 : null);
     const fmtPct = v => Math.round(v) + '%';
-    drawGroupedBars('chartShare', meses, shareA, shareB, C1, C2, labelA, labelB, fmtPct, v => v.toFixed(1) + '%');
+    drawGroupedBars('chartShare', meses, shareA, shareB, C1, C2, labelA, labelB, fmtPct, v => v.toFixed(1) + '%', false, mostrarValores);
 }
