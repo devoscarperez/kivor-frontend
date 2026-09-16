@@ -90,7 +90,7 @@ function niceScale(maxVal, minVal) {
 }
 
 /* ============ GROUPED BAR CHART (2 series) ============ */
-function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colorB, labelA, labelB, fmtVal, fmtTooltip, mostrarBrechaFlag, mostrarValoresFlag) {
+function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colorB, labelA, labelB, fmtVal, fmtTooltip, mostrarBrechaFlag, mostrarValoresFlag, extraA, extraB, extraLabel) {
     fmtTooltip = fmtTooltip || fmtCLP;
     const container = document.getElementById(containerId);
     const W = 1080, H = 340;
@@ -132,9 +132,10 @@ function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colo
             if (topY === null || by < topY) topY = by;
             const rect = el('rect', { class: 'bar-shape series-' + s.idx, x: bx, y: by, width: barW, height: Math.max(barH, 1), fill: s.color, rx: 3 });
             rect.addEventListener('mousemove', (evt) => {
+                const extraTxt = (arr) => (arr && arr[i] != null) ? ` (${arr[i]} ${extraLabel || ''})` : '';
                 showTooltip(evt, cat, [
-                    { color: colorA, label: labelA + ': ' + (seriesA[i] !== null ? fmtTooltip(seriesA[i]) : '—') },
-                    { color: colorB, label: labelB + ': ' + (seriesB[i] !== null ? fmtTooltip(seriesB[i]) : '—') }
+                    { color: colorA, label: labelA + ': ' + (seriesA[i] !== null ? fmtTooltip(seriesA[i]) : '—') + extraTxt(extraA) },
+                    { color: colorB, label: labelB + ': ' + (seriesB[i] !== null ? fmtTooltip(seriesB[i]) : '—') + extraTxt(extraB) }
                 ]);
             });
             rect.addEventListener('mouseleave', hideTooltip);
@@ -168,6 +169,109 @@ function drawGroupedBars(containerId, categories, seriesA, seriesB, colorA, colo
             }
         }
     });
+
+    container.innerHTML = '';
+    container.appendChild(svg);
+}
+
+/* ============ GROUPED BARS + LINE OVERLAY (eje secundario a la derecha) ============ */
+function drawBarsWithLine(containerId, categories, barA, barB, lineA, lineB, colorA, colorB, labelA, labelB, fmtBarAxis, fmtLineAxis, fmtBarTooltip, mostrarValoresFlag) {
+    fmtBarTooltip = fmtBarTooltip || fmtCLP;
+    const container = document.getElementById(containerId);
+    const W = 1080, H = 340;
+    const padL = 64, padR = 54, padT = 16, padB = 34;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+
+    const barVals = barA.concat(barB).filter(v => v !== null);
+    const barMax = barVals.length ? Math.max(...barVals) : 0;
+    const barScale = niceScale(barMax, 0);
+
+    const lineVals = lineA.concat(lineB).filter(v => v !== null && v !== undefined);
+    const lineMax = lineVals.length ? Math.max(...lineVals) : 0;
+    const lineScale = niceScale(lineMax, 0);
+
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: 'xMidYMid meet' });
+
+    barScale.ticks.forEach(t => {
+        const y = padT + plotH - (t / barScale.max) * plotH;
+        svg.appendChild(el('line', { x1: padL, x2: W - padR, y1: y, y2: y, stroke: CLINE, 'stroke-width': 1 }));
+        const txt = el('text', { x: padL - 10, y: y + 4, fill: CDIM, 'font-size': 11, 'text-anchor': 'end' });
+        txt.textContent = fmtBarAxis(t);
+        svg.appendChild(txt);
+    });
+
+    lineScale.ticks.forEach(t => {
+        const y = padT + plotH - (t / lineScale.max) * plotH;
+        const txt = el('text', { x: W - padR + 10, y: y + 4, fill: CDIM, 'font-size': 11, 'text-anchor': 'start' });
+        txt.textContent = fmtLineAxis(t);
+        svg.appendChild(txt);
+    });
+
+    const n = categories.length;
+    const groupW = plotW / n;
+    const barW = groupW * 0.30;
+    const gap = groupW * 0.06;
+
+    categories.forEach((cat, i) => {
+        const gx = padL + i * groupW;
+        const lbl = el('text', { x: gx + groupW / 2, y: H - padB + 18, fill: CDIM, 'font-size': 11, 'text-anchor': 'middle' });
+        lbl.textContent = cat;
+        svg.appendChild(lbl);
+
+        [{ v: barA[i], color: colorA, idx: 0 }, { v: barB[i], color: colorB, idx: 1 }].forEach(s => {
+            if (s.v === null) return;
+            const barH = (s.v / barScale.max) * plotH;
+            const bx = gx + groupW / 2 - barW - gap / 2 + s.idx * (barW + gap);
+            const by = padT + plotH - barH;
+            const rect = el('rect', { class: 'bar-shape series-' + s.idx, x: bx, y: by, width: barW, height: Math.max(barH, 1), fill: s.color, rx: 3 });
+            rect.addEventListener('mousemove', (evt) => {
+                const ticketsA = (lineA[i] !== null && lineA[i] !== undefined) ? ` · ${lineA[i]} tickets` : '';
+                const ticketsB = (lineB[i] !== null && lineB[i] !== undefined) ? ` · ${lineB[i]} tickets` : '';
+                showTooltip(evt, cat, [
+                    { color: colorA, label: labelA + ': ' + (barA[i] !== null ? fmtBarTooltip(barA[i]) : '—') + ticketsA },
+                    { color: colorB, label: labelB + ': ' + (barB[i] !== null ? fmtBarTooltip(barB[i]) : '—') + ticketsB }
+                ]);
+            });
+            rect.addEventListener('mouseleave', hideTooltip);
+            svg.appendChild(rect);
+
+            if (mostrarValoresFlag) {
+                const valEl = el('text', { x: bx + barW / 2, y: by - 6, fill: s.color, 'font-size': 9.5, 'font-weight': 700, 'text-anchor': 'middle' });
+                valEl.textContent = fmtBarTooltip(s.v);
+                svg.appendChild(valEl);
+            }
+        });
+    });
+
+    function pointXY(i, v) {
+        return [padL + i * groupW + groupW / 2, padT + plotH - (v / lineScale.max) * plotH];
+    }
+
+    function drawLineSeries(series, color) {
+        const pts = [];
+        series.forEach((v, i) => { if (v !== null && v !== undefined) pts.push([i, v]); });
+        if (pts.length === 0) return;
+
+        let d = '';
+        pts.forEach(([i, v], k) => {
+            const [x, y] = pointXY(i, v);
+            d += (k === 0 ? 'M' : 'L') + x + ',' + y + ' ';
+        });
+        svg.appendChild(el('path', { d, fill: 'none', stroke: color, 'stroke-width': 2.5, 'stroke-dasharray': '5,4', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }));
+
+        pts.forEach(([i, v]) => {
+            const [x, y] = pointXY(i, v);
+            const c = el('circle', { class: 'pt-shape', cx: x, cy: y, r: 4, fill: '#ffffff', stroke: color, 'stroke-width': 2 });
+            c.addEventListener('mousemove', (evt) => {
+                showTooltip(evt, categories[i], [{ color, label: 'Tickets: ' + v }]);
+            });
+            c.addEventListener('mouseleave', hideTooltip);
+            svg.appendChild(c);
+        });
+    }
+
+    drawLineSeries(lineA, colorA);
+    drawLineSeries(lineB, colorB);
 
     container.innerHTML = '';
     container.appendChild(svg);

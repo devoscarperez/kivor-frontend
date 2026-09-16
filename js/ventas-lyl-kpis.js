@@ -127,13 +127,18 @@ function fmtInt(v) {
    KPI COMPARATIVO (3 tarjetas: valor Año1, valor Año2, variación)
 ========================= */
 
-function renderKpiComparativo(containerId, tituloBase, valorA, valorB, labelA, labelB, fmt) {
+function renderKpiComparativo(containerId, tituloBase, valorA, valorB, labelA, labelB, fmt, countA, countB, countLabel) {
     const variacion = (valorA && valorB) ? ((valorB - valorA) / valorA * 100) : null;
+    const conteoHtml = (count) => count === undefined
+        ? ''
+        : `<div class="count">${fmtInt(count)} ${countLabel || ''}</div>`;
+
     const kpis = [
-        { label: `${tituloBase} ${labelA}`, value: fmt(valorA), sub: '' },
-        { label: `${tituloBase} ${labelB}`, value: fmt(valorB), sub: '' },
+        { label: `${tituloBase} ${labelA}`, count: conteoHtml(countA), value: fmt(valorA), sub: '' },
+        { label: `${tituloBase} ${labelB}`, count: conteoHtml(countB), value: fmt(valorB), sub: '' },
         {
             label: 'Variación',
+            count: '',
             value: variacion === null ? '—' : (variacion >= 0 ? '+' : '') + variacion.toFixed(1) + '%',
             sub: `${labelB} vs ${labelA}`,
             cls: variacion === null ? '' : (variacion >= 0 ? 'up' : 'down'),
@@ -145,7 +150,7 @@ function renderKpiComparativo(containerId, tituloBase, valorA, valorB, labelA, l
     kpis.forEach(k => {
         const d = document.createElement('div');
         d.className = 'kpi';
-        d.innerHTML = `<div class="label">${k.label}</div><div class="value">${k.value}</div><div class="sub ${k.cls || ''}">${k.sub}</div>`;
+        d.innerHTML = `<div class="label">${k.label}</div>${k.count}<div class="value">${k.value}</div><div class="sub ${k.cls || ''}">${k.sub}</div>`;
         box.appendChild(d);
     });
 }
@@ -251,25 +256,28 @@ function renderKpis(data) {
 
     /* Ticket promedio mensual */
     document.getElementById("ticketMensualSub").textContent =
-        `Suma de ${metricaLabel} ÷ cantidad de tickets (fecha entrega + N° formulario) del mes`;
-    drawGroupedBars(
+        `Barras: ${metricaLabel} ÷ cantidad de tickets, eje izquierdo · Línea punteada: cantidad de tickets, eje derecho`;
+    drawBarsWithLine(
         'chartTicketMensual', meses,
         data.ticket_mensual_anio1, data.ticket_mensual_anio2,
-        C1, C2, labelA, labelB, fmtShort, undefined, false, mostrarValores
+        data.ticket_mensual_tickets_anio1, data.ticket_mensual_tickets_anio2,
+        C1, C2, labelA, labelB, fmtShort, fmtInt, fmtCLP, mostrarValores
     );
 
     /* Ticket promedio semestral */
-    drawGroupedBars(
+    drawBarsWithLine(
         'chartTicketSemestral', SEMESTRES,
         data.ticket_semestral_anio1, data.ticket_semestral_anio2,
-        C1, C2, labelA, labelB, fmtShort, undefined, false, mostrarValores
+        data.ticket_semestral_tickets_anio1, data.ticket_semestral_tickets_anio2,
+        C1, C2, labelA, labelB, fmtShort, fmtInt, fmtCLP, mostrarValores
     );
 
     /* Ticket promedio anual */
     renderKpiComparativo(
         'kpiTicketAnual', 'Ticket promedio',
         data.ticket_anual_anio1, data.ticket_anual_anio2,
-        labelA, labelB, fmtCLP
+        labelA, labelB, fmtCLP,
+        data.ticket_anual_tickets_anio1, data.ticket_anual_tickets_anio2, 'tickets'
     );
 
     /* Clientas nuevas */

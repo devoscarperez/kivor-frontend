@@ -375,6 +375,21 @@
     margin-bottom: 6px;
 }
 
+.kpi .count {
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.kpis--compact .kpi .count {
+    font-size: 12px;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+}
+
 .kpi .value {
     font-size: 22px;
     font-weight: 700;
