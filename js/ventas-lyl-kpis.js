@@ -251,7 +251,7 @@ function renderKpis(data) {
 
     /* Ticket promedio mensual */
     document.getElementById("ticketMensualSub").textContent =
-        `Suma de ${metricaLabel} ÷ clientas únicas del mes`;
+        `Suma de ${metricaLabel} ÷ cantidad de tickets (fecha entrega + N° formulario) del mes`;
     drawGroupedBars(
         'chartTicketMensual', meses,
         data.ticket_mensual_anio1, data.ticket_mensual_anio2,
