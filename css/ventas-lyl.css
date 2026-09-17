@@ -270,10 +270,18 @@
     color: #9ca3af;
 }
 
-/* Anchos fijos de selectores, en caracteres (ch) */
-.select-w-10 { width: 10ch; }
-.select-w-20 { width: 20ch; }
-.select-w-25 { width: 25ch; }
+/* Anchos fijos de selectores, en caracteres (ch). box-sizing: border-box
+   asegura que el ancho declarado incluya el padding y la flecha nativa del
+   select, para que el texto no quede cortado en los anchos más angostos. */
+.select-w-20 {
+    box-sizing: border-box;
+    width: 20ch;
+}
+
+.select-w-25 {
+    box-sizing: border-box;
+    width: 25ch;
+}
 
 /* Pestañas de reporte (Análisis de Ventas / Análisis de KPIs) */
 .reporte-tabs {
@@ -313,6 +321,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+/* Variante compacta: la etiqueta y "Limpiar" quedan juntas en vez de
+   estirarse a los extremos, para usar junto a selectores angostos
+   (select-w-20 / select-w-25). Solo se usa en ventas-lyl-analisis.html. */
+.reporte-field-label-row--compact {
+    justify-content: flex-start;
+    gap: 10px;
+    width: fit-content;
 }
 
 .reporte-clear-btn {
