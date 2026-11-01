@@ -16,17 +16,18 @@
             <header class="ventas-header">
                 <div>
                     <h1>Carga de Precios</h1>
-                    <p>Importa la hoja de vigencia seleccionada del Excel hacia la tabla de precios de servicios.</p>
+                    <p>Importa la hoja PRECIOS del Excel hacia la tabla de precios de servicios.</p>
                 </div>
             </header>
 
             <section class="ventas-warning">
                 <strong>Importante:</strong>
-                la carga lee la hoja del Excel cuyo nombre coincide con el mes y año
-                seleccionados (ej. <strong>SEP2026</strong>). Una carga <strong>Full</strong>
-                elimina y reemplaza todos los precios de esa vigencia. Una carga
-                <strong>Parcial</strong> solo reemplaza los servicios incluidos en el
-                archivo, sin afectar el resto de la vigencia.
+                la carga siempre lee la hoja <strong>PRECIOS</strong> del Excel, y dentro de
+                ella busca las columnas de precio correspondientes al mes y año
+                seleccionados (ej. <strong>PROF_SEP_2026</strong> / <strong>WEB_SEP_2026</strong>).
+                Una carga <strong>Full</strong> elimina y reemplaza todos los precios de esa
+                vigencia. Una carga <strong>Parcial</strong> solo reemplaza los servicios
+                incluidos en el archivo, sin afectar el resto de la vigencia.
             </section>
 
             <form id="preciosUploadForm" class="ventas-form">

@@ -70,21 +70,25 @@ function handlePreUploadConfirm(event) {
 
     const vigencia = `${mes}${anio}`;
     const mesTexto = getMesTexto(mes);
+    const colProf = `PROF_${mes}_${anio}`;
+    const colWeb = `WEB_${mes}_${anio}`;
 
     if (modo === "full") {
         document.getElementById("confirmText").innerHTML = `
             Esta acción eliminará <strong>TODOS</strong> los precios existentes
             de la vigencia <strong>${vigencia} (${mesTexto} ${anio})</strong>
-            y cargará completos los datos de la hoja <strong>${vigencia}</strong>
-            del archivo seleccionado.
+            y cargará los datos de la hoja <strong>PRECIOS</strong> del archivo
+            seleccionado, usando las columnas <strong>${colProf}</strong> /
+            <strong>${colWeb}</strong>.
             <br><br>
             ¿Desea continuar?
         `;
     } else {
         document.getElementById("confirmText").innerHTML = `
             Esta acción reemplazará solo los servicios incluidos en la hoja
-            <strong>${vigencia}</strong> del archivo seleccionado, dentro de la
-            vigencia <strong>${vigencia} (${mesTexto} ${anio})</strong>, sin
+            <strong>PRECIOS</strong> del archivo seleccionado (columnas
+            <strong>${colProf}</strong> / <strong>${colWeb}</strong>), dentro de
+            la vigencia <strong>${vigencia} (${mesTexto} ${anio})</strong>, sin
             afectar el resto de los precios de esa vigencia.
             <br><br>
             ¿Desea continuar?
