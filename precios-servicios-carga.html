@@ -16,19 +16,55 @@
             <header class="ventas-header">
                 <div>
                     <h1>Carga de Precios</h1>
-                    <p>Importa la hoja PRECIOS del Excel hacia la tabla de precios de servicios.</p>
+                    <p>Importa la hoja de vigencia seleccionada del Excel hacia la tabla de precios de servicios.</p>
                 </div>
             </header>
 
             <section class="ventas-warning">
                 <strong>Importante:</strong>
-                esta carga no tiene filtros de período: al confirmar, KIVOR eliminará
-                <strong>TODOS</strong> los precios existentes en la tabla y luego insertará
-                completos los datos disponibles en la hoja <strong>PRECIOS</strong> del
-                archivo seleccionado.
+                la carga lee la hoja del Excel cuyo nombre coincide con el mes y año
+                seleccionados (ej. <strong>SEP2026</strong>). Una carga <strong>Full</strong>
+                elimina y reemplaza todos los precios de esa vigencia. Una carga
+                <strong>Parcial</strong> solo reemplaza los servicios incluidos en el
+                archivo, sin afectar el resto de la vigencia.
             </section>
 
             <form id="preciosUploadForm" class="ventas-form">
+                <div class="ventas-grid">
+                    <div class="ventas-field">
+                        <label for="anio">Año</label>
+                        <select id="anio" name="anio" required></select>
+                    </div>
+
+                    <div class="ventas-field">
+                        <label for="mes">Mes</label>
+                        <select id="mes" name="mes" required>
+                            <option value="">Seleccione</option>
+                            <option value="ENE">Enero</option>
+                            <option value="FEB">Febrero</option>
+                            <option value="MAR">Marzo</option>
+                            <option value="ABR">Abril</option>
+                            <option value="MAY">Mayo</option>
+                            <option value="JUN">Junio</option>
+                            <option value="JUL">Julio</option>
+                            <option value="AGO">Agosto</option>
+                            <option value="SEP">Septiembre</option>
+                            <option value="OCT">Octubre</option>
+                            <option value="NOV">Noviembre</option>
+                            <option value="DIC">Diciembre</option>
+                        </select>
+                    </div>
+
+                    <div class="ventas-field">
+                        <label for="modo">Tipo de carga</label>
+                        <select id="modo" name="modo" required>
+                            <option value="">Seleccione</option>
+                            <option value="full">Full (reemplaza toda la vigencia)</option>
+                            <option value="parcial">Parcial (solo los servicios del archivo)</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="ventas-field">
                     <label for="archivoPrecios">Archivo Excel</label>
                     <input
