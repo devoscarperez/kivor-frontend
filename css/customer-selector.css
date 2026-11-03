@@ -80,6 +80,26 @@ Namespacing propio (cs-*) para no chocar con otras hojas emergentes.
     font-size: 15px;
 }
 
+.cs-listo {
+    flex-shrink: 0;
+    padding: 0 14px;
+    height: 36px;
+    border-radius: var(--radius-default);
+    border: none;
+    background: var(--color-primary);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.cs-listo:active {
+    background: var(--color-primary-active);
+}
+
+.cs-listo.hidden {
+    display: none;
+}
+
 .cs-close {
     flex-shrink: 0;
     width: 36px;
@@ -123,6 +143,11 @@ Namespacing propio (cs-*) para no chocar con otras hojas emergentes.
 
 .cs-resultado:active {
     background: var(--color-border-default);
+}
+
+.cs-resultado-agregado {
+    background: color-mix(in srgb, var(--color-success) 15%, var(--color-background));
+    color: var(--color-success);
 }
 
 .cs-resultado-nombre {

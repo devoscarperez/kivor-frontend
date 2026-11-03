@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Profesionales del Ticket</title>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/ticket-profesionales.css">
+<link rel="stylesheet" href="css/customer-selector.css">
+</head>
+<body>
+
+<div class="app-tp">
+
+    <header class="topbar-tp">
+        <div class="topbar-tp-row">
+            <button class="icon-btn" onclick="volverATickets()" aria-label="Volver a Tickets">←</button>
+            <h1>Profesionales del Ticket</h1>
+            <button id="btnRefrescarTp" class="icon-btn" title="Actualizar" aria-label="Actualizar">⟳</button>
+        </div>
+        <div id="cabeceraTicket" class="cabecera-ticket"></div>
+    </header>
+
+    <div class="barra-nuevo-tp">
+        <button id="btnAgregarProfesional" class="btn-nuevo-ticket">+ Agregar profesional</button>
+    </div>
+
+    <div class="contenido-scroll">
+        <div id="sinProfesionales" class="lista-vacia hidden">Esta ticket aún no tiene profesionales asignadas.</div>
+        <div id="listaProfesionales" class="lista-profesionales"></div>
+    </div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const token = sessionStorage.getItem("access_token");
+if (!token) window.location.href = "login.html";
+
+function volverATickets() {
+    window.location.href = "ticket.html";
+}
+</script>
+
+<script src="js/api.js"></script>
+<script src="js/customer-selector.js"></script>
+<script src="js/ticket-profesionales.js"></script>
+
+</body>
+</html>

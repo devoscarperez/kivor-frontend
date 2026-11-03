@@ -179,6 +179,9 @@ function renderLista(tickets) {
                 <button class="ticket-clienta ${nombreClienta ? "clienta-asignada" : "clienta-vacia"}" data-ticket-id="${t.ticket_id}">
                     ${nombreClienta ? escapeHtml(nombreClienta) : "+ Asociar clienta"}
                 </button>
+                <a class="ticket-profesionales" href="ticket-profesionales.html?ticket_id=${t.ticket_id}">
+                    Profesionales (${t.professional_count || 0}) →
+                </a>
                 <div class="ticket-fechas">
                     Creado: ${formatearFecha(t.ticket_created_at)}<br>
                     Actualizado: ${formatearFecha(t.ticket_updated_at)}
