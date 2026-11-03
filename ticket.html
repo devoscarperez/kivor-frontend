@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tickets</title>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/ticket.css">
+</head>
+<body>
+
+<div class="app-ticket">
+
+    <header class="topbar-ticket">
+        <div class="topbar-ticket-row">
+            <button class="icon-btn" onclick="goMenu()" aria-label="Volver al menú">←</button>
+            <h1>Tickets</h1>
+            <button id="btnRefrescar" class="icon-btn" title="Actualizar" aria-label="Actualizar">⟳</button>
+        </div>
+        <div id="fechaCabecera" class="fecha-cabecera"></div>
+    </header>
+
+    <div class="barra-nuevo">
+        <button id="btnNuevoTicket" class="btn-nuevo-ticket">+ Nuevo Ticket</button>
+    </div>
+
+    <div id="filtros" class="filtros">
+        <div class="filtro-campo">
+            <label for="fechaDesde">Desde</label>
+            <input type="date" id="fechaDesde">
+        </div>
+        <div class="filtro-campo">
+            <label for="fechaHasta">Hasta</label>
+            <input type="date" id="fechaHasta">
+        </div>
+        <div class="filtro-campo filtro-status">
+            <label for="filtroStatus">Status</label>
+            <select id="filtroStatus" multiple></select>
+        </div>
+        <button id="btnOrden" class="btn-orden" data-orden="desc">Más reciente primero ↓</button>
+        <button id="btnAplicarFiltros" class="btn-aplicar-filtros">Aplicar</button>
+    </div>
+
+    <div id="listaVacia" class="lista-vacia hidden">No hay tickets para los filtros seleccionados.</div>
+    <div id="listaTickets" class="lista-tickets"></div>
+
+</div>
+
+<script>
+const token = sessionStorage.getItem("access_token");
+if (!token) window.location.href = "login.html";
+
+function goMenu() {
+    window.location.href = "index.html";
+}
+</script>
+
+<script src="js/api.js"></script>
+<script src="js/ticket.js"></script>
+
+</body>
+</html>
