@@ -288,3 +288,35 @@ siempre va acompañado del texto del status.
 .ticket-antiguedad.antiguedad-media { color: var(--color-warning); }
 .ticket-antiguedad.antiguedad-alerta { color: var(--color-error); }
 .ticket-antiguedad.antiguedad-na { color: var(--color-text-secondary); }
+
+/* =========================
+Toast de error/confirmación
+========================= */
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom) + 20px);
+    transform: translateX(-50%) translateY(10px);
+    background: #111111;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 50;
+    max-width: 90vw;
+    text-align: center;
+}
+
+.toast.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.toast-error {
+    background: var(--color-error);
+}

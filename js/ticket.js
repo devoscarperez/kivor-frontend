@@ -19,6 +19,29 @@ function authHeaders() {
     return { "Authorization": `Bearer ${t}` };
 }
 
+let toastTimeout = null;
+
+function mostrarToast(texto, esError = false) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+
+    toast.textContent = texto;
+    toast.classList.toggle("toast-error", esError);
+    toast.classList.add("visible");
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => toast.classList.remove("visible"), 3500);
+}
+
+async function extraerMensajeError(response, mensajePorDefecto) {
+    try {
+        const data = await response.json();
+        return data.detail || mensajePorDefecto;
+    } catch (e) {
+        return mensajePorDefecto;
+    }
+}
+
 function grupoStatus(status) {
     return STATUS_GRUPO[status] || "neutral";
 }
@@ -191,7 +214,8 @@ async function asociarClienta(ticketId, clienta) {
         }
 
         if (!response.ok) {
-            throw new Error("No se pudo asociar la clienta");
+            const mensaje = await extraerMensajeError(response, "No se pudo asociar la clienta.");
+            throw new Error(mensaje);
         }
 
         const actualizado = await response.json();
@@ -208,9 +232,11 @@ async function asociarClienta(ticketId, clienta) {
         }
 
         renderLista(ticketsActuales);
+        mostrarToast("Clienta asociada correctamente");
 
     } catch (error) {
         console.error("Error asociando clienta:", error);
+        mostrarToast(error.message || "No se pudo asociar la clienta.", true);
     }
 }
 
@@ -231,13 +257,15 @@ async function crearTicket() {
         }
 
         if (!response.ok) {
-            throw new Error("No se pudo crear el ticket");
+            const mensaje = await extraerMensajeError(response, "No se pudo crear el ticket.");
+            throw new Error(mensaje);
         }
 
         await cargarLista();
 
     } catch (error) {
         console.error("Error creando ticket:", error);
+        mostrarToast(error.message || "No se pudo crear el ticket.", true);
     } finally {
         btn.disabled = false;
     }
