@@ -4,16 +4,18 @@ Layout principal
 
 .app-ticket {
     background: var(--color-background);
-    min-height: 100vh;
+    height: 100vh;
+    height: 100dvh;
     box-sizing: border-box;
-    padding-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .topbar-ticket {
+    flex-shrink: 0;
     background: var(--color-surface);
     box-shadow: var(--shadow-soft);
-    position: sticky;
-    top: 0;
     z-index: 5;
     padding: calc(env(safe-area-inset-top) + 12px) 12px 10px 12px;
 }
@@ -65,6 +67,7 @@ Botón Nuevo Ticket
 ========================= */
 
 .barra-nuevo {
+    flex-shrink: 0;
     padding: 12px 12px 0 12px;
 }
 
@@ -88,11 +91,24 @@ Filtros
 ========================= */
 
 .filtros {
+    flex-shrink: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
     gap: 10px;
     padding: 12px;
+}
+
+/* =========================
+Contenedor con scroll propio: solo esta zona se desplaza,
+el encabezado/filtros arriba permanecen siempre visibles.
+========================= */
+
+.contenido-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .filtro-campo {
