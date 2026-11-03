@@ -1,15 +1,15 @@
 const REFRESCO_MS = 20000;
 const DIAS_SEMANA = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 
+// Valores reales permitidos por el constraint chk_ticket_status en BD.
+// Started/Completed/Approved/Finished quedan con el color neutro de
+// respaldo (ver grupoStatus) hasta definir su semántica/color.
 const STATUS_GRUPO = {
     "Inactive": "error",
-    "Customer": "warning",
-    "Professional": "warning",
-    "Client": "warning",
-    "Active": "info",
-    "Started": "info",
-    "Completed": "success",
+    "Assigned": "warning",
 };
+
+const TODOS_LOS_STATUS = ["Inactive", "Assigned", "Started", "Completed", "Approved", "Finished"];
 
 let ordenActual = "desc";
 let ticketsActuales = [];
@@ -107,7 +107,7 @@ function inicializarFiltros() {
     document.getElementById("fechaHasta").value = hoy;
 
     const selectStatus = document.getElementById("filtroStatus");
-    Object.keys(STATUS_GRUPO).forEach(status => {
+    TODOS_LOS_STATUS.forEach(status => {
         const option = document.createElement("option");
         option.value = status;
         option.textContent = status;
