@@ -12,6 +12,7 @@ const STATUS_GRUPO = {
 };
 
 let ordenActual = "desc";
+let ticketsActuales = [];
 
 function authHeaders() {
     const t = sessionStorage.getItem("access_token");
@@ -121,7 +122,8 @@ async function cargarLista() {
         }
 
         const tickets = await response.json();
-        renderLista(tickets || []);
+        ticketsActuales = tickets || [];
+        renderLista(ticketsActuales);
 
     } catch (error) {
         console.error("Error cargando tickets:", error);
@@ -144,12 +146,16 @@ function renderLista(tickets) {
     tickets.forEach(t => {
         const item = document.createElement("div");
         const grupo = grupoStatus(t.ticket_status);
+        const nombreClienta = t.customer_full_name || t.customer_nickname;
 
         item.className = `tarjeta-ticket status-${grupo}`;
 
         item.innerHTML = `
             <div class="ticket-info">
                 <div class="ticket-id">Ticket #${escapeHtml(t.ticket_id)}</div>
+                <button class="ticket-clienta ${nombreClienta ? "clienta-asignada" : "clienta-vacia"}" data-ticket-id="${t.ticket_id}">
+                    ${nombreClienta ? escapeHtml(nombreClienta) : "+ Asociar clienta"}
+                </button>
                 <div class="ticket-fechas">
                     Creado: ${formatearFecha(t.ticket_created_at)}<br>
                     Actualizado: ${formatearFecha(t.ticket_updated_at)}
@@ -163,8 +169,49 @@ function renderLista(tickets) {
             </div>
         `;
 
+        item.querySelector(".ticket-clienta").addEventListener("click", () => {
+            abrirSelectorClienta((clienta) => asociarClienta(t.ticket_id, clienta));
+        });
+
         contenedor.appendChild(item);
     });
+}
+
+async function asociarClienta(ticketId, clienta) {
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${ticketId}/customer`, {
+            method: "PATCH",
+            headers: { ...authHeaders(), "Content-Type": "application/json" },
+            body: JSON.stringify({ customer_id: clienta.customer_id })
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error("No se pudo asociar la clienta");
+        }
+
+        const actualizado = await response.json();
+
+        const ticket = ticketsActuales.find(t => t.ticket_id === ticketId);
+        if (ticket) {
+            ticket.ticket_customer_id = actualizado.ticket_customer_id;
+            ticket.ticket_status = actualizado.ticket_status;
+            ticket.ticket_status_changed_at = actualizado.ticket_status_changed_at;
+            ticket.ticket_updated_at = actualizado.ticket_updated_at;
+            ticket.customer_full_name = clienta.customer_full_name;
+            ticket.customer_nickname = clienta.customer_nickname;
+            ticket.customer_mobile = clienta.customer_mobile;
+        }
+
+        renderLista(ticketsActuales);
+
+    } catch (error) {
+        console.error("Error asociando clienta:", error);
+    }
 }
 
 async function crearTicket() {

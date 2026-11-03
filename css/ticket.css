@@ -209,10 +209,46 @@ siempre va acompañado del texto del status.
     font-size: 16px;
 }
 
+.ticket-clienta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    width: fit-content;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ticket-clienta.clienta-vacia {
+    background: transparent;
+    border: 1px dashed var(--color-border-default);
+    color: var(--color-text-secondary);
+}
+
+.ticket-clienta.clienta-vacia:active {
+    background: var(--color-background);
+}
+
+.ticket-clienta.clienta-asignada {
+    background: var(--color-background);
+    border: 1px solid var(--color-border-default);
+    color: var(--color-text-primary);
+}
+
+.ticket-clienta.clienta-asignada:active {
+    background: var(--color-border-default);
+}
+
 .ticket-fechas {
     font-size: 12px;
     color: var(--color-text-secondary);
-    margin-top: 4px;
+    margin-top: 6px;
 }
 
 .ticket-chip {
