@@ -142,3 +142,33 @@ Namespacing propio (cs-*) para no chocar con otras hojas emergentes.
     color: var(--color-text-secondary);
     font-size: 14px;
 }
+
+/* =========================
+Pantallas anchas (tablet/desktop): panel compacto flotante
+arriba a la derecha, en vez de hoja inferior a todo el ancho.
+========================= */
+
+@media (min-width: 700px) {
+    .cs-sheet {
+        left: auto;
+        right: 32px;
+        bottom: auto;
+        top: 64px;
+        width: 420px;
+        max-height: min(560px, 75vh);
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+        transform: translateY(-12px);
+        opacity: 0;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .cs-modal.activa .cs-sheet {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .cs-sheet-handle {
+        display: none;
+    }
+}
