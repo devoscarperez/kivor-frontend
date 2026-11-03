@@ -271,6 +271,12 @@ async function crearTicket() {
     }
 }
 
+function limpiarFiltroStatus() {
+    const selectStatus = document.getElementById("filtroStatus");
+    Array.from(selectStatus.options).forEach(o => { o.selected = false; });
+    cargarLista();
+}
+
 function alternarOrden() {
     const btn = document.getElementById("btnOrden");
     ordenActual = ordenActual === "desc" ? "asc" : "desc";
@@ -291,6 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnRefrescar").addEventListener("click", cargarLista);
     document.getElementById("btnNuevoTicket").addEventListener("click", crearTicket);
     document.getElementById("btnAplicarFiltros").addEventListener("click", cargarLista);
+    document.getElementById("btnLimpiarStatus").addEventListener("click", limpiarFiltroStatus);
     document.getElementById("btnOrden").addEventListener("click", alternarOrden);
 
     setInterval(cargarLista, REFRESCO_MS);
