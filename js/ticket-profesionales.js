@@ -393,6 +393,125 @@ async function guardarAgendamientoClienta() {
     }
 }
 
+let clientaAgendaSeleccionada = null;
+
+function abrirAgendaClienta() {
+    clientaAgendaSeleccionada = null;
+    document.getElementById("agendaFecha").value = fechaLocalISO(new Date());
+
+    renderChipClientaAgenda();
+    cargarAgendaClienta();
+
+    document.getElementById("agendaModal").classList.add("activa");
+    document.body.style.overflow = "hidden";
+}
+
+function cerrarAgendaClienta() {
+    document.getElementById("agendaModal").classList.remove("activa");
+    document.body.style.overflow = "";
+}
+
+function renderChipClientaAgenda() {
+    const contenedor = document.getElementById("agendaClientaContenedor");
+
+    if (!clientaAgendaSeleccionada) {
+        contenedor.innerHTML = `
+            <button id="btnClientaAgendaPopup" class="ticket-clienta clienta-vacia">+ Seleccionar clienta</button>
+        `;
+        document.getElementById("btnClientaAgendaPopup").addEventListener("click", () => {
+            abrirSelectorClienta((clienta) => {
+                clientaAgendaSeleccionada = clienta;
+                renderChipClientaAgenda();
+                cargarAgendaClienta();
+            });
+        });
+        return;
+    }
+
+    const nombre = clientaAgendaSeleccionada.customer_full_name || clientaAgendaSeleccionada.customer_nickname || "(sin nombre)";
+
+    contenedor.innerHTML = `
+        <span class="chip-clienta">
+            ${escapeHtml(nombre)}
+            <button id="btnQuitarClientaAgendaPopup" aria-label="Quitar clienta">×</button>
+        </span>
+    `;
+    document.getElementById("btnQuitarClientaAgendaPopup").addEventListener("click", () => {
+        clientaAgendaSeleccionada = null;
+        renderChipClientaAgenda();
+        cargarAgendaClienta();
+    });
+}
+
+async function cargarAgendaClienta() {
+    const vacia = document.getElementById("agendaVacia");
+    const tabla = document.getElementById("tablaAgenda");
+
+    if (!clientaAgendaSeleccionada) {
+        tabla.classList.add("hidden");
+        vacia.classList.remove("hidden");
+        vacia.textContent = "Selecciona una clienta y una fecha para ver sus atenciones.";
+        return;
+    }
+
+    const fecha = document.getElementById("agendaFecha").value;
+    if (!fecha) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/customer/${clientaAgendaSeleccionada.customer_id}/agenda?date=${fecha}`,
+            { headers: authHeaders() }
+        );
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo cargar la agenda.");
+            throw new Error(mensaje);
+        }
+
+        const atenciones = await response.json();
+        renderAgendaClienta(atenciones || []);
+
+    } catch (error) {
+        console.error("Error cargando agenda:", error);
+        mostrarToast(error.message || "No se pudo cargar la agenda.", true);
+    }
+}
+
+function renderAgendaClienta(atenciones) {
+    const vacia = document.getElementById("agendaVacia");
+    const tabla = document.getElementById("tablaAgenda");
+    const filas = document.getElementById("filasAgenda");
+
+    if (!atenciones.length) {
+        tabla.classList.add("hidden");
+        vacia.classList.remove("hidden");
+        vacia.textContent = "No hay atenciones programadas para esta clienta en esta fecha.";
+        return;
+    }
+
+    vacia.classList.add("hidden");
+    tabla.classList.remove("hidden");
+
+    filas.innerHTML = atenciones.map((a, indice) => {
+        const hora = horaLocalHHMM(new Date(a.booking_date));
+        const nombre = a.professional_name || a.professional_nickname || "-";
+
+        return `
+            <tr>
+                <td>${indice + 1}</td>
+                <td>${escapeHtml(nombre)}</td>
+                <td>${hora}</td>
+                <td><a href="ticket-profesionales.html?ticket_id=${a.ticket_id}">#${a.ticket_id}</a></td>
+            </tr>
+        `;
+    }).join("");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     if (!TICKET_ID) {
         mostrarToast("No se indicó el ticket. Volviendo a la lista...", true);
@@ -415,4 +534,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("tpcBookingClose").addEventListener("click", cerrarPopupAgendamientoClienta);
     document.getElementById("tpcBookingBackdrop").addEventListener("click", cerrarPopupAgendamientoClienta);
     document.getElementById("tpcBookingGuardar").addEventListener("click", guardarAgendamientoClienta);
+
+    document.getElementById("agendaClose").addEventListener("click", cerrarAgendaClienta);
+    document.getElementById("agendaBackdrop").addEventListener("click", cerrarAgendaClienta);
+    document.getElementById("agendaFecha").addEventListener("change", cargarAgendaClienta);
 });

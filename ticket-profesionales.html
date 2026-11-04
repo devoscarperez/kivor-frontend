@@ -18,7 +18,7 @@
         <div class="topbar-tp-row">
             <button class="icon-btn" onclick="volverATickets()" aria-label="Volver a Tickets">←</button>
             <h1>Profesionales del Ticket</h1>
-            <button class="icon-btn" onclick="irAAgendaClienta()" title="Agenda de clienta" aria-label="Agenda de clienta">📅</button>
+            <button class="icon-btn" onclick="abrirAgendaClienta()" title="Agenda de clienta" aria-label="Agenda de clienta">📅</button>
             <button id="btnRefrescarTp" class="icon-btn" title="Actualizar" aria-label="Actualizar">⟳</button>
         </div>
         <div id="cabeceraTicket" class="cabecera-ticket"></div>
@@ -59,6 +59,35 @@
     </div>
 </div>
 
+<div id="agendaModal" class="cs-modal">
+    <div id="agendaBackdrop" class="cs-backdrop"></div>
+    <div class="cs-sheet">
+        <div class="cs-sheet-handle"></div>
+        <header class="cs-sheet-header">
+            <strong class="booking-sheet-titulo">Agenda de clienta</strong>
+            <button id="agendaClose" class="cs-close" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="agenda-popup-filtros">
+            <div id="agendaClientaContenedor"></div>
+            <input type="date" id="agendaFecha">
+        </div>
+        <div class="agenda-popup-contenido">
+            <div id="agendaVacia" class="lista-vacia">Selecciona una clienta y una fecha para ver sus atenciones.</div>
+            <table id="tablaAgenda" class="tabla-agenda hidden">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Profesional</th>
+                        <th>Hora</th>
+                        <th>Ticket</th>
+                    </tr>
+                </thead>
+                <tbody id="filasAgenda"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script>
@@ -67,10 +96,6 @@ if (!token) window.location.href = "login.html";
 
 function volverATickets() {
     window.location.href = "ticket.html";
-}
-
-function irAAgendaClienta() {
-    window.location.href = "agenda-clienta.html";
 }
 </script>
 
