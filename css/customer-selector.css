@@ -181,7 +181,7 @@ arriba a la derecha, en vez de hoja inferior a todo el ancho.
         right: 32px;
         bottom: auto;
         top: 64px;
-        width: 420px;
+        width: 560px;
         max-width: calc(100vw - 64px);
         max-height: min(560px, 75vh);
         border-radius: 16px;
