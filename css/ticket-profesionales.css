@@ -231,6 +231,10 @@ Bloque de profesional + sus clientas
 Popup Agenda de Clienta
 ========================= */
 
+#agendaModal .cs-sheet-header {
+    cursor: move;
+}
+
 .agenda-popup-filtros {
     flex-shrink: 0;
     display: flex;

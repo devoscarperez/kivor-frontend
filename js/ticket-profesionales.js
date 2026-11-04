@@ -409,6 +409,58 @@ function abrirAgendaClienta() {
 function cerrarAgendaClienta() {
     document.getElementById("agendaModal").classList.remove("activa");
     document.body.style.overflow = "";
+
+    const sheet = document.querySelector("#agendaModal .cs-sheet");
+    sheet.style.left = "";
+    sheet.style.top = "";
+    sheet.style.right = "";
+    sheet.style.bottom = "";
+    sheet.style.transform = "";
+    sheet.style.transition = "";
+}
+
+let agendaDragState = null;
+
+function iniciarArrastreAgenda(event) {
+    if (event.target.closest("#agendaClose")) return;
+
+    const sheet = document.querySelector("#agendaModal .cs-sheet");
+    const rect = sheet.getBoundingClientRect();
+
+    sheet.style.transition = "none";
+    sheet.style.transform = "none";
+    sheet.style.right = "auto";
+    sheet.style.bottom = "auto";
+    sheet.style.left = `${rect.left}px`;
+    sheet.style.top = `${rect.top}px`;
+
+    agendaDragState = {
+        sheet,
+        startX: event.clientX,
+        startY: event.clientY,
+        baseLeft: rect.left,
+        baseTop: rect.top
+    };
+
+    document.body.style.userSelect = "none";
+    document.addEventListener("pointermove", moverAgenda);
+    document.addEventListener("pointerup", soltarAgenda);
+}
+
+function moverAgenda(event) {
+    if (!agendaDragState) return;
+    const dx = event.clientX - agendaDragState.startX;
+    const dy = event.clientY - agendaDragState.startY;
+    agendaDragState.sheet.style.left = `${agendaDragState.baseLeft + dx}px`;
+    agendaDragState.sheet.style.top = `${agendaDragState.baseTop + dy}px`;
+}
+
+function soltarAgenda() {
+    if (agendaDragState) agendaDragState.sheet.style.transition = "";
+    agendaDragState = null;
+    document.body.style.userSelect = "";
+    document.removeEventListener("pointermove", moverAgenda);
+    document.removeEventListener("pointerup", soltarAgenda);
 }
 
 function renderChipClientaAgenda() {
@@ -538,4 +590,5 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("agendaClose").addEventListener("click", cerrarAgendaClienta);
     document.getElementById("agendaBackdrop").addEventListener("click", cerrarAgendaClienta);
     document.getElementById("agendaFecha").addEventListener("change", cargarAgendaClienta);
+    document.querySelector("#agendaModal .cs-sheet-header").addEventListener("pointerdown", iniciarArrastreAgenda);
 });
