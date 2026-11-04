@@ -143,6 +143,15 @@ function inicializarFiltros() {
     });
 
     renderStatusBotones();
+
+    const selector = document.getElementById("statusSelector");
+    selector.innerHTML = "";
+    TODOS_LOS_STATUS.forEach(status => {
+        const opcion = document.createElement("option");
+        opcion.value = status;
+        opcion.textContent = status;
+        selector.appendChild(opcion);
+    });
 }
 
 function toggleStatusBoton(status) {
@@ -253,7 +262,7 @@ function renderLista(tickets) {
                 </button>
             </div>
             <div class="ticket-right">
-                <span class="ticket-chip">${escapeHtml(t.ticket_status)}</span>
+                <button class="ticket-chip" data-ticket-id="${t.ticket_id}">${escapeHtml(t.ticket_status)}</button>
                 <span class="ticket-antiguedad ${nivelAntiguedad(t.ticket_status, t.ticket_status_changed_at)}">
                     ${tiempoTranscurrido(t.ticket_status_changed_at)}
                 </span>
@@ -266,6 +275,10 @@ function renderLista(tickets) {
 
         item.querySelector(".ticket-booking").addEventListener("click", () => {
             abrirPopupAgendamiento(t);
+        });
+
+        item.querySelector(".ticket-chip").addEventListener("click", () => {
+            abrirPopupStatus(t);
         });
 
         contenedor.appendChild(item);
@@ -410,6 +423,65 @@ async function guardarAgendamiento() {
     }
 }
 
+let ticketIdEnEdicionStatus = null;
+
+function abrirPopupStatus(ticket) {
+    ticketIdEnEdicionStatus = ticket.ticket_id;
+
+    document.getElementById("statusSelector").value = ticket.ticket_status;
+
+    document.getElementById("statusModal").classList.add("activa");
+    document.body.style.overflow = "hidden";
+}
+
+function cerrarPopupStatus() {
+    document.getElementById("statusModal").classList.remove("activa");
+    document.body.style.overflow = "";
+    ticketIdEnEdicionStatus = null;
+}
+
+async function guardarStatus() {
+    if (!ticketIdEnEdicionStatus) return;
+
+    const status = document.getElementById("statusSelector").value;
+    const ticketId = ticketIdEnEdicionStatus;
+
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${ticketId}/status`, {
+            method: "PATCH",
+            headers: { ...authHeaders(), "Content-Type": "application/json" },
+            body: JSON.stringify({ status })
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo cambiar el status.");
+            throw new Error(mensaje);
+        }
+
+        const actualizado = await response.json();
+
+        const ticket = ticketsActuales.find(t => t.ticket_id === ticketId);
+        if (ticket) {
+            ticket.ticket_status = actualizado.ticket_status;
+            ticket.ticket_status_changed_at = actualizado.ticket_status_changed_at;
+            ticket.ticket_updated_at = actualizado.ticket_updated_at;
+        }
+
+        renderLista(ticketsActuales);
+        mostrarToast("Status actualizado");
+        cerrarPopupStatus();
+
+    } catch (error) {
+        console.error("Error cambiando status:", error);
+        mostrarToast(error.message || "No se pudo cambiar el status.", true);
+    }
+}
+
 function alternarOrden() {
     const btn = document.getElementById("btnOrden");
     ordenActual = ordenActual === "desc" ? "asc" : "desc";
@@ -436,6 +508,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("bookingClose").addEventListener("click", cerrarPopupAgendamiento);
     document.getElementById("bookingBackdrop").addEventListener("click", cerrarPopupAgendamiento);
     document.getElementById("bookingGuardar").addEventListener("click", guardarAgendamiento);
+
+    document.getElementById("statusClose").addEventListener("click", cerrarPopupStatus);
+    document.getElementById("statusBackdrop").addEventListener("click", cerrarPopupStatus);
+    document.getElementById("statusAplicar").addEventListener("click", guardarStatus);
 
     setInterval(cargarLista, REFRESCO_MS);
 });

@@ -79,6 +79,21 @@
     </div>
 </div>
 
+<div id="statusModal" class="cs-modal">
+    <div id="statusBackdrop" class="cs-backdrop"></div>
+    <div class="cs-sheet">
+        <div class="cs-sheet-handle"></div>
+        <header class="cs-sheet-header">
+            <strong class="booking-sheet-titulo">Cambiar status del ticket</strong>
+            <button id="statusClose" class="cs-close" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="status-sheet-body">
+            <select id="statusSelector"></select>
+            <button id="statusAplicar" class="btn-nuevo-ticket" type="button">Aplicar</button>
+        </div>
+    </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script>
