@@ -59,11 +59,13 @@ contenido con scroll propio).
     padding: 10px 12px;
     background: var(--color-background);
     border-radius: var(--radius-default);
-    font-size: 13px;
-    color: var(--color-text-secondary);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-text-primary);
 }
 
 .cabecera-ticket strong {
+    font-weight: 700;
     color: var(--color-text-primary);
 }
 

@@ -70,7 +70,7 @@ function renderCabecera(t) {
     const nombreClienta = t.customer_full_name || t.customer_nickname || "Sin clienta titular asignada";
 
     document.getElementById("cabeceraTicket").innerHTML = `
-        Ticket #${escapeHtml(t.ticket_id)} · <strong>${escapeHtml(t.ticket_status)}</strong><br>
+        <strong>Ticket #${escapeHtml(t.ticket_id)}</strong> · <strong>${escapeHtml(t.ticket_status)}</strong><br>
         Titular: <strong>${escapeHtml(nombreClienta)}</strong>
     `;
 }
