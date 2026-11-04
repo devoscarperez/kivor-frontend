@@ -12,6 +12,7 @@ const STATUS_GRUPO = {
 const TODOS_LOS_STATUS = ["Inactive", "Assigned", "Started", "Completed", "Approved", "Finished"];
 
 let ordenActual = "desc";
+let campoFechaActual = "created";
 let ticketsActuales = [];
 
 function authHeaders() {
@@ -142,8 +143,19 @@ function construirQueryString() {
     statusSeleccionados.forEach(s => params.append("status", s));
 
     params.append("order", ordenActual);
+    params.append("date_field", campoFechaActual);
 
     return params.toString();
+}
+
+function alternarCampoFecha() {
+    const btn = document.getElementById("btnCampoFecha");
+    campoFechaActual = campoFechaActual === "created" ? "booking" : "created";
+
+    btn.dataset.campo = campoFechaActual;
+    btn.textContent = campoFechaActual === "created" ? "📅 Creado" : "📅 Agendamiento";
+
+    cargarLista();
 }
 
 async function cargarLista() {
@@ -387,6 +399,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnRefrescar").addEventListener("click", cargarLista);
     document.getElementById("btnNuevoTicket").addEventListener("click", crearTicket);
     document.getElementById("btnAplicarFiltros").addEventListener("click", cargarLista);
+    document.getElementById("btnCampoFecha").addEventListener("click", alternarCampoFecha);
     document.getElementById("btnLimpiarStatus").addEventListener("click", limpiarFiltroStatus);
     document.getElementById("btnOrden").addEventListener("click", alternarOrden);
 

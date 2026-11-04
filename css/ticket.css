@@ -156,6 +156,7 @@ el encabezado/filtros arriba permanecen siempre visibles.
 }
 
 .btn-orden,
+.btn-campo-fecha,
 .btn-aplicar-filtros {
     padding: 10px 14px;
     font-size: 13px;
@@ -164,6 +165,11 @@ el encabezado/filtros arriba permanecen siempre visibles.
     border: 1px solid var(--color-border-default);
     background: var(--color-surface);
     color: var(--color-text-primary);
+}
+
+.btn-campo-fecha[data-campo="booking"] {
+    border-color: var(--color-info);
+    color: var(--color-info);
 }
 
 .btn-aplicar-filtros {
