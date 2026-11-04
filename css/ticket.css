@@ -154,6 +154,7 @@ el encabezado/filtros arriba permanecen siempre visibles.
 }
 
 .btn-campo-fecha-icono {
+    width: auto;
     flex-shrink: 0;
     padding: 7px 10px;
     font-size: 12px;
@@ -178,6 +179,7 @@ el encabezado/filtros arriba permanecen siempre visibles.
 }
 
 .status-boton {
+    width: auto;
     flex-shrink: 0;
     padding: 7px 12px;
     font-size: 12px;
@@ -197,6 +199,7 @@ el encabezado/filtros arriba permanecen siempre visibles.
 
 .btn-orden,
 .btn-aplicar-filtros {
+    width: auto;
     flex-shrink: 0;
     padding: 10px 14px;
     font-size: 13px;

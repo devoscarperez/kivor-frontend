@@ -199,6 +199,7 @@ Bloque de profesional + sus clientas
 
 .btn-agregar-clienta,
 .btn-usar-titular {
+    width: auto;
     padding: 6px 10px;
     border-radius: 999px;
     font-size: 12px;
