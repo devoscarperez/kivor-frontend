@@ -16,10 +16,12 @@
     <header class="topbar-ticket">
         <div class="topbar-ticket-row">
             <button class="icon-btn" onclick="goMenu()" aria-label="Volver al menú">←</button>
-            <h1>Tickets</h1>
+            <div class="topbar-ticket-titulo">
+                <h1>Tickets</h1>
+                <div id="fechaCabecera" class="fecha-cabecera"></div>
+            </div>
             <button id="btnRefrescar" class="icon-btn" title="Actualizar" aria-label="Actualizar">⟳</button>
         </div>
-        <div id="fechaCabecera" class="fecha-cabecera"></div>
     </header>
 
     <div class="barra-nuevo">
@@ -31,7 +33,7 @@
             <label for="fechaDesde">Desde</label>
             <input type="date" id="fechaDesde">
         </div>
-        <div class="filtro-campo">
+        <div class="filtro-campo filtro-hasta">
             <label for="fechaHasta">Hasta</label>
             <div class="campo-hasta-row">
                 <input type="date" id="fechaHasta">

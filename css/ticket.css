@@ -26,8 +26,16 @@ Layout principal
     gap: 8px;
 }
 
-.topbar-ticket-row h1 {
+.topbar-ticket-titulo {
     flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.topbar-ticket-titulo h1 {
     font-size: 18px;
     font-weight: 600;
     color: var(--color-text-primary);
@@ -59,7 +67,7 @@ Layout principal
     font-weight: 600;
     color: var(--color-text-secondary);
     text-transform: capitalize;
-    margin-top: 6px;
+    white-space: nowrap;
 }
 
 /* =========================
@@ -114,9 +122,19 @@ el encabezado/filtros arriba permanecen siempre visibles.
 .filtro-campo {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
+    min-width: 130px;
     gap: 4px;
     font-size: 12px;
     color: var(--color-text-secondary);
+}
+
+.filtro-hasta {
+    min-width: 220px;
+}
+
+.filtro-status {
+    min-width: 150px;
 }
 
 .filtro-campo input,
@@ -185,6 +203,7 @@ el encabezado/filtros arriba permanecen siempre visibles.
 
 .btn-orden,
 .btn-aplicar-filtros {
+    flex-shrink: 0;
     padding: 10px 14px;
     font-size: 13px;
     font-weight: 600;
@@ -429,4 +448,16 @@ Toast de error/confirmación
 
 .toast.toast-error {
     background: var(--color-error);
+}
+
+/* =========================
+Pantallas anchas (tablet/desktop)
+========================= */
+
+@media (min-width: 700px) {
+    .topbar-ticket-titulo {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 10px;
+    }
 }
