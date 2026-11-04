@@ -62,7 +62,7 @@ function formatearFecha(valor) {
     if (!valor) return "-";
     const fecha = new Date(valor);
     if (isNaN(fecha.getTime())) return "-";
-    return fecha.toLocaleString("es-CL", { dateStyle: "short", timeStyle: "short" });
+    return fecha.toLocaleString("es-CL", { dateStyle: "short", timeStyle: "short", hour12: false });
 }
 
 function tiempoTranscurrido(valor) {

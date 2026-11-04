@@ -161,8 +161,15 @@ Bloque de profesional + sus clientas
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.clienta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
 }
 
 .chip-clienta {

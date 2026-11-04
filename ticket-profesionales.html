@@ -6,6 +6,7 @@
 <title>Profesionales del Ticket</title>
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/ticket.css">
 <link rel="stylesheet" href="css/ticket-profesionales.css">
 <link rel="stylesheet" href="css/customer-selector.css">
 </head>
@@ -31,6 +32,30 @@
         <div id="listaProfesionales" class="lista-profesionales"></div>
     </div>
 
+</div>
+
+<div id="tpcBookingModal" class="cs-modal">
+    <div id="tpcBookingBackdrop" class="cs-backdrop"></div>
+    <div class="cs-sheet">
+        <div class="cs-sheet-handle"></div>
+        <header class="cs-sheet-header">
+            <strong class="booking-sheet-titulo">Fecha agendamiento clienta</strong>
+            <button id="tpcBookingClose" class="cs-close" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="booking-sheet-body">
+            <div class="filtro-campo">
+                <label for="tpcBookingFecha">Fecha</label>
+                <input type="date" id="tpcBookingFecha">
+            </div>
+            <div class="filtro-campo">
+                <label for="tpcBookingHora">Hora</label>
+                <input type="time" id="tpcBookingHora">
+            </div>
+        </div>
+        <div class="booking-sheet-acciones">
+            <button id="tpcBookingGuardar" class="btn-nuevo-ticket" type="button">Guardar</button>
+        </div>
+    </div>
 </div>
 
 <div id="toast" class="toast"></div>
