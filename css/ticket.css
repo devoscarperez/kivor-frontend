@@ -71,17 +71,21 @@ Layout principal
 }
 
 /* =========================
-Botón Nuevo Ticket
+Barra de acciones: Nuevo Ticket + orden, comparten línea
 ========================= */
 
 .barra-nuevo {
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
     padding: 12px 12px 0 12px;
 }
 
 .btn-nuevo-ticket {
-    width: 100%;
-    padding: 14px;
+    width: auto;
+    padding: 12px 22px;
     font-size: 15px;
     font-weight: 700;
     color: white;
@@ -103,7 +107,7 @@ Filtros
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: 10px;
+    gap: 16px;
     padding: 12px;
 }
 
@@ -123,50 +127,36 @@ el encabezado/filtros arriba permanecen siempre visibles.
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    min-width: 130px;
-    gap: 4px;
+    gap: 6px;
     font-size: 12px;
     color: var(--color-text-secondary);
 }
 
-.filtro-hasta {
-    min-width: 220px;
-}
-
-.filtro-status {
-    min-width: 150px;
-}
-
-.filtro-campo input,
-.filtro-campo select {
+.filtro-campo input {
     background: var(--color-input-background);
     color: var(--color-input-text);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-default);
     padding: 8px;
     font-size: 13px;
+    flex-shrink: 0;
 }
 
-.filtro-status select {
-    min-width: 140px;
-    min-height: 60px;
-}
-
-.campo-hasta-row {
+.campo-fechas-row {
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.campo-hasta-row input {
-    flex: 1;
-    min-width: 0;
+.fechas-separador {
+    color: var(--color-text-secondary);
+    font-size: 12px;
 }
 
 .btn-campo-fecha-icono {
     flex-shrink: 0;
-    padding: 7px 8px;
-    font-size: 11px;
+    padding: 7px 10px;
+    font-size: 12px;
     font-weight: 600;
     white-space: nowrap;
     border-radius: var(--radius-default);
@@ -180,25 +170,29 @@ el encabezado/filtros arriba permanecen siempre visibles.
     color: var(--color-info);
 }
 
-.filtro-status label {
+.status-botones {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
     gap: 6px;
 }
 
-.btn-limpiar-status {
-    padding: 0;
-    border: none;
-    background: none;
-    color: var(--color-primary);
-    font-size: 11px;
-    font-weight: 700;
-    text-decoration: underline;
+.status-boton {
+    flex-shrink: 0;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    border-radius: 999px;
+    border: 1px solid var(--color-border-default);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
 }
 
-.btn-limpiar-status:active {
-    opacity: 0.6;
+.status-boton.activo {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
 }
 
 .btn-orden,
@@ -376,6 +370,7 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
 }
 
 .booking-sheet-acciones .btn-nuevo-ticket {
+    width: 100%;
     padding: 12px;
     font-size: 14px;
 }

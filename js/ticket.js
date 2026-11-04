@@ -13,6 +13,7 @@ const TODOS_LOS_STATUS = ["Inactive", "Assigned", "Started", "Completed", "Appro
 
 let ordenActual = "desc";
 let campoFechaActual = "created";
+let statusSeleccionados = [];
 let ticketsActuales = [];
 
 function authHeaders() {
@@ -120,12 +121,52 @@ function inicializarFiltros() {
     document.getElementById("fechaDesde").value = hoy;
     document.getElementById("fechaHasta").value = hoy;
 
-    const selectStatus = document.getElementById("filtroStatus");
+    const contenedor = document.getElementById("statusBotones");
+    contenedor.innerHTML = "";
+
+    const btnTodos = document.createElement("button");
+    btnTodos.type = "button";
+    btnTodos.className = "status-boton";
+    btnTodos.dataset.status = "__todos__";
+    btnTodos.textContent = "Todos";
+    btnTodos.addEventListener("click", () => toggleStatusBoton("__todos__"));
+    contenedor.appendChild(btnTodos);
+
     TODOS_LOS_STATUS.forEach(status => {
-        const option = document.createElement("option");
-        option.value = status;
-        option.textContent = status;
-        selectStatus.appendChild(option);
+        const boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "status-boton";
+        boton.dataset.status = status;
+        boton.textContent = status;
+        boton.addEventListener("click", () => toggleStatusBoton(status));
+        contenedor.appendChild(boton);
+    });
+
+    renderStatusBotones();
+}
+
+function toggleStatusBoton(status) {
+    if (status === "__todos__") {
+        statusSeleccionados = [];
+    } else if (statusSeleccionados.includes(status)) {
+        statusSeleccionados = statusSeleccionados.filter(s => s !== status);
+    } else {
+        statusSeleccionados.push(status);
+    }
+
+    renderStatusBotones();
+}
+
+function renderStatusBotones() {
+    const botones = document.querySelectorAll("#statusBotones .status-boton");
+
+    botones.forEach(boton => {
+        const esTodos = boton.dataset.status === "__todos__";
+        const activo = esTodos
+            ? statusSeleccionados.length === 0
+            : statusSeleccionados.includes(boton.dataset.status);
+
+        boton.classList.toggle("activo", activo);
     });
 }
 
@@ -138,8 +179,6 @@ function construirQueryString() {
     if (desde) params.append("date_from", desde);
     if (hasta) params.append("date_to", hasta);
 
-    const statusSeleccionados = Array.from(document.getElementById("filtroStatus").selectedOptions)
-        .map(o => o.value);
     statusSeleccionados.forEach(s => params.append("status", s));
 
     params.append("order", ordenActual);
@@ -154,8 +193,6 @@ function alternarCampoFecha() {
 
     btn.dataset.campo = campoFechaActual;
     btn.textContent = campoFechaActual === "created" ? "📅 Creado" : "📅 Agendamiento";
-
-    cargarLista();
 }
 
 async function cargarLista() {
@@ -373,12 +410,6 @@ async function guardarAgendamiento() {
     }
 }
 
-function limpiarFiltroStatus() {
-    const selectStatus = document.getElementById("filtroStatus");
-    Array.from(selectStatus.options).forEach(o => { o.selected = false; });
-    cargarLista();
-}
-
 function alternarOrden() {
     const btn = document.getElementById("btnOrden");
     ordenActual = ordenActual === "desc" ? "asc" : "desc";
@@ -400,7 +431,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnNuevoTicket").addEventListener("click", crearTicket);
     document.getElementById("btnAplicarFiltros").addEventListener("click", cargarLista);
     document.getElementById("btnCampoFecha").addEventListener("click", alternarCampoFecha);
-    document.getElementById("btnLimpiarStatus").addEventListener("click", limpiarFiltroStatus);
     document.getElementById("btnOrden").addEventListener("click", alternarOrden);
 
     document.getElementById("bookingClose").addEventListener("click", cerrarPopupAgendamiento);
