@@ -18,6 +18,7 @@
         <div class="topbar-tp-row">
             <button class="icon-btn" onclick="volverATickets()" aria-label="Volver a Tickets">←</button>
             <h1>Profesionales del Ticket</h1>
+            <button class="icon-btn" onclick="irAAgendaClienta()" title="Agenda de clienta" aria-label="Agenda de clienta">📅</button>
             <button id="btnRefrescarTp" class="icon-btn" title="Actualizar" aria-label="Actualizar">⟳</button>
         </div>
         <div id="cabeceraTicket" class="cabecera-ticket"></div>
@@ -66,6 +67,10 @@ if (!token) window.location.href = "login.html";
 
 function volverATickets() {
     window.location.href = "ticket.html";
+}
+
+function irAAgendaClienta() {
+    window.location.href = "agenda-clienta.html";
 }
 </script>
 
