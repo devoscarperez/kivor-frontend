@@ -353,6 +353,7 @@ async function guardarAgendamiento() {
 
         renderLista(ticketsActuales);
         mostrarToast("Fecha de agendamiento actualizada");
+        cerrarPopupAgendamiento();
 
     } catch (error) {
         console.error("Error actualizando agendamiento:", error);
@@ -391,8 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("bookingClose").addEventListener("click", cerrarPopupAgendamiento);
     document.getElementById("bookingBackdrop").addEventListener("click", cerrarPopupAgendamiento);
-    document.getElementById("bookingFecha").addEventListener("change", guardarAgendamiento);
-    document.getElementById("bookingHora").addEventListener("change", guardarAgendamiento);
+    document.getElementById("bookingGuardar").addEventListener("click", guardarAgendamiento);
 
     setInterval(cargarLista, REFRESCO_MS);
 });

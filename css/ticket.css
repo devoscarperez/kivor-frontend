@@ -324,6 +324,15 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
     flex: 1;
 }
 
+.booking-sheet-acciones {
+    padding: 0 16px 20px 16px;
+}
+
+.booking-sheet-acciones .btn-nuevo-ticket {
+    padding: 12px;
+    font-size: 14px;
+}
+
 .ticket-chip {
     display: inline-flex;
     align-items: center;
