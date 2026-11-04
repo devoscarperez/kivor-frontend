@@ -101,8 +101,15 @@ function actualizarFechaCabecera() {
     document.getElementById("fechaCabecera").textContent = `${diaCapitalizado}, ${fechaTexto}`;
 }
 
+function fechaLocalISO(fecha) {
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+    return `${anio}-${mes}-${dia}`;
+}
+
 function inicializarFiltros() {
-    const hoy = new Date().toISOString().slice(0, 10);
+    const hoy = fechaLocalISO(new Date());
     document.getElementById("fechaDesde").value = hoy;
     document.getElementById("fechaHasta").value = hoy;
 
