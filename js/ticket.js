@@ -114,12 +114,6 @@ function horaLocalHHMM(fecha) {
     return `${horas}:${minutos}`;
 }
 
-function inicializarAgendamiento() {
-    const ahora = new Date();
-    document.getElementById("fechaAgendamiento").value = fechaLocalISO(ahora);
-    document.getElementById("horaAgendamiento").value = horaLocalHHMM(ahora);
-}
-
 function inicializarFiltros() {
     const hoy = fechaLocalISO(new Date());
     document.getElementById("fechaDesde").value = hoy;
@@ -205,9 +199,9 @@ function renderLista(tickets) {
                     Creado: ${formatearFecha(t.ticket_created_at)}<br>
                     Actualizado: ${formatearFecha(t.ticket_updated_at)}
                 </div>
-                <div class="ticket-booking">
+                <button class="ticket-booking" data-ticket-id="${t.ticket_id}">
                     Fecha agendamiento: ${formatearFecha(t.ticket_booking_date)}
-                </div>
+                </button>
             </div>
             <div class="ticket-right">
                 <span class="ticket-chip">${escapeHtml(t.ticket_status)}</span>
@@ -219,6 +213,10 @@ function renderLista(tickets) {
 
         item.querySelector(".ticket-clienta").addEventListener("click", () => {
             abrirSelectorClienta((clienta) => asociarClienta(t.ticket_id, clienta));
+        });
+
+        item.querySelector(".ticket-booking").addEventListener("click", () => {
+            abrirPopupAgendamiento(t);
         });
 
         contenedor.appendChild(item);
@@ -267,15 +265,8 @@ async function asociarClienta(ticketId, clienta) {
 
 async function crearTicket() {
     const btn = document.getElementById("btnNuevoTicket");
-    const fecha = document.getElementById("fechaAgendamiento").value;
-    const hora = document.getElementById("horaAgendamiento").value;
-
-    if (!fecha || !hora) {
-        mostrarToast("Debe indicar fecha y hora de agendamiento.", true);
-        return;
-    }
-
-    const bookingDate = `${fecha}T${hora}:00`;
+    const ahora = new Date();
+    const bookingDate = `${fechaLocalISO(ahora)}T${horaLocalHHMM(ahora)}:00`;
 
     try {
         btn.disabled = true;
@@ -297,13 +288,75 @@ async function crearTicket() {
         }
 
         await cargarLista();
-        inicializarAgendamiento();
 
     } catch (error) {
         console.error("Error creando ticket:", error);
         mostrarToast(error.message || "No se pudo crear el ticket.", true);
     } finally {
         btn.disabled = false;
+    }
+}
+
+let ticketIdEnEdicionAgendamiento = null;
+
+function abrirPopupAgendamiento(ticket) {
+    ticketIdEnEdicionAgendamiento = ticket.ticket_id;
+
+    const fecha = ticket.ticket_booking_date ? new Date(ticket.ticket_booking_date) : new Date();
+    document.getElementById("bookingFecha").value = fechaLocalISO(fecha);
+    document.getElementById("bookingHora").value = horaLocalHHMM(fecha);
+
+    document.getElementById("bookingModal").classList.add("activa");
+    document.body.style.overflow = "hidden";
+}
+
+function cerrarPopupAgendamiento() {
+    document.getElementById("bookingModal").classList.remove("activa");
+    document.body.style.overflow = "";
+    ticketIdEnEdicionAgendamiento = null;
+}
+
+async function guardarAgendamiento() {
+    if (!ticketIdEnEdicionAgendamiento) return;
+
+    const fecha = document.getElementById("bookingFecha").value;
+    const hora = document.getElementById("bookingHora").value;
+    if (!fecha || !hora) return;
+
+    const ticketId = ticketIdEnEdicionAgendamiento;
+    const bookingDate = `${fecha}T${hora}:00`;
+
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${ticketId}/booking-date`, {
+            method: "PATCH",
+            headers: { ...authHeaders(), "Content-Type": "application/json" },
+            body: JSON.stringify({ booking_date: bookingDate })
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo actualizar la fecha de agendamiento.");
+            throw new Error(mensaje);
+        }
+
+        const actualizado = await response.json();
+
+        const ticket = ticketsActuales.find(t => t.ticket_id === ticketId);
+        if (ticket) {
+            ticket.ticket_booking_date = actualizado.ticket_booking_date;
+            ticket.ticket_updated_at = actualizado.ticket_updated_at;
+        }
+
+        renderLista(ticketsActuales);
+        mostrarToast("Fecha de agendamiento actualizada");
+
+    } catch (error) {
+        console.error("Error actualizando agendamiento:", error);
+        mostrarToast(error.message || "No se pudo actualizar la fecha de agendamiento.", true);
     }
 }
 
@@ -328,7 +381,6 @@ function alternarOrden() {
 document.addEventListener("DOMContentLoaded", () => {
     actualizarFechaCabecera();
     inicializarFiltros();
-    inicializarAgendamiento();
     cargarLista();
 
     document.getElementById("btnRefrescar").addEventListener("click", cargarLista);
@@ -336,6 +388,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnAplicarFiltros").addEventListener("click", cargarLista);
     document.getElementById("btnLimpiarStatus").addEventListener("click", limpiarFiltroStatus);
     document.getElementById("btnOrden").addEventListener("click", alternarOrden);
+
+    document.getElementById("bookingClose").addEventListener("click", cerrarPopupAgendamiento);
+    document.getElementById("bookingBackdrop").addEventListener("click", cerrarPopupAgendamiento);
+    document.getElementById("bookingFecha").addEventListener("change", guardarAgendamiento);
+    document.getElementById("bookingHora").addEventListener("change", guardarAgendamiento);
 
     setInterval(cargarLista, REFRESCO_MS);
 });

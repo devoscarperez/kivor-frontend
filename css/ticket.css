@@ -71,16 +71,6 @@ Botón Nuevo Ticket
     padding: 12px 12px 0 12px;
 }
 
-.agendamiento-campos {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 8px;
-}
-
-.agendamiento-campos .filtro-campo {
-    flex: 1;
-}
-
 .btn-nuevo-ticket {
     width: 100%;
     padding: 14px;
@@ -301,11 +291,37 @@ siempre va acompañado del texto del status.
     width: fit-content;
     margin-top: 6px;
     padding: 4px 10px;
+    border: none;
     border-radius: 999px;
     font-size: 13px;
     font-weight: 700;
+    font-family: inherit;
     background: color-mix(in srgb, var(--color-info) 15%, var(--color-background));
     color: var(--color-info);
+}
+
+.ticket-booking:active {
+    background: color-mix(in srgb, var(--color-info) 25%, var(--color-background));
+}
+
+/* =========================
+Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
+========================= */
+
+.booking-sheet-titulo {
+    flex: 1;
+    font-size: 15px;
+    color: var(--color-text-primary);
+}
+
+.booking-sheet-body {
+    display: flex;
+    gap: 10px;
+    padding: 6px 16px 20px 16px;
+}
+
+.booking-sheet-body .filtro-campo {
+    flex: 1;
 }
 
 .ticket-chip {

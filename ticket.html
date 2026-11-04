@@ -23,16 +23,6 @@
     </header>
 
     <div class="barra-nuevo">
-        <div class="agendamiento-campos">
-            <div class="filtro-campo">
-                <label for="fechaAgendamiento">Fecha agendamiento</label>
-                <input type="date" id="fechaAgendamiento">
-            </div>
-            <div class="filtro-campo">
-                <label for="horaAgendamiento">Hora</label>
-                <input type="time" id="horaAgendamiento">
-            </div>
-        </div>
         <button id="btnNuevoTicket" class="btn-nuevo-ticket">+ Nuevo Ticket</button>
     </div>
 
@@ -61,6 +51,27 @@
         <div id="listaTickets" class="lista-tickets"></div>
     </div>
 
+</div>
+
+<div id="bookingModal" class="cs-modal">
+    <div id="bookingBackdrop" class="cs-backdrop"></div>
+    <div class="cs-sheet">
+        <div class="cs-sheet-handle"></div>
+        <header class="cs-sheet-header">
+            <strong class="booking-sheet-titulo">Fecha agendamiento</strong>
+            <button id="bookingClose" class="cs-close" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="booking-sheet-body">
+            <div class="filtro-campo">
+                <label for="bookingFecha">Fecha</label>
+                <input type="date" id="bookingFecha">
+            </div>
+            <div class="filtro-campo">
+                <label for="bookingHora">Hora</label>
+                <input type="time" id="bookingHora">
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="toast" class="toast"></div>
