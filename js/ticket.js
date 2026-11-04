@@ -108,6 +108,18 @@ function fechaLocalISO(fecha) {
     return `${anio}-${mes}-${dia}`;
 }
 
+function horaLocalHHMM(fecha) {
+    const horas = String(fecha.getHours()).padStart(2, "0");
+    const minutos = String(fecha.getMinutes()).padStart(2, "0");
+    return `${horas}:${minutos}`;
+}
+
+function inicializarAgendamiento() {
+    const ahora = new Date();
+    document.getElementById("fechaAgendamiento").value = fechaLocalISO(ahora);
+    document.getElementById("horaAgendamiento").value = horaLocalHHMM(ahora);
+}
+
 function inicializarFiltros() {
     const hoy = fechaLocalISO(new Date());
     document.getElementById("fechaDesde").value = hoy;
@@ -193,6 +205,9 @@ function renderLista(tickets) {
                     Creado: ${formatearFecha(t.ticket_created_at)}<br>
                     Actualizado: ${formatearFecha(t.ticket_updated_at)}
                 </div>
+                <div class="ticket-booking">
+                    Fecha agendamiento: ${formatearFecha(t.ticket_booking_date)}
+                </div>
             </div>
             <div class="ticket-right">
                 <span class="ticket-chip">${escapeHtml(t.ticket_status)}</span>
@@ -252,13 +267,23 @@ async function asociarClienta(ticketId, clienta) {
 
 async function crearTicket() {
     const btn = document.getElementById("btnNuevoTicket");
+    const fecha = document.getElementById("fechaAgendamiento").value;
+    const hora = document.getElementById("horaAgendamiento").value;
+
+    if (!fecha || !hora) {
+        mostrarToast("Debe indicar fecha y hora de agendamiento.", true);
+        return;
+    }
+
+    const bookingDate = `${fecha}T${hora}:00`;
 
     try {
         btn.disabled = true;
 
         const response = await fetch(`${API_BASE}/ticket`, {
             method: "POST",
-            headers: authHeaders()
+            headers: { ...authHeaders(), "Content-Type": "application/json" },
+            body: JSON.stringify({ booking_date: bookingDate })
         });
 
         if (response.status === 401) {
@@ -272,6 +297,7 @@ async function crearTicket() {
         }
 
         await cargarLista();
+        inicializarAgendamiento();
 
     } catch (error) {
         console.error("Error creando ticket:", error);
@@ -302,6 +328,7 @@ function alternarOrden() {
 document.addEventListener("DOMContentLoaded", () => {
     actualizarFechaCabecera();
     inicializarFiltros();
+    inicializarAgendamiento();
     cargarLista();
 
     document.getElementById("btnRefrescar").addEventListener("click", cargarLista);
