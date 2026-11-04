@@ -76,7 +76,6 @@ function _ensureCustomerSelectorDom() {
                         id="customerSelectorInput"
                         class="cs-input"
                     >
-                    <button id="customerSelectorListo" class="cs-listo hidden">Listo</button>
                     <button id="customerSelectorClose" class="cs-close" aria-label="Cerrar">✕</button>
                 </header>
                 <div id="customerSelectorResultados" class="cs-resultados"></div>
@@ -87,7 +86,6 @@ function _ensureCustomerSelectorDom() {
 
     document.getElementById("customerSelectorBackdrop").addEventListener("click", cerrarSelectorClienta);
     document.getElementById("customerSelectorClose").addEventListener("click", cerrarSelectorClienta);
-    document.getElementById("customerSelectorListo").addEventListener("click", cerrarSelectorClienta);
     document.getElementById("customerSelectorInput").addEventListener("input", _onCustomerSearchInput);
 }
 
@@ -100,7 +98,6 @@ function _abrirSelector(config, callback) {
     input.value = "";
     input.placeholder = config.placeholder;
 
-    document.getElementById("customerSelectorListo").classList.toggle("hidden", !config.multiSelect);
     document.getElementById("customerSelectorResultados").innerHTML =
         `<div class="cs-vacio">${_mensajeMinimoCS()}</div>`;
 
