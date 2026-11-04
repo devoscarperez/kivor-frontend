@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Agenda de Clienta</title>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/ticket.css">
+<link rel="stylesheet" href="css/agenda-clienta.css">
+<link rel="stylesheet" href="css/customer-selector.css">
+</head>
+<body>
+
+<div class="app-agenda">
+
+    <header class="topbar-agenda">
+        <div class="topbar-agenda-row">
+            <button class="icon-btn" onclick="goMenu()" aria-label="Volver al menú">←</button>
+            <h1>Agenda de Clienta</h1>
+            <button id="btnRefrescarAgenda" class="icon-btn" title="Actualizar" aria-label="Actualizar">⟳</button>
+        </div>
+    </header>
+
+    <div class="barra-filtros-agenda">
+        <div id="clientaContenedor"></div>
+        <input type="date" id="fechaAgenda">
+    </div>
+
+    <div class="contenido-scroll">
+        <div id="agendaVacia" class="lista-vacia">Selecciona una clienta y una fecha para ver sus atenciones.</div>
+        <table id="tablaAgenda" class="tabla-agenda hidden">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Profesional</th>
+                    <th>Hora</th>
+                    <th>Ticket</th>
+                </tr>
+            </thead>
+            <tbody id="filasAgenda"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const token = sessionStorage.getItem("access_token");
+if (!token) window.location.href = "login.html";
+
+function goMenu() {
+    window.location.href = "index.html";
+}
+</script>
+
+<script src="js/api.js"></script>
+<script src="js/customer-selector.js"></script>
+<script src="js/agenda-clienta.js"></script>
+
+</body>
+</html>

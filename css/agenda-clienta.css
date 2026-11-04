@@ -1,0 +1,210 @@
+/* =========================
+Layout principal (mismo patron que ticket.css: cabecera fija,
+contenido con scroll propio).
+========================= */
+
+.app-agenda {
+    background: var(--color-background);
+    height: 100vh;
+    height: 100dvh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.topbar-agenda {
+    flex-shrink: 0;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-soft);
+    z-index: 5;
+    padding: calc(env(safe-area-inset-top) + 12px) 12px 10px 12px;
+}
+
+.topbar-agenda-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topbar-agenda-row h1 {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+    text-align: center;
+}
+
+.icon-btn {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--color-text-secondary);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:active {
+    opacity: 0.6;
+}
+
+/* =========================
+Filtros: clienta + fecha
+========================= */
+
+.barra-filtros-agenda {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+}
+
+.barra-filtros-agenda .ticket-clienta {
+    margin-top: 0;
+    width: auto;
+}
+
+.chip-clienta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 6px 5px 10px;
+    border-radius: 999px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border-default);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.chip-clienta button {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-border-default);
+    color: var(--color-text-primary);
+    font-size: 11px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.barra-filtros-agenda input[type="date"] {
+    flex-shrink: 0;
+    background: var(--color-input-background);
+    color: var(--color-input-text);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-default);
+    padding: 8px;
+    font-size: 13px;
+}
+
+/* =========================
+Contenido con scroll
+========================= */
+
+.contenido-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 12px 12px 12px;
+}
+
+.lista-vacia {
+    padding: 60px 20px;
+    color: var(--color-text-secondary);
+    font-size: 15px;
+    text-align: center;
+}
+
+.lista-vacia.hidden {
+    display: none;
+}
+
+/* =========================
+Tabla de agenda
+========================= */
+
+.tabla-agenda {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-surface);
+    border-radius: var(--radius-default);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+.tabla-agenda.hidden {
+    display: none;
+}
+
+.tabla-agenda th,
+.tabla-agenda td {
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--color-border-default);
+}
+
+.tabla-agenda th {
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    background: var(--color-background);
+}
+
+.tabla-agenda td {
+    color: var(--color-text-primary);
+}
+
+.tabla-agenda tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-agenda a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* =========================
+Toast
+========================= */
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom) + 20px);
+    transform: translateX(-50%) translateY(10px);
+    background: #111111;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 50;
+    max-width: 90vw;
+    text-align: center;
+}
+
+.toast.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.toast-error {
+    background: var(--color-error);
+}
