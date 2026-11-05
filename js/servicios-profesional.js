@@ -45,6 +45,13 @@ function horaLocalHHMM(fecha) {
     return `${horas}:${minutos}`;
 }
 
+function fechaLocalISO(fecha) {
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+    return `${anio}-${mes}-${dia}`;
+}
+
 function formatearPrecio(valor) {
     const numero = Math.round(Number(valor) || 0);
     return `$${numero.toLocaleString("es-CL")}`;
@@ -52,7 +59,8 @@ function formatearPrecio(valor) {
 
 async function cargarAgendaHoy() {
     try {
-        const response = await fetch(`${API_BASE}/professional/me/agenda-hoy`, {
+        const hoy = fechaLocalISO(new Date());
+        const response = await fetch(`${API_BASE}/professional/me/agenda-hoy?date=${hoy}`, {
             headers: authHeaders()
         });
 
