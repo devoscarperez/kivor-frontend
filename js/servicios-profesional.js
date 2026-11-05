@@ -289,7 +289,7 @@ async function onCambioNivel3() {
         serviciosDisponibles.forEach(servicio => {
             const opcion = document.createElement("option");
             opcion.value = servicio.service_master_id;
-            opcion.textContent = servicio.nivel_4;
+            opcion.textContent = servicio.nivel_4 || "(sin nivel 4 - usar este servicio)";
             selectNivel4.appendChild(opcion);
         });
 
