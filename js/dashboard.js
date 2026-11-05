@@ -115,10 +115,34 @@ function renderMenuItem(menu) {
     }
 }
 
+async function cargarUsuarioConectado() {
+    try {
+        const response = await fetch(`${API_BASE}/me`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const contenedor = document.getElementById("usuarioConectado");
+        if (!contenedor) return;
+
+        contenedor.textContent = data.professional_name
+            ? `${data.username} - ${data.professional_name}`
+            : data.username;
+
+    } catch (error) {
+        console.error("Error cargando usuario conectado:", error);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     await validateSession();
     cargarMenu();
     cargarSesiones();
+    cargarUsuarioConectado();
 });
 
 async function cargarSesiones() {
