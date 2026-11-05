@@ -185,6 +185,58 @@ function cerrarPopupServicio() {
     document.getElementById("servicioModal").classList.remove("activa");
     document.body.style.overflow = "";
     contextoServicioEnEdicion = null;
+
+    const sheet = document.querySelector("#servicioModal .cs-sheet");
+    sheet.style.left = "";
+    sheet.style.top = "";
+    sheet.style.right = "";
+    sheet.style.bottom = "";
+    sheet.style.transform = "";
+    sheet.style.transition = "";
+}
+
+let servicioDragState = null;
+
+function iniciarArrastreServicio(event) {
+    if (event.target.closest("#servicioClose")) return;
+
+    const sheet = document.querySelector("#servicioModal .cs-sheet");
+    const rect = sheet.getBoundingClientRect();
+
+    sheet.style.transition = "none";
+    sheet.style.transform = "none";
+    sheet.style.right = "auto";
+    sheet.style.bottom = "auto";
+    sheet.style.left = `${rect.left}px`;
+    sheet.style.top = `${rect.top}px`;
+
+    servicioDragState = {
+        sheet,
+        startX: event.clientX,
+        startY: event.clientY,
+        baseLeft: rect.left,
+        baseTop: rect.top
+    };
+
+    document.body.style.userSelect = "none";
+    document.addEventListener("pointermove", moverServicio);
+    document.addEventListener("pointerup", soltarServicio);
+}
+
+function moverServicio(event) {
+    if (!servicioDragState) return;
+    const dx = event.clientX - servicioDragState.startX;
+    const dy = event.clientY - servicioDragState.startY;
+    servicioDragState.sheet.style.left = `${servicioDragState.baseLeft + dx}px`;
+    servicioDragState.sheet.style.top = `${servicioDragState.baseTop + dy}px`;
+}
+
+function soltarServicio() {
+    if (servicioDragState) servicioDragState.sheet.style.transition = "";
+    servicioDragState = null;
+    document.body.style.userSelect = "";
+    document.removeEventListener("pointermove", moverServicio);
+    document.removeEventListener("pointerup", soltarServicio);
 }
 
 async function obtenerOpcionesServicio() {
@@ -361,6 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("servicioClose").addEventListener("click", cerrarPopupServicio);
     document.getElementById("servicioBackdrop").addEventListener("click", cerrarPopupServicio);
     document.getElementById("servicioAgregar").addEventListener("click", agregarServicio);
+    document.querySelector("#servicioModal .cs-sheet-header").addEventListener("pointerdown", iniciarArrastreServicio);
 
     document.getElementById("servicioFamilia").addEventListener("change", onCambioFamilia);
     document.getElementById("servicioNivel2").addEventListener("change", onCambioNivel2);

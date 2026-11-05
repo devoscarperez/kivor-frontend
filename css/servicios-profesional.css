@@ -171,6 +171,10 @@ Lista de servicios ya agregados
 Popup de asignacion de servicio (cs-modal/cs-sheet)
 ========================= */
 
+#servicioModal .cs-sheet-header {
+    cursor: move;
+}
+
 .servicio-sheet-body {
     display: flex;
     flex-direction: column;
