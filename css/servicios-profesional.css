@@ -111,6 +111,27 @@ Tarjeta de clienta + hora + ticket
     color: var(--color-text-primary);
 }
 
+.status-sp-chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    padding: 3px 9px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.status-sp-chip.status-sp-Assigned {
+    background: var(--color-warning);
+}
+
+.status-sp-chip.status-sp-Completed {
+    background: var(--color-success);
+}
+
 .btn-finalizar-atencion {
     width: auto;
     padding: 5px 12px;

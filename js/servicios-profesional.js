@@ -117,6 +117,7 @@ function renderAgendaHoy(items) {
             <div class="agenda-sp-header">
                 <div class="agenda-sp-clienta-wrap">
                     <span class="agenda-sp-clienta">${escapeHtml(nombre)}</span>
+                    <span class="status-sp-chip status-sp-${item.ticket_professional_customer_status}">${escapeHtml(item.ticket_professional_customer_status)}</span>
                     ${estaAsignada ? `
                         <button class="btn-finalizar-atencion" data-tpc-id="${item.ticket_professional_customer_id}" data-tp-id="${item.ticket_professional_id}" data-ticket-id="${item.ticket_id}">
                             Finalizar Atención
