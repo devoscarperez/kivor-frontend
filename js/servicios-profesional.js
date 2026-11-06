@@ -127,6 +127,14 @@ function renderAgendaHoy(items) {
                 <div class="servicio-sp-linea">
                     <span>${escapeHtml(p.product_name)}</span>
                     <span class="servicio-sp-precio">${formatearPrecio(p.unit_price)}</span>
+                    ${estaAsignada ? `
+                        <button class="btn-quitar-servicio-sp"
+                            data-ticket-id="${item.ticket_id}"
+                            data-tp-id="${item.ticket_professional_id}"
+                            data-tpc-id="${item.ticket_professional_customer_id}"
+                            data-tpcp-id="${p.ticket_professional_customer_product_id}"
+                            aria-label="Eliminar servicio">✕</button>
+                    ` : ""}
                 </div>
             `).join("")
             : `<div class="servicio-sp-sin-servicios">Sin servicios asignados aún.</div>`;
@@ -163,6 +171,17 @@ function renderAgendaHoy(items) {
             tarjeta.querySelector(".btn-finalizar-atencion").addEventListener("click", () => {
                 finalizarAtencion(item);
             });
+
+            tarjeta.querySelectorAll(".btn-quitar-servicio-sp").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    quitarServicio(
+                        Number(btn.dataset.ticketId),
+                        Number(btn.dataset.tpId),
+                        Number(btn.dataset.tpcId),
+                        Number(btn.dataset.tpcpId)
+                    );
+                });
+            });
         }
 
         contenedor.appendChild(tarjeta);
@@ -194,6 +213,34 @@ async function finalizarAtencion(item) {
     } catch (error) {
         console.error("Error finalizando atención:", error);
         mostrarToast(error.message || "No se pudo finalizar la atención.", true);
+    }
+}
+
+async function quitarServicio(ticketId, ticketProfessionalId, ticketProfessionalCustomerId, ticketProfessionalCustomerProductId) {
+    if (!confirm("¿Eliminar este servicio?")) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/ticket/${ticketId}/professionals/${ticketProfessionalId}/customers/${ticketProfessionalCustomerId}/products/${ticketProfessionalCustomerProductId}`,
+            { method: "DELETE", headers: authHeaders() }
+        );
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo eliminar el servicio.");
+            throw new Error(mensaje);
+        }
+
+        await cargarAgendaHoy();
+        mostrarToast("Servicio eliminado");
+
+    } catch (error) {
+        console.error("Error eliminando servicio:", error);
+        mostrarToast(error.message || "No se pudo eliminar el servicio.", true);
     }
 }
 

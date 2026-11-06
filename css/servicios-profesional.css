@@ -174,12 +174,33 @@ Lista de servicios ya agregados
 
 .servicio-sp-linea {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+    align-items: center;
     gap: 10px;
     padding: 4px 0;
     font-size: 13px;
     color: var(--color-text-primary);
+}
+
+.servicio-sp-linea > span:first-child {
+    flex: 1;
+}
+
+.btn-quitar-servicio-sp {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-background);
+    color: var(--color-error);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-quitar-servicio-sp:active {
+    background: var(--color-border-default);
 }
 
 .servicio-sp-precio {
