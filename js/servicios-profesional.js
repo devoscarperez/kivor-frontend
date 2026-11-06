@@ -102,6 +102,7 @@ function renderAgendaHoy(items) {
 
         const nombre = item.customer_full_name || item.customer_nickname || "(sin nombre)";
         const hora = item.booking_date ? horaLocalHHMM(new Date(item.booking_date)) : "-";
+        const estaAsignada = item.ticket_professional_customer_status === "Assigned";
 
         const lineasServicios = item.products.length
             ? item.products.map(p => `
@@ -114,24 +115,67 @@ function renderAgendaHoy(items) {
 
         tarjeta.innerHTML = `
             <div class="agenda-sp-header">
-                <span class="agenda-sp-clienta">${escapeHtml(nombre)}</span>
+                <div class="agenda-sp-clienta-wrap">
+                    <span class="agenda-sp-clienta">${escapeHtml(nombre)}</span>
+                    ${estaAsignada ? `
+                        <button class="btn-finalizar-atencion" data-tpc-id="${item.ticket_professional_customer_id}" data-tp-id="${item.ticket_professional_id}" data-ticket-id="${item.ticket_id}">
+                            Finalizar Atención
+                        </button>
+                    ` : ""}
+                </div>
                 <span class="agenda-sp-meta">
                     ${hora} ·
                     <a href="ticket-profesionales.html?ticket_id=${item.ticket_id}">Ticket #${item.ticket_id}</a>
                 </span>
             </div>
             <div class="lista-servicios-sp">${lineasServicios}</div>
-            <button class="btn-asignar-servicios" data-tpc-id="${item.ticket_professional_customer_id}" data-tp-id="${item.ticket_professional_id}" data-ticket-id="${item.ticket_id}">
-                Asignar Servicios
-            </button>
+            ${estaAsignada ? `
+                <button class="btn-asignar-servicios" data-tpc-id="${item.ticket_professional_customer_id}" data-tp-id="${item.ticket_professional_id}" data-ticket-id="${item.ticket_id}">
+                    Asignar Servicios
+                </button>
+            ` : ""}
         `;
 
-        tarjeta.querySelector(".btn-asignar-servicios").addEventListener("click", () => {
-            abrirPopupServicio(item);
-        });
+        if (estaAsignada) {
+            tarjeta.querySelector(".btn-asignar-servicios").addEventListener("click", () => {
+                abrirPopupServicio(item);
+            });
+
+            tarjeta.querySelector(".btn-finalizar-atencion").addEventListener("click", () => {
+                finalizarAtencion(item);
+            });
+        }
 
         contenedor.appendChild(tarjeta);
     });
+}
+
+async function finalizarAtencion(item) {
+    if (!confirm(`¿Finalizar la atención de ${item.customer_full_name || item.customer_nickname}? No podrás agregar más servicios después de esto.`)) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/ticket/${item.ticket_id}/professionals/${item.ticket_professional_id}/customers/${item.ticket_professional_customer_id}/complete`,
+            { method: "PATCH", headers: authHeaders() }
+        );
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo finalizar la atención.");
+            throw new Error(mensaje);
+        }
+
+        await cargarAgendaHoy();
+        mostrarToast("Atención finalizada");
+
+    } catch (error) {
+        console.error("Error finalizando atención:", error);
+        mostrarToast(error.message || "No se pudo finalizar la atención.", true);
+    }
 }
 
 function limpiarSelect(select, placeholder) {
