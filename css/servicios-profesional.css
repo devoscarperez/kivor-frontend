@@ -255,6 +255,10 @@ Popup de asignacion de servicio (cs-modal/cs-sheet)
     font-size: 14px;
 }
 
+.servicio-sheet-body .filtro-campo.hidden {
+    display: none;
+}
+
 .servicio-sheet-acciones {
     padding: 0 16px 20px 16px;
 }

@@ -1,5 +1,7 @@
 let agendaSpActual = [];
 let serviciosDisponibles = [];
+let servicioSeleccionado = null;
+let campoTerminalActivo = null;
 let contextoServicioEnEdicion = null;
 let toastTimeout = null;
 
@@ -125,7 +127,7 @@ function renderAgendaHoy(items) {
         const lineasServicios = item.products.length
             ? item.products.map(p => `
                 <div class="servicio-sp-linea">
-                    <span>${escapeHtml(p.product_name)}</span>
+                    <span>${escapeHtml(p.product_label || p.product_name)}</span>
                     <span class="servicio-sp-precio">${formatearPrecio(p.unit_price)}</span>
                     ${estaAsignada ? `
                         <button class="btn-quitar-servicio-sp"
@@ -257,6 +259,45 @@ function llenarSelect(select, valores) {
     });
 }
 
+function mostrarCampo(id, mostrar) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle("hidden", !mostrar);
+}
+
+function llenarSelectConServicios(select, servicios) {
+    servicios.forEach(servicio => {
+        const opcion = document.createElement("option");
+        opcion.value = servicio.service_master_id;
+        opcion.textContent = servicio.nivel_4 || servicio.clave;
+        select.appendChild(opcion);
+    });
+}
+
+const CAMPO_POR_SELECT = {
+    servicioNivel2: "campoNivel2",
+    servicioNivel3: "campoNivel3",
+    servicioNivel4: "campoNivel4",
+};
+
+function resolverTerminal(idSelect, servicios) {
+    serviciosDisponibles = servicios;
+    const select = document.getElementById(idSelect);
+    const campo = CAMPO_POR_SELECT[idSelect];
+
+    if (servicios.length === 1) {
+        servicioSeleccionado = servicios[0];
+        campoTerminalActivo = null;
+        mostrarCampo(campo, false);
+        document.getElementById("servicioAgregar").disabled = false;
+        return;
+    }
+
+    campoTerminalActivo = idSelect;
+    llenarSelectConServicios(select, servicios);
+    select.disabled = false;
+    mostrarCampo(campo, true);
+}
+
 async function abrirPopupServicio(item) {
     contextoServicioEnEdicion = {
         ticketId: item.ticket_id,
@@ -270,13 +311,15 @@ async function abrirPopupServicio(item) {
     const selectNivel4 = document.getElementById("servicioNivel4");
 
     limpiarSelect(selectFamilia, "Selecciona...");
-    limpiarSelect(selectNivel2, "Selecciona...");
-    limpiarSelect(selectNivel3, "Selecciona...");
-    limpiarSelect(selectNivel4, "Selecciona...");
-    selectNivel2.disabled = true;
-    selectNivel3.disabled = true;
-    selectNivel4.disabled = true;
+    limpiarSelect(selectNivel2, "Selecciona..."); selectNivel2.disabled = true;
+    limpiarSelect(selectNivel3, "Selecciona..."); selectNivel3.disabled = true;
+    limpiarSelect(selectNivel4, "Selecciona..."); selectNivel4.disabled = true;
+    mostrarCampo("campoNivel2", true);
+    mostrarCampo("campoNivel3", true);
+    mostrarCampo("campoNivel4", true);
     serviciosDisponibles = [];
+    servicioSeleccionado = null;
+    campoTerminalActivo = null;
     document.getElementById("servicioAgregar").disabled = true;
 
     document.getElementById("servicioModal").classList.add("activa");
@@ -381,22 +424,32 @@ async function onCambioFamilia() {
     const selectNivel3 = document.getElementById("servicioNivel3");
     const selectNivel4 = document.getElementById("servicioNivel4");
 
-    limpiarSelect(selectNivel2, "Selecciona...");
-    limpiarSelect(selectNivel3, "Selecciona...");
-    limpiarSelect(selectNivel4, "Selecciona...");
-    selectNivel3.disabled = true;
-    selectNivel4.disabled = true;
+    limpiarSelect(selectNivel2, "Selecciona..."); selectNivel2.disabled = true;
+    limpiarSelect(selectNivel3, "Selecciona..."); selectNivel3.disabled = true;
+    limpiarSelect(selectNivel4, "Selecciona..."); selectNivel4.disabled = true;
+    mostrarCampo("campoNivel2", true);
+    mostrarCampo("campoNivel3", false);
+    mostrarCampo("campoNivel4", false);
     serviciosDisponibles = [];
+    servicioSeleccionado = null;
+    campoTerminalActivo = null;
     document.getElementById("servicioAgregar").disabled = true;
 
     const familia = document.getElementById("servicioFamilia").value;
     if (!familia) {
-        selectNivel2.disabled = true;
+        mostrarCampo("campoNivel2", false);
         return;
     }
 
     try {
         const opciones = await obtenerOpcionesServicio();
+
+        if (opciones.servicios.length) {
+            // Servicio de 1 solo nivel (familia): no hay nivel_2 que pedir.
+            resolverTerminal("servicioNivel2", opciones.servicios);
+            return;
+        }
+
         llenarSelect(selectNivel2, opciones.niveles_2);
         selectNivel2.disabled = false;
     } catch (error) {
@@ -406,23 +459,39 @@ async function onCambioFamilia() {
 }
 
 async function onCambioNivel2() {
+    if (campoTerminalActivo === "servicioNivel2") {
+        const serviceMasterId = Number(document.getElementById("servicioNivel2").value);
+        servicioSeleccionado = serviciosDisponibles.find(s => s.service_master_id === serviceMasterId) || null;
+        document.getElementById("servicioAgregar").disabled = !servicioSeleccionado;
+        return;
+    }
+
     const selectNivel3 = document.getElementById("servicioNivel3");
     const selectNivel4 = document.getElementById("servicioNivel4");
 
-    limpiarSelect(selectNivel3, "Selecciona...");
-    limpiarSelect(selectNivel4, "Selecciona...");
-    selectNivel4.disabled = true;
+    limpiarSelect(selectNivel3, "Selecciona..."); selectNivel3.disabled = true;
+    limpiarSelect(selectNivel4, "Selecciona..."); selectNivel4.disabled = true;
+    mostrarCampo("campoNivel3", true);
+    mostrarCampo("campoNivel4", false);
     serviciosDisponibles = [];
+    servicioSeleccionado = null;
     document.getElementById("servicioAgregar").disabled = true;
 
     const nivel2 = document.getElementById("servicioNivel2").value;
     if (!nivel2) {
-        selectNivel3.disabled = true;
+        mostrarCampo("campoNivel3", false);
         return;
     }
 
     try {
         const opciones = await obtenerOpcionesServicio();
+
+        if (opciones.servicios.length) {
+            // Servicio de 2 niveles (familia + nivel_2): no hay nivel_3 que pedir.
+            resolverTerminal("servicioNivel3", opciones.servicios);
+            return;
+        }
+
         llenarSelect(selectNivel3, opciones.niveles_3);
         selectNivel3.disabled = false;
     } catch (error) {
@@ -432,30 +501,32 @@ async function onCambioNivel2() {
 }
 
 async function onCambioNivel3() {
+    if (campoTerminalActivo === "servicioNivel3") {
+        const serviceMasterId = Number(document.getElementById("servicioNivel3").value);
+        servicioSeleccionado = serviciosDisponibles.find(s => s.service_master_id === serviceMasterId) || null;
+        document.getElementById("servicioAgregar").disabled = !servicioSeleccionado;
+        return;
+    }
+
     const selectNivel4 = document.getElementById("servicioNivel4");
 
-    limpiarSelect(selectNivel4, "Selecciona...");
+    limpiarSelect(selectNivel4, "Selecciona..."); selectNivel4.disabled = true;
+    mostrarCampo("campoNivel4", true);
     serviciosDisponibles = [];
+    servicioSeleccionado = null;
     document.getElementById("servicioAgregar").disabled = true;
 
     const nivel3 = document.getElementById("servicioNivel3").value;
     if (!nivel3) {
-        selectNivel4.disabled = true;
+        mostrarCampo("campoNivel4", false);
         return;
     }
 
     try {
         const opciones = await obtenerOpcionesServicio();
-        serviciosDisponibles = opciones.servicios;
-
-        serviciosDisponibles.forEach(servicio => {
-            const opcion = document.createElement("option");
-            opcion.value = servicio.service_master_id;
-            opcion.textContent = servicio.nivel_4 || "(sin nivel 4 - usar este servicio)";
-            selectNivel4.appendChild(opcion);
-        });
-
-        selectNivel4.disabled = false;
+        // Nivel 3 es siempre el ultimo paso: aqui ya vienen los servicios finales
+        // (con nivel_4 si existe, o servicios de 3 niveles si no).
+        resolverTerminal("servicioNivel4", opciones.servicios);
     } catch (error) {
         console.error("Error cargando nivel 4:", error);
         mostrarToast(error.message || "No se pudieron cargar los servicios.", true);
@@ -463,17 +534,15 @@ async function onCambioNivel3() {
 }
 
 function onCambioNivel4() {
-    const seleccionado = document.getElementById("servicioNivel4").value;
-    document.getElementById("servicioAgregar").disabled = !seleccionado;
+    const serviceMasterId = Number(document.getElementById("servicioNivel4").value);
+    servicioSeleccionado = serviciosDisponibles.find(s => s.service_master_id === serviceMasterId) || null;
+    document.getElementById("servicioAgregar").disabled = !servicioSeleccionado;
 }
 
 async function agregarServicio() {
-    if (!contextoServicioEnEdicion) return;
+    if (!contextoServicioEnEdicion || !servicioSeleccionado) return;
 
-    const serviceMasterId = Number(document.getElementById("servicioNivel4").value);
-    const servicio = serviciosDisponibles.find(s => s.service_master_id === serviceMasterId);
-    if (!servicio) return;
-
+    const servicio = servicioSeleccionado;
     const { ticketId, ticketProfessionalId, ticketProfessionalCustomerId } = contextoServicioEnEdicion;
 
     try {
@@ -505,9 +574,11 @@ async function agregarServicio() {
         await cargarAgendaHoy();
         mostrarToast("Servicio agregado");
 
-        const selectNivel4 = document.getElementById("servicioNivel4");
-        selectNivel4.value = "";
+        servicioSeleccionado = null;
         document.getElementById("servicioAgregar").disabled = true;
+        if (campoTerminalActivo) {
+            document.getElementById(campoTerminalActivo).value = "";
+        }
 
     } catch (error) {
         console.error("Error agregando servicio:", error);
