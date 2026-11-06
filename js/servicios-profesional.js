@@ -57,6 +57,22 @@ function formatearPrecio(valor) {
     return `$${numero.toLocaleString("es-CL")}`;
 }
 
+const REFRESCO_RAPIDO_MS = 6000;
+const REFRESCO_NORMAL_MS = 20000;
+let timeoutPollingAgenda = null;
+
+function hayAtencionesPendientes(items) {
+    return items.some(item => item.ticket_professional_customer_status === "Assigned");
+}
+
+function programarProximaConsultaAgenda() {
+    if (timeoutPollingAgenda) clearTimeout(timeoutPollingAgenda);
+    if (document.hidden) return;
+
+    const espera = hayAtencionesPendientes(agendaSpActual) ? REFRESCO_NORMAL_MS : REFRESCO_RAPIDO_MS;
+    timeoutPollingAgenda = setTimeout(cargarAgendaHoy, espera);
+}
+
 async function cargarAgendaHoy() {
     try {
         const hoy = fechaLocalISO(new Date());
@@ -76,10 +92,12 @@ async function cargarAgendaHoy() {
 
         agendaSpActual = await response.json();
         renderAgendaHoy(agendaSpActual);
+        programarProximaConsultaAgenda();
 
     } catch (error) {
         console.error("Error cargando agenda:", error);
         mostrarToast(error.message || "No se pudo cargar tu agenda de hoy.", true);
+        programarProximaConsultaAgenda();
     }
 }
 
@@ -483,4 +501,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("servicioNivel2").addEventListener("change", onCambioNivel2);
     document.getElementById("servicioNivel3").addEventListener("change", onCambioNivel3);
     document.getElementById("servicioNivel4").addEventListener("change", onCambioNivel4);
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            if (timeoutPollingAgenda) clearTimeout(timeoutPollingAgenda);
+        } else {
+            cargarAgendaHoy();
+        }
+    });
 });
