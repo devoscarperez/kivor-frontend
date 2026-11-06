@@ -405,8 +405,27 @@ async function agregarServicio() {
     }
 }
 
+async function cargarSaludoProfesional() {
+    try {
+        const response = await fetch(`${API_BASE}/me`, { headers: authHeaders() });
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const titulo = document.getElementById("tituloSp");
+        if (!titulo) return;
+
+        titulo.textContent = data.professional_name
+            ? `¡Hola, ${data.professional_name}! Hoy tienes estos servicios`
+            : "¡Hola! Hoy tienes estos servicios";
+
+    } catch (error) {
+        console.error("Error cargando saludo:", error);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     cargarAgendaHoy();
+    cargarSaludoProfesional();
 
     document.getElementById("btnRefrescarSp").addEventListener("click", cargarAgendaHoy);
 
