@@ -142,7 +142,7 @@ function renderCierreTickets(tickets) {
         });
 
         tarjeta.querySelector(".btn-enviar-whatsapp").addEventListener("click", (event) => {
-            enviarPorWhatsapp(t.ticket_id, event.currentTarget);
+            enviarPorWhatsapp(t.ticket_id, nombre, event.currentTarget);
         });
 
         contenedor.appendChild(tarjeta);
@@ -192,7 +192,7 @@ async function generarPdf(ticketId, boton) {
     }
 }
 
-async function enviarPorWhatsapp(ticketId, boton) {
+async function enviarPorWhatsapp(ticketId, nombreClienta, boton) {
     boton.disabled = true;
 
     try {
@@ -220,7 +220,7 @@ async function enviarPorWhatsapp(ticketId, boton) {
             new ClipboardItem({ "image/png": blob })
         ]);
 
-        const texto = encodeURIComponent(`Hola, te comparto tu comprobante de atención del Ticket #${ticketId}.`);
+        const texto = encodeURIComponent(`Hola, te comparto el comprobante de atención de ${nombreClienta}, Ticket #${ticketId}.`);
         window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${texto}`, "_blank");
 
         boton.classList.add("enviado");
