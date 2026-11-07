@@ -43,9 +43,17 @@ function formatearFecha(valor) {
     return fecha.toLocaleString("es-CL", { dateStyle: "short", timeStyle: "short", hour12: false });
 }
 
+function fechaLocalISO(fecha) {
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+    return `${anio}-${mes}-${dia}`;
+}
+
 async function cargarCierreTickets() {
     try {
-        const response = await fetch(`${API_BASE}/ticket`, {
+        const hoy = fechaLocalISO(new Date());
+        const response = await fetch(`${API_BASE}/ticket?date_from=${hoy}&date_to=${hoy}&date_field=booking`, {
             headers: authHeaders()
         });
 
