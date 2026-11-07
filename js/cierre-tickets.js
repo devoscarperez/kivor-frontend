@@ -50,10 +50,38 @@ function fechaLocalISO(fecha) {
     return `${anio}-${mes}-${dia}`;
 }
 
+let campoFechaCtActual = "booking";
+
+function inicializarFiltrosCt() {
+    const hoy = fechaLocalISO(new Date());
+    document.getElementById("ctFechaDesde").value = hoy;
+    document.getElementById("ctFechaHasta").value = hoy;
+}
+
+function alternarCampoFechaCt() {
+    const btn = document.getElementById("ctBtnCampoFecha");
+    campoFechaCtActual = campoFechaCtActual === "created" ? "booking" : "created";
+
+    btn.dataset.campo = campoFechaCtActual;
+    btn.textContent = campoFechaCtActual === "created" ? "📅 Creado" : "📅 Agendamiento";
+}
+
+function construirQueryStringCt() {
+    const params = new URLSearchParams();
+
+    const desde = document.getElementById("ctFechaDesde").value;
+    const hasta = document.getElementById("ctFechaHasta").value;
+
+    if (desde) params.append("date_from", desde);
+    if (hasta) params.append("date_to", hasta);
+    params.append("date_field", campoFechaCtActual);
+
+    return params.toString();
+}
+
 async function cargarCierreTickets() {
     try {
-        const hoy = fechaLocalISO(new Date());
-        const response = await fetch(`${API_BASE}/ticket?date_from=${hoy}&date_to=${hoy}&date_field=booking`, {
+        const response = await fetch(`${API_BASE}/ticket?${construirQueryStringCt()}`, {
             headers: authHeaders()
         });
 
@@ -155,6 +183,10 @@ async function generarPdf(ticketId, boton) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    inicializarFiltrosCt();
     cargarCierreTickets();
+
     document.getElementById("btnRefrescarCt").addEventListener("click", cargarCierreTickets);
+    document.getElementById("ctBtnAplicarFiltros").addEventListener("click", cargarCierreTickets);
+    document.getElementById("ctBtnCampoFecha").addEventListener("click", alternarCampoFechaCt);
 });

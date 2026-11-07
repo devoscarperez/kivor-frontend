@@ -21,8 +21,23 @@
         </div>
     </header>
 
+    <div id="filtrosCt" class="filtros">
+        <div class="filtro-campo filtro-fechas">
+            <label>Fechas</label>
+            <div class="campo-fechas-row">
+                <input type="date" id="ctFechaDesde">
+                <span class="fechas-separador">a</span>
+                <input type="date" id="ctFechaHasta">
+                <button id="ctBtnCampoFecha" class="btn-campo-fecha-icono" type="button" data-campo="booking" title="Cambiar a qué fecha aplica el filtro">
+                    📅 Agendamiento
+                </button>
+            </div>
+        </div>
+        <button id="ctBtnAplicarFiltros" class="btn-aplicar-filtros">Aplicar Filtro</button>
+    </div>
+
     <div class="contenido-scroll">
-        <div id="listaCtVacia" class="lista-vacia hidden">No hay tickets para hoy.</div>
+        <div id="listaCtVacia" class="lista-vacia hidden">No hay tickets para los filtros seleccionados.</div>
         <div id="listaCierreTickets" class="lista-cierre-tickets"></div>
     </div>
 
