@@ -1,3 +1,5 @@
+const NUMERO_WHATSAPP = "56985963737";
+
 let toastTimeout = null;
 
 function authHeaders() {
@@ -128,11 +130,18 @@ function renderCierreTickets(tickets) {
                 <span class="tarjeta-ct-clienta">${escapeHtml(nombre)}</span>
                 <span class="tarjeta-ct-meta">Ticket #${t.ticket_id} · ${formatearFecha(t.ticket_booking_date)}</span>
             </div>
-            <button class="btn-generar-pdf" data-ticket-id="${t.ticket_id}">Generar PDF</button>
+            <div class="tarjeta-ct-acciones">
+                <button class="btn-generar-pdf" data-ticket-id="${t.ticket_id}">Generar PDF</button>
+                <button class="btn-enviar-whatsapp" data-ticket-id="${t.ticket_id}">Enviar por WhatsApp</button>
+            </div>
         `;
 
         tarjeta.querySelector(".btn-generar-pdf").addEventListener("click", (event) => {
             generarPdf(t.ticket_id, event.currentTarget);
+        });
+
+        tarjeta.querySelector(".btn-enviar-whatsapp").addEventListener("click", (event) => {
+            enviarPorWhatsapp(t.ticket_id, event.currentTarget);
         });
 
         contenedor.appendChild(tarjeta);
@@ -177,6 +186,47 @@ async function generarPdf(ticketId, boton) {
     } catch (error) {
         console.error("Error generando PDF:", error);
         mostrarToast(error.message || "No se pudo generar el PDF.", true);
+    } finally {
+        boton.disabled = false;
+    }
+}
+
+async function enviarPorWhatsapp(ticketId, boton) {
+    boton.disabled = true;
+
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${ticketId}/voucher-imagen`, {
+            headers: authHeaders()
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo generar la imagen.");
+            throw new Error(mensaje);
+        }
+
+        const blob = await response.blob();
+
+        if (!navigator.clipboard || !window.ClipboardItem) {
+            throw new Error("Este navegador no permite copiar imágenes al portapapeles.");
+        }
+
+        await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob })
+        ]);
+
+        const texto = encodeURIComponent(`Hola, te comparto tu comprobante de atención del Ticket #${ticketId}.`);
+        window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${texto}`, "_blank");
+
+        mostrarToast("Imagen copiada. Pega con Ctrl+V en la conversación de WhatsApp");
+
+    } catch (error) {
+        console.error("Error enviando por WhatsApp:", error);
+        mostrarToast(error.message || "No se pudo preparar el envío por WhatsApp.", true);
     } finally {
         boton.disabled = false;
     }
