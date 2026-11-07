@@ -121,6 +121,7 @@ function renderCierreTickets(tickets) {
 
     tickets.forEach(t => {
         const nombre = t.customer_full_name || t.customer_nickname || "(sin clienta titular)";
+        const yaEnviado = Boolean(t.whatsapp_sent);
 
         const tarjeta = document.createElement("div");
         tarjeta.className = "tarjeta-ct";
@@ -132,7 +133,7 @@ function renderCierreTickets(tickets) {
             </div>
             <div class="tarjeta-ct-acciones">
                 <button class="btn-generar-pdf" data-ticket-id="${t.ticket_id}">Generar PDF</button>
-                <button class="btn-enviar-whatsapp" data-ticket-id="${t.ticket_id}">Enviar por WhatsApp</button>
+                <button class="btn-enviar-whatsapp ${yaEnviado ? "enviado" : ""}" data-ticket-id="${t.ticket_id}">Enviar por WhatsApp</button>
             </div>
         `;
 
@@ -222,6 +223,9 @@ async function enviarPorWhatsapp(ticketId, boton) {
         const texto = encodeURIComponent(`Hola, te comparto tu comprobante de atención del Ticket #${ticketId}.`);
         window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${texto}`, "_blank");
 
+        boton.classList.add("enviado");
+        registrarEnvioWhatsapp(ticketId);
+
         mostrarToast("Imagen copiada. Pega con Ctrl+V en la conversación de WhatsApp");
 
     } catch (error) {
@@ -229,6 +233,21 @@ async function enviarPorWhatsapp(ticketId, boton) {
         mostrarToast(error.message || "No se pudo preparar el envío por WhatsApp.", true);
     } finally {
         boton.disabled = false;
+    }
+}
+
+async function registrarEnvioWhatsapp(ticketId) {
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${ticketId}/whatsapp-sent`, {
+            method: "POST",
+            headers: authHeaders()
+        });
+
+        if (!response.ok) {
+            console.error("No se pudo registrar el envio de WhatsApp para el ticket", ticketId);
+        }
+    } catch (error) {
+        console.error("Error registrando envio de WhatsApp:", error);
     }
 }
 

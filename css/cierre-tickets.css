@@ -136,6 +136,10 @@ Tarjeta de ticket
     background: #25D366;
 }
 
+.btn-enviar-whatsapp.enviado {
+    background: #1877F2;
+}
+
 .btn-generar-pdf:active {
     background: var(--color-primary-active);
 }
