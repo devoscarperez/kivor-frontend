@@ -251,7 +251,7 @@ siempre va acompañado del texto del status.
     box-shadow: var(--shadow-soft);
     border-left: 6px solid transparent;
     padding: 16px;
-    background: var(--color-surface);
+    background: #FFF7FA;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -270,7 +270,7 @@ siempre va acompañado del texto del status.
 
 .ticket-id {
     font-weight: 700;
-    color: var(--color-text-primary);
+    color: #4E4E4E;
     font-size: 16px;
 }
 
@@ -293,7 +293,7 @@ siempre va acompañado del texto del status.
 .ticket-clienta.clienta-vacia {
     background: transparent;
     border: 1px dashed var(--color-border-default);
-    color: var(--color-text-secondary);
+    color: #4E4E4E;
 }
 
 .ticket-clienta.clienta-vacia:active {
@@ -303,7 +303,7 @@ siempre va acompañado del texto del status.
 .ticket-clienta.clienta-asignada {
     background: var(--color-background);
     border: 1px solid var(--color-border-default);
-    color: var(--color-text-primary);
+    color: #4E4E4E;
 }
 
 .ticket-clienta.clienta-asignada:active {
@@ -326,7 +326,7 @@ siempre va acompañado del texto del status.
 
 .ticket-fechas {
     font-size: 12px;
-    color: var(--color-text-secondary);
+    color: #4E4E4E;
     margin-top: 6px;
 }
 
