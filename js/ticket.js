@@ -494,9 +494,28 @@ function alternarOrden() {
     cargarLista();
 }
 
+const FILTROS_VISIBLES_KEY = "kivor_ticket_filtros_visible";
+
+function aplicarVisibilidadFiltros(visible) {
+    const filtros = document.getElementById("filtros");
+    const btn = document.getElementById("btnToggleFiltros");
+
+    filtros.classList.toggle("hidden", !visible);
+    btn.textContent = visible ? "▴" : "▾";
+    btn.setAttribute("aria-expanded", String(visible));
+    btn.setAttribute("aria-label", visible ? "Ocultar filtros" : "Mostrar filtros");
+}
+
+function alternarFiltros() {
+    const visible = document.getElementById("filtros").classList.contains("hidden");
+    localStorage.setItem(FILTROS_VISIBLES_KEY, String(visible));
+    aplicarVisibilidadFiltros(visible);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     actualizarFechaCabecera();
     inicializarFiltros();
+    aplicarVisibilidadFiltros(localStorage.getItem(FILTROS_VISIBLES_KEY) === "true");
     cargarLista();
 
     document.getElementById("btnRefrescar").addEventListener("click", cargarLista);
@@ -504,6 +523,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnAplicarFiltros").addEventListener("click", cargarLista);
     document.getElementById("btnCampoFecha").addEventListener("click", alternarCampoFecha);
     document.getElementById("btnOrden").addEventListener("click", alternarOrden);
+    document.getElementById("btnToggleFiltros").addEventListener("click", alternarFiltros);
 
     document.getElementById("bookingClose").addEventListener("click", cerrarPopupAgendamiento);
     document.getElementById("bookingBackdrop").addEventListener("click", cerrarPopupAgendamiento);

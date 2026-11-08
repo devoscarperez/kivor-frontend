@@ -103,6 +103,21 @@ Barra de acciones: Nuevo Ticket + orden, comparten línea
 Filtros
 ========================= */
 
+.btn-toggle-filtros {
+    width: auto;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    line-height: 1;
+    color: #4E4E4E;
+}
+
+.btn-toggle-filtros:active {
+    opacity: 0.6;
+}
+
 .filtros {
     flex-shrink: 0;
     display: flex;
@@ -110,6 +125,10 @@ Filtros
     align-items: flex-end;
     gap: 16px;
     padding: 12px;
+}
+
+.filtros.hidden {
+    display: none;
 }
 
 /* =========================
