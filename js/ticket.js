@@ -260,14 +260,14 @@ function renderLista(tickets) {
                     Creado: ${formatearFecha(t.ticket_created_at)}<br>
                     Actualizado: ${formatearFecha(t.ticket_updated_at)}
                 </div>
-                <button class="ticket-booking" data-ticket-id="${t.ticket_id}">
-                    Agendado: ${formatearFecha(t.ticket_booking_date)}
-                </button>
-            </div>
-            <div class="ticket-right">
-                <span class="ticket-antiguedad ${nivelAntiguedad(t.ticket_status, t.ticket_status_changed_at)}">
-                    ${tiempoTranscurrido(t.ticket_status_changed_at)}
-                </span>
+                <div class="ticket-booking-row">
+                    <button class="ticket-booking" data-ticket-id="${t.ticket_id}">
+                        Agendado: ${formatearFecha(t.ticket_booking_date)}
+                    </button>
+                    <span class="ticket-antiguedad ${nivelAntiguedad(t.ticket_status, t.ticket_status_changed_at)}">
+                        ${tiempoTranscurrido(t.ticket_status_changed_at)}
+                    </span>
+                </div>
             </div>
         `;
 
