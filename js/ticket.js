@@ -72,13 +72,13 @@ function tiempoTranscurrido(valor) {
 
     const diffMin = Math.floor((Date.now() - inicio) / 60000);
     if (diffMin < 1) return "recién";
-    if (diffMin < 60) return `hace ${diffMin} min`;
+    if (diffMin < 60) return `${diffMin} min`;
 
     const diffH = Math.floor(diffMin / 60);
-    if (diffH < 24) return `hace ${diffH} h`;
+    if (diffH < 24) return `${diffH} h`;
 
     const diffD = Math.floor(diffH / 24);
-    return `hace ${diffD} d`;
+    return `${diffD} d`;
 }
 
 function nivelAntiguedad(status, statusChangedAt) {
@@ -246,27 +246,27 @@ function renderLista(tickets) {
 
         item.innerHTML = `
             <div class="ticket-info">
-                <div class="ticket-id-row">
-                    <div class="ticket-id">Ticket #${escapeHtml(t.ticket_id)}</div>
-                    <button class="ticket-chip" data-ticket-id="${t.ticket_id}">${escapeHtml(t.ticket_status)}</button>
-                </div>
                 <button class="ticket-clienta ${nombreClienta ? "clienta-asignada" : "clienta-vacia"}" data-ticket-id="${t.ticket_id}">
                     ${nombreClienta ? escapeHtml(nombreClienta) : "+ Asociar clienta"}
                 </button>
+                <div class="ticket-meta-row">
+                    <button class="ticket-booking" data-ticket-id="${t.ticket_id}">
+                        Agendado: ${formatearFecha(t.ticket_booking_date)}
+                    </button>
+                    <span class="ticket-separador">·</span>
+                    <button class="ticket-chip" data-ticket-id="${t.ticket_id}">${escapeHtml(t.ticket_status)}</button>
+                    <span class="ticket-separador">·</span>
+                    <span class="ticket-antiguedad ${nivelAntiguedad(t.ticket_status, t.ticket_status_changed_at)}">
+                        ${tiempoTranscurrido(t.ticket_status_changed_at)}
+                    </span>
+                    <span class="ticket-separador">·</span>
+                    <span class="ticket-id">#${escapeHtml(t.ticket_id)}</span>
+                </div>
                 <a class="ticket-profesionales" href="ticket-profesionales.html?ticket_id=${t.ticket_id}">
                     Profesionales (${t.professional_count || 0}) →
                 </a>
                 <div class="ticket-fechas">
-                    Creado: ${formatearFecha(t.ticket_created_at)}<br>
-                    Actualizado: ${formatearFecha(t.ticket_updated_at)}
-                </div>
-                <div class="ticket-booking-row">
-                    <button class="ticket-booking" data-ticket-id="${t.ticket_id}">
-                        Agendado: ${formatearFecha(t.ticket_booking_date)}
-                    </button>
-                    <span class="ticket-antiguedad ${nivelAntiguedad(t.ticket_status, t.ticket_status_changed_at)}">
-                        ${tiempoTranscurrido(t.ticket_status_changed_at)}
-                    </span>
+                    Cre: ${formatearFecha(t.ticket_created_at)} <span class="ticket-separador">·</span> Act: ${formatearFecha(t.ticket_updated_at)}
                 </div>
             </div>
         `;

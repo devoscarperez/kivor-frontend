@@ -281,16 +281,14 @@ siempre va acompañado del texto del status.
     min-width: 0;
 }
 
-.ticket-id-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+.ticket-id {
+    font-weight: 400;
+    color: #9A9A9A;
+    font-size: 16px;
 }
 
-.ticket-id {
-    font-weight: 700;
-    color: #4E4E4E;
+.ticket-separador {
+    color: #9A9A9A;
     font-size: 16px;
 }
 
@@ -348,15 +346,14 @@ siempre va acompañado del texto del status.
 
 .ticket-fechas {
     font-size: 16px;
-    color: #4E4E4E;
+    color: #9A9A9A;
     margin-top: 6px;
 }
 
-.ticket-booking-row {
+.ticket-meta-row {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: space-between;
     gap: 8px;
     margin-top: 6px;
 }
