@@ -3,7 +3,7 @@ Layout principal
 ========================= */
 
 .app-ticket {
-    background: var(--color-background);
+    background: #FFF7FA;
     height: 100vh;
     height: 100dvh;
     box-sizing: border-box;
@@ -14,7 +14,7 @@ Layout principal
 
 .topbar-ticket {
     flex-shrink: 0;
-    background: var(--color-surface);
+    background: #FFF7FA;
     box-shadow: var(--shadow-soft);
     z-index: 5;
     padding: calc(env(safe-area-inset-top) + 12px) 12px 10px 12px;
@@ -38,7 +38,7 @@ Layout principal
 .topbar-ticket-titulo h1 {
     font-size: 18px;
     font-weight: 600;
-    color: var(--color-text-primary);
+    color: #4E4E4E;
     margin: 0;
     text-align: center;
 }
@@ -47,10 +47,11 @@ Layout principal
     width: 44px;
     height: 44px;
     flex-shrink: 0;
-    background: none;
-    border: none;
+    background: #FFF7FA;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-default);
     font-size: 22px;
-    color: var(--color-text-secondary);
+    color: #4E4E4E;
     padding: 0;
     display: flex;
     align-items: center;
@@ -63,9 +64,9 @@ Layout principal
 
 .fecha-cabecera {
     text-align: center;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
-    color: var(--color-text-secondary);
+    color: #4E4E4E;
     text-transform: capitalize;
     white-space: nowrap;
 }
@@ -86,16 +87,16 @@ Barra de acciones: Nuevo Ticket + orden, comparten línea
 .btn-nuevo-ticket {
     width: auto;
     padding: 12px 22px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
-    color: white;
-    background: var(--color-primary);
-    border: none;
+    color: #4E4E4E;
+    background: #FFF7FA;
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-default);
 }
 
 .btn-nuevo-ticket:active {
-    background: var(--color-primary-active);
+    opacity: 0.6;
 }
 
 /* =========================
@@ -128,47 +129,47 @@ el encabezado/filtros arriba permanecen siempre visibles.
     flex-direction: column;
     flex-shrink: 0;
     gap: 6px;
-    font-size: 12px;
-    color: var(--color-text-secondary);
+    font-size: 16px;
+    color: #4E4E4E;
 }
 
 .filtro-campo input {
-    background: var(--color-input-background);
-    color: var(--color-input-text);
+    background: #FFF7FA;
+    color: #4E4E4E;
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-default);
     padding: 8px;
-    font-size: 13px;
+    font-size: 16px;
     flex-shrink: 0;
 }
 
 .campo-fechas-row {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 6px;
 }
 
 .fechas-separador {
-    color: var(--color-text-secondary);
-    font-size: 12px;
+    color: #4E4E4E;
+    font-size: 16px;
 }
 
 .btn-campo-fecha-icono {
     width: auto;
     flex-shrink: 0;
     padding: 7px 10px;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     white-space: nowrap;
     border-radius: var(--radius-default);
     border: 1px solid var(--color-border-default);
-    background: var(--color-surface);
-    color: var(--color-text-primary);
+    background: #FFF7FA;
+    color: #4E4E4E;
 }
 
 .btn-campo-fecha-icono[data-campo="booking"] {
-    border-color: var(--color-info);
-    color: var(--color-info);
+    border-color: var(--color-primary);
 }
 
 .status-botones {
@@ -182,19 +183,17 @@ el encabezado/filtros arriba permanecen siempre visibles.
     width: auto;
     flex-shrink: 0;
     padding: 7px 12px;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     white-space: nowrap;
     border-radius: 999px;
     border: 1px solid var(--color-border-default);
-    background: var(--color-surface);
-    color: var(--color-text-primary);
+    background: #FFF7FA;
+    color: #4E4E4E;
 }
 
 .status-boton.activo {
-    background: var(--color-primary);
     border-color: var(--color-primary);
-    color: white;
 }
 
 .btn-orden,
@@ -202,18 +201,12 @@ el encabezado/filtros arriba permanecen siempre visibles.
     width: auto;
     flex-shrink: 0;
     padding: 10px 14px;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
     border-radius: var(--radius-default);
     border: 1px solid var(--color-border-default);
-    background: var(--color-surface);
-    color: var(--color-text-primary);
-}
-
-.btn-aplicar-filtros {
-    background: var(--color-primary);
-    color: white;
-    border: none;
+    background: #FFF7FA;
+    color: #4E4E4E;
 }
 
 /* =========================
@@ -222,8 +215,8 @@ Lista de tickets
 
 .lista-vacia {
     padding: 60px 20px;
-    color: var(--color-text-secondary);
-    font-size: 15px;
+    color: #4E4E4E;
+    font-size: 16px;
     text-align: center;
 }
 
@@ -281,42 +274,44 @@ siempre va acompañado del texto del status.
     margin-top: 6px;
     padding: 5px 10px;
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     width: fit-content;
     max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .ticket-clienta.clienta-vacia {
-    background: transparent;
+    background: #FFF7FA;
     border: 1px dashed var(--color-border-default);
     color: #4E4E4E;
 }
 
 .ticket-clienta.clienta-vacia:active {
-    background: var(--color-background);
+    opacity: 0.6;
 }
 
 .ticket-clienta.clienta-asignada {
-    background: var(--color-background);
+    background: #FFF7FA;
     border: 1px solid var(--color-border-default);
     color: #4E4E4E;
 }
 
 .ticket-clienta.clienta-asignada:active {
-    background: var(--color-border-default);
+    opacity: 0.6;
 }
 
 .ticket-profesionales {
-    display: block;
+    display: inline-block;
     width: fit-content;
     margin-top: 6px;
-    font-size: 12px;
+    padding: 5px 10px;
+    border: 1px solid var(--color-border-default);
+    border-radius: 999px;
+    font-size: 16px;
     font-weight: 600;
-    color: var(--color-primary);
+    color: #4E4E4E;
     text-decoration: none;
 }
 
@@ -325,7 +320,7 @@ siempre va acompañado del texto del status.
 }
 
 .ticket-fechas {
-    font-size: 12px;
+    font-size: 16px;
     color: #4E4E4E;
     margin-top: 6px;
 }
@@ -334,18 +329,18 @@ siempre va acompañado del texto del status.
     display: inline-block;
     width: fit-content;
     margin-top: 6px;
-    padding: 4px 10px;
-    border: none;
+    padding: 5px 10px;
+    border: 1px solid var(--color-border-default);
     border-radius: 999px;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
     font-family: inherit;
-    background: color-mix(in srgb, var(--color-info) 15%, var(--color-background));
-    color: var(--color-info);
+    background: #FFF7FA;
+    color: #4E4E4E;
 }
 
 .ticket-booking:active {
-    background: color-mix(in srgb, var(--color-info) 25%, var(--color-background));
+    opacity: 0.6;
 }
 
 /* =========================
@@ -354,12 +349,13 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
 
 .booking-sheet-titulo {
     flex: 1;
-    font-size: 15px;
-    color: var(--color-text-primary);
+    font-size: 16px;
+    color: #4E4E4E;
 }
 
 .booking-sheet-body {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     padding: 6px 16px 20px 16px;
 }
@@ -375,11 +371,12 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
 .booking-sheet-acciones .btn-nuevo-ticket {
     width: 100%;
     padding: 12px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .status-sheet-body {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     padding: 6px 16px 20px 16px;
 }
@@ -387,19 +384,19 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
 .status-sheet-body select {
     flex: 1;
     min-width: 0;
-    background: var(--color-input-background);
-    color: var(--color-input-text);
+    background: #FFF7FA;
+    color: #4E4E4E;
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-default);
     padding: 11px 10px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .status-sheet-body .btn-nuevo-ticket {
     width: auto;
     flex-shrink: 0;
     padding: 11px 16px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .ticket-chip {
@@ -407,11 +404,12 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 700;
-    color: white;
-    padding: 4px 10px;
-    border: none;
+    color: #4E4E4E;
+    background: #FFF7FA;
+    padding: 5px 12px;
+    border: 1px solid var(--color-border-default);
     border-radius: 999px;
     text-transform: uppercase;
     letter-spacing: 0.02em;
@@ -420,14 +418,8 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
 }
 
 .ticket-chip:active {
-    opacity: 0.8;
+    opacity: 0.6;
 }
-
-.status-error .ticket-chip { background: var(--color-error); }
-.status-warning .ticket-chip { background: var(--color-warning); }
-.status-info .ticket-chip { background: var(--color-info); }
-.status-success .ticket-chip { background: var(--color-success); }
-.status-neutral .ticket-chip { background: var(--color-text-secondary); }
 
 .ticket-right {
     flex-shrink: 0;
@@ -438,7 +430,7 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
 }
 
 .ticket-antiguedad {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 700;
 }
 
@@ -458,7 +450,7 @@ Toast de error/confirmación
     transform: translateX(-50%) translateY(10px);
     background: #111111;
     color: white;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
     padding: 10px 18px;
     border-radius: 999px;
