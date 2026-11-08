@@ -246,7 +246,10 @@ function renderLista(tickets) {
 
         item.innerHTML = `
             <div class="ticket-info">
-                <div class="ticket-id">Ticket #${escapeHtml(t.ticket_id)}</div>
+                <div class="ticket-id-row">
+                    <div class="ticket-id">Ticket #${escapeHtml(t.ticket_id)}</div>
+                    <button class="ticket-chip" data-ticket-id="${t.ticket_id}">${escapeHtml(t.ticket_status)}</button>
+                </div>
                 <button class="ticket-clienta ${nombreClienta ? "clienta-asignada" : "clienta-vacia"}" data-ticket-id="${t.ticket_id}">
                     ${nombreClienta ? escapeHtml(nombreClienta) : "+ Asociar clienta"}
                 </button>
@@ -262,7 +265,6 @@ function renderLista(tickets) {
                 </button>
             </div>
             <div class="ticket-right">
-                <button class="ticket-chip" data-ticket-id="${t.ticket_id}">${escapeHtml(t.ticket_status)}</button>
                 <span class="ticket-antiguedad ${nivelAntiguedad(t.ticket_status, t.ticket_status_changed_at)}">
                     ${tiempoTranscurrido(t.ticket_status_changed_at)}
                 </span>

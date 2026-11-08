@@ -277,7 +277,15 @@ siempre va acompañado del texto del status.
 .status-neutral { border-left-color: var(--color-border-default); }
 
 .ticket-info {
+    flex: 1;
     min-width: 0;
+}
+
+.ticket-id-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
 .ticket-id {
