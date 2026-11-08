@@ -261,7 +261,7 @@ function renderLista(tickets) {
                     Actualizado: ${formatearFecha(t.ticket_updated_at)}
                 </div>
                 <button class="ticket-booking" data-ticket-id="${t.ticket_id}">
-                    Fecha agendamiento: ${formatearFecha(t.ticket_booking_date)}
+                    Agendado: ${formatearFecha(t.ticket_booking_date)}
                 </button>
             </div>
             <div class="ticket-right">
