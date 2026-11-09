@@ -454,6 +454,12 @@ Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
     opacity: 0.6;
 }
 
+.status-info .ticket-chip {
+    background: #1E40AF;
+    color: #FFFFFF;
+    border-color: #1E40AF;
+}
+
 .ticket-antiguedad {
     font-size: 16px;
     font-weight: 700;

@@ -7,6 +7,7 @@ const DIAS_SEMANA = ["domingo", "lunes", "martes", "miércoles", "jueves", "vier
 const STATUS_GRUPO = {
     "Inactive": "error",
     "Assigned": "warning",
+    "Started": "info",
 };
 
 const TODOS_LOS_STATUS = ["Inactive", "Assigned", "Started", "Completed", "Approved", "Finished"];
