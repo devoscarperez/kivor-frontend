@@ -493,6 +493,23 @@ async function guardarStatus() {
     }
 }
 
+function reiniciarFiltros() {
+    const hoy = fechaLocalISO(new Date());
+    document.getElementById("fechaDesde").value = hoy;
+    document.getElementById("fechaHasta").value = hoy;
+    guardarFechasFiltro();
+
+    statusSeleccionados = [];
+    renderStatusBotones();
+
+    ordenActual = "desc";
+    const btnOrden = document.getElementById("btnOrden");
+    btnOrden.dataset.orden = "desc";
+    btnOrden.textContent = "Más reciente primero ↓";
+
+    cargarLista();
+}
+
 function alternarOrden() {
     const btn = document.getElementById("btnOrden");
     ordenActual = ordenActual === "desc" ? "asc" : "desc";
@@ -535,6 +552,7 @@ document.addEventListener("DOMContentLoaded", () => {
         guardarFechasFiltro();
         cargarLista();
     });
+    document.getElementById("btnReiniciarFiltros").addEventListener("click", reiniciarFiltros);
     document.getElementById("btnCampoFecha").addEventListener("click", alternarCampoFecha);
     document.getElementById("btnOrden").addEventListener("click", alternarOrden);
     document.getElementById("btnToggleFiltros").addEventListener("click", alternarFiltros);
