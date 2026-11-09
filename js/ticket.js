@@ -271,9 +271,14 @@ function renderLista(tickets) {
                     <span class="ticket-separador">·</span>
                     <span class="ticket-id">#${escapeHtml(t.ticket_id)}</span>
                 </div>
-                <a class="ticket-profesionales" href="ticket-profesionales.html?ticket_id=${t.ticket_id}">
-                    Profesionales (${t.professional_count || 0}) →
-                </a>
+                <div class="ticket-profesionales-row">
+                    <a class="ticket-profesionales" href="ticket-profesionales.html?ticket_id=${t.ticket_id}">
+                        Profesionales (${t.professional_count || 0}) →
+                    </a>
+                    ${(t.professional_aliases && t.professional_aliases.length)
+                        ? `<span class="ticket-profesionales-alias">${t.professional_aliases.map(escapeHtml).join(" · ")}</span>`
+                        : ""}
+                </div>
                 <div class="ticket-fechas">
                     Cre: ${formatearFecha(t.ticket_created_at)} <span class="ticket-separador">·</span> Act: ${formatearFecha(t.ticket_updated_at)}
                 </div>
