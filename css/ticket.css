@@ -310,7 +310,7 @@ siempre va acompañado del texto del status.
 .ticket-clienta.clienta-vacia {
     background: #FFF7FA;
     border: 1px dashed var(--color-border-default);
-    color: #4E4E4E;
+    color: #1F3A5F;
 }
 
 .ticket-clienta.clienta-vacia:active {
@@ -320,7 +320,7 @@ siempre va acompañado del texto del status.
 .ticket-clienta.clienta-asignada {
     background: #FFF7FA;
     border: 1px solid var(--color-border-default);
-    color: #4E4E4E;
+    color: #1F3A5F;
 }
 
 .ticket-clienta.clienta-asignada:active {
