@@ -116,10 +116,18 @@ function horaLocalHHMM(fecha) {
     return `${horas}:${minutos}`;
 }
 
+const FECHA_DESDE_KEY = "kivor_ticket_fecha_desde";
+const FECHA_HASTA_KEY = "kivor_ticket_fecha_hasta";
+
+function guardarFechasFiltro() {
+    localStorage.setItem(FECHA_DESDE_KEY, document.getElementById("fechaDesde").value);
+    localStorage.setItem(FECHA_HASTA_KEY, document.getElementById("fechaHasta").value);
+}
+
 function inicializarFiltros() {
     const hoy = fechaLocalISO(new Date());
-    document.getElementById("fechaDesde").value = hoy;
-    document.getElementById("fechaHasta").value = hoy;
+    document.getElementById("fechaDesde").value = localStorage.getItem(FECHA_DESDE_KEY) || hoy;
+    document.getElementById("fechaHasta").value = localStorage.getItem(FECHA_HASTA_KEY) || hoy;
 
     const contenedor = document.getElementById("statusBotones");
     contenedor.innerHTML = "";
@@ -522,7 +530,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("btnRefrescar").addEventListener("click", cargarLista);
     document.getElementById("btnNuevoTicket").addEventListener("click", crearTicket);
-    document.getElementById("btnAplicarFiltros").addEventListener("click", cargarLista);
+    document.getElementById("btnAplicarFiltros").addEventListener("click", () => {
+        guardarFechasFiltro();
+        cargarLista();
+    });
     document.getElementById("btnCampoFecha").addEventListener("click", alternarCampoFecha);
     document.getElementById("btnOrden").addEventListener("click", alternarOrden);
     document.getElementById("btnToggleFiltros").addEventListener("click", alternarFiltros);
