@@ -122,7 +122,7 @@ function renderAgendaHoy(items) {
 
         const nombre = item.customer_full_name || item.customer_nickname || "(sin nombre)";
         const hora = item.booking_date ? horaLocalHHMM(new Date(item.booking_date)) : "-";
-        const estaAsignada = item.ticket_professional_customer_status === "Assigned";
+        const estaAsignada = item.ticket_status === "Started" && item.ticket_professional_customer_status === "Assigned";
 
         const lineasServicios = item.products.length
             ? item.products.map(p => `
