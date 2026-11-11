@@ -105,8 +105,7 @@ function actualizarFechaCabecera() {
 }
 
 function formatearMonto(valor) {
-    if (valor === null || valor === undefined) return "—";
-    return `$${Number(valor).toLocaleString("es-CL")}`;
+    return `$${Number(valor || 0).toLocaleString("es-CL")}`;
 }
 
 function fechaLocalISO(fecha) {
@@ -288,12 +287,10 @@ function renderLista(tickets) {
                     </span>
                     <span class="ticket-separador">·</span>
                     <span class="ticket-id">#${escapeHtml(t.ticket_id)}</span>
-                    ${t.ticket_customer_id ? `
-                        <span class="ticket-separador">·</span>
-                        <button class="ticket-abono" data-ticket-id="${t.ticket_id}">
-                            Abono: ${formatearMonto(t.ticket_booking_deposit)}
-                        </button>
-                    ` : ""}
+                    <span class="ticket-separador">·</span>
+                    <button class="ticket-abono ${(t.ticket_booking_deposit || 0) > 0 ? "abono-pagado" : "abono-cero"}" data-ticket-id="${t.ticket_id}">
+                        Abono: ${formatearMonto(t.ticket_booking_deposit)}
+                    </button>
                 </div>
                 <div class="ticket-profesionales-row">
                     <a class="ticket-profesionales" href="ticket-profesionales.html?ticket_id=${t.ticket_id}">
@@ -310,7 +307,7 @@ function renderLista(tickets) {
         `;
 
         item.querySelector(".ticket-clienta").addEventListener("click", () => {
-            abrirSelectorClienta((clienta) => abrirPopupAbono(t, clienta));
+            abrirSelectorClienta((clienta) => asociarClienta(t.ticket_id, clienta));
         });
 
         item.querySelector(".ticket-booking").addEventListener("click", () => {
@@ -321,26 +318,63 @@ function renderLista(tickets) {
             abrirPopupStatus(t);
         });
 
-        const btnAbono = item.querySelector(".ticket-abono");
-        if (btnAbono) {
-            btnAbono.addEventListener("click", () => {
-                abrirPopupAbono(t);
-            });
-        }
+        item.querySelector(".ticket-abono").addEventListener("click", () => {
+            abrirPopupAbono(t);
+        });
 
         contenedor.appendChild(item);
     });
 }
 
-let contextoAbono = null;
+async function asociarClienta(ticketId, clienta) {
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${ticketId}/customer`, {
+            method: "PATCH",
+            headers: { ...authHeaders(), "Content-Type": "application/json" },
+            body: JSON.stringify({ customer_id: clienta.customer_id })
+        });
 
-function abrirPopupAbono(ticket, clienta = null) {
-    contextoAbono = { ticketId: ticket.ticket_id, clienta };
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo asociar la clienta.");
+            throw new Error(mensaje);
+        }
+
+        const actualizado = await response.json();
+
+        const ticket = ticketsActuales.find(t => t.ticket_id === ticketId);
+        if (ticket) {
+            ticket.ticket_customer_id = actualizado.ticket_customer_id;
+            ticket.ticket_status = actualizado.ticket_status;
+            ticket.ticket_status_changed_at = actualizado.ticket_status_changed_at;
+            ticket.ticket_updated_at = actualizado.ticket_updated_at;
+            ticket.customer_full_name = clienta.customer_full_name;
+            ticket.customer_nickname = clienta.customer_nickname;
+            ticket.customer_mobile = clienta.customer_mobile;
+        }
+
+        renderLista(ticketsActuales);
+        mostrarToast("Clienta asociada correctamente");
+
+    } catch (error) {
+        console.error("Error asociando clienta:", error);
+        mostrarToast(error.message || "No se pudo asociar la clienta.", true);
+    }
+}
+
+let ticketIdEnEdicionAbono = null;
+
+function abrirPopupAbono(ticket) {
+    ticketIdEnEdicionAbono = ticket.ticket_id;
 
     const input = document.getElementById("abonoMonto");
-    input.value = clienta ? "" : (ticket.ticket_booking_deposit ?? "");
+    input.value = String(ticket.ticket_booking_deposit || 0);
 
-    document.getElementById("abonoGuardar").disabled = input.value === "";
+    document.getElementById("abonoGuardar").disabled = false;
 
     document.getElementById("abonoModal").classList.add("activa");
     document.body.style.overflow = "hidden";
@@ -350,7 +384,7 @@ function abrirPopupAbono(ticket, clienta = null) {
 function cerrarPopupAbono() {
     document.getElementById("abonoModal").classList.remove("activa");
     document.body.style.overflow = "";
-    contextoAbono = null;
+    ticketIdEnEdicionAbono = null;
 }
 
 function onInputAbonoMonto(event) {
@@ -359,22 +393,18 @@ function onInputAbonoMonto(event) {
 }
 
 async function guardarAbono() {
-    if (!contextoAbono) return;
+    if (!ticketIdEnEdicionAbono) return;
 
     const monto = document.getElementById("abonoMonto").value;
     if (monto === "") return;
 
-    const { ticketId, clienta } = contextoAbono;
-    const ticket = ticketsActuales.find(t => t.ticket_id === ticketId);
-    const customerId = clienta ? clienta.customer_id : ticket?.ticket_customer_id;
-
-    if (!customerId) return;
+    const ticketId = ticketIdEnEdicionAbono;
 
     try {
-        const response = await fetch(`${API_BASE}/ticket/${ticketId}/customer`, {
+        const response = await fetch(`${API_BASE}/ticket/${ticketId}/booking-deposit`, {
             method: "PATCH",
             headers: { ...authHeaders(), "Content-Type": "application/json" },
-            body: JSON.stringify({ customer_id: customerId, booking_deposit: Number(monto) })
+            body: JSON.stringify({ booking_deposit: Number(monto) })
         });
 
         if (response.status === 401) {
@@ -389,17 +419,10 @@ async function guardarAbono() {
 
         const actualizado = await response.json();
 
+        const ticket = ticketsActuales.find(t => t.ticket_id === ticketId);
         if (ticket) {
-            ticket.ticket_customer_id = actualizado.ticket_customer_id;
-            ticket.ticket_status = actualizado.ticket_status;
-            ticket.ticket_status_changed_at = actualizado.ticket_status_changed_at;
-            ticket.ticket_updated_at = actualizado.ticket_updated_at;
             ticket.ticket_booking_deposit = actualizado.ticket_booking_deposit;
-            if (clienta) {
-                ticket.customer_full_name = clienta.customer_full_name;
-                ticket.customer_nickname = clienta.customer_nickname;
-                ticket.customer_mobile = clienta.customer_mobile;
-            }
+            ticket.ticket_updated_at = actualizado.ticket_updated_at;
         }
 
         renderLista(ticketsActuales);

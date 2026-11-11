@@ -390,6 +390,16 @@ siempre va acompañado del texto del status.
     opacity: 0.6;
 }
 
+.ticket-abono.abono-cero {
+    border-color: var(--kivor-error-border);
+    color: var(--kivor-error-text);
+}
+
+.ticket-abono.abono-pagado {
+    border-color: var(--color-info);
+    color: var(--color-info);
+}
+
 /* =========================
 Popup de agendamiento (reutiliza cs-modal/cs-sheet de customer-selector.css)
 ========================= */
