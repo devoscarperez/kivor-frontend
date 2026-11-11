@@ -79,6 +79,30 @@ Layout principal (mismo patron que ticket.css/servicios-profesional.css)
 }
 
 /* =========================
+Secciones (Completados / Otros status)
+========================= */
+
+.ct-seccion.hidden {
+    display: none;
+}
+
+.ct-seccion-titulo {
+    margin: 4px 16px 0;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+}
+
+.tarjeta-ct-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* =========================
 Tarjeta de ticket
 ========================= */
 

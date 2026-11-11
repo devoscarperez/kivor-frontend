@@ -107,46 +107,64 @@ async function cargarCierreTickets() {
 }
 
 function renderCierreTickets(tickets) {
-    const contenedor = document.getElementById("listaCierreTickets");
     const vacia = document.getElementById("listaCtVacia");
+    const seccionCompletados = document.getElementById("seccionCtCompletados");
+    const seccionOtros = document.getElementById("seccionCtOtros");
+    const contenedorCompletados = document.getElementById("listaCierreTicketsCompletados");
+    const contenedorOtros = document.getElementById("listaCierreTicketsOtros");
 
-    contenedor.innerHTML = "";
+    contenedorCompletados.innerHTML = "";
+    contenedorOtros.innerHTML = "";
 
     if (!tickets.length) {
         vacia.classList.remove("hidden");
+        seccionCompletados.classList.add("hidden");
+        seccionOtros.classList.add("hidden");
         return;
     }
 
     vacia.classList.add("hidden");
 
-    tickets.forEach(t => {
-        const nombre = t.customer_full_name || t.customer_nickname || "(sin clienta titular)";
-        const yaEnviado = Boolean(t.whatsapp_sent);
+    const completados = tickets.filter(t => t.ticket_status === "Completed");
+    const otros = tickets.filter(t => t.ticket_status !== "Completed");
 
-        const tarjeta = document.createElement("div");
-        tarjeta.className = "tarjeta-ct";
+    seccionCompletados.classList.toggle("hidden", completados.length === 0);
+    seccionOtros.classList.toggle("hidden", otros.length === 0);
 
-        tarjeta.innerHTML = `
-            <div class="tarjeta-ct-info">
-                <span class="tarjeta-ct-clienta">${escapeHtml(nombre)}</span>
+    completados.forEach(t => contenedorCompletados.appendChild(crearTarjetaCt(t, true)));
+    otros.forEach(t => contenedorOtros.appendChild(crearTarjetaCt(t, false)));
+}
+
+function crearTarjetaCt(t, esCompletado) {
+    const nombre = t.customer_full_name || t.customer_nickname || "(sin clienta titular)";
+    const yaEnviado = Boolean(t.whatsapp_sent);
+
+    const tarjeta = document.createElement("div");
+    tarjeta.className = esCompletado ? "tarjeta-ct status-info" : "tarjeta-ct";
+
+    tarjeta.innerHTML = `
+        <div class="tarjeta-ct-info">
+            <span class="tarjeta-ct-clienta">${escapeHtml(nombre)}</span>
+            <div class="tarjeta-ct-meta-row">
                 <span class="tarjeta-ct-meta">Ticket #${t.ticket_id} · ${formatearFecha(t.ticket_booking_date)}</span>
+                <span class="ticket-chip">${escapeHtml(t.ticket_status)}</span>
             </div>
-            <div class="tarjeta-ct-acciones">
-                <button class="btn-generar-pdf" data-ticket-id="${t.ticket_id}">Generar PDF</button>
-                <button class="btn-enviar-whatsapp ${yaEnviado ? "enviado" : ""}" data-ticket-id="${t.ticket_id}">Enviar por WhatsApp</button>
-            </div>
-        `;
+        </div>
+        <div class="tarjeta-ct-acciones">
+            <button class="btn-generar-pdf" data-ticket-id="${t.ticket_id}">Generar PDF</button>
+            <button class="btn-enviar-whatsapp ${yaEnviado ? "enviado" : ""}" data-ticket-id="${t.ticket_id}">Enviar por WhatsApp</button>
+        </div>
+    `;
 
-        tarjeta.querySelector(".btn-generar-pdf").addEventListener("click", (event) => {
-            generarPdf(t.ticket_id, event.currentTarget);
-        });
-
-        tarjeta.querySelector(".btn-enviar-whatsapp").addEventListener("click", (event) => {
-            enviarPorWhatsapp(t.ticket_id, nombre, event.currentTarget);
-        });
-
-        contenedor.appendChild(tarjeta);
+    tarjeta.querySelector(".btn-generar-pdf").addEventListener("click", (event) => {
+        generarPdf(t.ticket_id, event.currentTarget);
     });
+
+    tarjeta.querySelector(".btn-enviar-whatsapp").addEventListener("click", (event) => {
+        enviarPorWhatsapp(t.ticket_id, nombre, event.currentTarget);
+    });
+
+    return tarjeta;
 }
 
 async function generarPdf(ticketId, boton) {
