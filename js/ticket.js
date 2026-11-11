@@ -1,4 +1,4 @@
-const REFRESCO_MS = 20000;
+const REFRESCO_VACIO_MS = 60000;
 const DIAS_SEMANA = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 
 // Valores reales permitidos por el constraint chk_ticket_status en BD.
@@ -122,18 +122,10 @@ function horaLocalHHMM(fecha) {
     return `${horas}:${minutos}`;
 }
 
-const FECHA_DESDE_KEY = "kivor_ticket_fecha_desde";
-const FECHA_HASTA_KEY = "kivor_ticket_fecha_hasta";
-
-function guardarFechasFiltro() {
-    localStorage.setItem(FECHA_DESDE_KEY, document.getElementById("fechaDesde").value);
-    localStorage.setItem(FECHA_HASTA_KEY, document.getElementById("fechaHasta").value);
-}
-
 function inicializarFiltros() {
     const hoy = fechaLocalISO(new Date());
-    document.getElementById("fechaDesde").value = localStorage.getItem(FECHA_DESDE_KEY) || hoy;
-    document.getElementById("fechaHasta").value = localStorage.getItem(FECHA_HASTA_KEY) || hoy;
+    document.getElementById("fechaDesde").value = hoy;
+    document.getElementById("fechaHasta").value = hoy;
 
     const contenedor = document.getElementById("statusBotones");
     contenedor.innerHTML = "";
@@ -218,7 +210,24 @@ function alternarCampoFecha() {
     btn.textContent = campoFechaActual === "created" ? "📅 Creado" : "📅 Agendamiento";
 }
 
+let cargaEnCurso = false;
+let timeoutRefrescoTickets = null;
+
+function programarProximoRefresco() {
+    if (timeoutRefrescoTickets) clearTimeout(timeoutRefrescoTickets);
+
+    // Con tickets cargados no se reprograma: solo refresca una accion
+    // explicita (boton Actualizar, aplicar filtro, etc). Vacio si refresca
+    // solo para detectar tickets nuevos sin que nadie este mirando el detalle.
+    if (!ticketsActuales.length) {
+        timeoutRefrescoTickets = setTimeout(cargarLista, REFRESCO_VACIO_MS);
+    }
+}
+
 async function cargarLista() {
+    if (cargaEnCurso) return;
+    cargaEnCurso = true;
+
     try {
         const response = await fetch(`${API_BASE}/ticket?${construirQueryString()}`, {
             headers: authHeaders()
@@ -232,9 +241,13 @@ async function cargarLista() {
         const tickets = await response.json();
         ticketsActuales = tickets || [];
         renderLista(ticketsActuales);
+        programarProximoRefresco();
 
     } catch (error) {
         console.error("Error cargando tickets:", error);
+        programarProximoRefresco();
+    } finally {
+        cargaEnCurso = false;
     }
 }
 
@@ -560,7 +573,6 @@ function reiniciarFiltros() {
     const hoy = fechaLocalISO(new Date());
     document.getElementById("fechaDesde").value = hoy;
     document.getElementById("fechaHasta").value = hoy;
-    guardarFechasFiltro();
 
     statusSeleccionados = [];
     renderStatusBotones();
@@ -611,10 +623,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("btnRefrescar").addEventListener("click", cargarLista);
     document.getElementById("btnNuevoTicket").addEventListener("click", crearTicket);
-    document.getElementById("btnAplicarFiltros").addEventListener("click", () => {
-        guardarFechasFiltro();
-        cargarLista();
-    });
+    document.getElementById("btnAplicarFiltros").addEventListener("click", cargarLista);
     document.getElementById("btnReiniciarFiltros").addEventListener("click", reiniciarFiltros);
     document.getElementById("btnCampoFecha").addEventListener("click", alternarCampoFecha);
     document.getElementById("btnOrden").addEventListener("click", alternarOrden);
@@ -632,6 +641,4 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("abonoBackdrop").addEventListener("click", cerrarPopupAbono);
     document.getElementById("abonoMonto").addEventListener("input", onInputAbonoMonto);
     document.getElementById("abonoGuardar").addEventListener("click", guardarAbono);
-
-    setInterval(cargarLista, REFRESCO_MS);
 });
