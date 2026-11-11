@@ -391,8 +391,8 @@ siempre va acompañado del texto del status.
 }
 
 .ticket-abono.abono-cero {
-    border-color: var(--kivor-error-border);
-    color: var(--kivor-error-text);
+    border-color: var(--color-warning);
+    color: var(--color-warning);
 }
 
 .ticket-abono.abono-pagado {
