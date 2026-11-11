@@ -81,6 +81,26 @@
     </div>
 </div>
 
+<div id="abonoModal" class="cs-modal">
+    <div id="abonoBackdrop" class="cs-backdrop"></div>
+    <div class="cs-sheet">
+        <div class="cs-sheet-handle"></div>
+        <header class="cs-sheet-header">
+            <strong class="booking-sheet-titulo">Abono de agendamiento</strong>
+            <button id="abonoClose" class="cs-close" aria-label="Cerrar">✕</button>
+        </header>
+        <div class="booking-sheet-body">
+            <div class="filtro-campo">
+                <label for="abonoMonto">Monto del abono</label>
+                <input type="text" id="abonoMonto" inputmode="numeric" pattern="[0-9]*" maxlength="5" placeholder="0">
+            </div>
+        </div>
+        <div class="booking-sheet-acciones">
+            <button id="abonoGuardar" class="btn-nuevo-ticket" type="button" disabled>Guardar</button>
+        </div>
+    </div>
+</div>
+
 <div id="statusModal" class="cs-modal">
     <div id="statusBackdrop" class="cs-backdrop"></div>
     <div class="cs-sheet">

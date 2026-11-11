@@ -104,6 +104,11 @@ function actualizarFechaCabecera() {
     document.getElementById("fechaCabecera").textContent = `${diaCapitalizado}, ${fechaTexto}`;
 }
 
+function formatearMonto(valor) {
+    if (valor === null || valor === undefined) return "—";
+    return `$${Number(valor).toLocaleString("es-CL")}`;
+}
+
 function fechaLocalISO(fecha) {
     const anio = fecha.getFullYear();
     const mes = String(fecha.getMonth() + 1).padStart(2, "0");
@@ -270,6 +275,12 @@ function renderLista(tickets) {
                     </span>
                     <span class="ticket-separador">·</span>
                     <span class="ticket-id">#${escapeHtml(t.ticket_id)}</span>
+                    ${t.ticket_customer_id ? `
+                        <span class="ticket-separador">·</span>
+                        <button class="ticket-abono" data-ticket-id="${t.ticket_id}">
+                            Abono: ${formatearMonto(t.ticket_booking_deposit)}
+                        </button>
+                    ` : ""}
                 </div>
                 <div class="ticket-profesionales-row">
                     <a class="ticket-profesionales" href="ticket-profesionales.html?ticket_id=${t.ticket_id}">
@@ -286,7 +297,7 @@ function renderLista(tickets) {
         `;
 
         item.querySelector(".ticket-clienta").addEventListener("click", () => {
-            abrirSelectorClienta((clienta) => asociarClienta(t.ticket_id, clienta));
+            abrirSelectorClienta((clienta) => abrirPopupAbono(t, clienta));
         });
 
         item.querySelector(".ticket-booking").addEventListener("click", () => {
@@ -297,16 +308,60 @@ function renderLista(tickets) {
             abrirPopupStatus(t);
         });
 
+        const btnAbono = item.querySelector(".ticket-abono");
+        if (btnAbono) {
+            btnAbono.addEventListener("click", () => {
+                abrirPopupAbono(t);
+            });
+        }
+
         contenedor.appendChild(item);
     });
 }
 
-async function asociarClienta(ticketId, clienta) {
+let contextoAbono = null;
+
+function abrirPopupAbono(ticket, clienta = null) {
+    contextoAbono = { ticketId: ticket.ticket_id, clienta };
+
+    const input = document.getElementById("abonoMonto");
+    input.value = clienta ? "" : (ticket.ticket_booking_deposit ?? "");
+
+    document.getElementById("abonoGuardar").disabled = input.value === "";
+
+    document.getElementById("abonoModal").classList.add("activa");
+    document.body.style.overflow = "hidden";
+    setTimeout(() => input.focus(), 100);
+}
+
+function cerrarPopupAbono() {
+    document.getElementById("abonoModal").classList.remove("activa");
+    document.body.style.overflow = "";
+    contextoAbono = null;
+}
+
+function onInputAbonoMonto(event) {
+    event.target.value = event.target.value.replace(/\D/g, "").slice(0, 5);
+    document.getElementById("abonoGuardar").disabled = event.target.value === "";
+}
+
+async function guardarAbono() {
+    if (!contextoAbono) return;
+
+    const monto = document.getElementById("abonoMonto").value;
+    if (monto === "") return;
+
+    const { ticketId, clienta } = contextoAbono;
+    const ticket = ticketsActuales.find(t => t.ticket_id === ticketId);
+    const customerId = clienta ? clienta.customer_id : ticket?.ticket_customer_id;
+
+    if (!customerId) return;
+
     try {
         const response = await fetch(`${API_BASE}/ticket/${ticketId}/customer`, {
             method: "PATCH",
             headers: { ...authHeaders(), "Content-Type": "application/json" },
-            body: JSON.stringify({ customer_id: clienta.customer_id })
+            body: JSON.stringify({ customer_id: customerId, booking_deposit: Number(monto) })
         });
 
         if (response.status === 401) {
@@ -315,29 +370,32 @@ async function asociarClienta(ticketId, clienta) {
         }
 
         if (!response.ok) {
-            const mensaje = await extraerMensajeError(response, "No se pudo asociar la clienta.");
+            const mensaje = await extraerMensajeError(response, "No se pudo guardar el abono.");
             throw new Error(mensaje);
         }
 
         const actualizado = await response.json();
 
-        const ticket = ticketsActuales.find(t => t.ticket_id === ticketId);
         if (ticket) {
             ticket.ticket_customer_id = actualizado.ticket_customer_id;
             ticket.ticket_status = actualizado.ticket_status;
             ticket.ticket_status_changed_at = actualizado.ticket_status_changed_at;
             ticket.ticket_updated_at = actualizado.ticket_updated_at;
-            ticket.customer_full_name = clienta.customer_full_name;
-            ticket.customer_nickname = clienta.customer_nickname;
-            ticket.customer_mobile = clienta.customer_mobile;
+            ticket.ticket_booking_deposit = actualizado.ticket_booking_deposit;
+            if (clienta) {
+                ticket.customer_full_name = clienta.customer_full_name;
+                ticket.customer_nickname = clienta.customer_nickname;
+                ticket.customer_mobile = clienta.customer_mobile;
+            }
         }
 
         renderLista(ticketsActuales);
-        mostrarToast("Clienta asociada correctamente");
+        mostrarToast("Abono guardado");
+        cerrarPopupAbono();
 
     } catch (error) {
-        console.error("Error asociando clienta:", error);
-        mostrarToast(error.message || "No se pudo asociar la clienta.", true);
+        console.error("Error guardando abono:", error);
+        mostrarToast(error.message || "No se pudo guardar el abono.", true);
     }
 }
 
@@ -569,6 +627,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("statusClose").addEventListener("click", cerrarPopupStatus);
     document.getElementById("statusBackdrop").addEventListener("click", cerrarPopupStatus);
     document.getElementById("statusAplicar").addEventListener("click", guardarStatus);
+
+    document.getElementById("abonoClose").addEventListener("click", cerrarPopupAbono);
+    document.getElementById("abonoBackdrop").addEventListener("click", cerrarPopupAbono);
+    document.getElementById("abonoMonto").addEventListener("input", onInputAbonoMonto);
+    document.getElementById("abonoGuardar").addEventListener("click", guardarAbono);
 
     setInterval(cargarLista, REFRESCO_MS);
 });

@@ -370,7 +370,8 @@ siempre va acompañado del texto del status.
     margin-top: 6px;
 }
 
-.ticket-booking {
+.ticket-booking,
+.ticket-abono {
     display: inline-block;
     width: fit-content;
     min-width: 0;
@@ -384,7 +385,8 @@ siempre va acompañado del texto del status.
     color: #4E4E4E;
 }
 
-.ticket-booking:active {
+.ticket-booking:active,
+.ticket-abono:active {
     opacity: 0.6;
 }
 
