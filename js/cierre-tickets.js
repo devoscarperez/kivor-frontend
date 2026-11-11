@@ -145,6 +145,9 @@ function crearTarjetaCt(t, esCompletado) {
     tarjeta.innerHTML = `
         <div class="tarjeta-ct-info">
             <span class="tarjeta-ct-clienta">${escapeHtml(nombre)}</span>
+            ${(t.professional_aliases && t.professional_aliases.length)
+                ? `<span class="ticket-profesionales-alias">${t.professional_aliases.map(escapeHtml).join(" · ")}</span>`
+                : ""}
             <div class="tarjeta-ct-meta-row">
                 <span class="tarjeta-ct-meta">Ticket #${t.ticket_id} · ${formatearFecha(t.ticket_booking_date)}</span>
                 <span class="ticket-chip">${escapeHtml(t.ticket_status)}</span>
