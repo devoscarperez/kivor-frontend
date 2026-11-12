@@ -235,7 +235,9 @@ Lista de servicios ya agregados
 }
 
 .btn-aplicar-descuento-linea {
-    flex-shrink: 0;
+    display: inline-block;
+    width: auto;
+    margin: 0 0 6px;
     padding: 3px 10px;
     border-radius: 999px;
     font-size: 13px;

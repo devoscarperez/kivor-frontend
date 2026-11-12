@@ -126,9 +126,19 @@ function renderAgendaHoy(items) {
 
         const lineasServicios = item.products.length
             ? item.products.map(p => `
-                <div class="servicio-sp-linea">
-                    <span>${escapeHtml(p.product_label || p.product_name)}</span>
-                    <span class="servicio-sp-precio">${formatearPrecio(p.unit_price)}</span>
+                <div class="servicio-sp-item">
+                    <div class="servicio-sp-linea">
+                        <span>${escapeHtml(p.product_label || p.product_name)}</span>
+                        <span class="servicio-sp-precio">${formatearPrecio(p.unit_price)}</span>
+                        ${estaAsignada ? `
+                            <button class="btn-quitar-servicio-sp"
+                                data-ticket-id="${item.ticket_id}"
+                                data-tp-id="${item.ticket_professional_id}"
+                                data-tpc-id="${item.ticket_professional_customer_id}"
+                                data-tpcp-id="${p.ticket_professional_customer_product_id}"
+                                aria-label="Eliminar servicio">✕</button>
+                        ` : ""}
+                    </div>
                     ${estaAsignada && p.descuento_disponible ? `
                         <button class="btn-aplicar-descuento-linea"
                             data-ticket-id="${item.ticket_id}"
@@ -137,14 +147,6 @@ function renderAgendaHoy(items) {
                             data-tpcp-id="${p.ticket_professional_customer_product_id}">
                             Aplicar Descuento
                         </button>
-                    ` : ""}
-                    ${estaAsignada ? `
-                        <button class="btn-quitar-servicio-sp"
-                            data-ticket-id="${item.ticket_id}"
-                            data-tp-id="${item.ticket_professional_id}"
-                            data-tpc-id="${item.ticket_professional_customer_id}"
-                            data-tpcp-id="${p.ticket_professional_customer_product_id}"
-                            aria-label="Eliminar servicio">✕</button>
                     ` : ""}
                 </div>
             `).join("")
