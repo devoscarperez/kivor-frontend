@@ -163,6 +163,11 @@ function renderAgendaHoy(items) {
                     Asignar Servicios
                 </button>
             ` : ""}
+            ${estaAsignada && item.descuento_disponible ? `
+                <button class="btn-aplicar-descuento" data-tpc-id="${item.ticket_professional_customer_id}" data-tp-id="${item.ticket_professional_id}" data-ticket-id="${item.ticket_id}">
+                    Aplicar Descuento
+                </button>
+            ` : ""}
         `;
 
         if (estaAsignada) {
@@ -173,6 +178,13 @@ function renderAgendaHoy(items) {
             tarjeta.querySelector(".btn-finalizar-atencion").addEventListener("click", () => {
                 finalizarAtencion(item);
             });
+
+            const btnAplicarDescuento = tarjeta.querySelector(".btn-aplicar-descuento");
+            if (btnAplicarDescuento) {
+                btnAplicarDescuento.addEventListener("click", () => {
+                    aplicarDescuento(item);
+                });
+            }
 
             tarjeta.querySelectorAll(".btn-quitar-servicio-sp").forEach(btn => {
                 btn.addEventListener("click", () => {
@@ -188,6 +200,32 @@ function renderAgendaHoy(items) {
 
         contenedor.appendChild(tarjeta);
     });
+}
+
+async function aplicarDescuento(item) {
+    try {
+        const response = await fetch(
+            `${API_BASE}/ticket/${item.ticket_id}/professionals/${item.ticket_professional_id}/customers/${item.ticket_professional_customer_id}/apply-discount`,
+            { method: "POST", headers: authHeaders() }
+        );
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo aplicar el descuento.");
+            throw new Error(mensaje);
+        }
+
+        await cargarAgendaHoy();
+        mostrarToast("Descuento aplicado");
+
+    } catch (error) {
+        console.error("Error aplicando descuento:", error);
+        mostrarToast(error.message || "No se pudo aplicar el descuento.", true);
+    }
 }
 
 async function finalizarAtencion(item) {
