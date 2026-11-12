@@ -129,6 +129,15 @@ function renderAgendaHoy(items) {
                 <div class="servicio-sp-linea">
                     <span>${escapeHtml(p.product_label || p.product_name)}</span>
                     <span class="servicio-sp-precio">${formatearPrecio(p.unit_price)}</span>
+                    ${estaAsignada && p.descuento_disponible ? `
+                        <button class="btn-aplicar-descuento-linea"
+                            data-ticket-id="${item.ticket_id}"
+                            data-tp-id="${item.ticket_professional_id}"
+                            data-tpc-id="${item.ticket_professional_customer_id}"
+                            data-tpcp-id="${p.ticket_professional_customer_product_id}">
+                            Aplicar Descuento
+                        </button>
+                    ` : ""}
                     ${estaAsignada ? `
                         <button class="btn-quitar-servicio-sp"
                             data-ticket-id="${item.ticket_id}"
@@ -163,11 +172,6 @@ function renderAgendaHoy(items) {
                     Asignar Servicios
                 </button>
             ` : ""}
-            ${estaAsignada && item.descuento_disponible ? `
-                <button class="btn-aplicar-descuento" data-tpc-id="${item.ticket_professional_customer_id}" data-tp-id="${item.ticket_professional_id}" data-ticket-id="${item.ticket_id}">
-                    Aplicar Descuento
-                </button>
-            ` : ""}
         `;
 
         if (estaAsignada) {
@@ -179,12 +183,16 @@ function renderAgendaHoy(items) {
                 finalizarAtencion(item);
             });
 
-            const btnAplicarDescuento = tarjeta.querySelector(".btn-aplicar-descuento");
-            if (btnAplicarDescuento) {
-                btnAplicarDescuento.addEventListener("click", () => {
-                    aplicarDescuento(item);
+            tarjeta.querySelectorAll(".btn-aplicar-descuento-linea").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    aplicarDescuento(
+                        Number(btn.dataset.ticketId),
+                        Number(btn.dataset.tpId),
+                        Number(btn.dataset.tpcId),
+                        Number(btn.dataset.tpcpId)
+                    );
                 });
-            }
+            });
 
             tarjeta.querySelectorAll(".btn-quitar-servicio-sp").forEach(btn => {
                 btn.addEventListener("click", () => {
@@ -202,10 +210,10 @@ function renderAgendaHoy(items) {
     });
 }
 
-async function aplicarDescuento(item) {
+async function aplicarDescuento(ticketId, ticketProfessionalId, ticketProfessionalCustomerId, ticketProfessionalCustomerProductId) {
     try {
         const response = await fetch(
-            `${API_BASE}/ticket/${item.ticket_id}/professionals/${item.ticket_professional_id}/customers/${item.ticket_professional_customer_id}/apply-discount`,
+            `${API_BASE}/ticket/${ticketId}/professionals/${ticketProfessionalId}/customers/${ticketProfessionalCustomerId}/products/${ticketProfessionalCustomerProductId}/apply-discount`,
             { method: "POST", headers: authHeaders() }
         );
 
