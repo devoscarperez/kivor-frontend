@@ -1,0 +1,39 @@
+.app-lcb {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.lcb-contenido {
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.lcb-aviso {
+    font-size: 13px;
+    color: var(--color-text-muted, #666);
+    margin-bottom: 16px;
+}
+
+.lcb-reader {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 16px auto;
+}
+
+.lcb-historial {
+    margin-top: 24px;
+}
+
+.lcb-historial-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.lcb-historial-duracion {
+    font-weight: 600;
+}
