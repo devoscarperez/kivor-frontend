@@ -1,8 +1,54 @@
 let lectorLcb;
 let ultimoCodigoLcb = "";
 let ultimaLecturaLcb = 0;
+let sonidoActivadoLcb = localStorage.getItem("lcb_sonido") !== "off";
+
+const btnSonidoLcb = document.getElementById("btnSonidoLcb");
+actualizarIconoSonidoLcb();
 
 document.getElementById("btnIniciarLcb").addEventListener("click", iniciarLectorLcb);
+btnSonidoLcb.addEventListener("click", toggleSonidoLcb);
+
+function toggleSonidoLcb() {
+    sonidoActivadoLcb = !sonidoActivadoLcb;
+    localStorage.setItem("lcb_sonido", sonidoActivadoLcb ? "on" : "off");
+    actualizarIconoSonidoLcb();
+}
+
+function actualizarIconoSonidoLcb() {
+    btnSonidoLcb.textContent = sonidoActivadoLcb ? "🔊" : "🔇";
+}
+
+function reproducirBeepLcb() {
+    if (!sonidoActivadoLcb) return;
+
+    try {
+        const AudioContextClass = window.AudioContext || window["webkitAudioContext"];
+        const contexto = new AudioContextClass();
+        const oscilador = contexto.createOscillator();
+        const ganancia = contexto.createGain();
+
+        oscilador.type = "sine";
+        oscilador.frequency.value = 1200;
+        ganancia.gain.setValueAtTime(0.2, contexto.currentTime);
+        ganancia.gain.exponentialRampToValueAtTime(0.001, contexto.currentTime + 0.15);
+
+        oscilador.connect(ganancia);
+        ganancia.connect(contexto.destination);
+
+        oscilador.start();
+        oscilador.stop(contexto.currentTime + 0.15);
+    } catch (error) {
+        console.error("No se pudo reproducir el beep:", error);
+    }
+}
+
+function flashMarcoLcb() {
+    const wrapper = document.getElementById("readerWrapperLcb");
+    wrapper.classList.remove("lcb-flash-ok");
+    void wrapper.offsetWidth;
+    wrapper.classList.add("lcb-flash-ok");
+}
 
 async function iniciarLectorLcb() {
     if (lectorLcb) return;
@@ -35,6 +81,9 @@ function onCodigoDetectadoLcb(codigo) {
 
     ultimoCodigoLcb = codigo;
     ultimaLecturaLcb = ahora;
+
+    reproducirBeepLcb();
+    flashMarcoLcb();
 
     const horaLectura = new Date();
     const inicioMedicion = performance.now();

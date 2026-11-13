@@ -27,9 +27,14 @@
             No busca productos ni afecta ventas.
         </p>
 
-        <button id="btnIniciarLcb" class="btn-nuevo-ticket" type="button">Abrir cámara</button>
+        <div class="lcb-acciones">
+            <button id="btnIniciarLcb" class="btn-nuevo-ticket" type="button">Abrir cámara</button>
+            <button id="btnSonidoLcb" class="icon-btn" type="button" aria-label="Activar o desactivar sonido">🔊</button>
+        </div>
 
-        <div id="reader" class="lcb-reader"></div>
+        <div id="readerWrapperLcb" class="lcb-reader-wrapper">
+            <div id="reader" class="lcb-reader"></div>
+        </div>
 
         <h3 id="resultadoLcb">Esperando lectura...</h3>
 
