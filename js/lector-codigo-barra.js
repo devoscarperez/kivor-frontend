@@ -112,17 +112,32 @@ async function guardarLecturaLcb(codigo, horaLectura, inicioMedicion) {
             return;
         }
 
-        await response.json();
+        const data = await response.json();
 
         document.getElementById("resultadoLcb").textContent =
             "Código: " + codigo + " — guardado en " + duracionMs + " ms";
 
         agregarHistorialLcb(codigo, horaLectura, duracionMs);
+        guardarDuracionLcb(data.fila, duracionMs);
 
     } catch (error) {
         console.error("Error guardando lectura:", error);
         document.getElementById("resultadoLcb").textContent =
             "Código: " + codigo + " — error al guardar";
+    }
+}
+
+async function guardarDuracionLcb(fila, duracionMs) {
+    if (!fila) return;
+
+    try {
+        await apiFetch(`${API_BASE}/barcode-scan/duration`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fila: fila, duracion_ms: duracionMs })
+        });
+    } catch (error) {
+        console.error("Error guardando duración:", error);
     }
 }
 
