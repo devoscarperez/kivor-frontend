@@ -59,13 +59,26 @@ async function iniciarLectorLcb() {
             Html5QrcodeSupportedFormats.EAN_8,
             Html5QrcodeSupportedFormats.UPC_A,
             Html5QrcodeSupportedFormats.CODE_128
-        ]
+        ],
+        experimentalFeatures: {
+            useBarCodeDetectorIfSupported: true
+        }
     });
+
+    const anchoBox = Math.min(window.innerWidth - 40, 380);
 
     try {
         await lectorLcb.start(
             { facingMode: "environment" },
-            { fps: 10, qrbox: { width: 280, height: 140 } },
+            {
+                fps: 20,
+                qrbox: { width: anchoBox, height: Math.round(anchoBox * 0.5) },
+                videoConstraints: {
+                    facingMode: "environment",
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                }
+            },
             onCodigoDetectadoLcb
         );
     } catch (error) {
