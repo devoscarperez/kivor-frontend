@@ -76,11 +76,21 @@ async function iniciarLectorLcb() {
                 videoConstraints: {
                     facingMode: "environment",
                     width: { ideal: 1920 },
-                    height: { ideal: 1080 }
+                    height: { ideal: 1080 },
+                    advanced: [{ focusMode: "continuous" }]
                 }
             },
             onCodigoDetectadoLcb
         );
+
+        try {
+            await lectorLcb.applyVideoConstraints({
+                advanced: [{ focusMode: "continuous" }]
+            });
+        } catch (focusError) {
+            console.warn("Enfoque continuo no soportado en este dispositivo:", focusError);
+        }
+
     } catch (error) {
         lectorLcb = null;
         alert("No se pudo abrir la cámara: " + error);
