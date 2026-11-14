@@ -38,6 +38,9 @@ input.addEventListener('keydown', (e) => {
                 : "*".repeat(input.value.length);
 
             input.type = showPassword ? "text" : "password";
+
+            const btn = document.getElementById("toggle-password");
+            if (btn) btn.textContent = showPassword ? "[OCULTAR]" : "[MOSTRAR]";
         }
 
         return;
@@ -153,12 +156,12 @@ function changePrompt(newPrompt) {
     line.appendChild(textSpan);
     line.appendChild(caretSpan);
 
-    // 👁 SOLO si es password
+    // SOLO si es password
     if (isPasswordPrompt) {
         const btn = document.createElement("button");
         btn.id = "toggle-password";
         btn.type = "button";
-        btn.textContent = showPassword ? "👁‍🗨" : "👁";
+        btn.textContent = showPassword ? "[OCULTAR]" : "[MOSTRAR]";
 
         line.appendChild(btn);
     }
@@ -179,12 +182,12 @@ document.addEventListener("click", (e) => {
         text.textContent = input.value;
         input.type = "text";
 
-        if (btn) btn.textContent = "👁‍🗨";
+        if (btn) btn.textContent = "[OCULTAR]";
     } else {
         text.textContent = "*".repeat(input.value.length);
         input.type = "password";
 
-        if (btn) btn.textContent = "👁";
+        if (btn) btn.textContent = "[MOSTRAR]";
     }
 });
 
