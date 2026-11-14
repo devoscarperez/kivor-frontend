@@ -922,8 +922,7 @@ CAmbio 1
     font-size: 0.75rem;
     letter-spacing: 0.5px;
 
-    padding: 10px 12px;
-    min-height: 44px;
+    padding: 4px 10px;
 
     cursor: pointer;
     opacity: 0.75;
