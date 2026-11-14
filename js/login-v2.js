@@ -163,6 +163,10 @@ function changePrompt(newPrompt) {
         btn.type = "button";
         btn.textContent = showPassword ? "[OCULTAR]" : "[MOSTRAR]";
 
+        // evita que el boton le robe el foco al input oculto
+        btn.addEventListener("mousedown", (e) => e.preventDefault());
+        btn.addEventListener("touchstart", (e) => e.preventDefault());
+
         line.appendChild(btn);
     }
 
@@ -189,6 +193,8 @@ document.addEventListener("click", (e) => {
 
         if (btn) btn.textContent = "[MOSTRAR]";
     }
+
+    input.focus();
 });
 
 const bootText = `
