@@ -56,8 +56,8 @@ input.addEventListener('keydown', (e) => {
             input.value = "";
             text.textContent = "";
 
-            changePrompt("password:");
             stage = "password";
+            changePrompt("password:");
             input.focus();
 
         } else if (stage === "password") {
