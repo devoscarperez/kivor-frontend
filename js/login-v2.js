@@ -59,11 +59,13 @@ input.addEventListener('keydown', (e) => {
 
         } else if (stage === "password") {
 
-            showProcessingMessage("Authenticating...");
             const passwordValue = input.value;
 
             input.value = "";
             text.textContent = "";
+
+            loginEl.style.display = "none";
+            showProcessingMessage("Authenticating...");
 
             authenticate(loginValue, passwordValue);
         }
@@ -261,6 +263,7 @@ function resetToLogin(message) {
 
         input.value = "";
         text.textContent = "";
+        loginEl.style.display = "flex";
         input.focus();
     }, 800);
 }
