@@ -127,6 +127,25 @@ td:first-child {
     margin-bottom: 12px;
 }
 
+/* Boton de icono estandar (ej. volver al menu): mismo tamaño/peso en
+   toda la app, con area tactil minima de 44px. */
+.icon-btn {
+    min-width: 44px;
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: none;
+    border: none;
+
+    font-size: 22px;
+    color: var(--color-text-primary, #111);
+
+    cursor: pointer;
+}
+
 .tabla-precios {
     width: 100%;
     margin-top: 25px;
