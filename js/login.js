@@ -297,5 +297,5 @@ async function logout() {
 
     sessionStorage.removeItem("access_token");
 
-    window.location.href = "index.html";
+    window.location.href = "login.html";
 }
