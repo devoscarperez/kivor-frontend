@@ -161,7 +161,7 @@ Tarjeta de ticket
 }
 
 .btn-enviar-whatsapp.enviado {
-    background: #1877F2;
+    background: var(--color-info);
 }
 
 .btn-generar-pdf:active {
