@@ -162,6 +162,15 @@ el encabezado/filtros arriba permanecen siempre visibles.
     flex-shrink: 0;
 }
 
+/* El filtro de fechas junta 2 inputs nativos + separador + boton:
+   siempre necesita el ancho completo de la fila para poder partirse
+   en dos lineas sin desbordar la pantalla. */
+.filtro-campo.filtro-fechas {
+    flex-shrink: 1;
+    min-width: 0;
+    width: 100%;
+}
+
 .campo-fechas-row {
     display: flex;
     align-items: center;
