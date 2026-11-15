@@ -4,6 +4,27 @@ if (!token) {
     window.location.href = "login.html";
 }
 
+/* =========================
+   DRAWER DE MENU
+========================= */
+
+const menuDrawer = document.getElementById("menuDrawer");
+const menuBackdrop = document.getElementById("menuBackdrop");
+const btnAbrirMenu = document.getElementById("btnAbrirMenu");
+
+function abrirMenu() {
+    menuDrawer.classList.add("open");
+    menuBackdrop.classList.add("visible");
+}
+
+function cerrarMenu() {
+    menuDrawer.classList.remove("open");
+    menuBackdrop.classList.remove("visible");
+}
+
+btnAbrirMenu.addEventListener("click", abrirMenu);
+menuBackdrop.addEventListener("click", cerrarMenu);
+
 async function validateSession() {
     try {
         const response = await fetch(`${API_BASE}/sessions`, {
