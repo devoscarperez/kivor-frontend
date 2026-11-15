@@ -914,15 +914,14 @@ CAmbio 1
     margin-left: 6px;
 
     background: none;
-    border: 1px solid #a8ff9e;
-    border-radius: 2px;
+    border: none;
 
     color: #a8ff9e;
     font-family: inherit;
     font-size: 0.95rem;
     letter-spacing: 0.5px;
 
-    padding: 4px 10px;
+    padding: 4px 6px;
 
     cursor: pointer;
 }
