@@ -89,14 +89,14 @@ Barra de acciones: Nuevo Ticket + orden, comparten línea
     padding: 12px 22px;
     font-size: 16px;
     font-weight: 700;
-    color: #4E4E4E;
-    background: #FFF7FA;
-    border: 1px solid var(--color-border-default);
+    color: #1a1200;
+    background: var(--color-primary);
+    border: none;
     border-radius: var(--radius-default);
 }
 
 .btn-nuevo-ticket:active {
-    opacity: 0.6;
+    background: var(--color-primary-active);
 }
 
 /* =========================
@@ -165,7 +165,8 @@ el encabezado/filtros arriba permanecen siempre visibles.
 /* El filtro de fechas junta 2 inputs nativos + separador + boton:
    siempre necesita el ancho completo de la fila para poder partirse
    en dos lineas sin desbordar la pantalla. */
-.filtro-campo.filtro-fechas {
+.filtro-campo.filtro-fechas,
+.filtro-campo.filtro-status {
     flex-shrink: 1;
     min-width: 0;
     width: 100%;
