@@ -1,264 +1,937 @@
-:root{
-  --kivor-base: #111111;
-  --kivor-primary: #D97706;
-  --kivor-secondary: #2E2E2E;
-  --kivor-background: #F4F4F5;
-  --kivor-success: #166534;
-  --kivor-error: #991B1B;
+/* =========================
+   RESET
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-  --kivor-white: #FFFFFF;
-  --kivor-border: #D1D5DB;
-  --kivor-placeholder: #9CA3AF;
+/* =========================
+   BASE
+========================= */
+/*
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
 
-  --radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #0f1722 0%,
+            #0c131c 100%
+        );
+}
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--color-text-primary);
+}
+
+
+Cambio 2
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #05080c;
+}
+
+#login-texture {
+    display: contents;
+}
+
+
+Cambio 3
+
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            #102033 0%,
+            #0b1623 42%,
+            #08111b 72%,
+            #05080c 100%
+        );
+}
+
+Cambio 4
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            #102033 0%,
+            #0b1623 42%,
+            #08111b 72%,
+            #05080c 100%
+        );
+}
+Cambio 5
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 40%,
+            #16283d 0%,
+            #0e1c2b 35%,
+            #08121c 65%,
+            #04070b 100%
+        );
+}
+
+Cambio 6
+html,
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        
+        radial-gradient(
+            ellipse at 50% 45%,
+            rgba(40, 80, 120, 0.25) 0%,
+            rgba(20, 40, 70, 0.18) 25%,
+            rgba(10, 20, 35, 0.12) 45%,
+            transparent 60%
+        ),
+
+        
+        radial-gradient(
+            ellipse at center,
+            transparent 40%,
+            #060a0f 75%,
+            #020305 100%
+        ),
+
+        
+        linear-gradient(
+            180deg,
+            #0a1622 0%,
+            #05080c 100%
+        );
+}
+*/
+
+html {
+    height: 100%;
+}
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        /* 👇 LUZ MODERNA (esto cambia TODO) */
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(120, 180, 255, 0.45) 0%,
+            rgba(80, 140, 255, 0.25) 18%,
+            rgba(40, 90, 200, 0.12) 35%,
+            transparent 55%
+        ),
+
+        /* 👇 base con identidad (menos negro muerto) */
+        linear-gradient(
+            180deg,
+            #1a2a3a 0%,
+            #0a1118 100%
+        );
+}
+
+/* =========================
+   ENTORNO
+========================= */
+
+/* 
+Cambio 1
+
+.kivor-boot {
+    color: #a8ff9e;
+    font-family: "Courier New", monospace;
+    font-size: 0.95rem;
+    line-height: 1.15;
+    white-space: pre;
+
+    text-shadow:
+        0 0 1px rgba(168,255,158,0.5),
+        0 0 4px rgba(168,255,158,0.3),
+        0 0 8px rgba(120,255,120,0.2);
+}
+*/
+
+.kivor-boot {
+    color: #a8ff9e;
+    font-family: "Courier New", monospace;
+
+    /* 👇 clave: tamaño adaptable */
+    font-size: clamp(0.55rem, 1.8vw, 0.95rem);
+
+    line-height: 1.15;
+    white-space: pre;
+
+    text-shadow:
+        0 0 1px rgba(168,255,158,0.5),
+        0 0 4px rgba(168,255,158,0.3),
+        0 0 8px rgba(120,255,120,0.2);
+   
+    animation: kivorPowerOn 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.kivor-world {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: none;
+}
+/*
+Cambio 3
+.kivor-world {
+    position: static;
+
+    width: auto;
+    min-height: auto;
+
+    display: block;
+
+    background: none;
+}
+
+Cambio 2
+.kivor-world {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+}
+
+.kivor-world {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+*/
+
+/* =========================
+   MONITOR
+========================= */
+.kivor-device {
+    position: relative;
+
+    /* 👇 clave: limitar por viewport completo */
+    width: min(92vw, 780px);
+    height: min(92vh, 585px);
+
+    aspect-ratio: 4 / 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    background: transparent;
+
+    box-shadow:
+        0 60px 140px rgba(0, 0, 0, 0.65),
+        0 25px 60px rgba(0, 0, 0, 0.45),
+        0 0 80px rgba(0, 0, 0, 0.35);
+
+    transform: translateY(-10px);
+
+    overflow: visible;
+}
+/*
+Cambio 2
+.kivor-device {
+    position: relative;
+    width: min(92vw, 780px);
+    aspect-ratio: 4 / 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    background: transparent;
+
+    box-shadow:
+        0 60px 140px rgba(0, 0, 0, 0.65),
+        0 25px 60px rgba(0, 0, 0, 0.45),
+        0 0 80px rgba(0, 0, 0, 0.35);
+
+    transform: translateY(-10px);
+
+    overflow: visible;
+}
+
+
+CAmbio 1
+.kivor-device {
+    position: relative;
+    width: min(92vw, 780px);
+    aspect-ratio: 4 / 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border-radius: 0; 
+    background: transparent;
+    box-shadow: none;
+
+    overflow: visible;
+}
+*/
+
+.kivor-device::after {
+    content: none;
 }
 
 /*
-:root {
-  --color-background: #F4F4F5;
-  --color-surface: #FFFFFF;
-
-  --color-text-primary: #111111;
-  --color-text-secondary: #2E2E2E;
-
-  --color-primary: #D97706;
-  --color-primary-hover: #B45309;
-
-  --color-border-default: #D1D5DB;
-  --color-border-focus: #D97706;
-  --color-border-error: #DC2626;
-
-  --color-input-background: #FFFFFF;
-  --color-input-text: #111111;
-  --color-input-placeholder: #9CA3AF;
-
-  --color-error: #DC2626;
-
-  --radius-default: 14px;
+.kivor-device::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    pointer-events: none;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.30),
+        inset 0 -1px 0 rgba(0,0,0,0.35),
+        inset 10px 10px 18px rgba(255,255,255,0.04),
+        inset -14px -18px 24px rgba(0,0,0,0.28);
 }
 */
-* { box-sizing: border-box; }
+/* =========================
+   BISEL
+========================= */
+.kivor-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--kivor-background);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  color: var(--kivor-base);
+    padding: 0;
+    border-radius: 0;
+
+    background: transparent;
+    box-shadow: none;
 }
 
-.container {
-  width: 92%;
-  max-width: 420px;
-  background: var(--color-surface);
-  padding: 32px;
-  border-radius: 18px;
-  border: 1px solid rgba(0,0,0,0.05);
+/* =========================
+   PANTALLA
+========================= */
+.kivor-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+
+    font-family: "Courier New", monospace;
+
+    background: #000000; /* 👈 estado base real apagado */
+    /*
+    background:
+        radial-gradient(
+            ellipse at center,
+            #13301c 0%,
+            #08130d 45%,
+            #020403 75%,
+            #000000 100%
+        );
+    */
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.03),
+        inset 0 0 80px rgba(0,0,0,0.95),
+        inset 0 0 180px rgba(0,0,0,1),
+        0 20px 60px rgba(0,0,0,0.35);
+
+    /* 👇 ESTO ES LO IMPORTANTE */
+    transform-origin: center;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+
+    /* 👇 SOLO flicker, SIN powerOn */
+    animation: kivorScreenFlicker 6s infinite;
+    animation-delay: 0.5s;
+
+    isolation: isolate;
+    filter: blur(0.25px);
 }
 
-.screen {
-  display: none;
-  flex-direction: column;
-  gap: 10px;
+/* vidrio */
+.kivor-screen::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(160, 255, 180, 0) 0%,
+        rgba(160, 255, 180, 0.08) 40%,
+        rgba(190, 255, 210, 0.55) 50%,
+        rgba(160, 255, 180, 0.08) 60%,
+        rgba(160, 255, 180, 0) 100%
+    );
+
+    box-shadow:
+        0 0 6px rgba(160, 255, 180, 0.35),
+        0 0 12px rgba(160, 255, 180, 0.18);
+
+    transform: translateY(-50%) scaleY(1);
+    transform-origin: center;
+
+    animation:
+        kivorLinePulse 1.2s ease-in-out 2,
+        kivorLineExpand 1.2s ease-out 1.3s forwards;
+}
+/* Cambiado por problema de transcion de la linea a crt
+.kivor-screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.12) 0%,
+            rgba(255,255,255,0.05) 8%,
+            transparent 20%
+        ),
+        radial-gradient(
+            ellipse at 50% 50%,
+            rgba(120,255,120,0.08),
+            transparent 65%
+        ),
+        radial-gradient(
+            ellipse at 52% 48%,
+            transparent 58%,
+            rgba(0,0,0,0.55) 100%
+        );
+
+    opacity: 0.85;
+}
+*/
+
+/* scanlines */
+.kivor-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent 48%,
+            rgba(168, 255, 158, 0.95) 49%,
+            rgba(168, 255, 158, 1) 50%,
+            rgba(168, 255, 158, 0.95) 51%,
+            transparent 52%
+        );
+
+    filter: blur(0.6px) brightness(2.5);
+
+    opacity: 0;
+    transform: scaleY(0);
+
+    animation: kivorTurnOn 1s ease-out forwards;
+}
+/* Cambio 0
+.kivor-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(255,255,255,0.15) 0%,
+            rgba(255,255,255,0.08) 20%,
+            transparent 40%
+        );
+
+    opacity: 0;
+    animation: kivorTurnOn 1.2s ease-out forwards;
+}
+*/
+/* =========================
+   CONTENIDO
+========================= */
+
+.kivor-container {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: 
+        opacity 0.4s ease,
+        transform 0.4s ease;
 }
 
-.screen.active {
-  display: flex;
+/* Cambio drastico version TOP-DOWN
+.kivor-container {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+*/
+
+.kivor-screen.on .kivor-container {
+    opacity: 1;
+    transform: scaleY(1);
 }
 
-button {
-    transition: all 0.15s ease;
-}
 
-button:active {
-    transform: scale(0.98);
+.kivor-content-box {
+    width: 100%;
+    max-width: 420px;
+    padding: 0 16px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 
 /* =========================
-   INPUT GROUP (BCI STYLE)
+   TEXTO
 ========================= */
-.input-initial-focus {
-    border: 1.5px solid var(--kivor-primary);
+.kivor-message {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
 }
 
-.input-group {
-    position: relative;
-    margin-bottom: 22px;
+/* =========================
+   INPUT TERMINAL REAL
+========================= */
+.kivor-input-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
-/* INPUT */
-.input-group input {
-    width: 100%;
-    padding: 18px 16px;
-    font-size: 16px;
-    border-radius: var(--radius);
-    border: 1px solid var(--kivor-border);
-    box-shadow: none;
-    position: relative;
-    z-index: 1;
-    background: var(--kivor-white);
-    color: var(--kivor-base);
+.kivor-prompt {
+    color: #a8ff9e;
+    white-space: nowrap;
+}
+
+.kivor-input {
+    background: transparent;
+    border: none;
+
+    color: #a8ff9e;
+
+    font-family: inherit;
+    font-size: 1rem;
 
     outline: none;
 
-    /* 👇 AQUÍ vuelve el "cuerpo" */
-    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-
-    transition: border-color 0.2s ease;
+    caret-color: #a8ff9e;
 }
 
-/* ESTADO ESCRIBIENDO (sensación de hundimiento) */
-.input-group input.input-typing {
-    box-shadow: none;
-}
-
-/* PLACEHOLDER */
-.input-group input::placeholder {
-    color: var(--color-input-placeholder);
-}
-
-/* FOCUS (BCI REAL) */
-.input-group input:focus {
-    border: 1.5px solid var(--kivor-primary);
-    box-shadow: none;
-}
-
-
-/* LABEL (sin parche) */
-.input-group label {
-    position: absolute;
-
-    top: -8px;
-    left: 14px;
-
-    font-size: 13.5px;
-    font-weight: 500;
-
-    padding: 0 4px;
-
-    background: var(--kivor-white);
-
-    color: var(--kivor-secondary);
-
-    line-height: 1;
-    z-index: 2;
-}
-
-/* ERROR */
-.input-group input.input-invalid {
-    border: 2px solid var(--kivor-error-border);
-    background-color: transparent; /*var(--kivor-error-bg);*/
-}
-
-.input-group input.input-invalid + label {
+.kivor-error {
+    min-height: 16px;
+    font-size: 12px;
     color: var(--kivor-error-text);
 }
 
-.input-error {
-    font-size: 0.85rem;
-    color: var(--color-error);
-    margin-top: 6px;
+/* =========================
+   BOTÓN (temporal)
+========================= */
+.kivor-button {
+    width: 100%;
+    background-color: var(--color-primary);
+    border: none;
+    color: #000;
+    font-size: 0.95rem;
+    padding: 10px 12px;
+}
+
+/* =========================
+   LOGO
+========================= */
+.kivor-logo {
+    display: none;
+   /*
+    position: absolute;
+    left: 18px;
+    bottom: 12px;
+    width: 180px;
+   */
+}
+
+/* =========================
+   ANIMACIÓN CRT
+========================= */
+@keyframes kivorScreenFlicker {
+    0% { opacity: 1; }
+    95% { opacity: 1; }
+    96% { opacity: 0.97; }
+    97% { opacity: 1; }
+    98% { opacity: 0.965; }
+    100% { opacity: 1; }
+}
+
+
+.kivor-input-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* input invisible pero funcional */
+.kivor-input {
+    position: absolute;
     opacity: 0;
-    transform: translateY(-4px);
-    transition: all 0.2s ease;
+    pointer-events: none;
 }
 
-.input-error.active {
+/* texto visible */
+#kivor-text {
+    color: #a8ff9e;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+/* cursor CRT REAL */
+.kivor-caret {
+    width: 10px;
+    height: 16px;
+    background: #a8ff9e;
+    margin-left: 2px;
+    box-shadow: 0 0 6px rgba(168, 255, 158, 0.6);
+
+    animation: kivorCursorBlink 1s steps(2, start) infinite;
+}
+
+@keyframes kivorCursorBlink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+/*
+@keyframes kivorCursorBlink {
+    0%   { opacity: 1; }
+    40%  { opacity: 1; }
+    50%  { opacity: 0.2; }
+    60%  { opacity: 1; }
+    100% { opacity: 1; }
+}
+*/
+/* =========================
+   TERMINAL REAL UNIX
+========================= */
+.kivor-terminal {
+    width: 100%;
+    height: 100%;
+
+    padding-left: 16px;
+    padding-top: 24px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    gap: 4px;
+}
+
+/* línea tipo terminal */
+.kivor-line {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    color: #a8ff9e;
+
+    font-family: "Courier New", monospace;
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+
+/* input invisible */
+.kivor-hidden-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: auto;
+}
+
+/* cursor CRT */
+.kivor-caret {
+    width: 10px;
+    height: 16px;
+
+    background: #a8ff9e;
+
+    margin-left: 0;
+
+    animation: kivorCursorBlink 1.8s infinite;
+
+    box-shadow: 0 0 6px rgba(168, 255, 158, 0.6);
+}
+
+.kivor-screen.on {
+    background:
+        radial-gradient(
+            ellipse at center,
+            #13301c 0%,
+            #08130d 45%,
+            #020403 75%,
+            #000000 100%
+        );
+}
+
+.kivor-screen.off {
+    transform: scaleY(0.02);
+    opacity: 0;
+}
+
+
+.kivor-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.02) 0px,
+            rgba(255,255,255,0.02) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+
+    opacity: 0.18;
+    mix-blend-mode: soft-light;
+}
+
+
+@media (max-width: 600px) {
+    .kivor-device {
+        width: 95vw;
+        height: 80vh;
+
+        transform: none; /* evita recorte arriba */
+    }
+}
+
+@media (max-width: 420px) {
+    .kivor-boot {
+        font-size: 0.5rem;
+    }
+}
+
+
+@keyframes kivorPowerOn {
+    0% {
+        transform: scaleY(0.01);
+        opacity: 1;
+    }
+
+    30% {
+        transform: scaleY(0.01); /* 👈 línea se mantiene */
+        opacity: 1;
+    }
+
+    100% {
+        transform: scaleY(1); /* 👈 aquí crece */
+        opacity: 1;
+    }
+}
+
+
+@keyframes kivorTurnOn {
+    0% {
+        opacity: 1;
+        transform: scaleY(0.02);
+        filter: brightness(6);
+    }
+
+    /* 🔥 PAUSA — línea visible */
+    30% {
+        opacity: 1;
+        transform: scaleY(0.02);
+        filter: brightness(6);
+    }
+
+    /* expansión */
+    70% {
+        transform: scaleY(0.5);
+        filter: brightness(3);
+    }
+
+    /* apertura completa */
+    100% {
+        opacity: 0;
+        transform: scaleY(1);
+        filter: brightness(1);
+    }
+}
+
+
+
+@keyframes kivorLineExpand {
+    0% {
+        transform: translateY(-50%) scaleY(1);
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateY(-50%) scaleY(25);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translateY(-50%) scaleY(120);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateY(-50%) scaleY(160);
+        opacity: 0;
+    }
+}
+
+
+@keyframes kivorLinePulse {
+    0% {
+        opacity: 0.35;
+        filter: blur(0.4px);
+        transform: translateY(-50%);
+    }
+
+    /* 🔒 línea estable */
+    40% {
+        opacity: 0.35;
+        filter: blur(0.4px);
+        transform: translateY(-50%);
+    }
+
+    /* ⚡ empieza carga */
+    70% {
+        opacity: 0.7;
+        filter: blur(1px);
+        transform: translateY(-50%);
+    }
+
+    /* ⚡⚡ peak */
+    85% {
+        opacity: 1;
+        filter: blur(2.2px);
+        transform: translateY(-50%);
+    }
+
+    /* 🔥 HOLD (ESTO ES TODO) */
+    100% {
+        opacity: 1;
+        filter: blur(2.2px);
+        transform: translateY(-50%);
+    }
+}
+
+
+/* =========================
+   👁 PASSWORD TOGGLE
+========================= */
+
+.kivor-input-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* botón mostrar/ocultar password, mismo color y estilo que el resto del texto */
+#toggle-password {
+    position: relative;
+    flex-shrink: 0;
+
+    margin-left: 6px;
+
+    background: none;
+    border: none;
+
+    color: #a8ff9e;
+    font-family: inherit;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+
+    padding: 4px 6px;
+
+    cursor: pointer;
+}
+
+#toggle-password:active {
+    background: rgba(168, 255, 158, 0.15);
+}
+
+#toggle-password:hover {
     opacity: 1;
-    transform: translateY(0);
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
-button {
-  padding: 14px;
-  font-size: 18px;
-  border: none;
-  border-radius: var(--radius);
-  background: var(--kivor-base);
-  color: white;
-}
-
-#btn-username, #btn-login {
-  background: var(--kivor-primary);
-  color: #ffffff;
-  font-weight: 700;
-}
-
-button:disabled {
-  background: #E5E7EB;
-  color: #9CA3AF;
-  cursor: not-allowed;
-}
-
-/* =========================
-   PASSWORD ICON
-========================= */
-
-.password-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.password-wrapper input {
-  padding-right: 42px;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 16px;
-  opacity: 0.6;
-}
-
-.toggle-password:hover {
-  opacity: 1;
-}
-
-/* =========================
-   BRAND
-========================= */
-
-.layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
-}
-
-.brand {
-  text-align: center;
-  margin-bottom:48px;
-}
-
-.brand-logo {
-  width: 260px;
-  margin: 0 auto 10px;
-}
-
-.brand-underline {
-  width: 180px;
-  height: 3px;
-  background-color: var(--kivor-primary);
-  margin: 16px auto 14px;
-  border-radius: 2px;
-}
-
-.brand p {
-  font-size: 15px;
-  color: var(--kivor-secondary);
-  margin-top:8px;
 }
