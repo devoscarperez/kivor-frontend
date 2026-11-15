@@ -202,9 +202,6 @@ K    K      I         V V     O    O   R   R
 K     K   IIIIII       V       OOOO    R    R
 
 KIVOR SYSTEM TERMINAL v1.0
-MEMORY CHECK ............. OK
-CPU INIT ................. OK
-I/O CHANNELS ............. OK
 
 UNAUTHORIZED ACCESS PROHIBITED
 
