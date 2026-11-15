@@ -29,6 +29,10 @@
   --radius-default: 14px;
   --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
 
+  /* navegación (menú/drawer) — sigue el tema, no un color fijo */
+  --color-nav-background: var(--color-surface);
+  --color-nav-text: var(--color-text-primary);
+
   /* KIVOR específicos */
   --kivor-error-border: #B91C1C;
   --kivor-error-bg: #FEF2F2;
