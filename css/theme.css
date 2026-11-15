@@ -9,12 +9,12 @@
   --color-text-primary: #111111;
   --color-text-secondary: #2E2E2E;
 
-  --color-primary: #D97706;
-  --color-primary-hover: #B45309;
-  --color-primary-active: #92400E;
+  --color-primary: #f2b84b;
+  --color-primary-hover: #e0a93f;
+  --color-primary-active: #c98f2f;
 
   --color-border-default: #D1D5DB;
-  --color-border-focus: #D97706;
+  --color-border-focus: #f2b84b;
   --color-border-error: #DC2626;
 
   --color-input-background: #FFFFFF;
@@ -28,6 +28,21 @@
 
   --radius-default: 14px;
   --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
+
+  /* espaciado — grilla de 8px, igual en claro y oscuro */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+
+  /* tamaño táctil mínimo de cualquier elemento interactivo */
+  --touch-target-min: 44px;
+
+  /* padding estándar de botones e inputs */
+  --control-padding-y: 12px;
+  --control-padding-x: 20px;
 
   /* navegación (menú/drawer) — sigue el tema, no un color fijo */
   --color-nav-background: var(--color-surface);
