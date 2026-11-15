@@ -5,8 +5,8 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f2f2f7;
-    color: #111;
+    background: var(--color-background, #f2f2f7);
+    color: var(--color-text-primary, #111);
 }
 
 .container {
@@ -30,7 +30,7 @@ h1 {
 ========================= */
 
 .filtro {
-    background: white;
+    background: var(--color-surface, #ffffff);
     padding: 18px;
     border-radius: 16px;
     margin-bottom: 28px;
@@ -42,9 +42,9 @@ select {
     padding: 16px;
     font-size: 16px;
     border-radius: 12px;
-    border: 1px solid #e5e5e5;
+    border: 1px solid var(--color-border-default, #e5e5e5);
     margin-bottom: 14px;
-    background: #fafafa;
+    background: var(--color-background, #fafafa);
 }
 
 button {
@@ -53,8 +53,8 @@ button {
     font-size: 16px;
     border-radius: 12px;
     border: none;
-    background: #111;
-    color: white;
+    background: var(--color-primary, #111);
+    color: #1a1200;
     font-weight: 600;
     transition: 0.2s ease;
 }
@@ -69,7 +69,7 @@ button:active {
 ========================= */
 
 .table-container {
-    background: white;
+    background: var(--color-surface, #ffffff);
     border-radius: 16px;
     overflow-x: auto;
     box-shadow: 0 6px 24px rgba(0,0,0,0.04);
@@ -83,7 +83,7 @@ table {
 }
 
 thead {
-    background: #f7f7f7;
+    background: var(--color-background, #f7f7f7);
     font-weight: 600;
 }
 
@@ -91,16 +91,16 @@ th {
     text-align: left;
     padding: 14px 12px;
     font-size: 13px;
-    color: #555;
+    color: var(--color-text-secondary, #555);
 }
 
 td {
     padding: 14px 12px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--color-border-default, #f0f0f0);
 }
 
 tr:hover {
-    background: #fafafa;
+    background: var(--color-background, #fafafa);
 }
 
 td:first-child {
@@ -115,14 +115,14 @@ td:first-child {
 .logout-btn {
     background: none;
     border: none;
-    color: #777;
+    color: var(--color-text-secondary, #777);
     font-size: 14px;
     margin-bottom: 12px;
 }
 .back-btn {
     background: none;
     border: none;
-    color: #777;
+    color: var(--color-text-secondary, #777);
     font-size: 14px;
     margin-bottom: 12px;
 }
@@ -130,8 +130,10 @@ td:first-child {
 /* Boton de icono estandar (ej. volver al menu): mismo tamaño/peso en
    toda la app, con area tactil minima de 44px. */
 .icon-btn {
+    width: auto;
     min-width: 44px;
     min-height: 44px;
+    flex-shrink: 0;
 
     display: flex;
     align-items: center;
@@ -152,13 +154,13 @@ td:first-child {
     border-collapse: collapse;
     font-family: "Courier New", monospace;
     font-size: 12px; /* Aproximadamente 10 CPI */
-    color: #222;
+    color: var(--color-text-primary, #222);
 }
 
 .tabla-precios th,
 .tabla-precios td {
     padding: 6px 8px;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid var(--color-border-default, #e5e5e5);
     font-weight: normal;
     max-width: 15ch;
     white-space: nowrap;
@@ -167,8 +169,8 @@ td:first-child {
 }
 
 .tabla-precios th {
-    color: #555;
-    background: #f7f7f7;
+    color: var(--color-text-secondary, #555);
+    background: var(--color-background, #f7f7f7);
 }
 
 .tabla-precios td.num {
@@ -176,7 +178,7 @@ td:first-child {
 }
 
 .tabla-precios tbody tr:hover {
-    background-color: #f0f0f0;
+    background-color: var(--color-background, #f0f0f0);
     transition: background 0.15s ease;
 }
 
@@ -192,7 +194,7 @@ td:first-child {
     display: block;
     font-size: 16px;
     margin-bottom: 8px;
-    color: #2E2E2E;
+    color: var(--color-text-secondary, #2E2E2E);
 }
 
 #express-field-container input {
@@ -202,12 +204,12 @@ td:first-child {
 
     padding: 0 14px;
 
-    border: 1px solid #d4d8dd;
+    border: 1px solid var(--color-border-default, #d4d8dd);
     border-radius: 12px;
 
     font-size: 16px;
 
-    background-color: #eef2f6;
+    background-color: var(--color-background, #eef2f6);
 
     transition: all 0.15s ease;
 }
@@ -216,9 +218,9 @@ td:first-child {
 
     outline: none;
 
-    background-color: #ffffff;
+    background-color: var(--color-surface, #ffffff);
 
-    border-color: #D97706;
+    border-color: var(--color-border-focus, #D97706);
 
     box-shadow: 0 0 0 3px rgba(217,119,6,0.15);
 
@@ -226,7 +228,7 @@ td:first-child {
 
 #express-progress {
     font-size: 14px;
-    color: #555;
+    color: var(--color-text-secondary, #555);
     margin-bottom: 14px;
 }
 
@@ -246,21 +248,21 @@ td:first-child {
 
     border: none;
 
-    background: #D97706;
+    background: var(--color-primary, #D97706);
 
-    color: white;
+    color: #1a1200;
 
     font-weight: 700;
 
 }
 
 #express-btn-back {
-    background: #E5E7EB;
-    color: #111;
+    background: var(--color-border-default, #E5E7EB);
+    color: var(--color-text-primary, #111);
 }
 
 #express-error {
     margin-top: 8px;
     font-size: 13px;
-    color: #991B1B;
+    color: var(--color-error, #991B1B);
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kivor - Ganancias Mensuales</title>
+    <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -11,7 +12,7 @@
 
     <div class="container">
         
-        <button class="back-btn" onclick="goMenu()">← Menú</button>
+        <button class="icon-btn" onclick="goMenu()" aria-label="Volver al menú">←</button>
         
         <h1>Ganancias Mensuales</h1>
 
@@ -54,7 +55,7 @@
     <script src="js/ganancias-mensuales.js"></script>
     <script>
        function goMenu() {
-           window.location.href = "index.html";
+           window.location.href = "dashboard.html";
        }
     </script>
 
