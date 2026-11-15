@@ -910,6 +910,7 @@ CAmbio 1
 /* botón mostrar/ocultar password, mismo color y estilo que el resto del texto */
 #toggle-password {
     position: relative;
+    flex-shrink: 0;
 
     margin-left: 6px;
 
@@ -920,6 +921,7 @@ CAmbio 1
     font-family: inherit;
     font-size: 0.95rem;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 
     padding: 4px 6px;
 
