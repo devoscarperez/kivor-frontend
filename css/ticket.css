@@ -400,6 +400,24 @@ siempre va acompañado del texto del status.
     opacity: 0.6;
 }
 
+.ticket-booking-end {
+    display: inline-block;
+    width: fit-content;
+    min-width: 0;
+    padding: 5px 10px;
+    border: none;
+    background: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+}
+
+.ticket-booking-end:active {
+    opacity: 0.6;
+}
+
 .ticket-abono.abono-cero {
     border-color: var(--color-warning);
     color: var(--color-warning);

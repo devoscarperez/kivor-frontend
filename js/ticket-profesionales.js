@@ -137,17 +137,31 @@ function renderProfesionales(lista) {
         const bloque = document.createElement("div");
         bloque.className = "bloque-profesional";
 
-        const chips = p.customers.map(c => `
+        const chips = p.customers.map(c => {
+            const tieneCambioHora = c.ticket_professional_customer_booking_end_date
+                && c.ticket_professional_customer_booking_date
+                && new Date(c.ticket_professional_customer_booking_end_date).getTime()
+                    !== new Date(c.ticket_professional_customer_booking_date).getTime();
+
+            const textoHora = tieneCambioHora
+                ? `${formatearFecha(c.ticket_professional_customer_booking_date)} → ${formatearFecha(c.ticket_professional_customer_booking_end_date)}`
+                : formatearFecha(c.ticket_professional_customer_booking_date);
+
+            return `
             <div class="clienta-item">
                 <span class="chip-clienta">
                     ${escapeHtml(c.customer_full_name || c.customer_nickname)}
                     <button data-quitar-clienta="${c.ticket_professional_customer_id}" data-tp-id="${p.ticket_professional_id}" aria-label="Quitar clienta">×</button>
                 </span>
                 <button class="ticket-booking" data-tpc-booking="${c.ticket_professional_customer_id}" data-tp-id="${p.ticket_professional_id}">
-                    ${formatearFecha(c.ticket_professional_customer_booking_date)}
+                    ${textoHora}
+                </button>
+                <button class="ticket-booking-end" data-tpc-booking-end="${c.ticket_professional_customer_id}" data-tp-id="${p.ticket_professional_id}">
+                    Cambio de hora
                 </button>
             </div>
-        `).join("");
+        `;
+        }).join("");
 
         bloque.innerHTML = `
             <div class="bloque-profesional-header">
@@ -192,6 +206,14 @@ function renderProfesionales(lista) {
         const ticketProfessionalId = Number(btn.dataset.tpId);
         btn.addEventListener("click", () => {
             abrirPopupAgendamientoClienta(ticketProfessionalId, ticketProfessionalCustomerId);
+        });
+    });
+
+    contenedor.querySelectorAll("[data-tpc-booking-end]").forEach(btn => {
+        const ticketProfessionalCustomerId = Number(btn.dataset.tpcBookingEnd);
+        const ticketProfessionalId = Number(btn.dataset.tpId);
+        btn.addEventListener("click", () => {
+            abrirPopupCambioHora(ticketProfessionalId, ticketProfessionalCustomerId);
         });
     });
 }
@@ -343,6 +365,81 @@ function cerrarPopupAgendamientoClienta() {
     tpcContextoEnEdicion = null;
 }
 
+function abrirPopupCambioHora(ticketProfessionalId, ticketProfessionalCustomerId) {
+    tpcContextoEnEdicion = { ticketProfessionalId, ticketProfessionalCustomerId };
+
+    const profesional = profesionalesActuales.find(p => p.ticket_professional_id === ticketProfessionalId);
+    const clienta = profesional
+        ? profesional.customers.find(c => c.ticket_professional_customer_id === ticketProfessionalCustomerId)
+        : null;
+
+    const fecha = clienta && clienta.ticket_professional_customer_booking_end_date
+        ? new Date(clienta.ticket_professional_customer_booking_end_date)
+        : new Date();
+
+    document.getElementById("tpcBookingEndFecha").value = fechaLocalISO(fecha);
+    document.getElementById("tpcBookingEndHora").value = horaLocalHHMM(fecha);
+
+    document.getElementById("tpcBookingEndModal").classList.add("activa");
+    document.body.style.overflow = "hidden";
+}
+
+function cerrarPopupCambioHora() {
+    document.getElementById("tpcBookingEndModal").classList.remove("activa");
+    document.body.style.overflow = "";
+    tpcContextoEnEdicion = null;
+}
+
+async function guardarCambioHora() {
+    if (!tpcContextoEnEdicion) return;
+
+    const fecha = document.getElementById("tpcBookingEndFecha").value;
+    const hora = document.getElementById("tpcBookingEndHora").value;
+    if (!fecha || !hora) return;
+
+    const { ticketProfessionalId, ticketProfessionalCustomerId } = tpcContextoEnEdicion;
+    const bookingEndDate = `${fecha}T${hora}:00`;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/ticket/${TICKET_ID}/professionals/${ticketProfessionalId}/customers/${ticketProfessionalCustomerId}/booking-end-date`,
+            {
+                method: "PATCH",
+                headers: { ...authHeaders(), "Content-Type": "application/json" },
+                body: JSON.stringify({ booking_end_date: bookingEndDate })
+            }
+        );
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const mensaje = await extraerMensajeError(response, "No se pudo actualizar la hora.");
+            throw new Error(mensaje);
+        }
+
+        const actualizado = await response.json();
+
+        const profesional = profesionalesActuales.find(p => p.ticket_professional_id === ticketProfessionalId);
+        const clienta = profesional
+            ? profesional.customers.find(c => c.ticket_professional_customer_id === ticketProfessionalCustomerId)
+            : null;
+        if (clienta) {
+            clienta.ticket_professional_customer_booking_end_date = actualizado.ticket_professional_customer_booking_end_date;
+        }
+
+        renderProfesionales(profesionalesActuales);
+        mostrarToast("Hora actualizada");
+        cerrarPopupCambioHora();
+
+    } catch (error) {
+        console.error("Error actualizando la hora:", error);
+        mostrarToast(error.message || "No se pudo actualizar la hora.", true);
+    }
+}
+
 async function guardarAgendamientoClienta() {
     if (!tpcContextoEnEdicion) return;
 
@@ -381,6 +478,7 @@ async function guardarAgendamientoClienta() {
             : null;
         if (clienta) {
             clienta.ticket_professional_customer_booking_date = actualizado.ticket_professional_customer_booking_date;
+            clienta.ticket_professional_customer_booking_end_date = actualizado.ticket_professional_customer_booking_end_date;
         }
 
         renderProfesionales(profesionalesActuales);
@@ -586,6 +684,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("tpcBookingClose").addEventListener("click", cerrarPopupAgendamientoClienta);
     document.getElementById("tpcBookingBackdrop").addEventListener("click", cerrarPopupAgendamientoClienta);
     document.getElementById("tpcBookingGuardar").addEventListener("click", guardarAgendamientoClienta);
+
+    document.getElementById("tpcBookingEndClose").addEventListener("click", cerrarPopupCambioHora);
+    document.getElementById("tpcBookingEndBackdrop").addEventListener("click", cerrarPopupCambioHora);
+    document.getElementById("tpcBookingEndGuardar").addEventListener("click", guardarCambioHora);
 
     document.getElementById("agendaClose").addEventListener("click", cerrarAgendaClienta);
     document.getElementById("agendaBackdrop").addEventListener("click", cerrarAgendaClienta);
