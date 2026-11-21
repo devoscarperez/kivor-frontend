@@ -320,17 +320,37 @@
     color:var(--ink-soft);
     font-weight:700;
 }
-.ticket .ficha-atencion{touch-action:pan-y}
-.ticket .ficha-nombre{
-    display:block;
-    font:700 17px/1.2 Georgia,"Times New Roman",serif;
+.ticket .ficha-atencion{
+    touch-action:pan-y;
+    display:flex;
+    align-items:baseline;
+    gap:3px;
+    font-size:9px;
+    font-weight:400;
     color:var(--text);
-    word-break:break-word;
+    overflow:hidden;
 }
-.ticket .ficha-hora{
-    font-size:12px;
+.ticket .ficha-clienta{
+    flex:1 1 auto;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.ticket .ficha-profesional{
+    flex:0 0 auto;
+    max-width:8ch;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.ticket .ficha-fecha{
+    flex:0 0 auto;
+    white-space:nowrap;
+}
+.ticket .ficha-sep{
+    flex:0 0 auto;
     color:var(--text-soft);
-    margin-top:2px;
 }
 .ticket .ficha-vacio{
     font:700 19px/1.2 Georgia,"Times New Roman",serif;

@@ -234,8 +234,11 @@ function renderFicha() {
     wrap.innerHTML = `
         <span class="label">Atención <span class="ficha-contador">${posicion}-${total}</span></span>
         <div class="ficha-atencion">
-            <strong class="ficha-nombre">${escapeHtmlM(a.clienta)} – ${escapeHtmlM(a.profesional)}</strong>
-            <div class="ficha-hora">${formatearFechaM(a.fecha)}</div>
+            <span class="ficha-clienta">${escapeHtmlM(a.clienta)}</span>
+            <span class="ficha-sep">–</span>
+            <span class="ficha-profesional">${escapeHtmlM(a.profesional)}</span>
+            <span class="ficha-sep">–</span>
+            <span class="ficha-fecha">${formatearFechaM(a.fecha)}</span>
         </div>
     `;
     ajustarNumeroTicket();
