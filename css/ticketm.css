@@ -36,11 +36,102 @@
     justify-content:center;
 }
 .ticketm-icon-btn:active{opacity:.6}
-.ticketm-fecha{
+
+/* ---- huella sutil para activar filtros: la fecha es el gatillo ---- */
+.ticketm-fecha-toggle{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    border:none;
+    background:none;
+    padding:6px 4px;
     font-size:16px;
     font-weight:600;
     color:var(--color-text-secondary);
+    position:relative;
 }
+.ticketm-chevron{
+    font-size:13px;
+    color:var(--color-text-secondary);
+    opacity:.55;
+    transition:transform .2s ease;
+}
+.ticketm-fecha-toggle[aria-expanded="true"] .ticketm-chevron{transform:rotate(180deg)}
+.ticketm-fecha-toggle.ticketm-filtro-activo .ticketm-chevron{opacity:1;color:var(--color-primary-active)}
+.ticketm-fecha-toggle.ticketm-filtro-activo::after{
+    content:"";
+    position:absolute;
+    top:2px;
+    right:-6px;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--color-primary-active);
+}
+
+.ticketm-filtros{
+    margin:0 12px 10px;
+    padding:14px;
+    background:var(--color-surface);
+    border:1px solid var(--color-border-default);
+    border-radius:var(--radius-default);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    animation:ticketm-desplegar .18s ease;
+}
+@keyframes ticketm-desplegar{
+    from{opacity:0;transform:translateY(-6px)}
+    to{opacity:1;transform:translateY(0)}
+}
+.ticketm-filtros[hidden]{display:none}
+.ticketm-filtros-fechas{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:16px;
+    color:var(--color-text-secondary);
+}
+.ticketm-filtros-fechas input{
+    flex:1;
+    min-width:0;
+    padding:8px 10px;
+    border:1px solid var(--color-border-default);
+    border-radius:10px;
+    font-size:16px;
+    color:var(--color-input-text);
+    background:var(--color-input-background);
+}
+.ticketm-filtros-status{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+.ticketm-status-chip{
+    border:1px solid var(--color-border-default);
+    border-radius:999px;
+    padding:6px 12px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--color-text-secondary);
+    background:var(--color-surface);
+}
+.ticketm-status-chip.activo{
+    border-color:var(--color-primary-active);
+    color:var(--color-primary-active);
+    background:color-mix(in srgb, var(--color-primary) 18%, white);
+}
+.ticketm-filtros-aplicar{
+    align-self:flex-end;
+    border:none;
+    border-radius:10px;
+    padding:10px 18px;
+    font-size:16px;
+    font-weight:700;
+    color:#111111;
+    background:var(--color-primary);
+}
+.ticketm-filtros-aplicar:active{background:var(--color-primary-active)}
 
 /* ---- escenario: el ticket + flechas de navegación ---- */
 .ticketm-stage{

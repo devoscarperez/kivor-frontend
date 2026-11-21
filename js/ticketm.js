@@ -24,6 +24,12 @@ const STATUS_ES = {
 let ticketsDelDia = [];
 let indiceActual = 0;
 
+// Filtros: por defecto, "hoy" y todos los status — igual que el
+// comportamiento actual. Solo cambian si el usuario los toca.
+let filtroDesde = null;
+let filtroHasta = null;
+let filtroStatus = [];
+
 function authHeadersM() {
     const t = sessionStorage.getItem("access_token");
     return { "Authorization": `Bearer ${t}` };
@@ -81,11 +87,26 @@ function actualizarFechaCabeceraM() {
     document.getElementById("ticketmFecha").textContent = `${diaCapitalizado}, ${fechaTexto}`;
 }
 
+function hoyISOM() {
+    return fechaLocalISOM(new Date());
+}
+
+function filtrosSonPorDefecto() {
+    return filtroDesde === hoyISOM() && filtroHasta === hoyISOM() && filtroStatus.length === 0;
+}
+
+function actualizarHuellaFiltros() {
+    document.getElementById("btnFiltros").classList.toggle("ticketm-filtro-activo", !filtrosSonPorDefecto());
+}
+
 async function cargarTicketsDelDia() {
-    const hoy = fechaLocalISOM(new Date());
+    if (filtroDesde === null) filtroDesde = hoyISOM();
+    if (filtroHasta === null) filtroHasta = hoyISOM();
+
     const params = new URLSearchParams();
-    params.append("date_from", hoy);
-    params.append("date_to", hoy);
+    params.append("date_from", filtroDesde);
+    params.append("date_to", filtroHasta);
+    filtroStatus.forEach(s => params.append("status", s));
     params.append("order", "asc");
     params.append("date_field", "booking");
 
@@ -103,6 +124,7 @@ async function cargarTicketsDelDia() {
         ticketsDelDia = tickets || [];
         indiceActual = 0;
         renderActual();
+        actualizarHuellaFiltros();
 
     } catch (error) {
         console.error("Error cargando tickets:", error);
@@ -155,7 +177,10 @@ function renderActual() {
     const btnNext = document.getElementById("btnNext");
 
     if (!ticketsDelDia.length) {
-        slot.innerHTML = `<div class="ticketm-vacio">No hay tickets agendados para hoy.</div>`;
+        const mensaje = filtrosSonPorDefecto()
+            ? "No hay tickets agendados para hoy."
+            : "No hay tickets para los filtros seleccionados.";
+        slot.innerHTML = `<div class="ticketm-vacio">${mensaje}</div>`;
         indice.textContent = "";
         btnPrev.disabled = true;
         btnNext.disabled = true;
@@ -212,10 +237,64 @@ function inicializarSwipe() {
     }, { passive: true });
 }
 
+function construirChipsStatus() {
+    const contenedor = document.getElementById("fStatusChips");
+    contenedor.innerHTML = "";
+
+    Object.keys(STATUS_ES).forEach(status => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "ticketm-status-chip";
+        chip.textContent = STATUS_ES[status];
+        chip.dataset.status = status;
+        chip.addEventListener("click", () => {
+            chip.classList.toggle("activo");
+        });
+        contenedor.appendChild(chip);
+    });
+}
+
+function abrirPanelFiltros() {
+    const panel = document.getElementById("panelFiltros");
+    const boton = document.getElementById("btnFiltros");
+
+    document.getElementById("fFechaDesde").value = filtroDesde || hoyISOM();
+    document.getElementById("fFechaHasta").value = filtroHasta || hoyISOM();
+
+    document.querySelectorAll("#fStatusChips .ticketm-status-chip").forEach(chip => {
+        chip.classList.toggle("activo", filtroStatus.includes(chip.dataset.status));
+    });
+
+    panel.hidden = false;
+    boton.setAttribute("aria-expanded", "true");
+}
+
+function cerrarPanelFiltros() {
+    document.getElementById("panelFiltros").hidden = true;
+    document.getElementById("btnFiltros").setAttribute("aria-expanded", "false");
+}
+
+function aplicarFiltros() {
+    filtroDesde = document.getElementById("fFechaDesde").value || hoyISOM();
+    filtroHasta = document.getElementById("fFechaHasta").value || hoyISOM();
+    filtroStatus = Array.from(document.querySelectorAll("#fStatusChips .ticketm-status-chip.activo"))
+        .map(chip => chip.dataset.status);
+
+    cerrarPanelFiltros();
+    cargarTicketsDelDia();
+}
+
 document.getElementById("btnPrev").addEventListener("click", irAnterior);
 document.getElementById("btnNext").addEventListener("click", irSiguiente);
 document.getElementById("btnRefrescarM").addEventListener("click", cargarTicketsDelDia);
+document.getElementById("btnFiltros").addEventListener("click", () => {
+    const abierto = document.getElementById("panelFiltros").hidden === false;
+    if (abierto) cerrarPanelFiltros();
+    else abrirPanelFiltros();
+});
+document.getElementById("btnAplicarFiltrosM").addEventListener("click", aplicarFiltros);
 
 actualizarFechaCabeceraM();
+construirChipsStatus();
 inicializarSwipe();
 cargarTicketsDelDia();

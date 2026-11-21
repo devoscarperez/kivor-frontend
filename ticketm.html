@@ -13,9 +13,22 @@
 
     <header class="ticketm-topbar">
         <button class="ticketm-icon-btn" onclick="goMenu()" aria-label="Volver al menú">←</button>
-        <div class="ticketm-fecha" id="ticketmFecha"></div>
+        <button class="ticketm-fecha-toggle" id="btnFiltros" aria-expanded="false" aria-controls="panelFiltros">
+            <span id="ticketmFecha"></span>
+            <span class="ticketm-chevron" aria-hidden="true">⌄</span>
+        </button>
         <button class="ticketm-icon-btn" id="btnRefrescarM" title="Actualizar" aria-label="Actualizar">⟳</button>
     </header>
+
+    <div class="ticketm-filtros" id="panelFiltros" hidden>
+        <div class="ticketm-filtros-fechas">
+            <input type="date" id="fFechaDesde" aria-label="Desde">
+            <span>a</span>
+            <input type="date" id="fFechaHasta" aria-label="Hasta">
+        </div>
+        <div class="ticketm-filtros-status" id="fStatusChips"></div>
+        <button class="ticketm-filtros-aplicar" id="btnAplicarFiltrosM">Aplicar</button>
+    </div>
 
     <main class="ticketm-stage">
         <button class="ticketm-nav ticketm-nav-prev" id="btnPrev" aria-label="Ticket anterior">‹</button>
