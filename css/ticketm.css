@@ -218,9 +218,9 @@
 .ticket::before{
     content:"";
     position:absolute;
-    inset:0 36px;
+    inset:0 32px;
     border-radius:10px;
-    box-shadow:0 12px 28px rgba(0,0,0,.20), 0 2px 0 rgba(0,0,0,.06);
+    box-shadow:0 10px 22px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.08);
     z-index:-1;
 }
 @keyframes ticketm-asentar{
