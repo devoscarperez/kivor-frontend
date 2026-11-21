@@ -177,6 +177,18 @@
     touch-action:pan-y;
 }
 
+/* Transición entre tickets: el contenedor (no el ticket) es el que se
+   anima -el ticket y su sombra en capa aparte se mueven juntos como
+   un bloque, sin el desfase que causaba animar el ticket mismo. */
+.ticketm-sale-arriba{animation:ticketm-sale-arriba .16s ease-in both}
+.ticketm-sale-abajo{animation:ticketm-sale-abajo .16s ease-in both}
+.ticketm-entra-abajo{animation:ticketm-entra-abajo .18s ease-out both}
+.ticketm-entra-arriba{animation:ticketm-entra-arriba .18s ease-out both}
+@keyframes ticketm-sale-arriba{ to{opacity:0; transform:translateY(-24px)} }
+@keyframes ticketm-sale-abajo{ to{opacity:0; transform:translateY(24px)} }
+@keyframes ticketm-entra-abajo{ from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:translateY(0)} }
+@keyframes ticketm-entra-arriba{ from{opacity:0; transform:translateY(-24px)} to{opacity:1; transform:translateY(0)} }
+
 .ticketm-vacio{
     font-size:16px;
     color:var(--color-text-secondary);

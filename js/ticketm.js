@@ -215,17 +215,58 @@ function renderActual() {
     btnNext.disabled = indiceActual === ticketsDelDia.length - 1;
 }
 
+let cambioEnCurso = false;
+
+function prefiereMenosMovimiento() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+// El ticket sale (hacia arriba si avanzamos, hacia abajo si retrocedemos)
+// y recién cuando termina de salir entra el siguiente desde el lado
+// opuesto -como pasar páginas. La animación se aplica al contenedor
+// del ticket, nunca al ticket mismo (ese combo ya causó un glitch
+// visual con la sombra en capa aparte; se verificó por separado).
+function cambiarTicket(nuevoIndice, direccion) {
+    if (cambioEnCurso) return;
+
+    if (prefiereMenosMovimiento()) {
+        indiceActual = nuevoIndice;
+        renderActual();
+        return;
+    }
+
+    cambioEnCurso = true;
+    const slot = document.getElementById("ticketmSlot");
+    const claseSale = direccion === "siguiente" ? "ticketm-sale-arriba" : "ticketm-sale-abajo";
+    const claseEntra = direccion === "siguiente" ? "ticketm-entra-abajo" : "ticketm-entra-arriba";
+
+    slot.classList.add(claseSale);
+
+    slot.addEventListener("animationend", function alTerminarSalida() {
+        slot.removeEventListener("animationend", alTerminarSalida);
+        slot.classList.remove(claseSale);
+
+        indiceActual = nuevoIndice;
+        renderActual();
+
+        slot.classList.add(claseEntra);
+        slot.addEventListener("animationend", function alTerminarEntrada() {
+            slot.removeEventListener("animationend", alTerminarEntrada);
+            slot.classList.remove(claseEntra);
+            cambioEnCurso = false;
+        });
+    });
+}
+
 function irAnterior() {
     if (indiceActual > 0) {
-        indiceActual--;
-        renderActual();
+        cambiarTicket(indiceActual - 1, "anterior");
     }
 }
 
 function irSiguiente() {
     if (indiceActual < ticketsDelDia.length - 1) {
-        indiceActual++;
-        renderActual();
+        cambiarTicket(indiceActual + 1, "siguiente");
     }
 }
 
