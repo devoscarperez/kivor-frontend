@@ -137,7 +137,7 @@ function numeroTicketPadded(ticketId) {
     return String(ticketId).padStart(5, "0");
 }
 
-function construirTicketHTML(t) {
+function construirTicketHTML(t, contador) {
     const nombreClienta = escapeHtmlM(t.customer_full_name || t.customer_nickname || "Sin asignar");
     const grupo = STATUS_GRUPO_M[t.ticket_status] || "neutral";
     const statusTexto = STATUS_ES[t.ticket_status] || t.ticket_status;
@@ -167,7 +167,10 @@ function construirTicketHTML(t) {
                         <div class="money"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></div>
                     </div>
                     <div class="rule"></div>
-                    <div class="ticket-footer">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</div>
+                    <div class="ticket-footer">
+                        <span class="ticket-fechas">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</span>
+                        <span class="ticket-contador">${contador}</span>
+                    </div>
                 </div>
                 <div class="stub"><span class="number">${numero}</span></div>
             </div>
@@ -188,7 +191,6 @@ function ajustarNumeroTicket() {
 
 function renderActual() {
     const slot = document.getElementById("ticketmSlot");
-    const indice = document.getElementById("ticketmIndice");
     const btnPrev = document.getElementById("btnPrev");
     const btnNext = document.getElementById("btnNext");
 
@@ -197,19 +199,18 @@ function renderActual() {
             ? "No hay tickets agendados para hoy."
             : "No hay tickets para los filtros seleccionados.";
         slot.innerHTML = `<div class="ticketm-vacio">${mensaje}</div>`;
-        indice.textContent = "";
         btnPrev.disabled = true;
         btnNext.disabled = true;
         return;
     }
 
     const actual = ticketsDelDia[indiceActual];
-    slot.innerHTML = construirTicketHTML(actual);
-    ajustarNumeroTicket();
-
     const posicion = String(indiceActual + 1).padStart(2, "0");
     const total = String(ticketsDelDia.length).padStart(2, "0");
-    indice.textContent = `${posicion}-${total}`;
+
+    slot.innerHTML = construirTicketHTML(actual, `${posicion}-${total}`);
+    ajustarNumeroTicket();
+
     btnPrev.disabled = indiceActual === 0;
     btnNext.disabled = indiceActual === ticketsDelDia.length - 1;
 }
