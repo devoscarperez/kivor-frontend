@@ -149,6 +149,10 @@ function construirTicketHTML(t, contador) {
 
     return `
         <div class="ticket" aria-label="Ticket número ${numero} de ${nombreClienta}">
+            <span class="cut cut-l cut-top"></span>
+            <span class="cut cut-l cut-bottom"></span>
+            <span class="cut cut-r cut-top"></span>
+            <span class="cut cut-r cut-bottom"></span>
             <div class="frame">
                 <div class="main">
                     <h1 class="name">${nombreClienta}</h1>
