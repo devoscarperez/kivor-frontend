@@ -156,7 +156,6 @@ function construirTicketHTML(t, contador) {
                     <div class="row">
                         <span>${formatearFechaM(t.ticket_booking_date)}</span>
                         <span class="pill pill-${grupo}">${escapeHtmlM(statusTexto)}</span>
-                        <span class="antiguedad">${tiempoTranscurridoM(t.ticket_booking_date)}</span>
                     </div>
                     <div class="details">
                         <div class="ficha-wrap" id="fichaWrap"><span class="label">Atención</span><strong class="ficha-vacio">—</strong></div>
@@ -164,6 +163,7 @@ function construirTicketHTML(t, contador) {
                     <div class="rule"></div>
                     <div class="ticket-footer">
                         <span class="abono-footer"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></span>
+                        <span class="antiguedad">${tiempoTranscurridoM(t.ticket_booking_date)}</span>
                         <!-- Cre/Act deshabilitado por ahora, no hace falta mostrarlo:
                         <span class="ticket-fechas">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</span>
                         -->

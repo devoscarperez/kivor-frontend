@@ -374,6 +374,10 @@
     text-transform:uppercase;
     color:var(--ink-soft);
 }
+.ticket .ticket-footer .antiguedad{
+    flex:1;
+    text-align:center;
+}
 .ticket .abono-footer strong{
     font:700 19px/1.2 Georgia,"Times New Roman",serif;
     color:var(--text);
