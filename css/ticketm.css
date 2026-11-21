@@ -207,14 +207,15 @@
     background:
         radial-gradient(circle at 7px 7px, rgba(60,30,20,.09) 0.7px, transparent 1.1px) 0 0/9px 9px,
         linear-gradient(145deg, var(--paper2), var(--paper) 60%);
-    animation:ticketm-asentar .3s cubic-bezier(.22,.8,.32,1) both;
 }
 /* La sombra vive en una capa aparte, angosta en los costados, para
    que su difuminado nunca llegue hasta donde están las mordidas de
    los bordes — así los círculos no tienen que "adivinar" ningún
-   color, simplemente no hay sombra detrás de ellos. El margen (36px)
-   crece junto con el difuminado (28px) para mantener el mismo colchón
-   de seguridad de antes. */
+   color, simplemente no hay sombra detrás de ellos. El margen (32px)
+   crece junto con el difuminado (22px) para mantener el colchón de
+   seguridad. Sin animación de entrada: combinada con esta sombra en
+   capa aparte producía un parpadeo/doble imagen durante la transición
+   -se comprobó y se descartó, no vale la pena por un detalle menor. */
 .ticket::before{
     content:"";
     position:absolute;
@@ -222,13 +223,6 @@
     border-radius:10px;
     box-shadow:0 10px 22px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.08);
     z-index:-1;
-}
-@keyframes ticketm-asentar{
-    from{opacity:0; transform:translateY(-8px)}
-    to{opacity:1; transform:translateY(0)}
-}
-@media (prefers-reduced-motion:reduce){
-    .ticket{animation:none}
 }
 .ticket .cut{
     position:absolute;
