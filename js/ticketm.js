@@ -141,10 +141,6 @@ function construirTicketHTML(t, contador) {
     const nombreClienta = escapeHtmlM(t.customer_full_name || t.customer_nickname || "Sin asignar");
     const grupo = STATUS_GRUPO_M[t.ticket_status] || "neutral";
     const statusTexto = STATUS_ES[t.ticket_status] || t.ticket_status;
-    const profesionales = t.professional_count || 0;
-    const aliasProfesionales = (t.professional_aliases && t.professional_aliases.length)
-        ? t.professional_aliases.join(" · ")
-        : "—";
     const numero = numeroTicketPadded(t.ticket_id);
 
     return `
@@ -163,7 +159,7 @@ function construirTicketHTML(t, contador) {
                         <span class="antiguedad">${tiempoTranscurridoM(t.ticket_booking_date)}</span>
                     </div>
                     <div class="details">
-                        <div><span class="label">Profesionales (${profesionales})</span><strong>${escapeHtmlM(aliasProfesionales)}</strong></div>
+                        <div class="ficha-wrap" id="fichaWrap"><span class="label">Atención</span><strong class="ficha-vacio">—</strong></div>
                         <div class="money"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></div>
                     </div>
                     <div class="rule"></div>
@@ -176,6 +172,117 @@ function construirTicketHTML(t, contador) {
             </div>
         </div>
     `;
+}
+
+// La "ficha de atención" (Clienta – Profesional – Fecha hora) vive en
+// ticket_professional_customer, no en el endpoint de lista — por eso
+// se pide aparte, por ticket, reutilizando el mismo endpoint que ya
+// usa ticket-profesionales.html.
+let atencionesActuales = [];
+let indiceAtencionActual = 0;
+
+function aplanarAtenciones(profesionales) {
+    const atenciones = [];
+    (profesionales || []).forEach(p => {
+        const nombreProfesional = p.professional_name || p.professional_nickname || "Sin nombre";
+        (p.customers || []).forEach(c => {
+            atenciones.push({
+                clienta: c.customer_full_name || c.customer_nickname || "Sin clienta",
+                profesional: nombreProfesional,
+                fecha: c.ticket_professional_customer_booking_date
+            });
+        });
+    });
+    return atenciones;
+}
+
+async function cargarAtenciones(ticketId) {
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${ticketId}/professionals`, {
+            headers: authHeadersM()
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const profesionales = await response.json();
+        atencionesActuales = aplanarAtenciones(profesionales);
+        indiceAtencionActual = 0;
+        renderFicha();
+
+    } catch (error) {
+        console.error("Error cargando atenciones:", error);
+    }
+}
+
+function renderFicha() {
+    const wrap = document.getElementById("fichaWrap");
+    if (!wrap) return;
+
+    if (!atencionesActuales.length) {
+        wrap.innerHTML = `<span class="label">Atención</span><strong class="ficha-vacio">—</strong>`;
+        ajustarNumeroTicket();
+        return;
+    }
+
+    const a = atencionesActuales[indiceAtencionActual];
+    const posicion = String(indiceAtencionActual + 1).padStart(2, "0");
+    const total = String(atencionesActuales.length).padStart(2, "0");
+
+    wrap.innerHTML = `
+        <span class="label">Atención <span class="ficha-contador">${posicion}-${total}</span></span>
+        <div class="ficha-atencion">
+            <strong class="ficha-nombre">${escapeHtmlM(a.clienta)} – ${escapeHtmlM(a.profesional)}</strong>
+            <div class="ficha-hora">${formatearFechaM(a.fecha)}</div>
+        </div>
+    `;
+    ajustarNumeroTicket();
+}
+
+function anteriorAtencion() {
+    if (indiceAtencionActual > 0) {
+        indiceAtencionActual--;
+        renderFicha();
+    }
+}
+
+function siguienteAtencion() {
+    if (indiceAtencionActual < atencionesActuales.length - 1) {
+        indiceAtencionActual++;
+        renderFicha();
+    }
+}
+
+// Arrastre horizontal específico sobre la ficha, para moverse entre
+// las atenciones del mismo ticket -no choca con el arrastre vertical
+// del número (otra zona) ni con el swipe de salida/entrada entre
+// tickets (ese lo dispara el usuario desde los botones o el número).
+function inicializarArrastreFicha() {
+    const slot = document.getElementById("ticketmSlot");
+    let inicioX = null;
+    let enFicha = false;
+
+    slot.addEventListener("touchstart", (e) => {
+        enFicha = !!e.target.closest(".ficha-atencion");
+        inicioX = enFicha ? e.touches[0].clientX : null;
+    }, { passive: true });
+
+    slot.addEventListener("touchend", (e) => {
+        if (!enFicha || inicioX === null) return;
+
+        const finX = e.changedTouches[0].clientX;
+        const deltaX = finX - inicioX;
+
+        if (Math.abs(deltaX) > 40) {
+            if (deltaX < 0) siguienteAtencion();
+            else anteriorAtencion();
+        }
+
+        inicioX = null;
+        enFicha = false;
+    }, { passive: true });
 }
 
 function ajustarNumeroTicket() {
@@ -210,6 +317,12 @@ function renderActual() {
 
     slot.innerHTML = construirTicketHTML(actual, `${posicion}-${total}`);
     ajustarNumeroTicket();
+
+    atencionesActuales = [];
+    indiceAtencionActual = 0;
+    if (actual.professional_count > 0) {
+        cargarAtenciones(actual.ticket_id);
+    }
 
     btnPrev.disabled = indiceActual === 0;
     btnNext.disabled = indiceActual === ticketsDelDia.length - 1;
@@ -360,6 +473,7 @@ document.getElementById("btnAplicarFiltrosM").addEventListener("click", aplicarF
 actualizarFechaCabeceraM();
 construirChipsStatus();
 inicializarArrastreNumero();
+inicializarArrastreFicha();
 cargarTicketsDelDia();
 
 window.addEventListener("resize", ajustarNumeroTicket);
