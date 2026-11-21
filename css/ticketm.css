@@ -300,12 +300,13 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:10px 0;
+    padding:4px 0;
+    touch-action:none;
 }
 .ticket .number{
     writing-mode:vertical-rl;
     transform:rotate(180deg);
-    font:900 26px/1 Georgia,"Times New Roman",serif;
-    letter-spacing:.05em;
+    font:900 26px/1.03 Georgia,"Times New Roman",serif;
+    letter-spacing:.02em;
     color:var(--ink);
 }

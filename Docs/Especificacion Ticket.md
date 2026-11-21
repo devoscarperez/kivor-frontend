@@ -433,3 +433,23 @@ Siguiendo el orden que ya proponía la sección 12 del documento:
 ### 14.6 Archivos del desarrollo
 
 Nuevos, sin modificar nada existente: `ticketm.html`, `css/ticketm.css`, `js/ticketm.js`. Reutilizan `js/api.js` y los endpoints ya existentes (`GET /ticket` hoy; `/customer`, `/booking-deposit`, `/professionals` en las próximas etapas). El listado actual (`ticket.html`, `ticket.js`, `ticket.css`) sigue intacto en producción.
+
+### 14.7 Precisiones del mock v2 (`Especificacion ticket mágico.pptx`)
+
+Un segundo documento, más detallado, confirmó y precisó varias decisiones:
+
+**Filtros.** Confirmado: siempre disponibles, pero escondidos hasta que el usuario decide mostrarlos — exactamente la huella (fecha con chevron + panel) ya construida. No es una excepción a la regla, es la forma correcta de cumplirla.
+
+**Navegación entre tickets — gesto específico.** No es un swipe genérico sobre la tarjeta: es un **arrastre vertical** (arriba/abajo) hecho específicamente sobre el número del ticket, en el talón. Arrastrar hacia arriba avanza al siguiente; hacia abajo, al anterior. Los botones de flecha visibles se mantienen como respaldo fácil de descubrir (principio #9: la navegación es una tarea habitual, no puede depender solo de un secreto).
+
+**Número del ticket — formato y tamaño.** Siempre 5 dígitos con ceros a la izquierda (ej. `00001`), y el número debe ocupar todo el espacio disponible del talón, no un tamaño de letra fijo y modesto.
+
+**Antigüedad del ticket — definición correcta.** Se calcula sobre `ticket_booking_date` (la fecha/hora de agendamiento de la cabecera), no sobre `ticket_status_changed_at` ni sobre `ticket_created_at`. Ejemplo que lo justifica: una clienta agendada hoy a las 10:00 y sin resolver a las 19:00 — ahí está el problema que la antigüedad debe mostrar.
+
+**Contador de posición.** Formato compacto `01-05` (ticket 1 de 5 en la consulta actual), no la frase "Ticket 1 de 5".
+
+**Un quinto secreto, no contemplado en la visión original: el estado.** Arrastrar el dedo horizontalmente sobre el status lo avanza o retrocede en el orden `Inactive → Assigned → Started → Completed → Approved → Finished`, llamando a `PATCH /ticket/{id}/status` (ya existe). Pendiente de construir, junto con el resto de los secretos.
+
+**Atenciones — el detalle de la "ficha".** Cuando un ticket tiene más de una atención, cada una se muestra como una ficha (`Clienta – Profesional – Fecha hora`) que se arrastra horizontalmente para moverse entre las atenciones del mismo ticket, con su propio contador `01-03` (atención 1 de 3). La fecha de agendamiento de la cabecera del ticket no necesariamente coincide con la de la primera atención — son datos relacionados pero distintos. Detalle para la Etapa 3, registrado aquí para no perderlo.
+
+**Pendiente de confirmar:** si el pie `Cre: ... · Act: ...` (timestamps de creación/actualización) se mantiene o se elimina — no apareció en la lista de campos importantes del mock v2, pero tampoco se confirmó su eliminación todavía.

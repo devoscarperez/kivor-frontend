@@ -133,6 +133,10 @@ async function cargarTicketsDelDia() {
     }
 }
 
+function numeroTicketPadded(ticketId) {
+    return String(ticketId).padStart(5, "0");
+}
+
 function construirTicketHTML(t) {
     const nombreClienta = escapeHtmlM(t.customer_full_name || t.customer_nickname || "Sin asignar");
     const grupo = STATUS_GRUPO_M[t.ticket_status] || "neutral";
@@ -141,9 +145,10 @@ function construirTicketHTML(t) {
     const aliasProfesionales = (t.professional_aliases && t.professional_aliases.length)
         ? t.professional_aliases.join(" · ")
         : "—";
+    const numero = numeroTicketPadded(t.ticket_id);
 
     return `
-        <div class="ticket" aria-label="Ticket número ${escapeHtmlM(t.ticket_id)} de ${nombreClienta}">
+        <div class="ticket" aria-label="Ticket número ${numero} de ${nombreClienta}">
             <span class="cut cut-l cut-top"></span>
             <span class="cut cut-l cut-bottom"></span>
             <span class="cut cut-r cut-top"></span>
@@ -155,7 +160,7 @@ function construirTicketHTML(t) {
                     <div class="row">
                         <span>${formatearFechaM(t.ticket_booking_date)}</span>
                         <span class="pill pill-${grupo}">${escapeHtmlM(statusTexto)}</span>
-                        <span class="antiguedad">${tiempoTranscurridoM(t.ticket_status_changed_at)}</span>
+                        <span class="antiguedad">${tiempoTranscurridoM(t.ticket_booking_date)}</span>
                     </div>
                     <div class="details">
                         <div><span class="label">Profesionales (${profesionales})</span><strong>${escapeHtmlM(aliasProfesionales)}</strong></div>
@@ -164,10 +169,21 @@ function construirTicketHTML(t) {
                     <div class="rule"></div>
                     <div class="ticket-footer">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</div>
                 </div>
-                <div class="stub"><span class="number">${escapeHtmlM(t.ticket_id)}</span></div>
+                <div class="stub"><span class="number">${numero}</span></div>
             </div>
         </div>
     `;
+}
+
+function ajustarNumeroTicket() {
+    const stub = document.querySelector(".ticket .stub");
+    const numero = document.querySelector(".ticket .number");
+    if (!stub || !numero) return;
+
+    // El número (siempre 5 dígitos) debe ocupar todo el alto del talón.
+    const alto = stub.clientHeight;
+    const tamano = Math.floor(alto / 5.2);
+    numero.style.fontSize = `${tamano}px`;
 }
 
 function renderActual() {
@@ -189,8 +205,11 @@ function renderActual() {
 
     const actual = ticketsDelDia[indiceActual];
     slot.innerHTML = construirTicketHTML(actual);
+    ajustarNumeroTicket();
 
-    indice.textContent = `Ticket ${indiceActual + 1} de ${ticketsDelDia.length}`;
+    const posicion = String(indiceActual + 1).padStart(2, "0");
+    const total = String(ticketsDelDia.length).padStart(2, "0");
+    indice.textContent = `${posicion}-${total}`;
     btnPrev.disabled = indiceActual === 0;
     btnNext.disabled = indiceActual === ticketsDelDia.length - 1;
 }
@@ -209,31 +228,33 @@ function irSiguiente() {
     }
 }
 
-function inicializarSwipe() {
+// El gesto de navegación vive específicamente en el número del ticket
+// (el talón), no en toda la tarjeta — así no choca con otros cajones
+// secretos que más adelante usarán arrastre horizontal (status, fichas
+// de atención). Arrastrar hacia arriba avanza, hacia abajo retrocede.
+function inicializarArrastreNumero() {
     const slot = document.getElementById("ticketmSlot");
-    let inicioX = null;
     let inicioY = null;
+    let enTalon = false;
 
     slot.addEventListener("touchstart", (e) => {
-        inicioX = e.touches[0].clientX;
-        inicioY = e.touches[0].clientY;
+        enTalon = !!e.target.closest(".stub");
+        inicioY = enTalon ? e.touches[0].clientY : null;
     }, { passive: true });
 
     slot.addEventListener("touchend", (e) => {
-        if (inicioX === null) return;
+        if (!enTalon || inicioY === null) return;
 
-        const finX = e.changedTouches[0].clientX;
         const finY = e.changedTouches[0].clientY;
-        const deltaX = finX - inicioX;
         const deltaY = finY - inicioY;
 
-        if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 2) {
-            if (deltaX < 0) irSiguiente();
+        if (Math.abs(deltaY) > 40) {
+            if (deltaY < 0) irSiguiente();
             else irAnterior();
         }
 
-        inicioX = null;
         inicioY = null;
+        enTalon = false;
     }, { passive: true });
 }
 
@@ -296,5 +317,7 @@ document.getElementById("btnAplicarFiltrosM").addEventListener("click", aplicarF
 
 actualizarFechaCabeceraM();
 construirChipsStatus();
-inicializarSwipe();
+inicializarArrastreNumero();
 cargarTicketsDelDia();
+
+window.addEventListener("resize", ajustarNumeroTicket);
