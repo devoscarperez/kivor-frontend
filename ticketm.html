@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ticket Mágico</title>
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/ticketm.css">
+</head>
+<body>
+
+<div class="app-ticketm">
+
+    <header class="ticketm-topbar">
+        <button class="ticketm-icon-btn" onclick="goMenu()" aria-label="Volver al menú">←</button>
+        <div class="ticketm-fecha" id="ticketmFecha"></div>
+        <button class="ticketm-icon-btn" id="btnRefrescarM" title="Actualizar" aria-label="Actualizar">⟳</button>
+    </header>
+
+    <main class="ticketm-stage">
+        <button class="ticketm-nav ticketm-nav-prev" id="btnPrev" aria-label="Ticket anterior">‹</button>
+
+        <div class="ticketm-slot" id="ticketmSlot">
+            <div class="ticketm-vacio" id="ticketmVacio">No hay tickets agendados para hoy.</div>
+        </div>
+
+        <button class="ticketm-nav ticketm-nav-next" id="btnNext" aria-label="Ticket siguiente">›</button>
+    </main>
+
+    <div class="ticketm-indice" id="ticketmIndice"></div>
+
+</div>
+
+<script>
+const token = sessionStorage.getItem("access_token");
+if (!token) window.location.href = "login.html";
+
+function goMenu() {
+    window.location.href = "dashboard.html";
+}
+</script>
+
+<script src="js/api.js"></script>
+<script src="js/ticketm.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+/* =========================
+   Ticket Mágico — Etapa 1
+   Una pantalla, un ticket. Sin cajones secretos todavía:
+   solo lectura + navegación entre los tickets del día.
+========================= */
+
+*{box-sizing:border-box}
+
+.app-ticketm{
+    min-height:100vh;
+    background:var(--color-background);
+    display:flex;
+    flex-direction:column;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+
+/* ---- barra superior (chrome de la app, no es parte del ticket) ---- */
+.ticketm-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 12px;
+}
+.ticketm-icon-btn{
+    width:var(--touch-target-min);
+    height:var(--touch-target-min);
+    border:none;
+    border-radius:999px;
+    background:var(--color-surface);
+    color:var(--color-text-primary);
+    font-size:20px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.ticketm-icon-btn:active{opacity:.6}
+.ticketm-fecha{
+    font-size:16px;
+    font-weight:600;
+    color:var(--color-text-secondary);
+}
+
+/* ---- escenario: el ticket + flechas de navegación ---- */
+.ticketm-stage{
+    position:relative;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px 48px 24px;
+}
+.ticketm-nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:var(--touch-target-min);
+    height:var(--touch-target-min);
+    border:none;
+    border-radius:999px;
+    background:var(--color-surface);
+    box-shadow:var(--shadow-soft);
+    color:var(--color-text-secondary);
+    font-size:24px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.ticketm-nav:active{opacity:.6}
+.ticketm-nav:disabled{opacity:.25}
+.ticketm-nav-prev{left:0}
+.ticketm-nav-next{right:0}
+
+.ticketm-slot{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    touch-action:pan-y;
+}
+
+.ticketm-vacio{
+    font-size:16px;
+    color:var(--color-text-secondary);
+    text-align:center;
+    padding:32px 16px;
+}
+
+.ticketm-indice{
+    text-align:center;
+    font-size:14px;
+    color:var(--color-text-secondary);
+    padding:0 16px 20px;
+}
+
+/* =========================
+   El ticket — paleta "Papel cálido"
+   Alto 100% dependiente del contenido real: nunca se recorta ni se
+   superpone. El look "boleto ancho" se logra con padding/tipografía,
+   no con una relación de aspecto forzada.
+========================= */
+.ticket{
+    --paper:#FBF2E4;
+    --paper2:#F2E0C2;
+    --ink:#7A2142;
+    --ink-soft:#C8A5B3;
+    --text:#4E4E4E;
+    --text-soft:#96898A;
+
+    position:relative;
+    width:100%;
+    max-width:480px;
+    border-radius:10px;
+    color:var(--text);
+    background:
+        radial-gradient(circle at 7px 7px, rgba(60,30,20,.09) 0.7px, transparent 1.1px) 0 0/9px 9px,
+        linear-gradient(145deg, var(--paper2), var(--paper) 60%);
+    box-shadow:0 8px 20px rgba(0,0,0,.14), 0 1px 0 rgba(0,0,0,.04);
+}
+.ticket .cut{
+    position:absolute;
+    width:20px;
+    height:24px;
+    border-radius:50%;
+    background:var(--color-background);
+    z-index:2;
+}
+.ticket .cut-l{left:-10px}
+.ticket .cut-r{right:-10px}
+.ticket .cut-top{top:38px}
+.ticket .cut-bottom{bottom:38px}
+
+.ticket .frame{
+    margin:12px;
+    border:2px solid var(--ink);
+    border-radius:14px;
+    display:grid;
+    grid-template-columns:1fr 56px;
+    overflow:hidden;
+}
+.ticket .main{
+    padding:16px 16px 12px;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+}
+.ticket .name{
+    margin:0 0 8px;
+    text-align:center;
+    font:700 22px/1.2 Georgia,"Times New Roman",serif;
+    text-wrap:balance;
+    overflow-wrap:break-word;
+    color:var(--text);
+}
+.ticket .rule{border-top:1px solid var(--ink-soft);margin:8px 0}
+.ticket .row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:8px 10px;
+    font-size:16px;
+}
+.ticket .pill{
+    border-radius:999px;
+    padding:3px 12px;
+    font-size:16px;
+    font-weight:700;
+    border:1.5px solid;
+    white-space:nowrap;
+}
+.ticket .pill-error{border-color:var(--color-error);color:var(--color-error);background:color-mix(in srgb, var(--color-error) 12%, white)}
+.ticket .pill-warning{border-color:var(--color-warning);color:var(--color-warning);background:color-mix(in srgb, var(--color-warning) 12%, white)}
+.ticket .pill-info{border-color:var(--color-info);color:var(--color-info);background:color-mix(in srgb, var(--color-info) 12%, white)}
+.ticket .pill-neutral{border-color:var(--color-border-default);color:var(--color-text-secondary);background:color-mix(in srgb, var(--color-border-default) 25%, white)}
+
+.ticket .antiguedad{color:var(--text-soft);white-space:nowrap}
+.ticket .details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:end;
+    gap:8px 14px;
+    margin:10px 0 2px;
+}
+.ticket .details .label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:2px;
+}
+.ticket .details strong{
+    font:700 19px/1.2 Georgia,"Times New Roman",serif;
+    color:var(--text);
+    word-break:break-word;
+}
+.ticket .money{text-align:right}
+.ticket .ticket-footer{
+    margin-top:10px;
+    font-size:12px;
+    color:var(--text-soft);
+    text-align:center;
+}
+.ticket .stub{
+    border-left:2px solid var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 0;
+}
+.ticket .number{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font:900 26px/1 Georgia,"Times New Roman",serif;
+    letter-spacing:.05em;
+    color:var(--ink);
+}
