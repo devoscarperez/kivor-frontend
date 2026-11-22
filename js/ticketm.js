@@ -281,12 +281,22 @@ function actualizarContadorAtenciones() {
 function ajustarNumeroTicket() {
     const stub = document.querySelector(".ticket .stub");
     const numero = document.querySelector(".ticket .number");
-    if (!stub || !numero) return;
+    if (stub && numero) {
+        // El número (siempre 5 dígitos) debe ocupar todo el alto del talón.
+        const alto = stub.clientHeight;
+        numero.style.fontSize = `${Math.floor(alto / 5.2)}px`;
+    }
 
-    // El número (siempre 5 dígitos) debe ocupar todo el alto del talón.
-    const alto = stub.clientHeight;
-    const tamano = Math.floor(alto / 5.2);
-    numero.style.fontSize = `${tamano}px`;
+    // Mismo criterio para el status: llenar el alto del talón. El
+    // divisor usa el largo real de la palabra (varía 8-10 letras según
+    // el status) en vez de un valor fijo, para que nunca se corte.
+    const stubStatus = document.querySelector(".ticket .stub-status");
+    const statusTexto = document.querySelector(".ticket .status-vertical");
+    if (stubStatus && statusTexto) {
+        const altoStatus = stubStatus.clientHeight;
+        const largo = statusTexto.textContent.length || 1;
+        statusTexto.style.fontSize = `${Math.floor(altoStatus / (largo * 1.04))}px`;
+    }
 }
 
 function renderActual() {
@@ -443,6 +453,7 @@ function cambiarStatusVisual(direccion) {
     stub.dataset.status = nuevoStatus;
     stub.className = `stub-status grupo-${nuevoGrupo}`;
     stub.querySelector(".status-vertical").textContent = STATUS_ES[nuevoStatus] || nuevoStatus;
+    ajustarNumeroTicket();
 }
 
 function construirChipsStatus() {
