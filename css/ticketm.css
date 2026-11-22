@@ -270,8 +270,11 @@
    -si no, este desplazamiento quedaría invisible, igual que le pasó
    al status antes de sacarlo de adentro de .frame. */
 .ticket .name-wrap.abierto{
-    transform:translateY(-8px);
-    box-shadow:0 -5px 12px rgba(0,0,0,.2);
+    transform:translateY(-10px);
+    background:#FFFCF6;
+    border-radius:10px;
+    padding:6px 8px;
+    box-shadow:0 -6px 14px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.12);
     z-index:2;
 }
 .ticket .name{

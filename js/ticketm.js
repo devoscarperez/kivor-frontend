@@ -651,6 +651,8 @@ function abrirCajonNombre() {
         input.focus();
         input.select();
     }, 50);
+
+    ajustarNumeroTicket();
 }
 
 function cerrarCajonNombre(huboSeleccion) {
@@ -664,6 +666,8 @@ function cerrarCajonNombre(huboSeleccion) {
         document.getElementById("nombreBuscadorInput").value = "";
         document.getElementById("nombreBuscadorResultados").innerHTML = "";
     }
+
+    ajustarNumeroTicket();
 }
 
 function inicializarBusquedaNombre() {
@@ -712,6 +716,7 @@ function renderResultadosNombre(items) {
 
     if (!items.length) {
         resultados.innerHTML = `<div class="nombre-resultado-vacio">No se encontraron clientas.</div>`;
+        ajustarNumeroTicket();
         return;
     }
 
@@ -724,6 +729,8 @@ function renderResultadosNombre(items) {
             </div>
         `;
     }).join("");
+
+    ajustarNumeroTicket();
 }
 
 async function seleccionarClienta(customerId, nombre) {
