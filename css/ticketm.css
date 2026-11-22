@@ -275,52 +275,14 @@
     right:86px;
     transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
-/* El borde izquierdo es donde se "arranca" el trozo del cuerpo del
-   ticket -por eso no lleva el borde tinta de los otros tres lados
-   (eso representaría el borde impreso original, que un desgarro no
-   tiene). clip-path recorta ese filo en zigzag en dos capas:
-   name-wrap-backing (blanca, un poco más grande, detrás) se asoma
-   justo en los dientes del corte de name-wrap (el papel, encima) -el
-   efecto de fibra rota. Tienen que ser elementos hermanos, no
-   ::before/::after: un pseudo-elemento con z-index negativo igual
-   pinta ENCIMA del fondo propio de su elemento (ese fondo es un paso
-   aparte, anterior a cualquier hijo con z-index, sin importar el
-   signo) -se intentó y el blanco tapaba todo el papel. Como
-   hermanos, con z-index positivo normal, el orden es predecible.
-   Tampoco se usa filter:drop-shadow -no se renderiza en este
-   Chromium headless sin GPU, no se pudo verificar. */
-.ticket .name-wrap-backing{display:none}
-.ticket .name-wrap.abierto ~ .name-wrap-backing{
-    display:block;
-    position:absolute;
-    top:21px;
-    left:75px;
-    right:91px;
-    height:128px;
-    transform:translateX(20px);
-    background:#FFFEFA;
-    clip-path:polygon(
-        0% 0%, 100% 0%, 100% 100%, 0% 100%,
-        8% 92%, 0% 84%, 8% 76%, 0% 68%, 8% 60%, 0% 52%,
-        8% 44%, 0% 36%, 8% 28%, 0% 20%, 8% 12%, 0% 4%, 0% 0%
-    );
-    box-shadow:6px 4px 10px rgba(0,0,0,.24);
-    z-index:1;
-}
 .ticket .name-wrap.abierto{
-    transform:translateX(20px);
+    transform:translateY(-8px);
     background:
         radial-gradient(circle at 7px 7px, rgba(60,30,20,.09) 0.7px, transparent 1.1px) 0 0/9px 9px,
         linear-gradient(145deg, var(--paper2), var(--paper) 60%);
-    border:2px solid var(--ink);
-    border-left:none;
-    border-radius:0;
-    padding:6px 8px 6px 14px;
-    clip-path:polygon(
-        0% 0%, 100% 0%, 100% 100%, 0% 100%,
-        8% 92%, 0% 84%, 8% 76%, 0% 68%, 8% 60%, 0% 52%,
-        8% 44%, 0% 36%, 8% 28%, 0% 20%, 8% 12%, 0% 4%, 0% 0%
-    );
+    border-radius:8px;
+    padding:6px 8px;
+    box-shadow:0 6px 14px rgba(0,0,0,.22);
     z-index:2;
 }
 .ticket .name{
@@ -347,7 +309,7 @@
 }
 .ticket .nombre-buscador-resultados{
     margin-top:6px;
-    height:72px;
+    max-height:120px;
     overflow-y:auto;
 }
 .ticket .nombre-resultado{
