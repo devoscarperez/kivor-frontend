@@ -121,7 +121,12 @@ async function cargarTicketsDelDia() {
         }
 
         const tickets = await response.json();
-        ticketsDelDia = tickets || [];
+
+        if (!response.ok || !Array.isArray(tickets)) {
+            throw new Error(tickets?.detail || "Respuesta inesperada del servidor.");
+        }
+
+        ticketsDelDia = tickets;
         indiceActual = 0;
         renderActual();
         actualizarHuellaFiltros();
