@@ -146,29 +146,8 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:0 48px;
+    padding:0 16px;
 }
-.ticketm-nav{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:var(--touch-target-min);
-    height:var(--touch-target-min);
-    border:none;
-    border-radius:999px;
-    background:var(--color-surface);
-    box-shadow:var(--shadow-soft);
-    color:var(--color-text-secondary);
-    font-size:24px;
-    line-height:1;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-.ticketm-nav:active{opacity:.6}
-.ticketm-nav:disabled{opacity:.25}
-.ticketm-nav-prev{left:0}
-.ticketm-nav-next{right:0}
 
 .ticketm-slot{
     width:100%;
@@ -213,7 +192,7 @@
 
     position:relative;
     width:100%;
-    max-width:480px;
+    max-width:560px;
     border-radius:10px;
     color:var(--text);
     background:
@@ -253,7 +232,7 @@
     border:2px solid var(--ink);
     border-radius:14px;
     display:grid;
-    grid-template-columns:1fr 56px;
+    grid-template-columns:48px 1fr 56px;
     overflow:hidden;
 }
 .ticket .main{
@@ -262,61 +241,50 @@
     flex-direction:column;
     min-width:0;
 }
+.ticket .name-wrap{
+    position:relative;
+    margin:0 0 16px;
+}
 .ticket .name{
-    margin:0 0 8px;
+    margin:0;
     text-align:center;
     font:700 22px/1.2 Georgia,"Times New Roman",serif;
     text-wrap:balance;
     overflow-wrap:break-word;
     color:var(--text);
 }
-.ticket .rule{border-top:1px solid var(--ink-soft);margin:8px 0}
-.ticket .row{
-    display:flex;
-    align-items:center;
-    flex-wrap:wrap;
-    justify-content:space-between;
-    gap:8px 10px;
-    font-size:16px;
-}
-.ticket .pill{
-    border-radius:999px;
-    padding:3px 12px;
-    font-size:16px;
-    font-weight:700;
-    border:1.5px solid;
+.ticket .atenciones-contador{
+    position:absolute;
+    right:2px;
+    bottom:-14px;
+    font:400 12px/1 Georgia,"Times New Roman",serif;
+    letter-spacing:.03em;
+    color:var(--ink-soft);
     white-space:nowrap;
 }
-.ticket .pill-error{border-color:var(--color-error);color:var(--color-error);background:color-mix(in srgb, var(--color-error) 12%, white)}
-.ticket .pill-warning{border-color:var(--color-warning);color:var(--color-warning);background:color-mix(in srgb, var(--color-warning) 12%, white)}
-.ticket .pill-info{border-color:var(--color-info);color:var(--color-info);background:color-mix(in srgb, var(--color-info) 12%, white)}
-.ticket .pill-neutral{border-color:var(--color-border-default);color:var(--color-text-secondary);background:color-mix(in srgb, var(--color-border-default) 25%, white)}
+.ticket .rule{border-top:1px solid var(--ink-soft);margin:5px 0}
 
 .ticket .antiguedad{color:var(--text-soft);white-space:nowrap}
 .ticket .details{
     margin:10px 0 2px;
+    flex-shrink:0;
 }
-.ticket .details .label{
-    display:block;
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:.05em;
-    text-transform:uppercase;
-    color:var(--ink-soft);
-    margin-bottom:2px;
-}
-.ticket .details strong{
-    font:700 19px/1.2 Georgia,"Times New Roman",serif;
-    color:var(--text);
-    word-break:break-word;
+.ticket .atenciones-lista{
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    max-height:76px;
+    overflow-y:auto;
+    touch-action:pan-y;
 }
 .ticket .ficha-wrap{min-width:0}
-.ticket .ficha-contador{
-    color:var(--ink-soft);
-    font-weight:700;
+.ticket .ficha-vacio{
+    font:700 19px/1.2 Georgia,"Times New Roman",serif;
+    color:var(--text-soft);
 }
 .ticket .ficha-atencion{
-    touch-action:pan-y;
+    flex-shrink:0;
     display:flex;
     align-items:baseline;
     gap:3px;
@@ -347,12 +315,8 @@
     flex:0 0 auto;
     color:var(--text-soft);
 }
-.ticket .ficha-vacio{
-    font:700 19px/1.2 Georgia,"Times New Roman",serif;
-    color:var(--text-soft);
-}
 .ticket .ticket-footer{
-    margin-top:10px;
+    margin-top:6px;
     display:flex;
     align-items:baseline;
     justify-content:space-between;
@@ -404,3 +368,21 @@
     letter-spacing:.02em;
     color:var(--ink);
 }
+.ticket .stub-status{
+    border-right:2px solid var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:4px 0;
+    touch-action:none;
+}
+.ticket .status-vertical{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font:700 13px/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    letter-spacing:.08em;
+}
+.ticket .stub-status.grupo-error .status-vertical{color:var(--color-error)}
+.ticket .stub-status.grupo-warning .status-vertical{color:var(--color-warning)}
+.ticket .stub-status.grupo-info .status-vertical{color:var(--color-info)}
+.ticket .stub-status.grupo-neutral .status-vertical{color:var(--color-text-secondary)}

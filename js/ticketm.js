@@ -137,6 +137,13 @@ function numeroTicketPadded(ticketId) {
     return String(ticketId).padStart(5, "0");
 }
 
+// Orden en que se cicla el status al arrastrar verticalmente el
+// talón izquierdo. Mismo orden que ya usan los filtros (TODOS_LOS_STATUS
+// en ticket.js). El cambio es solo visual por ahora -no se guarda en
+// la base de datos todavía, eso vendrá cuando construyamos el secreto
+// de status con escritura real.
+const ORDEN_STATUS = ["Inactive", "Assigned", "Started", "Completed", "Approved", "Finished"];
+
 function construirTicketHTML(t, contador) {
     const nombreClienta = escapeHtmlM(t.customer_full_name || t.customer_nickname || "Sin asignar");
     const grupo = STATUS_GRUPO_M[t.ticket_status] || "neutral";
@@ -150,15 +157,17 @@ function construirTicketHTML(t, contador) {
             <span class="cut cut-r cut-top"></span>
             <span class="cut cut-r cut-bottom"></span>
             <div class="frame">
+                <div class="stub-status grupo-${grupo}" id="stubStatus" data-status="${escapeHtmlM(t.ticket_status)}">
+                    <span class="status-vertical">${escapeHtmlM(statusTexto)}</span>
+                </div>
                 <div class="main">
-                    <h1 class="name">${nombreClienta}</h1>
-                    <div class="rule"></div>
-                    <div class="row">
-                        <span>${formatearFechaM(t.ticket_booking_date)}</span>
-                        <span class="pill pill-${grupo}">${escapeHtmlM(statusTexto)}</span>
+                    <div class="name-wrap">
+                        <h1 class="name">${nombreClienta}</h1>
+                        <span class="atenciones-contador" id="atencionesContador"></span>
                     </div>
+                    <div class="rule"></div>
                     <div class="details">
-                        <div class="ficha-wrap" id="fichaWrap"><span class="label">Atención</span><strong class="ficha-vacio">—</strong></div>
+                        <div class="atenciones-lista" id="atencionesLista"><div class="ficha-vacio">—</div></div>
                     </div>
                     <div class="rule"></div>
                     <div class="ticket-footer">
@@ -219,22 +228,24 @@ async function cargarAtenciones(ticketId) {
     }
 }
 
+// Lista de hasta 3 atenciones relajadas, con scroll vertical si hay
+// más -reemplaza el modelo de "una a la vez con arrastre horizontal".
+// El contador junto al nombre de la titular indica la posición actual
+// según qué fila esté más arriba del scroll, y el total, para saber
+// si conviene seguir desplazándose.
 function renderFicha() {
-    const wrap = document.getElementById("fichaWrap");
-    if (!wrap) return;
+    const lista = document.getElementById("atencionesLista");
+    const contador = document.getElementById("atencionesContador");
+    if (!lista) return;
 
     if (!atencionesActuales.length) {
-        wrap.innerHTML = `<span class="label">Atención</span><strong class="ficha-vacio">—</strong>`;
+        lista.innerHTML = `<div class="ficha-vacio">—</div>`;
+        if (contador) contador.textContent = "";
         ajustarNumeroTicket();
         return;
     }
 
-    const a = atencionesActuales[indiceAtencionActual];
-    const posicion = String(indiceAtencionActual + 1).padStart(2, "0");
-    const total = String(atencionesActuales.length).padStart(2, "0");
-
-    wrap.innerHTML = `
-        <span class="label">Atención <span class="ficha-contador">${posicion}-${total}</span></span>
+    lista.innerHTML = atencionesActuales.map(a => `
         <div class="ficha-atencion">
             <span class="ficha-clienta">${escapeHtmlM(a.clienta)}</span>
             <span class="ficha-sep">–</span>
@@ -242,52 +253,29 @@ function renderFicha() {
             <span class="ficha-sep">–</span>
             <span class="ficha-fecha">${formatearFechaM(a.fecha)}</span>
         </div>
-    `;
+    `).join("");
+
+    lista.addEventListener("scroll", actualizarContadorAtenciones, { passive: true });
+    actualizarContadorAtenciones();
     ajustarNumeroTicket();
 }
 
-function anteriorAtencion() {
-    if (indiceAtencionActual > 0) {
-        indiceAtencionActual--;
-        renderFicha();
-    }
-}
+function actualizarContadorAtenciones() {
+    const lista = document.getElementById("atencionesLista");
+    const contador = document.getElementById("atencionesContador");
+    if (!lista || !contador || !atencionesActuales.length) return;
 
-function siguienteAtencion() {
-    if (indiceAtencionActual < atencionesActuales.length - 1) {
-        indiceAtencionActual++;
-        renderFicha();
-    }
-}
+    const filas = lista.querySelectorAll(".ficha-atencion");
+    if (!filas.length) return;
 
-// Arrastre horizontal específico sobre la ficha, para moverse entre
-// las atenciones del mismo ticket -no choca con el arrastre vertical
-// del número (otra zona) ni con el swipe de salida/entrada entre
-// tickets (ese lo dispara el usuario desde los botones o el número).
-function inicializarArrastreFicha() {
-    const slot = document.getElementById("ticketmSlot");
-    let inicioX = null;
-    let enFicha = false;
+    let indiceVisible = 0;
+    filas.forEach((fila, i) => {
+        if (fila.offsetTop <= lista.scrollTop + 4) indiceVisible = i;
+    });
 
-    slot.addEventListener("touchstart", (e) => {
-        enFicha = !!e.target.closest(".ficha-atencion");
-        inicioX = enFicha ? e.touches[0].clientX : null;
-    }, { passive: true });
-
-    slot.addEventListener("touchend", (e) => {
-        if (!enFicha || inicioX === null) return;
-
-        const finX = e.changedTouches[0].clientX;
-        const deltaX = finX - inicioX;
-
-        if (Math.abs(deltaX) > 40) {
-            if (deltaX < 0) siguienteAtencion();
-            else anteriorAtencion();
-        }
-
-        inicioX = null;
-        enFicha = false;
-    }, { passive: true });
+    const posicion = String(indiceVisible + 1).padStart(2, "0");
+    const total = String(atencionesActuales.length).padStart(2, "0");
+    contador.textContent = `${posicion}-${total}`;
 }
 
 function ajustarNumeroTicket() {
@@ -303,16 +291,12 @@ function ajustarNumeroTicket() {
 
 function renderActual() {
     const slot = document.getElementById("ticketmSlot");
-    const btnPrev = document.getElementById("btnPrev");
-    const btnNext = document.getElementById("btnNext");
 
     if (!ticketsDelDia.length) {
         const mensaje = filtrosSonPorDefecto()
             ? "No hay tickets agendados para hoy."
             : "No hay tickets para los filtros seleccionados.";
         slot.innerHTML = `<div class="ticketm-vacio">${mensaje}</div>`;
-        btnPrev.disabled = true;
-        btnNext.disabled = true;
         return;
     }
 
@@ -328,9 +312,6 @@ function renderActual() {
     if (actual.professional_count > 0) {
         cargarAtenciones(actual.ticket_id);
     }
-
-    btnPrev.disabled = indiceActual === 0;
-    btnNext.disabled = indiceActual === ticketsDelDia.length - 1;
 }
 
 let cambioEnCurso = false;
@@ -418,6 +399,52 @@ function inicializarArrastreNumero() {
     }, { passive: true });
 }
 
+// Arrastre vertical sobre el talón de status, para ciclar entre los
+// estados (mismo orden que los filtros). Por ahora es solo visual —
+// no llama a ningún endpoint todavía, eso llega con el secreto de
+// status con escritura real.
+function inicializarArrastreStatus() {
+    const slot = document.getElementById("ticketmSlot");
+    let inicioY = null;
+    let enStub = false;
+
+    slot.addEventListener("touchstart", (e) => {
+        enStub = !!e.target.closest(".stub-status");
+        inicioY = enStub ? e.touches[0].clientY : null;
+    }, { passive: true });
+
+    slot.addEventListener("touchend", (e) => {
+        if (!enStub || inicioY === null) return;
+
+        const finY = e.changedTouches[0].clientY;
+        const deltaY = finY - inicioY;
+
+        if (Math.abs(deltaY) > 40) {
+            cambiarStatusVisual(deltaY < 0 ? 1 : -1);
+        }
+
+        inicioY = null;
+        enStub = false;
+    }, { passive: true });
+}
+
+function cambiarStatusVisual(direccion) {
+    const stub = document.getElementById("stubStatus");
+    if (!stub) return;
+
+    const actual = stub.dataset.status;
+    const indiceActualStatus = ORDEN_STATUS.indexOf(actual);
+    const nuevoIndice = Math.min(ORDEN_STATUS.length - 1, Math.max(0, indiceActualStatus + direccion));
+    if (nuevoIndice === indiceActualStatus) return;
+
+    const nuevoStatus = ORDEN_STATUS[nuevoIndice];
+    const nuevoGrupo = STATUS_GRUPO_M[nuevoStatus] || "neutral";
+
+    stub.dataset.status = nuevoStatus;
+    stub.className = `stub-status grupo-${nuevoGrupo}`;
+    stub.querySelector(".status-vertical").textContent = STATUS_ES[nuevoStatus] || nuevoStatus;
+}
+
 function construirChipsStatus() {
     const contenedor = document.getElementById("fStatusChips");
     contenedor.innerHTML = "";
@@ -465,8 +492,6 @@ function aplicarFiltros() {
     cargarTicketsDelDia();
 }
 
-document.getElementById("btnPrev").addEventListener("click", irAnterior);
-document.getElementById("btnNext").addEventListener("click", irSiguiente);
 document.getElementById("btnRefrescarM").addEventListener("click", cargarTicketsDelDia);
 document.getElementById("btnFiltros").addEventListener("click", () => {
     const abierto = document.getElementById("panelFiltros").hidden === false;
@@ -478,7 +503,7 @@ document.getElementById("btnAplicarFiltrosM").addEventListener("click", aplicarF
 actualizarFechaCabeceraM();
 construirChipsStatus();
 inicializarArrastreNumero();
-inicializarArrastreFicha();
+inicializarArrastreStatus();
 cargarTicketsDelDia();
 
 window.addEventListener("resize", ajustarNumeroTicket);
