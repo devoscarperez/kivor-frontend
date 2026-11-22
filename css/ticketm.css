@@ -249,7 +249,7 @@
 .ticket .frame{
     margin:12px 12px 12px 60px;
     border:2px solid var(--ink);
-    border-radius:14px;
+    border-radius:0 14px 14px 0;
     display:grid;
     grid-template-columns:1fr 56px;
     overflow:hidden;
@@ -394,7 +394,7 @@
     left:12px;
     width:48px;
     border:2px solid var(--ink);
-    border-radius:14px;
+    border-radius:14px 0 0 14px;
     overflow:hidden;
     display:flex;
     align-items:center;
