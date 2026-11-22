@@ -172,7 +172,7 @@ function construirTicketHTML(t, contador) {
                     <div class="rule"></div>
                     <div class="ticket-footer">
                         <span class="abono-footer"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></span>
-                        <span class="antiguedad">${tiempoTranscurridoM(t.ticket_booking_date)}</span>
+                        <span class="antiguedad">${tiempoTranscurridoM(t.primera_atencion || t.ticket_created_at)}</span>
                         <!-- Cre/Act deshabilitado por ahora, no hace falta mostrarlo:
                         <span class="ticket-fechas">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</span>
                         -->
