@@ -161,10 +161,10 @@ function construirTicketHTML(t, contador) {
             <span class="cut cut-l cut-bottom"></span>
             <span class="cut cut-r cut-top"></span>
             <span class="cut cut-r cut-bottom"></span>
+            <div class="stub-status grupo-${grupo}" id="stubStatus" data-status="${escapeHtmlM(t.ticket_status)}">
+                <span class="status-vertical">${escapeHtmlM(statusTexto)}</span>
+            </div>
             <div class="frame">
-                <div class="stub-status grupo-${grupo}" id="stubStatus" data-status="${escapeHtmlM(t.ticket_status)}">
-                    <span class="status-vertical">${escapeHtmlM(statusTexto)}</span>
-                </div>
                 <div class="main">
                     <div class="name-wrap">
                         <h1 class="name">${nombreClienta}</h1>
@@ -335,6 +335,12 @@ function renderActual() {
     slot.innerHTML = construirTicketHTML(actual, `${posicion}-${total}`);
     ajustarNumeroTicket();
 
+    // El talón nuevo siempre nace cerrado -evita que quede un "abierto"
+    // colgado si el usuario navega a otro ticket sin cerrar el cajón.
+    statusAbierto = false;
+    statusOriginal = null;
+    ultimoTapStatus = 0;
+
     atencionesActuales = [];
     indiceAtencionActual = 0;
     if (actual.professional_count > 0) {
@@ -427,10 +433,18 @@ function inicializarArrastreNumero() {
     }, { passive: true });
 }
 
-// Arrastre vertical sobre el talón de status, para ciclar entre los
-// estados (mismo orden que los filtros). Por ahora es solo visual —
-// no llama a ningún endpoint todavía, eso llega con el secreto de
-// status con escritura real.
+// El cajón del status: doble-tap para abrir (se despega del ticket),
+// arrastre vertical mientras está abierto para ciclar el estado, y un
+// tap simple para cerrarlo -cerrar es lo que guarda el cambio de
+// verdad, igual que guardar algo al volver a meter el cajón.
+const DOBLE_TAP_MS = 350;
+const UMBRAL_TAP_PX = 12;
+const UMBRAL_CICLO_PX = 40;
+
+let statusAbierto = false;
+let statusOriginal = null;
+let ultimoTapStatus = 0;
+
 function inicializarArrastreStatus() {
     const slot = document.getElementById("ticketmSlot");
     let inicioY = null;
@@ -447,13 +461,52 @@ function inicializarArrastreStatus() {
         const finY = e.changedTouches[0].clientY;
         const deltaY = finY - inicioY;
 
-        if (Math.abs(deltaY) > 40) {
+        if (Math.abs(deltaY) < UMBRAL_TAP_PX) {
+            manejarTapStatus();
+        } else if (statusAbierto && Math.abs(deltaY) > UMBRAL_CICLO_PX) {
             cambiarStatusVisual(deltaY < 0 ? 1 : -1);
         }
 
         inicioY = null;
         enStub = false;
     }, { passive: true });
+}
+
+function manejarTapStatus() {
+    const ahora = Date.now();
+
+    if (!statusAbierto) {
+        if (ahora - ultimoTapStatus < DOBLE_TAP_MS) {
+            abrirCajonStatus();
+            ultimoTapStatus = 0;
+        } else {
+            ultimoTapStatus = ahora;
+        }
+    } else {
+        cerrarCajonStatus();
+    }
+}
+
+function abrirCajonStatus() {
+    const stub = document.getElementById("stubStatus");
+    if (!stub) return;
+
+    statusAbierto = true;
+    statusOriginal = stub.dataset.status;
+    stub.classList.add("abierto");
+}
+
+function cerrarCajonStatus() {
+    const stub = document.getElementById("stubStatus");
+    if (!stub) return;
+
+    statusAbierto = false;
+    stub.classList.remove("abierto");
+
+    const nuevoStatus = stub.dataset.status;
+    if (nuevoStatus !== statusOriginal) {
+        guardarStatusM(nuevoStatus, statusOriginal);
+    }
 }
 
 function cambiarStatusVisual(direccion) {
@@ -466,12 +519,67 @@ function cambiarStatusVisual(direccion) {
     if (nuevoIndice === indiceActualStatus) return;
 
     const nuevoStatus = ORDEN_STATUS[nuevoIndice];
-    const nuevoGrupo = STATUS_GRUPO_M[nuevoStatus] || "neutral";
+    aplicarStatusVisual(nuevoStatus);
+}
 
-    stub.dataset.status = nuevoStatus;
-    stub.className = `stub-status grupo-${nuevoGrupo}`;
-    stub.querySelector(".status-vertical").textContent = STATUS_ES[nuevoStatus] || nuevoStatus;
+function aplicarStatusVisual(status) {
+    const stub = document.getElementById("stubStatus");
+    if (!stub) return;
+
+    const grupo = STATUS_GRUPO_M[status] || "neutral";
+    stub.dataset.status = status;
+    stub.className = `stub-status grupo-${grupo}${stub.classList.contains("abierto") ? " abierto" : ""}`;
+    stub.querySelector(".status-vertical").textContent = STATUS_ES[status] || status;
     ajustarNumeroTicket();
+}
+
+async function guardarStatusM(nuevoStatus, statusAnterior) {
+    const actual = ticketsDelDia[indiceActual];
+    if (!actual) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${actual.ticket_id}/status`, {
+            method: "PATCH",
+            headers: { ...authHeadersM(), "Content-Type": "application/json" },
+            body: JSON.stringify({ status: nuevoStatus })
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const resultado = await response.json();
+
+        if (!response.ok) {
+            throw new Error(resultado?.detail || "No se pudo cambiar el estado.");
+        }
+
+        actual.ticket_status = resultado.ticket_status;
+        actual.ticket_status_changed_at = resultado.ticket_status_changed_at;
+        actual.ticket_updated_at = resultado.ticket_updated_at;
+
+        mostrarToastM("Estado actualizado");
+
+    } catch (error) {
+        console.error("Error cambiando status:", error);
+        aplicarStatusVisual(statusAnterior);
+        mostrarToastM(error.message || "No se pudo cambiar el estado.", true);
+    }
+}
+
+let toastMTimeout = null;
+
+function mostrarToastM(texto, esError = false) {
+    const toast = document.getElementById("toastM");
+    if (!toast) return;
+
+    toast.textContent = texto;
+    toast.classList.toggle("toast-error", esError);
+    toast.classList.add("visible");
+
+    if (toastMTimeout) clearTimeout(toastMTimeout);
+    toastMTimeout = setTimeout(() => toast.classList.remove("visible"), 3500);
 }
 
 function construirChipsStatus() {

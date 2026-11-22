@@ -6,6 +6,25 @@
 
 *{box-sizing:border-box}
 
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:calc(env(safe-area-inset-bottom) + 20px);
+    transform:translateX(-50%) translateY(10px);
+    background:#111111;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    padding:10px 18px;
+    border-radius:999px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:50;
+}
+.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.toast-error{background:var(--color-error)}
+
 .app-ticketm{
     min-height:100vh;
     background:var(--color-background);
@@ -228,11 +247,11 @@
 .ticket .cut-top{top:38px}
 .ticket .cut-bottom{bottom:38px}
 .ticket .frame{
-    margin:12px;
+    margin:12px 12px 12px 60px;
     border:2px solid var(--ink);
     border-radius:14px;
     display:grid;
-    grid-template-columns:48px 1fr 56px;
+    grid-template-columns:1fr 56px;
     overflow:hidden;
 }
 .ticket .main{
@@ -369,12 +388,27 @@
     color:var(--ink);
 }
 .ticket .stub-status{
-    border-right:2px solid var(--ink);
+    position:absolute;
+    top:12px;
+    bottom:12px;
+    left:12px;
+    width:48px;
+    border:2px solid var(--ink);
+    border-radius:14px;
+    overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
     padding:4px 0;
     touch-action:none;
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+/* El cajón abierto: se despega del cuerpo del ticket y gana sombra
+   propia -ahí, y solo ahí, el arrastre cambia el status de verdad. */
+.ticket .stub-status.abierto{
+    transform:translateX(-9px);
+    box-shadow:-4px 3px 10px rgba(0,0,0,.22);
+    z-index:1;
 }
 .ticket .status-vertical{
     writing-mode:vertical-rl;
