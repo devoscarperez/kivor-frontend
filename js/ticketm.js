@@ -172,6 +172,7 @@ function construirTicketHTML(t, contador) {
                 </div>
                 <span class="atenciones-contador" id="atencionesContador"></span>
             </div>
+            <div class="name-wrap-backing"></div>
             <div class="frame">
                 <div class="main">
                     <div class="rule"></div>
@@ -668,7 +669,8 @@ function abrirCajonNombre() {
 
     const nombreReal = wrap.dataset.nombreReal || "";
     input.value = nombreReal;
-    document.getElementById("nombreBuscadorResultados").innerHTML = "";
+    document.getElementById("nombreBuscadorResultados").innerHTML =
+        `<div class="nombre-resultado-vacio">Escribe para buscar...</div>`;
 
     setTimeout(() => {
         input.focus();
@@ -703,7 +705,8 @@ function inicializarBusquedaNombre() {
         clearTimeout(nombreBusquedaTimeout);
 
         if (termino.length < NOMBRE_BUSQUEDA_MIN_CHARS) {
-            document.getElementById("nombreBuscadorResultados").innerHTML = "";
+            document.getElementById("nombreBuscadorResultados").innerHTML =
+                `<div class="nombre-resultado-vacio">Escribe para buscar...</div>`;
             return;
         }
 
