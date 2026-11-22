@@ -164,16 +164,16 @@ function construirTicketHTML(t, contador) {
             <div class="stub-status grupo-${grupo}" id="stubStatus" data-status="${escapeHtmlM(t.ticket_status)}">
                 <span class="status-vertical">${escapeHtmlM(statusTexto)}</span>
             </div>
+            <div class="name-wrap" id="nameWrap" data-nombre-real="${escapeHtmlM(t.customer_full_name || t.customer_nickname || "")}">
+                <h1 class="name" id="nombreTitular">${nombreClienta}</h1>
+                <div class="nombre-buscador" id="nombreBuscador">
+                    <input type="text" class="nombre-buscador-input" id="nombreBuscadorInput" placeholder="Buscar clienta por nombre...">
+                    <div class="nombre-buscador-resultados" id="nombreBuscadorResultados"></div>
+                </div>
+                <span class="atenciones-contador" id="atencionesContador"></span>
+            </div>
             <div class="frame">
                 <div class="main">
-                    <div class="name-wrap" id="nameWrap" data-nombre-real="${escapeHtmlM(t.customer_full_name || t.customer_nickname || "")}">
-                        <h1 class="name" id="nombreTitular">${nombreClienta}</h1>
-                        <div class="nombre-buscador" id="nombreBuscador">
-                            <input type="text" class="nombre-buscador-input" id="nombreBuscadorInput" placeholder="Buscar clienta por nombre...">
-                            <div class="nombre-buscador-resultados" id="nombreBuscadorResultados"></div>
-                        </div>
-                        <span class="atenciones-contador" id="atencionesContador"></span>
-                    </div>
                     <div class="rule"></div>
                     <div class="details">
                         <div class="atenciones-lista" id="atencionesLista"><div class="ficha-vacio">—</div></div>
