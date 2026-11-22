@@ -290,12 +290,14 @@ function ajustarNumeroTicket() {
     // Mismo criterio para el status: llenar el alto del talón. El
     // divisor usa el largo real de la palabra (varía 8-10 letras según
     // el status) en vez de un valor fijo, para que nunca se corte.
+    // 0.8 en vez de 1.04 = ~30% más grande, para que ocupe de verdad
+    // su espacio en vez de quedar flotando.
     const stubStatus = document.querySelector(".ticket .stub-status");
     const statusTexto = document.querySelector(".ticket .status-vertical");
     if (stubStatus && statusTexto) {
         const altoStatus = stubStatus.clientHeight;
         const largo = statusTexto.textContent.length || 1;
-        statusTexto.style.fontSize = `${Math.floor(altoStatus / (largo * 1.04))}px`;
+        statusTexto.style.fontSize = `${Math.floor(altoStatus / (largo * 0.8))}px`;
     }
 }
 
