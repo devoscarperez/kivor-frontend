@@ -394,6 +394,7 @@
     left:12px;
     width:48px;
     border:2px solid var(--ink);
+    border-right:none;
     border-radius:14px 0 0 14px;
     overflow:hidden;
     display:flex;
@@ -406,6 +407,7 @@
 /* El cajón abierto: se despega del cuerpo del ticket y gana sombra
    propia -ahí, y solo ahí, el arrastre cambia el status de verdad. */
 .ticket .stub-status.abierto{
+    border-right:2px solid var(--ink);
     transform:translateX(-9px);
     box-shadow:-4px 3px 10px rgba(0,0,0,.22);
     z-index:1;
