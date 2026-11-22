@@ -252,7 +252,6 @@
     border-radius:0 14px 14px 0;
     display:grid;
     grid-template-columns:1fr 56px;
-    overflow:hidden;
 }
 .ticket .main{
     padding:16px 16px 12px;
@@ -263,6 +262,17 @@
 .ticket .name-wrap{
     position:relative;
     margin:0 0 16px;
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+/* El cajón del nombre: se levanta hacia arriba (en vez de hacia el
+   costado, como el status) porque es un elemento horizontal arriba
+   del ticket. Por eso .frame ya no recorta (overflow:hidden quitado)
+   -si no, este desplazamiento quedaría invisible, igual que le pasó
+   al status antes de sacarlo de adentro de .frame. */
+.ticket .name-wrap.abierto{
+    transform:translateY(-8px);
+    box-shadow:0 -5px 12px rgba(0,0,0,.2);
+    z-index:2;
 }
 .ticket .name{
     margin:0;
@@ -271,6 +281,47 @@
     text-wrap:balance;
     overflow-wrap:break-word;
     color:var(--text);
+}
+.ticket .name-wrap.abierto .name{display:none}
+.ticket .nombre-buscador{display:none}
+.ticket .name-wrap.abierto .nombre-buscador{display:block}
+.ticket .nombre-buscador-input{
+    width:100%;
+    border:none;
+    border-bottom:2px solid var(--ink);
+    background:transparent;
+    text-align:center;
+    font:700 20px/1.2 Georgia,"Times New Roman",serif;
+    color:var(--text);
+    padding:0 0 4px;
+    outline:none;
+}
+.ticket .nombre-buscador-resultados{
+    margin-top:6px;
+    max-height:120px;
+    overflow-y:auto;
+}
+.ticket .nombre-resultado{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:8px;
+    padding:6px 2px;
+    font-size:14px;
+    color:var(--text);
+    border-bottom:1px solid var(--ink-soft);
+}
+.ticket .nombre-resultado:last-child{border-bottom:none}
+.ticket .nombre-resultado-meta{
+    color:var(--text-soft);
+    font-size:12px;
+    white-space:nowrap;
+}
+.ticket .nombre-resultado-vacio{
+    font-size:13px;
+    color:var(--text-soft);
+    text-align:center;
+    padding:8px 0;
 }
 .ticket .atenciones-contador{
     position:absolute;

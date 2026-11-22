@@ -166,8 +166,12 @@ function construirTicketHTML(t, contador) {
             </div>
             <div class="frame">
                 <div class="main">
-                    <div class="name-wrap">
-                        <h1 class="name">${nombreClienta}</h1>
+                    <div class="name-wrap" id="nameWrap" data-nombre-real="${escapeHtmlM(t.customer_full_name || t.customer_nickname || "")}">
+                        <h1 class="name" id="nombreTitular">${nombreClienta}</h1>
+                        <div class="nombre-buscador" id="nombreBuscador">
+                            <input type="text" class="nombre-buscador-input" id="nombreBuscadorInput" placeholder="Buscar clienta por nombre...">
+                            <div class="nombre-buscador-resultados" id="nombreBuscadorResultados"></div>
+                        </div>
                         <span class="atenciones-contador" id="atencionesContador"></span>
                     </div>
                     <div class="rule"></div>
@@ -340,6 +344,9 @@ function renderActual() {
     statusAbierto = false;
     statusOriginal = null;
     ultimoTapStatus = 0;
+
+    nombreAbierto = false;
+    ultimoTapNombre = 0;
 
     atencionesActuales = [];
     indiceAtencionActual = 0;
@@ -582,6 +589,182 @@ function mostrarToastM(texto, esError = false) {
     toastMTimeout = setTimeout(() => toast.classList.remove("visible"), 3500);
 }
 
+// El cajón del nombre: doble-tap lo abre (se levanta hacia arriba, el
+// nombre se convierte en buscador). Elegir un resultado guarda y
+// cierra en el mismo gesto -no hace falta un tap aparte para
+// confirmar, porque elegir ya es una acción final, a diferencia del
+// arrastre de status. Tocar afuera del cajón cancela sin guardar.
+const NOMBRE_BUSQUEDA_DEBOUNCE_MS = 300;
+const NOMBRE_BUSQUEDA_MIN_CHARS = 2;
+
+let nombreAbierto = false;
+let nombreBusquedaTimeout = null;
+let ultimoTapNombre = 0;
+
+function inicializarCajonNombre() {
+    const slot = document.getElementById("ticketmSlot");
+
+    slot.addEventListener("click", (e) => {
+        const wrap = e.target.closest(".name-wrap");
+
+        if (!nombreAbierto) {
+            if (wrap) manejarTapNombre();
+            return;
+        }
+
+        // Abierto: clic en un resultado selecciona; clic en cualquier
+        // otro lado (incluido el propio campo) no cierra -el campo
+        // necesita poder tocarse para escribir/mover el cursor.
+        const resultado = e.target.closest(".nombre-resultado");
+        if (resultado) {
+            seleccionarClienta(resultado.dataset.customerId, resultado.dataset.nombre);
+        } else if (!wrap) {
+            cerrarCajonNombre(false);
+        }
+    });
+}
+
+function manejarTapNombre() {
+    const ahora = Date.now();
+
+    if (ahora - ultimoTapNombre < DOBLE_TAP_MS) {
+        abrirCajonNombre();
+        ultimoTapNombre = 0;
+    } else {
+        ultimoTapNombre = ahora;
+    }
+}
+
+function abrirCajonNombre() {
+    const wrap = document.getElementById("nameWrap");
+    const input = document.getElementById("nombreBuscadorInput");
+    if (!wrap || !input) return;
+
+    nombreAbierto = true;
+    wrap.classList.add("abierto");
+
+    const nombreReal = wrap.dataset.nombreReal || "";
+    input.value = nombreReal;
+    document.getElementById("nombreBuscadorResultados").innerHTML = "";
+
+    setTimeout(() => {
+        input.focus();
+        input.select();
+    }, 50);
+}
+
+function cerrarCajonNombre(huboSeleccion) {
+    const wrap = document.getElementById("nameWrap");
+    if (!wrap) return;
+
+    nombreAbierto = false;
+    wrap.classList.remove("abierto");
+
+    if (!huboSeleccion) {
+        document.getElementById("nombreBuscadorInput").value = "";
+        document.getElementById("nombreBuscadorResultados").innerHTML = "";
+    }
+}
+
+function inicializarBusquedaNombre() {
+    const slot = document.getElementById("ticketmSlot");
+
+    slot.addEventListener("input", (e) => {
+        if (!e.target.matches("#nombreBuscadorInput")) return;
+
+        const termino = e.target.value.trim();
+        clearTimeout(nombreBusquedaTimeout);
+
+        if (termino.length < NOMBRE_BUSQUEDA_MIN_CHARS) {
+            document.getElementById("nombreBuscadorResultados").innerHTML = "";
+            return;
+        }
+
+        nombreBusquedaTimeout = setTimeout(() => buscarClientas(termino), NOMBRE_BUSQUEDA_DEBOUNCE_MS);
+    });
+}
+
+async function buscarClientas(termino) {
+    const resultados = document.getElementById("nombreBuscadorResultados");
+    resultados.innerHTML = `<div class="nombre-resultado-vacio">Buscando...</div>`;
+
+    try {
+        const response = await fetch(`${API_BASE}/customer/search?q=${encodeURIComponent(termino)}`, {
+            headers: authHeadersM()
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const items = await response.json();
+        renderResultadosNombre(items || []);
+
+    } catch (error) {
+        console.error("Error buscando clientas:", error);
+        resultados.innerHTML = `<div class="nombre-resultado-vacio">Error al buscar. Intenta de nuevo.</div>`;
+    }
+}
+
+function renderResultadosNombre(items) {
+    const resultados = document.getElementById("nombreBuscadorResultados");
+
+    if (!items.length) {
+        resultados.innerHTML = `<div class="nombre-resultado-vacio">No se encontraron clientas.</div>`;
+        return;
+    }
+
+    resultados.innerHTML = items.map(c => {
+        const nombre = c.customer_full_name || c.customer_nickname || "(sin nombre)";
+        return `
+            <div class="nombre-resultado" data-customer-id="${c.customer_id}" data-nombre="${escapeHtmlM(nombre)}">
+                <span class="nombre-resultado-nombre">${escapeHtmlM(nombre)}</span>
+                <span class="nombre-resultado-meta">${escapeHtmlM(c.customer_mobile || "")}</span>
+            </div>
+        `;
+    }).join("");
+}
+
+async function seleccionarClienta(customerId, nombre) {
+    const actual = ticketsDelDia[indiceActual];
+    if (!actual) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${actual.ticket_id}/customer`, {
+            method: "PATCH",
+            headers: { ...authHeadersM(), "Content-Type": "application/json" },
+            body: JSON.stringify({ customer_id: Number(customerId) })
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const resultado = await response.json();
+
+        if (!response.ok) {
+            throw new Error(resultado?.detail || "No se pudo asociar la clienta.");
+        }
+
+        actual.ticket_customer_id = resultado.ticket_customer_id;
+        actual.customer_full_name = nombre;
+        actual.customer_nickname = nombre;
+
+        document.getElementById("nombreTitular").textContent = nombre;
+        document.getElementById("nameWrap").dataset.nombreReal = nombre;
+
+        cerrarCajonNombre(true);
+        mostrarToastM("Clienta actualizada");
+
+    } catch (error) {
+        console.error("Error asociando clienta:", error);
+        cerrarCajonNombre(false);
+        mostrarToastM(error.message || "No se pudo asociar la clienta.", true);
+    }
+}
+
 function construirChipsStatus() {
     const contenedor = document.getElementById("fStatusChips");
     contenedor.innerHTML = "";
@@ -641,6 +824,8 @@ actualizarFechaCabeceraM();
 construirChipsStatus();
 inicializarArrastreNumero();
 inicializarArrastreStatus();
+inicializarCajonNombre();
+inicializarBusquedaNombre();
 cargarTicketsDelDia();
 
 window.addEventListener("resize", ajustarNumeroTicket);
