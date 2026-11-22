@@ -204,6 +204,17 @@ function aplanarAtenciones(profesionales) {
             });
         });
     });
+
+    // Orden cronológico por booking_date, del más antiguo al más
+    // reciente. Las que no tienen fecha quedan al final, no rompen
+    // el orden de las que sí tienen.
+    atenciones.sort((a, b) => {
+        if (!a.fecha && !b.fecha) return 0;
+        if (!a.fecha) return 1;
+        if (!b.fecha) return -1;
+        return new Date(a.fecha) - new Date(b.fecha);
+    });
+
     return atenciones;
 }
 
