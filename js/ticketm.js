@@ -516,6 +516,29 @@ function cerrarCajonStatus() {
     }
 }
 
+// Tocar afuera del talón mientras está abierto cancela sin guardar
+// -descarta cualquier cambio probado con el arrastre y cierra. Mismo
+// criterio que el cajón del nombre: tocar afuera siempre cancela,
+// tocar el elemento mismo siempre confirma.
+function cancelarCajonStatus() {
+    const stub = document.getElementById("stubStatus");
+    if (!stub) return;
+
+    statusAbierto = false;
+    stub.classList.remove("abierto");
+    aplicarStatusVisual(statusOriginal);
+}
+
+function inicializarCierreAfueraStatus() {
+    const slot = document.getElementById("ticketmSlot");
+
+    slot.addEventListener("click", (e) => {
+        if (!statusAbierto) return;
+        if (e.target.closest(".stub-status")) return;
+        cancelarCajonStatus();
+    });
+}
+
 function cambiarStatusVisual(direccion) {
     const stub = document.getElementById("stubStatus");
     if (!stub) return;
@@ -831,6 +854,7 @@ actualizarFechaCabeceraM();
 construirChipsStatus();
 inicializarArrastreNumero();
 inicializarArrastreStatus();
+inicializarCierreAfueraStatus();
 inicializarCajonNombre();
 inicializarBusquedaNombre();
 cargarTicketsDelDia();
