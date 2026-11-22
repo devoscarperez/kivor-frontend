@@ -254,7 +254,7 @@
     grid-template-columns:1fr 56px;
 }
 .ticket .main{
-    padding:10px 16px 12px;
+    padding:52px 16px 12px;
     display:flex;
     flex-direction:column;
     min-width:0;
@@ -262,11 +262,17 @@
 /* El nombre vive afuera de .frame, igual que el status -así puede
    salir de verdad por encima del borde del ticket (contra el fondo
    de la pantalla) en vez de quedar "flotando adentro" sin escapar de
-   nada. Cerrado no tiene fondo ni borde propio, igual que siempre;
-   solo los gana al abrirse. */
+   nada. Va posicionado de forma absoluta, como una etiqueta flotante
+   encima de .frame -si fuera flujo normal, empujaría a .frame hacia
+   abajo y lo desalinearía del talón de status. .main reserva el
+   espacio de arriba (padding-top) para que el contenido de abajo no
+   quede tapado. Cerrado no tiene fondo ni borde propio, igual que
+   siempre; solo los gana al abrirse. */
 .ticket .name-wrap{
-    position:relative;
-    margin:12px 12px 6px;
+    position:absolute;
+    top:24px;
+    left:78px;
+    right:86px;
     transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
 .ticket .name-wrap.abierto{
