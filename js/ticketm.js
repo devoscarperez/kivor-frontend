@@ -926,6 +926,7 @@ function inicializarCierreAfueraGiro() {
         if (dentroDelTicket) return;
 
         flip.classList.remove("girado");
+        ajustarAltoGiro();
     });
 }
 
