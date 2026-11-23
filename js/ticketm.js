@@ -374,13 +374,34 @@ function ajustarAltoGiro() {
     const flip = document.getElementById("ticketFlip");
     if (!flip) return;
 
-    const activa = flip.classList.contains("girado")
-        ? flip.querySelector(".cara-dorso")
-        : flip.querySelector(".cara-frente");
+    const girado = flip.classList.contains("girado");
+    const activa = girado ? flip.querySelector(".cara-dorso") : flip.querySelector(".cara-frente");
     if (!activa) return;
 
+    let altoReal;
+    if (girado) {
+        // cara-dorso es position:absolute;inset:0 -eso ata su propio
+        // alto al que .ticket-flip YA tenía (bottom:0 la estira hasta
+        // igualar al padre sin importar cuánto necesite su contenido
+        // real), así que medirla "tal cual" nunca refleja una
+        // necesidad más chica, solo ve overflow si el contenido ya no
+        // entra en lo que había antes -mismo principio que el bug de
+        // margin-top:auto encontrado antes al construir el dorso,
+        // en otra forma. Se suelta bottom un instante (deja solo
+        // top:0) para que el contenido real determine el alto, se
+        // mide con offsetHeight (incluye el borde propio de
+        // cara-dorso, que es justo lo que .ticket-flip necesita para
+        // no recortarla por esos 4px), y se restaura.
+        const bottomPrevio = activa.style.bottom;
+        activa.style.bottom = "auto";
+        altoReal = activa.offsetHeight;
+        activa.style.bottom = bottomPrevio;
+    } else {
+        altoReal = activa.offsetHeight;
+    }
+
     const maxAlto = window.innerHeight * 0.7;
-    flip.style.height = `${Math.min(activa.scrollHeight, maxAlto)}px`;
+    flip.style.height = `${Math.min(altoReal, maxAlto)}px`;
 }
 
 function renderActual() {
@@ -886,7 +907,23 @@ function inicializarCierreAfueraGiro() {
     document.addEventListener("click", (e) => {
         const flip = document.getElementById("ticketFlip");
         if (!flip || !flip.classList.contains("girado")) return;
-        if (e.target.closest(".ticket")) return;
+
+        // e.composedPath() (no e.target.closest) a propósito: al
+        // seleccionar una clienta/profesional de los resultados, ese
+        // mismo click ya disparó antes el handler de selección (en
+        // #ticketmSlot, más cerca del target, dispara primero en la
+        // fase de bubble) que reemplaza el innerHTML del campo -el
+        // nodo donde ocurrió el click queda huérfano del documento.
+        // Para cuando este handler (en document, dispara después)
+        // corre, e.target.closest(".ticket") ya no encuentra nada
+        // porque el nodo no tiene padres -cerraba el giro justo al
+        // seleccionar. composedPath() captura la cadena de
+        // ancestros tal como era AL MOMENTO del click, antes de que
+        // cualquier handler mude el DOM.
+        const dentroDelTicket = e.composedPath().some(
+            (el) => el.classList && el.classList.contains("ticket")
+        );
+        if (dentroDelTicket) return;
 
         flip.classList.remove("girado");
     });
@@ -1064,6 +1101,7 @@ function dorsoSeleccionarCliente(id, nombre) {
     const campo = document.getElementById("dorsoClienteCampo");
     campo.innerHTML = `<span class="dorso-seleccion">${escapeHtmlM(nombre)} <button type="button" data-limpiar-cliente>cambiar</button></span>`;
     dorsoActualizarBotonConfirmar();
+    ajustarAltoGiro();
 }
 
 function dorsoLimpiarCliente() {
@@ -1077,6 +1115,7 @@ function dorsoLimpiarCliente() {
         <div class="dorso-buscador-resultados" id="dorsoClienteResultados"></div>
     `;
     dorsoActualizarBotonConfirmar();
+    ajustarAltoGiro();
 }
 
 function dorsoSeleccionarProfesional(id, nombre) {
@@ -1086,6 +1125,7 @@ function dorsoSeleccionarProfesional(id, nombre) {
     const campo = document.getElementById("dorsoProfesionalCampo");
     campo.innerHTML = `<span class="dorso-seleccion">${escapeHtmlM(nombre)} <button type="button" data-limpiar-profesional>cambiar</button></span>`;
     dorsoActualizarBotonConfirmar();
+    ajustarAltoGiro();
 }
 
 function dorsoLimpiarProfesional() {
@@ -1098,12 +1138,23 @@ function dorsoLimpiarProfesional() {
         <div class="dorso-buscador-resultados" id="dorsoProfesionalResultados"></div>
     `;
     dorsoActualizarBotonConfirmar();
+    ajustarAltoGiro();
 }
 
+// Cada vez que cambia el contenido de los resultados hay que volver
+// a medir el alto del dorso (ajustarAltoGiro) -.ticket-flip tiene un
+// alto explícito fijado en JS, no automático, así que una lista de
+// resultados que aparece/crece/desaparece no se nota (queda
+// recortada por el overflow del dorso, inalcanzable) a menos que se
+// vuelva a medir. Esto se pasó por alto al construir la búsqueda; se
+// detectó porque el buscador de profesional "no hacía nada" -en
+// realidad sí buscaba, pero el resultado quedaba fuera del alto
+// visible.
 async function dorsoBuscarClientas(termino) {
     const resultados = document.getElementById("dorsoClienteResultados");
     if (!resultados) return;
     resultados.innerHTML = `<div class="nombre-resultado-vacio">Buscando...</div>`;
+    ajustarAltoGiro();
 
     try {
         const response = await fetch(`${API_BASE}/customer/search?q=${encodeURIComponent(termino)}`, {
@@ -1114,6 +1165,7 @@ async function dorsoBuscarClientas(termino) {
 
         if (!items || !items.length) {
             resultados.innerHTML = `<div class="nombre-resultado-vacio">No se encontraron clientas.</div>`;
+            ajustarAltoGiro();
             return;
         }
 
@@ -1123,10 +1175,12 @@ async function dorsoBuscarClientas(termino) {
                 <span class="nombre-resultado-meta">${escapeHtmlM(c.customer_mobile || "")}</span>
             </div>
         `).join("");
+        ajustarAltoGiro();
 
     } catch (error) {
         console.error("Error buscando clientas:", error);
         resultados.innerHTML = `<div class="nombre-resultado-vacio">Error al buscar.</div>`;
+        ajustarAltoGiro();
     }
 }
 
@@ -1134,6 +1188,7 @@ async function dorsoBuscarProfesionales(termino) {
     const resultados = document.getElementById("dorsoProfesionalResultados");
     if (!resultados) return;
     resultados.innerHTML = `<div class="nombre-resultado-vacio">Buscando...</div>`;
+    ajustarAltoGiro();
 
     try {
         const response = await fetch(`${API_BASE}/professional/search?q=${encodeURIComponent(termino)}`, {
@@ -1144,6 +1199,7 @@ async function dorsoBuscarProfesionales(termino) {
 
         if (!items || !items.length) {
             resultados.innerHTML = `<div class="nombre-resultado-vacio">No se encontraron profesionales.</div>`;
+            ajustarAltoGiro();
             return;
         }
 
@@ -1152,10 +1208,12 @@ async function dorsoBuscarProfesionales(termino) {
                 <span class="nombre-resultado-nombre">${escapeHtmlM(p.professional_name || p.professional_nickname || "")}</span>
             </div>
         `).join("");
+        ajustarAltoGiro();
 
     } catch (error) {
         console.error("Error buscando profesionales:", error);
         resultados.innerHTML = `<div class="nombre-resultado-vacio">Error al buscar.</div>`;
+        ajustarAltoGiro();
     }
 }
 
