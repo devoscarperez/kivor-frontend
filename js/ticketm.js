@@ -164,31 +164,38 @@ function construirTicketHTML(t, contador) {
             <div class="stub-status grupo-${grupo}" id="stubStatus" data-status="${escapeHtmlM(t.ticket_status)}">
                 <span class="status-vertical">${escapeHtmlM(statusTexto)}</span>
             </div>
-            <div class="name-wrap" id="nameWrap" data-nombre-real="${escapeHtmlM(t.customer_full_name || t.customer_nickname || "")}">
-                <h1 class="name" id="nombreTitular">${nombreClienta}</h1>
-                <div class="nombre-buscador" id="nombreBuscador">
-                    <input type="text" class="nombre-buscador-input" id="nombreBuscadorInput" placeholder="Buscar clienta por nombre...">
-                    <div class="nombre-buscador-resultados" id="nombreBuscadorResultados"></div>
-                </div>
-                <span class="atenciones-contador" id="atencionesContador"></span>
-            </div>
-            <div class="frame">
-                <div class="main">
-                    <div class="rule"></div>
-                    <div class="details">
-                        <div class="atenciones-lista" id="atencionesLista"><div class="ficha-vacio">—</div></div>
+            <div class="stub"><span class="number">${numero}</span></div>
+            <div class="ticket-flip" id="ticketFlip">
+                <div class="cara cara-frente">
+                    <div class="name-wrap" id="nameWrap" data-nombre-real="${escapeHtmlM(t.customer_full_name || t.customer_nickname || "")}">
+                        <h1 class="name" id="nombreTitular">${nombreClienta}</h1>
+                        <div class="nombre-buscador" id="nombreBuscador">
+                            <input type="text" class="nombre-buscador-input" id="nombreBuscadorInput" placeholder="Buscar clienta por nombre...">
+                            <div class="nombre-buscador-resultados" id="nombreBuscadorResultados"></div>
+                        </div>
+                        <span class="atenciones-contador" id="atencionesContador"></span>
                     </div>
-                    <div class="rule"></div>
-                    <div class="ticket-footer">
-                        <span class="abono-footer"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></span>
-                        <span class="antiguedad">${tiempoTranscurridoM(t.primera_atencion || t.ticket_created_at)}</span>
-                        <!-- Cre/Act deshabilitado por ahora, no hace falta mostrarlo:
-                        <span class="ticket-fechas">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</span>
-                        -->
-                        <span class="ticket-contador">${contador}</span>
+                    <div class="frame">
+                        <div class="main">
+                            <div class="rule"></div>
+                            <div class="details">
+                                <div class="atenciones-lista" id="atencionesLista"><div class="ficha-vacio">—</div></div>
+                            </div>
+                            <div class="rule"></div>
+                            <div class="ticket-footer">
+                                <span class="abono-footer"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></span>
+                                <span class="antiguedad">${tiempoTranscurridoM(t.primera_atencion || t.ticket_created_at)}</span>
+                                <!-- Cre/Act deshabilitado por ahora, no hace falta mostrarlo:
+                                <span class="ticket-fechas">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</span>
+                                -->
+                                <span class="ticket-contador">${contador}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="stub"><span class="number">${numero}</span></div>
+                <div class="cara cara-dorso" id="caraDorso">
+                    <div class="dorso-placeholder">Atenciones<br>(en construcción)</div>
+                </div>
             </div>
         </div>
     `;
@@ -347,6 +354,7 @@ function renderActual() {
 
     nombreAbierto = false;
     ultimoTapNombre = 0;
+    ultimoTapAtenciones = 0;
 
     atencionesActuales = [];
     indiceAtencionActual = 0;
@@ -795,6 +803,35 @@ async function seleccionarClienta(customerId, nombre) {
     }
 }
 
+// El secreto de las atenciones: doble-tap en el contador gira el
+// ticket 180° -el status y el número quedan fijos (viven afuera de
+// .ticket-flip) como ancla visual; el resto pasa a ser 100% espacio
+// de atenciones en el dorso. Por ahora el dorso es un placeholder;
+// el contenido real (lista editable + agregar) viene en una
+// siguiente pasada, ya con el mecanismo del giro probado.
+let ultimoTapAtenciones = 0;
+
+function inicializarGiroAtenciones() {
+    const slot = document.getElementById("ticketmSlot");
+
+    slot.addEventListener("touchend", (e) => {
+        if (!e.target.closest(".atenciones-contador")) return;
+
+        const ahora = Date.now();
+        if (ahora - ultimoTapAtenciones < DOBLE_TAP_MS) {
+            alternarGiroTicket();
+            ultimoTapAtenciones = 0;
+        } else {
+            ultimoTapAtenciones = ahora;
+        }
+    }, { passive: true });
+}
+
+function alternarGiroTicket() {
+    const flip = document.getElementById("ticketFlip");
+    if (flip) flip.classList.toggle("girado");
+}
+
 function construirChipsStatus() {
     const contenedor = document.getElementById("fStatusChips");
     contenedor.innerHTML = "";
@@ -857,6 +894,7 @@ inicializarArrastreStatus();
 inicializarCierreAfueraStatus();
 inicializarCajonNombre();
 inicializarBusquedaNombre();
+inicializarGiroAtenciones();
 cargarTicketsDelDia();
 
 window.addEventListener("resize", ajustarNumeroTicket);

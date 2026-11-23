@@ -217,6 +217,7 @@
     background:
         radial-gradient(circle at 7px 7px, rgba(60,30,20,.09) 0.7px, transparent 1.1px) 0 0/9px 9px,
         linear-gradient(145deg, var(--paper2), var(--paper) 60%);
+    perspective:1200px;
 }
 /* La sombra vive en una capa aparte, angosta en los costados, para
    que su difuminado nunca llegue hasta donde están las mordidas de
@@ -246,12 +247,53 @@
 .ticket .cut-r{right:-10px}
 .ticket .cut-top{top:38px}
 .ticket .cut-bottom{bottom:38px}
+/* El número vive afuera del giro (ver .ticket-flip más abajo), como
+   ancla visual junto al status -por eso .frame ya no incluye su
+   columna: ahora .frame es solo el marco de .main, del mismo ancho
+   que .ticket-flip, con el lado derecho sin borde propio porque ahí
+   empieza (sin espacio) el talón del número. */
 .ticket .frame{
-    margin:12px 12px 12px 60px;
     border:2px solid var(--ink);
-    border-radius:0 14px 14px 0;
-    display:grid;
-    grid-template-columns:1fr 56px;
+    border-right:none;
+    border-radius:0;
+}
+/* El giro de 180°: envuelve todo lo que SÍ cambia al dar vuelta el
+   ticket (nombre + cuerpo en la cara frente; atenciones en el
+   dorso). Deja el margen que antes tenía .frame, descontando ahora
+   el ancho del talón del número (56px + 12px de aire) en el lado
+   derecho -mismo criterio que el talón del status ya usa a la
+   izquierda. preserve-3d en el padre + backface-visibility:hidden en
+   cada cara es lo que hace que la cara de atrás no se vea en
+   espejo. */
+.ticket .ticket-flip{
+    position:relative;
+    margin:12px 68px 12px 60px;
+    transform-style:preserve-3d;
+    transition:transform .5s ease;
+}
+.ticket .ticket-flip.girado{
+    transform:rotateY(180deg);
+}
+.ticket .cara{
+    backface-visibility:hidden;
+}
+.ticket .cara-frente{
+    position:relative;
+}
+.ticket .cara-dorso{
+    position:absolute;
+    inset:0;
+    transform:rotateY(180deg);
+}
+.ticket .dorso-placeholder{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    text-align:center;
+    font:700 16px/1.3 Georgia,"Times New Roman",serif;
+    color:var(--text-soft);
 }
 .ticket .main{
     padding:52px 16px 12px;
@@ -270,9 +312,9 @@
    siempre; solo los gana al abrirse. */
 .ticket .name-wrap{
     position:absolute;
-    top:24px;
-    left:78px;
-    right:86px;
+    top:12px;
+    left:18px;
+    right:18px;
     transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
 .ticket .name-wrap.abierto{
@@ -434,13 +476,25 @@
     background:var(--paper);
     white-space:nowrap;
 }
+/* Vive afuera de .ticket-flip (ver más arriba), como el status -así
+   queda fijo en ambas caras del giro en vez de voltearse en espejo
+   con el resto. Mismo criterio de borde que .stub-status: plano del
+   lado que toca a .frame (ese ya no dibuja su propio borde ahí),
+   redondeado del lado que es el borde real del ticket. */
 .ticket .stub{
-    border-left:2px solid var(--ink);
+    position:absolute;
+    top:12px;
+    bottom:12px;
+    right:12px;
+    width:56px;
+    border:2px solid var(--ink);
+    border-radius:0 14px 14px 0;
     display:flex;
     align-items:center;
     justify-content:center;
     padding:4px 0;
     touch-action:none;
+    z-index:1;
 }
 .ticket .number{
     writing-mode:vertical-rl;
