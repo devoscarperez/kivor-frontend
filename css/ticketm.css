@@ -276,10 +276,21 @@
     margin:12px 68px 12px 60px;
     perspective:1200px;
 }
+/* El alto NO se anima -solo el giro. Animar ambos a distinta
+   duración (como se hizo al principio) deja una ventana donde el
+   alto del contenedor y el contenido real de la cara (cara-frente,
+   en flujo normal, con su propio alto fijo) no coinciden -el
+   ticket no recorta nada a propósito (ver más arriba), así que ese
+   desajuste se veía como un borde/línea sobresaliendo del marco,
+   de forma intermitente según el instante exacto en que se mirara.
+   Se comprobó con un repro: en una corrida salió la línea, en la
+   siguiente corrida idéntica no -confirma que era una ventana de
+   tiempo, no un estado roto. Con el alto fijándose al instante, el
+   contenedor ya tiene el tamaño correcto durante todo el giro. */
 .ticket .ticket-flip{
     position:relative;
     transform-style:preserve-3d;
-    transition:transform .5s ease, height .3s ease;
+    transition:transform .5s ease;
 }
 .ticket .ticket-flip.girado{
     transform:rotateY(180deg);
