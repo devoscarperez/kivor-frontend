@@ -588,12 +588,16 @@
     margin:10px 0 2px;
     flex-shrink:0;
 }
+/* 112px -antes 76px (~3 filas)- para que 4 atenciones quepan
+   completas sin que la última quede cortada a la mitad en la
+   primera mirada (se veía como el ticket "roto", reportado con
+   captura real). Sigue scrolleando a partir de la 5ta. */
 .ticket .atenciones-lista{
     flex-shrink:0;
     display:flex;
     flex-direction:column;
     gap:6px;
-    max-height:76px;
+    max-height:112px;
     overflow-y:auto;
     touch-action:pan-y;
 }
