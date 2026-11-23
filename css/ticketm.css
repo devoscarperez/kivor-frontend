@@ -279,7 +279,7 @@
 .ticket .ticket-flip{
     position:relative;
     transform-style:preserve-3d;
-    transition:transform .5s ease;
+    transition:transform .5s ease, height .3s ease;
 }
 .ticket .ticket-flip.girado{
     transform:rotateY(180deg);
@@ -294,17 +294,192 @@
     position:absolute;
     inset:0;
     transform:rotateY(180deg);
+    border:2px solid var(--ink);
+    display:flex;
+    flex-direction:column;
+    overflow-y:auto;
 }
-.ticket .dorso-placeholder{
-    height:100%;
+.ticket .dorso-lista{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:14px 14px 4px;
+}
+.ticket .dorso-vacio{
+    font-size:14px;
+    color:var(--text-soft);
+    text-align:center;
+    padding:12px 0;
+}
+.ticket .dorso-fila{
     display:flex;
     align-items:center;
-    justify-content:center;
-    padding:24px;
-    text-align:center;
-    font:700 16px/1.3 Georgia,"Times New Roman",serif;
+    justify-content:space-between;
+    gap:8px;
+    padding:6px 2px;
+    border-bottom:1px solid var(--ink-soft);
+}
+.ticket .dorso-fila-info{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    gap:3px;
+    font-size:14px;
+    color:var(--text);
+    flex:1;
+    min-width:0;
+}
+.ticket .dorso-fila-clienta{font-weight:700}
+.ticket .dorso-fila-sep{color:var(--text-soft)}
+.ticket .dorso-fila-fecha{
+    flex:0 0 100%;
+    font-size:12px;
     color:var(--text-soft);
 }
+.ticket .dorso-fila-eliminar{
+    flex:0 0 auto;
+    width:24px;
+    height:24px;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    color:var(--ink);
+    font-size:18px;
+    line-height:1;
+}
+/* :not([hidden]) en vez de display:flex liso -con display:flex liso
+   esta regla (2 clases) le gana en especificidad a la regla nativa
+   [hidden]{display:none} (1 atributo) del navegador, dejando el
+   atributo hidden sin efecto -el editor quedaba siempre visible. Se
+   comprobó con un repro: el alto no crecía al mostrar el editor
+   porque ya estaba mostrado desde el principio. */
+.ticket .dorso-fila-editor:not([hidden]){
+    display:flex;
+    gap:6px;
+    align-items:center;
+    padding:4px 2px 10px;
+    border-bottom:1px solid var(--ink-soft);
+}
+.ticket .dorso-editor-fecha,
+.ticket .dorso-editor-hora{
+    font-size:13px;
+    border:1px solid var(--ink-soft);
+    border-radius:6px;
+    padding:4px 6px;
+    background:transparent;
+    color:var(--text);
+}
+.ticket .dorso-editor-guardar{
+    font-size:13px;
+    font-weight:700;
+    border:none;
+    border-radius:6px;
+    padding:5px 10px;
+    background:var(--ink);
+    color:var(--paper);
+}
+/* Sin margin-top:auto a propósito: empujar esto al fondo del
+   contenedor hacía que scrollHeight midiera el alto IMPUESTO desde
+   afuera (el que .ticket-flip ya tenía) en vez del alto real del
+   contenido -el margen automático "rellenaba" el espacio sobrante y
+   volvía inútil la medición en ajustarAltoGiro(). Se comprobó con un
+   repro: el alto no crecía al abrir el editor de hora porque
+   scrollHeight ya reportaba el alto heredado, no el real. */
+.ticket .dorso-agregar{
+    padding:8px 14px 14px;
+}
+.ticket .dorso-agregar-toggle{
+    width:100%;
+    border:1px dashed var(--ink-soft);
+    border-radius:8px;
+    padding:8px;
+    background:transparent;
+    color:var(--ink);
+    font:700 14px Georgia,"Times New Roman",serif;
+}
+/* Mismo motivo que .dorso-fila-editor: :not([hidden]) para no pisar
+   el atributo hidden con una regla de mayor especificidad. */
+.ticket .dorso-agregar-form:not([hidden]){
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+}
+.ticket .dorso-campo{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+.ticket .dorso-campo-label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+}
+.ticket .dorso-usar-titular{
+    align-self:flex-start;
+    font-size:12px;
+    border:1px solid var(--ink-soft);
+    border-radius:999px;
+    padding:4px 10px;
+    background:transparent;
+    color:var(--ink);
+    margin-bottom:4px;
+}
+.ticket .dorso-buscador-input{
+    width:100%;
+    border:none;
+    border-bottom:1px solid var(--ink-soft);
+    background:transparent;
+    font-size:14px;
+    color:var(--text);
+    padding:4px 2px;
+    outline:none;
+}
+.ticket .dorso-buscador-resultados{
+    max-height:90px;
+    overflow-y:auto;
+}
+.ticket .dorso-seleccion{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+    font-weight:700;
+    color:var(--text);
+}
+.ticket .dorso-seleccion button{
+    font-size:11px;
+    font-weight:400;
+    border:none;
+    background:transparent;
+    color:var(--ink);
+    text-decoration:underline;
+    padding:0;
+}
+.ticket .dorso-campo-fecha{
+    flex-direction:row;
+    gap:8px;
+}
+.ticket .dorso-campo-fecha input{
+    flex:1;
+    font-size:13px;
+    border:1px solid var(--ink-soft);
+    border-radius:6px;
+    padding:6px;
+    background:transparent;
+    color:var(--text);
+}
+.ticket .dorso-confirmar{
+    border:none;
+    border-radius:8px;
+    padding:10px;
+    font:700 14px Georgia,"Times New Roman",serif;
+    background:var(--ink);
+    color:var(--paper);
+}
+.ticket .dorso-confirmar:disabled{opacity:.4}
 .ticket .main{
     padding:52px 16px 12px;
     display:flex;

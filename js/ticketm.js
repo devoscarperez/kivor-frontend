@@ -195,7 +195,32 @@ function construirTicketHTML(t, contador) {
                         </div>
                     </div>
                     <div class="cara cara-dorso" id="caraDorso">
-                        <div class="dorso-placeholder">Atenciones<br>(en construcción)</div>
+                        <div class="dorso-lista" id="dorsoLista"></div>
+                        <div class="dorso-agregar">
+                            <button type="button" class="dorso-agregar-toggle" id="dorsoAgregarToggle">+ Agregar atención</button>
+                            <div class="dorso-agregar-form" id="dorsoAgregarForm" hidden>
+                                <div class="dorso-campo">
+                                    <span class="dorso-campo-label">Clienta</span>
+                                    <div id="dorsoClienteCampo">
+                                        <button type="button" class="dorso-usar-titular" id="dorsoUsarTitular">Usar titular</button>
+                                        <input type="text" class="dorso-buscador-input" id="dorsoClienteInput" placeholder="o buscar clienta...">
+                                        <div class="dorso-buscador-resultados" id="dorsoClienteResultados"></div>
+                                    </div>
+                                </div>
+                                <div class="dorso-campo">
+                                    <span class="dorso-campo-label">Profesional</span>
+                                    <div id="dorsoProfesionalCampo">
+                                        <input type="text" class="dorso-buscador-input" id="dorsoProfesionalInput" placeholder="Buscar profesional...">
+                                        <div class="dorso-buscador-resultados" id="dorsoProfesionalResultados"></div>
+                                    </div>
+                                </div>
+                                <div class="dorso-campo dorso-campo-fecha">
+                                    <input type="date" id="dorsoFechaInput">
+                                    <input type="time" id="dorsoHoraInput">
+                                </div>
+                                <button type="button" class="dorso-confirmar" id="dorsoConfirmarBtn" disabled>Confirmar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,9 +241,12 @@ function aplanarAtenciones(profesionales) {
         const nombreProfesional = p.professional_name || p.professional_nickname || "Sin nombre";
         (p.customers || []).forEach(c => {
             atenciones.push({
+                tpId: p.ticket_professional_id,
+                tpcId: c.ticket_professional_customer_id,
                 clienta: c.customer_full_name || c.customer_nickname || "Sin clienta",
                 profesional: nombreProfesional,
-                fecha: c.ticket_professional_customer_booking_date
+                fecha: c.ticket_professional_customer_booking_date,
+                fechaFin: c.ticket_professional_customer_booking_end_date
             });
         });
     });
@@ -271,6 +299,7 @@ function renderFicha() {
         lista.innerHTML = `<div class="ficha-vacio">—</div>`;
         if (contador) contador.textContent = "";
         ajustarNumeroTicket();
+        renderDorso();
         return;
     }
 
@@ -287,6 +316,7 @@ function renderFicha() {
     lista.addEventListener("scroll", actualizarContadorAtenciones, { passive: true });
     actualizarContadorAtenciones();
     ajustarNumeroTicket();
+    renderDorso();
 }
 
 function actualizarContadorAtenciones() {
@@ -330,6 +360,29 @@ function ajustarNumeroTicket() {
     }
 }
 
+// Las dos caras del giro casi nunca miden lo mismo (el dorso tiene
+// lista + formulario de agregar, el frente no) -con ambas en
+// position:absolute (necesario para el 3D del giro) .ticket-flip no
+// tiene alto propio a menos que se lo demos. Se mide el alto real de
+// la cara que corresponda mostrar y se aplica como alto explícito,
+// igual que el resto del ticket: nunca se recorta ni se superpone,
+// solo que acá hace falta un empujón de JS porque position:absolute
+// no participa del alto automático del padre. Tope de 70% del alto
+// de pantalla -más allá de eso, scroll interno en vez de seguir
+// creciendo.
+function ajustarAltoGiro() {
+    const flip = document.getElementById("ticketFlip");
+    if (!flip) return;
+
+    const activa = flip.classList.contains("girado")
+        ? flip.querySelector(".cara-dorso")
+        : flip.querySelector(".cara-frente");
+    if (!activa) return;
+
+    const maxAlto = window.innerHeight * 0.7;
+    flip.style.height = `${Math.min(activa.scrollHeight, maxAlto)}px`;
+}
+
 function renderActual() {
     const slot = document.getElementById("ticketmSlot");
 
@@ -347,6 +400,7 @@ function renderActual() {
 
     slot.innerHTML = construirTicketHTML(actual, `${posicion}-${total}`);
     ajustarNumeroTicket();
+    ajustarAltoGiro();
 
     // El talón nuevo siempre nace cerrado -evita que quede un "abierto"
     // colgado si el usuario navega a otro ticket sin cerrar el cajón.
@@ -357,6 +411,7 @@ function renderActual() {
     nombreAbierto = false;
     ultimoTapNombre = 0;
     ultimoTapAtenciones = 0;
+    dorsoSeleccion = { clienteId: null, clienteNombre: "", profesionalId: null, profesionalNombre: "" };
 
     atencionesActuales = [];
     indiceAtencionActual = 0;
@@ -808,9 +863,7 @@ async function seleccionarClienta(customerId, nombre) {
 // El secreto de las atenciones: doble-tap en el contador gira el
 // ticket 180° -el status y el número quedan fijos (viven afuera de
 // .ticket-flip) como ancla visual; el resto pasa a ser 100% espacio
-// de atenciones en el dorso. Por ahora el dorso es un placeholder;
-// el contenido real (lista editable + agregar) viene en una
-// siguiente pasada, ya con el mecanismo del giro probado.
+// de atenciones en el dorso.
 let ultimoTapAtenciones = 0;
 
 function inicializarGiroAtenciones() {
@@ -841,7 +894,400 @@ function inicializarCierreAfueraGiro() {
 
 function alternarGiroTicket() {
     const flip = document.getElementById("ticketFlip");
-    if (flip) flip.classList.toggle("girado");
+    if (!flip) return;
+
+    flip.classList.toggle("girado");
+    ajustarAltoGiro();
+}
+
+// Contenido real del dorso: lista editable de atenciones + agregar
+// una nueva. "Cambio de hora" edita solo booking_end_date -mismo
+// criterio ya validado en ticket-profesionales.html: el agendamiento
+// original (booking_date) no se toca desde acá. Agregar es un solo
+// paso (clienta + profesional + fecha/hora juntos, según lo
+// definido) aunque internamente sean 2 llamadas encadenadas.
+let dorsoSeleccion = { clienteId: null, clienteNombre: "", profesionalId: null, profesionalNombre: "" };
+let dorsoClienteBusquedaTimeout = null;
+let dorsoProfesionalBusquedaTimeout = null;
+
+function renderDorso() {
+    const lista = document.getElementById("dorsoLista");
+    if (!lista) return;
+
+    if (!atencionesActuales.length) {
+        lista.innerHTML = `<div class="dorso-vacio">Sin atenciones todavía.</div>`;
+        ajustarAltoGiro();
+        return;
+    }
+
+    lista.innerHTML = atencionesActuales.map(a => {
+        const huboCambio = a.fechaFin && a.fecha
+            && new Date(a.fechaFin).getTime() !== new Date(a.fecha).getTime();
+        const textoFecha = huboCambio
+            ? `${formatearFechaM(a.fecha)} → ${formatearFechaM(a.fechaFin)}`
+            : formatearFechaM(a.fecha);
+        const fechaEditor = a.fechaFin || a.fecha;
+
+        return `
+            <div class="dorso-fila">
+                <div class="dorso-fila-info" data-editar-hora="${a.tpcId}">
+                    <span class="dorso-fila-clienta">${escapeHtmlM(a.clienta)}</span>
+                    <span class="dorso-fila-sep">–</span>
+                    <span class="dorso-fila-profesional">${escapeHtmlM(a.profesional)}</span>
+                    <span class="dorso-fila-fecha">${textoFecha}</span>
+                </div>
+                <button type="button" class="dorso-fila-eliminar" data-eliminar-atencion="${a.tpcId}" aria-label="Eliminar atención">×</button>
+            </div>
+            <div class="dorso-fila-editor" id="dorsoEditor${a.tpcId}" hidden>
+                <input type="date" class="dorso-editor-fecha" id="dorsoEditorFecha${a.tpcId}" value="${fechaEditor ? fechaLocalISOM(new Date(fechaEditor)) : ""}">
+                <input type="time" class="dorso-editor-hora" id="dorsoEditorHora${a.tpcId}" value="${fechaEditor ? horaLocalHHMMM(new Date(fechaEditor)) : ""}">
+                <button type="button" class="dorso-editor-guardar" data-guardar-hora="${a.tpcId}" data-tp-id="${a.tpId}">Guardar hora</button>
+            </div>
+        `;
+    }).join("");
+
+    ajustarAltoGiro();
+}
+
+function horaLocalHHMMM(fecha) {
+    const horas = String(fecha.getHours()).padStart(2, "0");
+    const minutos = String(fecha.getMinutes()).padStart(2, "0");
+    return `${horas}:${minutos}`;
+}
+
+function inicializarDorsoLista() {
+    const slot = document.getElementById("ticketmSlot");
+
+    slot.addEventListener("click", (e) => {
+        const fila = e.target.closest("[data-editar-hora]");
+        if (fila) {
+            const tpcId = fila.dataset.editarHora;
+            const editor = document.getElementById(`dorsoEditor${tpcId}`);
+            if (editor) editor.hidden = !editor.hidden;
+            ajustarAltoGiro();
+            return;
+        }
+
+        const eliminar = e.target.closest("[data-eliminar-atencion]");
+        if (eliminar) {
+            eliminarAtencion(eliminar.dataset.eliminarAtencion);
+            return;
+        }
+
+        const guardar = e.target.closest("[data-guardar-hora]");
+        if (guardar) {
+            guardarHoraAtencion(guardar.dataset.guardarHora, guardar.dataset.tpId);
+        }
+    });
+}
+
+async function guardarHoraAtencion(tpcId, tpId) {
+    const actual = ticketsDelDia[indiceActual];
+    const fecha = document.getElementById(`dorsoEditorFecha${tpcId}`).value;
+    const hora = document.getElementById(`dorsoEditorHora${tpcId}`).value;
+    if (!actual || !fecha || !hora) return;
+
+    const bookingEndDate = `${fecha}T${hora}:00`;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/ticket/${actual.ticket_id}/professionals/${tpId}/customers/${tpcId}/booking-end-date`,
+            {
+                method: "PATCH",
+                headers: { ...authHeadersM(), "Content-Type": "application/json" },
+                body: JSON.stringify({ booking_end_date: bookingEndDate })
+            }
+        );
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const resultado = await response.json().catch(() => null);
+            throw new Error(resultado?.detail || "No se pudo actualizar la hora.");
+        }
+
+        await cargarAtenciones(actual.ticket_id);
+        mostrarToastM("Hora actualizada");
+
+    } catch (error) {
+        console.error("Error actualizando hora:", error);
+        mostrarToastM(error.message || "No se pudo actualizar la hora.", true);
+    }
+}
+
+async function eliminarAtencion(tpcId) {
+    const actual = ticketsDelDia[indiceActual];
+    const atencion = atencionesActuales.find(a => String(a.tpcId) === String(tpcId));
+    if (!actual || !atencion) return;
+
+    if (!confirm(`¿Quitar la atención de ${atencion.clienta}?`)) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/ticket/${actual.ticket_id}/professionals/${atencion.tpId}/customers/${tpcId}`,
+            { method: "DELETE", headers: authHeadersM() }
+        );
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            const resultado = await response.json().catch(() => null);
+            throw new Error(resultado?.detail || "No se pudo quitar la atención.");
+        }
+
+        await cargarAtenciones(actual.ticket_id);
+        mostrarToastM("Atención quitada");
+
+    } catch (error) {
+        console.error("Error quitando atención:", error);
+        mostrarToastM(error.message || "No se pudo quitar la atención.", true);
+    }
+}
+
+function dorsoActualizarBotonConfirmar() {
+    const boton = document.getElementById("dorsoConfirmarBtn");
+    const fecha = document.getElementById("dorsoFechaInput").value;
+    const hora = document.getElementById("dorsoHoraInput").value;
+    boton.disabled = !(dorsoSeleccion.clienteId && dorsoSeleccion.profesionalId && fecha && hora);
+}
+
+function dorsoSeleccionarCliente(id, nombre) {
+    dorsoSeleccion.clienteId = id;
+    dorsoSeleccion.clienteNombre = nombre;
+
+    const campo = document.getElementById("dorsoClienteCampo");
+    campo.innerHTML = `<span class="dorso-seleccion">${escapeHtmlM(nombre)} <button type="button" data-limpiar-cliente>cambiar</button></span>`;
+    dorsoActualizarBotonConfirmar();
+}
+
+function dorsoLimpiarCliente() {
+    dorsoSeleccion.clienteId = null;
+    dorsoSeleccion.clienteNombre = "";
+
+    const campo = document.getElementById("dorsoClienteCampo");
+    campo.innerHTML = `
+        <button type="button" class="dorso-usar-titular" id="dorsoUsarTitular">Usar titular</button>
+        <input type="text" class="dorso-buscador-input" id="dorsoClienteInput" placeholder="o buscar clienta...">
+        <div class="dorso-buscador-resultados" id="dorsoClienteResultados"></div>
+    `;
+    dorsoActualizarBotonConfirmar();
+}
+
+function dorsoSeleccionarProfesional(id, nombre) {
+    dorsoSeleccion.profesionalId = id;
+    dorsoSeleccion.profesionalNombre = nombre;
+
+    const campo = document.getElementById("dorsoProfesionalCampo");
+    campo.innerHTML = `<span class="dorso-seleccion">${escapeHtmlM(nombre)} <button type="button" data-limpiar-profesional>cambiar</button></span>`;
+    dorsoActualizarBotonConfirmar();
+}
+
+function dorsoLimpiarProfesional() {
+    dorsoSeleccion.profesionalId = null;
+    dorsoSeleccion.profesionalNombre = "";
+
+    const campo = document.getElementById("dorsoProfesionalCampo");
+    campo.innerHTML = `
+        <input type="text" class="dorso-buscador-input" id="dorsoProfesionalInput" placeholder="Buscar profesional...">
+        <div class="dorso-buscador-resultados" id="dorsoProfesionalResultados"></div>
+    `;
+    dorsoActualizarBotonConfirmar();
+}
+
+async function dorsoBuscarClientas(termino) {
+    const resultados = document.getElementById("dorsoClienteResultados");
+    if (!resultados) return;
+    resultados.innerHTML = `<div class="nombre-resultado-vacio">Buscando...</div>`;
+
+    try {
+        const response = await fetch(`${API_BASE}/customer/search?q=${encodeURIComponent(termino)}`, {
+            headers: authHeadersM()
+        });
+        if (response.status === 401) { window.location.href = "login.html"; return; }
+        const items = await response.json();
+
+        if (!items || !items.length) {
+            resultados.innerHTML = `<div class="nombre-resultado-vacio">No se encontraron clientas.</div>`;
+            return;
+        }
+
+        resultados.innerHTML = items.map(c => `
+            <div class="nombre-resultado" data-dorso-cliente-id="${c.customer_id}" data-dorso-cliente-nombre="${escapeHtmlM(c.customer_full_name || c.customer_nickname || "")}">
+                <span class="nombre-resultado-nombre">${escapeHtmlM(c.customer_full_name || c.customer_nickname || "")}</span>
+                <span class="nombre-resultado-meta">${escapeHtmlM(c.customer_mobile || "")}</span>
+            </div>
+        `).join("");
+
+    } catch (error) {
+        console.error("Error buscando clientas:", error);
+        resultados.innerHTML = `<div class="nombre-resultado-vacio">Error al buscar.</div>`;
+    }
+}
+
+async function dorsoBuscarProfesionales(termino) {
+    const resultados = document.getElementById("dorsoProfesionalResultados");
+    if (!resultados) return;
+    resultados.innerHTML = `<div class="nombre-resultado-vacio">Buscando...</div>`;
+
+    try {
+        const response = await fetch(`${API_BASE}/professional/search?q=${encodeURIComponent(termino)}`, {
+            headers: authHeadersM()
+        });
+        if (response.status === 401) { window.location.href = "login.html"; return; }
+        const items = await response.json();
+
+        if (!items || !items.length) {
+            resultados.innerHTML = `<div class="nombre-resultado-vacio">No se encontraron profesionales.</div>`;
+            return;
+        }
+
+        resultados.innerHTML = items.map(p => `
+            <div class="nombre-resultado" data-dorso-profesional-id="${p.professional_id}" data-dorso-profesional-nombre="${escapeHtmlM(p.professional_name || p.professional_nickname || "")}">
+                <span class="nombre-resultado-nombre">${escapeHtmlM(p.professional_name || p.professional_nickname || "")}</span>
+            </div>
+        `).join("");
+
+    } catch (error) {
+        console.error("Error buscando profesionales:", error);
+        resultados.innerHTML = `<div class="nombre-resultado-vacio">Error al buscar.</div>`;
+    }
+}
+
+async function dorsoConfirmarAtencion() {
+    const actual = ticketsDelDia[indiceActual];
+    const fecha = document.getElementById("dorsoFechaInput").value;
+    const hora = document.getElementById("dorsoHoraInput").value;
+    if (!actual || !dorsoSeleccion.clienteId || !dorsoSeleccion.profesionalId || !fecha || !hora) return;
+
+    const bookingDate = `${fecha}T${hora}:00`;
+
+    try {
+        const respProfesional = await fetch(`${API_BASE}/ticket/${actual.ticket_id}/professionals`, {
+            method: "POST",
+            headers: { ...authHeadersM(), "Content-Type": "application/json" },
+            body: JSON.stringify({ professional_id: Number(dorsoSeleccion.profesionalId) })
+        });
+        if (respProfesional.status === 401) { window.location.href = "login.html"; return; }
+        if (!respProfesional.ok) {
+            const resultado = await respProfesional.json().catch(() => null);
+            throw new Error(resultado?.detail || "No se pudo agregar la profesional.");
+        }
+        const profesionalCreado = await respProfesional.json();
+
+        const respCliente = await fetch(
+            `${API_BASE}/ticket/${actual.ticket_id}/professionals/${profesionalCreado.ticket_professional_id}/customers`,
+            {
+                method: "POST",
+                headers: { ...authHeadersM(), "Content-Type": "application/json" },
+                body: JSON.stringify({ customer_id: Number(dorsoSeleccion.clienteId), booking_date: bookingDate })
+            }
+        );
+        if (respCliente.status === 401) { window.location.href = "login.html"; return; }
+        if (!respCliente.ok) {
+            const resultado = await respCliente.json().catch(() => null);
+            throw new Error(resultado?.detail || "No se pudo agregar la atención.");
+        }
+
+        await cargarAtenciones(actual.ticket_id);
+        dorsoCerrarFormularioAgregar();
+        mostrarToastM("Atención agregada");
+
+    } catch (error) {
+        console.error("Error agregando atención:", error);
+        mostrarToastM(error.message || "No se pudo agregar la atención.", true);
+    }
+}
+
+function dorsoCerrarFormularioAgregar() {
+    document.getElementById("dorsoAgregarForm").hidden = true;
+    dorsoLimpiarCliente();
+    dorsoLimpiarProfesional();
+    document.getElementById("dorsoFechaInput").value = "";
+    document.getElementById("dorsoHoraInput").value = "";
+    ajustarAltoGiro();
+}
+
+function inicializarDorsoAgregar() {
+    const slot = document.getElementById("ticketmSlot");
+
+    slot.addEventListener("click", (e) => {
+        if (e.target.closest("#dorsoAgregarToggle")) {
+            const form = document.getElementById("dorsoAgregarForm");
+            form.hidden = !form.hidden;
+            ajustarAltoGiro();
+            return;
+        }
+
+        if (e.target.closest("#dorsoUsarTitular")) {
+            const actual = ticketsDelDia[indiceActual];
+            if (!actual || !actual.ticket_customer_id) {
+                mostrarToastM("El ticket no tiene clienta titular asignada.", true);
+                return;
+            }
+            dorsoSeleccionarCliente(actual.ticket_customer_id, actual.customer_full_name || actual.customer_nickname || "Titular");
+            return;
+        }
+
+        if (e.target.closest("[data-limpiar-cliente]")) {
+            dorsoLimpiarCliente();
+            return;
+        }
+
+        if (e.target.closest("[data-limpiar-profesional]")) {
+            dorsoLimpiarProfesional();
+            return;
+        }
+
+        const resultadoCliente = e.target.closest("[data-dorso-cliente-id]");
+        if (resultadoCliente) {
+            dorsoSeleccionarCliente(resultadoCliente.dataset.dorsoClienteId, resultadoCliente.dataset.dorsoClienteNombre);
+            return;
+        }
+
+        const resultadoProfesional = e.target.closest("[data-dorso-profesional-id]");
+        if (resultadoProfesional) {
+            dorsoSeleccionarProfesional(resultadoProfesional.dataset.dorsoProfesionalId, resultadoProfesional.dataset.dorsoProfesionalNombre);
+            return;
+        }
+
+        if (e.target.closest("#dorsoConfirmarBtn")) {
+            dorsoConfirmarAtencion();
+        }
+    });
+
+    slot.addEventListener("input", (e) => {
+        if (e.target.matches("#dorsoClienteInput")) {
+            const termino = e.target.value.trim();
+            clearTimeout(dorsoClienteBusquedaTimeout);
+            if (termino.length < NOMBRE_BUSQUEDA_MIN_CHARS) {
+                document.getElementById("dorsoClienteResultados").innerHTML = "";
+                return;
+            }
+            dorsoClienteBusquedaTimeout = setTimeout(() => dorsoBuscarClientas(termino), NOMBRE_BUSQUEDA_DEBOUNCE_MS);
+            return;
+        }
+
+        if (e.target.matches("#dorsoProfesionalInput")) {
+            const termino = e.target.value.trim();
+            clearTimeout(dorsoProfesionalBusquedaTimeout);
+            if (termino.length < NOMBRE_BUSQUEDA_MIN_CHARS) {
+                document.getElementById("dorsoProfesionalResultados").innerHTML = "";
+                return;
+            }
+            dorsoProfesionalBusquedaTimeout = setTimeout(() => dorsoBuscarProfesionales(termino), NOMBRE_BUSQUEDA_DEBOUNCE_MS);
+            return;
+        }
+
+        if (e.target.matches("#dorsoFechaInput, #dorsoHoraInput")) {
+            dorsoActualizarBotonConfirmar();
+        }
+    });
 }
 
 function construirChipsStatus() {
@@ -908,6 +1354,8 @@ inicializarCajonNombre();
 inicializarBusquedaNombre();
 inicializarGiroAtenciones();
 inicializarCierreAfueraGiro();
+inicializarDorsoLista();
+inicializarDorsoAgregar();
 cargarTicketsDelDia();
 
 window.addEventListener("resize", ajustarNumeroTicket);
