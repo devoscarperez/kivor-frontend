@@ -165,36 +165,38 @@ function construirTicketHTML(t, contador) {
                 <span class="status-vertical">${escapeHtmlM(statusTexto)}</span>
             </div>
             <div class="stub"><span class="number">${numero}</span></div>
-            <div class="ticket-flip" id="ticketFlip">
-                <div class="cara cara-frente">
-                    <div class="name-wrap" id="nameWrap" data-nombre-real="${escapeHtmlM(t.customer_full_name || t.customer_nickname || "")}">
-                        <h1 class="name" id="nombreTitular">${nombreClienta}</h1>
-                        <div class="nombre-buscador" id="nombreBuscador">
-                            <input type="text" class="nombre-buscador-input" id="nombreBuscadorInput" placeholder="Buscar clienta por nombre...">
-                            <div class="nombre-buscador-resultados" id="nombreBuscadorResultados"></div>
-                        </div>
-                        <span class="atenciones-contador" id="atencionesContador"></span>
-                    </div>
-                    <div class="frame">
-                        <div class="main">
-                            <div class="rule"></div>
-                            <div class="details">
-                                <div class="atenciones-lista" id="atencionesLista"><div class="ficha-vacio">—</div></div>
+            <div class="ticket-flip-stage">
+                <div class="ticket-flip" id="ticketFlip">
+                    <div class="cara cara-frente">
+                        <div class="name-wrap" id="nameWrap" data-nombre-real="${escapeHtmlM(t.customer_full_name || t.customer_nickname || "")}">
+                            <h1 class="name" id="nombreTitular">${nombreClienta}</h1>
+                            <div class="nombre-buscador" id="nombreBuscador">
+                                <input type="text" class="nombre-buscador-input" id="nombreBuscadorInput" placeholder="Buscar clienta por nombre...">
+                                <div class="nombre-buscador-resultados" id="nombreBuscadorResultados"></div>
                             </div>
-                            <div class="rule"></div>
-                            <div class="ticket-footer">
-                                <span class="abono-footer"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></span>
-                                <span class="antiguedad">${tiempoTranscurridoM(t.primera_atencion || t.ticket_created_at)}</span>
-                                <!-- Cre/Act deshabilitado por ahora, no hace falta mostrarlo:
-                                <span class="ticket-fechas">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</span>
-                                -->
-                                <span class="ticket-contador">${contador}</span>
+                            <span class="atenciones-contador" id="atencionesContador"></span>
+                        </div>
+                        <div class="frame">
+                            <div class="main">
+                                <div class="rule"></div>
+                                <div class="details">
+                                    <div class="atenciones-lista" id="atencionesLista"><div class="ficha-vacio">—</div></div>
+                                </div>
+                                <div class="rule"></div>
+                                <div class="ticket-footer">
+                                    <span class="abono-footer"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></span>
+                                    <span class="antiguedad">${tiempoTranscurridoM(t.primera_atencion || t.ticket_created_at)}</span>
+                                    <!-- Cre/Act deshabilitado por ahora, no hace falta mostrarlo:
+                                    <span class="ticket-fechas">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</span>
+                                    -->
+                                    <span class="ticket-contador">${contador}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="cara cara-dorso" id="caraDorso">
-                    <div class="dorso-placeholder">Atenciones<br>(en construcción)</div>
+                    <div class="cara cara-dorso" id="caraDorso">
+                        <div class="dorso-placeholder">Atenciones<br>(en construcción)</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -827,6 +829,16 @@ function inicializarGiroAtenciones() {
     }, { passive: true });
 }
 
+function inicializarCierreAfueraGiro() {
+    document.addEventListener("click", (e) => {
+        const flip = document.getElementById("ticketFlip");
+        if (!flip || !flip.classList.contains("girado")) return;
+        if (e.target.closest(".ticket")) return;
+
+        flip.classList.remove("girado");
+    });
+}
+
 function alternarGiroTicket() {
     const flip = document.getElementById("ticketFlip");
     if (flip) flip.classList.toggle("girado");
@@ -895,6 +907,7 @@ inicializarCierreAfueraStatus();
 inicializarCajonNombre();
 inicializarBusquedaNombre();
 inicializarGiroAtenciones();
+inicializarCierreAfueraGiro();
 cargarTicketsDelDia();
 
 window.addEventListener("resize", ajustarNumeroTicket);
