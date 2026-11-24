@@ -7,6 +7,7 @@ const escenario = document.getElementById("juegoEscenario");
 const pista = document.getElementById("juegoPista");
 const estilista = document.getElementById("estilista");
 const pelo = estilista.querySelector(".estilista-pelo");
+const elementoVelocidad = document.getElementById("velocidadTexto");
 const elementoPuntaje = document.getElementById("puntajeActual");
 const pantallaInicio = document.getElementById("pantallaInicio");
 const pantallaFin = document.getElementById("pantallaFin");
@@ -21,6 +22,14 @@ const VELOCIDAD_SALTO = -0.78; // px/ms (negativo = hacia arriba)
 const VELOCIDAD_INICIAL = 0.26; // px/ms de los obstáculos
 const VELOCIDAD_MAXIMA = 0.5;
 const RAMPA_VELOCIDAD = 0.000006; // px/ms añadidos por ms transcurrido
+
+// Conversión puramente visual de velocidadActual (px/ms) a un "km/h"
+// que se entienda de un vistazo -se pidió mostrar que la velocidad
+// sube de verdad, porque la rampa real es tan lenta (~40s de mínima a
+// máxima) que a simple vista casi no se nota. No corresponde a ninguna
+// escala real de píxeles en pantalla, el objetivo es solo que el
+// número suba de forma creíble (termina entre ~12 y ~23 km/h).
+const FACTOR_KMH = 46;
 
 const INTERVALO_MIN_INICIAL = 1150; // ms entre obstáculos, al empezar
 const INTERVALO_MAX_INICIAL = 1800;
@@ -46,14 +55,15 @@ let fasePelo = 0;
 // criterio para los obstáculos, ver colisionan().
 const COLISION_TOLERANCIA = 10; // px de margen perdonado por lado
 
-const TIPOS_OBSTACULO = ["carrito", "sillon", "frasco", "secador", "peineta", "cepillo"];
+const TIPOS_OBSTACULO = ["carrito", "sillon", "frasco", "secador", "peineta", "cepillo", "tijeras"];
 const MARCADO_INTERNO = {
     carrito: '<div class="carrito-bandeja"></div><div class="carrito-cuerpo"></div><div class="carrito-rueda"></div><div class="carrito-rueda"></div>',
     sillon: '<div class="sillon-respaldo"></div><div class="sillon-asiento"></div><div class="sillon-pata"></div><div class="sillon-pata"></div>',
-    frasco: '<div class="frasco-cuerpo"></div><div class="frasco-tapa"></div>',
-    secador: '<div class="secador-cuerpo"></div><div class="secador-mango"></div><div class="secador-cable"></div>',
+    frasco: '<div class="frasco-cuerpo"></div><div class="frasco-tapa"></div><div class="frasco-gatillo"></div>',
+    secador: '<div class="secador-cuerpo"></div><div class="secador-anillo"></div><div class="secador-mango"></div><div class="secador-cable"></div>',
     peineta: '<div class="peineta-lomo"></div><div class="peineta-dientes"></div>',
     cepillo: '<div class="cepillo-cabeza"></div><div class="cepillo-mango"></div>',
+    tijeras: '<div class="tijeras-hoja tijeras-hoja-1"></div><div class="tijeras-hoja tijeras-hoja-2"></div><div class="tijeras-anilla tijeras-anilla-1"></div><div class="tijeras-anilla tijeras-anilla-2"></div><div class="tijeras-remache"></div>',
 };
 
 // Objetos chicos de mano -los únicos candidatos a salir "gigantes"
@@ -62,7 +72,7 @@ const MARCADO_INTERNO = {
 // cepillo del porte de la estilista sí es la sorpresa graciosa que se
 // pidió, y de paso exige saltar mejor sincronizado -no todos, solo
 // algunos al azar.
-const TIPOS_GIGANTE_ELEGIBLES = ["secador", "peineta", "cepillo"];
+const TIPOS_GIGANTE_ELEGIBLES = ["secador", "peineta", "cepillo", "tijeras"];
 const PROBABILIDAD_GIGANTE = 0.3;
 const ESCALA_GIGANTE_MIN = 1.8;
 const ESCALA_GIGANTE_MAX = 2.6;
@@ -149,6 +159,7 @@ function cuadro(ahora) {
 
     velocidadActual = Math.min(VELOCIDAD_MAXIMA, VELOCIDAD_INICIAL + tiempoTranscurrido * RAMPA_VELOCIDAD);
     const progresoVelocidad = (velocidadActual - VELOCIDAD_INICIAL) / (VELOCIDAD_MAXIMA - VELOCIDAD_INICIAL);
+    elementoVelocidad.textContent = `${Math.round(velocidadActual * FACTOR_KMH)} km/h`;
 
     // Pelo al viento: más rápido y con más vuelo a medida que sube la
     // velocidad, y se levanta hacia atrás (translateY negativo).
@@ -215,6 +226,7 @@ function empezarJuego() {
     velocidadActual = VELOCIDAD_INICIAL;
     puntaje = 0;
     actualizarPuntajeEnPantalla();
+    elementoVelocidad.textContent = `${Math.round(VELOCIDAD_INICIAL * FACTOR_KMH)} km/h`;
 
     estilista.classList.remove("saltando");
     estilista.classList.add("corriendo", "jugando");

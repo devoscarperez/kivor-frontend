@@ -40,6 +40,8 @@
     --salon-pelo:#4a3426;
     --salon-madera:#6b4a35;
     --salon-metal:#c9ccd1;
+    --salon-negro:#2b2d33;
+    --salon-acento:#e2542f;
 }
 
 .juego-topbar{
@@ -76,6 +78,26 @@
     font-weight:800;
     font-variant-numeric:tabular-nums;
     color:var(--color-text-primary);
+}
+
+/* Velocímetro -se pidió que se viera que la velocidad sube de verdad
+   (la rampa es lenta: ~40s para ir de mínima a máxima, casi no se
+   nota solo mirando el juego). km/h es una conversión puramente
+   visual (ver FACTOR_KMH en el JS), no corresponde a una escala real
+   de la pantalla -el objetivo es que el número suba, no ser exacto. */
+.juego-velocidad{
+    position:absolute;
+    left:12px;
+    top:12px;
+    z-index:2;
+    font-size:13px;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    color:var(--color-primary);
+    background:rgba(15,17,21,.55);
+    padding:4px 10px;
+    border-radius:999px;
+    border:1px solid rgba(242,184,75,.3);
 }
 
 .juego-escenario{
@@ -349,29 +371,67 @@
 .obstaculo-sillon .sillon-pata:first-of-type{ left:8px }
 .obstaculo-sillon .sillon-pata:last-of-type{ left:40px }
 
-.obstaculo-frasco{ width:20px; height:30px }
+/* Rociador -con gatillo en ángulo en vez de una tapa chata, para que
+   se lea como spray y no como un frasco cualquiera (ver foto de
+   referencia en Errores/cosasdesalon.PNG: el rociador con gatillo es
+   uno de los objetos más reconocibles del set). */
+.obstaculo-frasco{ width:22px; height:30px }
 .obstaculo-frasco .frasco-cuerpo{
-    position:absolute; bottom:0; left:2px; width:16px; height:22px;
+    position:absolute; bottom:0; left:4px; width:16px; height:20px;
     border-radius:3px; background:var(--color-primary);
 }
 .obstaculo-frasco .frasco-tapa{
-    position:absolute; top:0; left:5px; width:10px; height:8px;
+    position:absolute; top:4px; left:7px; width:9px; height:7px;
     border-radius:2px; background:var(--salon-metal);
 }
+.obstaculo-frasco .frasco-gatillo{
+    position:absolute; top:0; left:13px; width:9px; height:6px;
+    border-radius:0 6px 6px 0; background:var(--salon-metal);
+    transform:rotate(-20deg); transform-origin:left center;
+}
 
+/* Secador profesional -cuerpo negro con el anillo de acento naranja
+   junto al motor, como el de la foto de referencia (antes era un gris
+   liso, poco reconocible como "secador" y no otra cosa). */
 .obstaculo-secador{ width:44px; height:26px }
 .obstaculo-secador .secador-cuerpo{
     position:absolute; bottom:6px; left:0; width:28px; height:14px;
-    border-radius:3px 10px 10px 3px; background:var(--salon-metal);
+    border-radius:3px 10px 10px 3px; background:var(--salon-negro);
+}
+.obstaculo-secador .secador-anillo{
+    position:absolute; bottom:6px; left:16px; width:5px; height:14px;
+    background:var(--salon-acento);
 }
 .obstaculo-secador .secador-mango{
     position:absolute; bottom:0; left:4px; width:9px; height:16px;
-    border-radius:0 0 4px 4px; background:var(--salon-uniforme-sombra);
+    border-radius:0 0 4px 4px; background:var(--salon-negro);
 }
 .obstaculo-secador .secador-cable{
     position:absolute; bottom:4px; left:24px; width:20px; height:10px;
     border:3px solid var(--salon-pelo); border-left:none; border-radius:0 10px 10px 0;
 }
+
+/* Tijeras -dos hojas cruzadas en X + remaches de los dedos, la
+   silueta más reconocible de todo el set (nada más en el juego se le
+   parece). Metal claro para que destaque sobre el fondo oscuro. */
+.obstaculo-tijeras{ width:34px; height:30px }
+.obstaculo-tijeras .tijeras-hoja{
+    position:absolute; top:10px; left:4px; width:26px; height:5px;
+    border-radius:0 3px 3px 0; background:var(--salon-metal);
+    transform-origin:left center;
+}
+.obstaculo-tijeras .tijeras-hoja-1{ transform:rotate(-18deg) }
+.obstaculo-tijeras .tijeras-hoja-2{ transform:rotate(18deg) }
+.obstaculo-tijeras .tijeras-remache{
+    position:absolute; top:11px; left:2px; width:6px; height:6px;
+    border-radius:50%; background:var(--color-primary);
+}
+.obstaculo-tijeras .tijeras-anilla{
+    position:absolute; left:0; width:10px; height:10px;
+    border-radius:50%; border:3px solid var(--salon-metal);
+}
+.obstaculo-tijeras .tijeras-anilla-1{ top:0 }
+.obstaculo-tijeras .tijeras-anilla-2{ top:18px }
 
 .obstaculo-peineta{ width:34px; height:26px }
 .obstaculo-peineta .peineta-lomo{
