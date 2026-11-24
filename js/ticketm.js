@@ -301,7 +301,10 @@ function renderFicha() {
 
     if (!atencionesActuales.length) {
         lista.innerHTML = `<div class="ficha-vacio">—</div>`;
-        if (contador) contador.textContent = "";
+        // El contador siempre va en formato NN-NN, incluso en cero -se
+        // pidió que nunca desaparezca, a diferencia de antes que
+        // quedaba vacío cuando no había atenciones.
+        if (contador) contador.textContent = "00-00";
         ajustarNumeroTicket();
         renderDorso();
         return;
@@ -440,6 +443,13 @@ function renderActual() {
 
     atencionesActuales = [];
     indiceAtencionActual = 0;
+    // renderFicha() siempre primero -deja el contador en 00-00 y la
+    // ficha en "—" de inmediato. Si el ticket SÍ tiene profesionales,
+    // cargarAtenciones() los trae después y vuelve a llamar renderFicha()
+    // con los datos reales. Antes, cuando professional_count era 0,
+    // esta función nunca se llamaba y el contador quedaba vacío desde
+    // el HTML inicial -nunca llegaba a pintarse ni "00-00" ni nada.
+    renderFicha();
     if (actual.professional_count > 0) {
         cargarAtenciones(actual.ticket_id);
     }
