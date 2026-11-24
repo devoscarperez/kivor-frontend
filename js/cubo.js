@@ -402,7 +402,7 @@ function manejarTap() {
     if (!nodo) return;
 
     if (nodo.esJuego) {
-        mostrarToastCubo("El juego todavía no está listo — próximamente.");
+        navegarA("juego-estres.html");
         return;
     }
 

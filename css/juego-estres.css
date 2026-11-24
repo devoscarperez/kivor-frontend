@@ -1,0 +1,375 @@
+/* =========================
+   KIVOR — Spa Run (minijuego antiestrés del cubo)
+   Runner de un solo toque ambientado en el salón: la estilista salta
+   herramientas y mobiliario que se cruzan en su camino. Todo el arte
+   es vectorial (divs con formas CSS), no hay imágenes que cargar -se
+   eligió así porque no hay un pipeline de assets todavía, y formas
+   planas se ven nítidas en cualquier pantalla de celular.
+========================= */
+
+*{box-sizing:border-box}
+
+.app-juego{
+    margin:0;
+    min-height:100vh;
+    background:var(--color-background);
+    color:var(--color-text-primary);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    user-select:none;
+    -webkit-user-select:none;
+}
+
+/* Paleta propia del salón -el tema de la app solo define fondo/texto/
+   dorado de marca, no colores de piel, uniforme o madera, así que se
+   agregan acá, acotados a esta página. */
+.app-juego{
+    --salon-piel:#e8b084;
+    --salon-uniforme:#3f7c74;
+    --salon-uniforme-sombra:#2f5f59;
+    --salon-pelo:#4a3426;
+    --salon-madera:#6b4a35;
+    --salon-metal:#c9ccd1;
+}
+
+.juego-topbar{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:14px 16px;
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:.03em;
+    color:var(--color-primary);
+}
+
+.juego-volver{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:transparent;
+    color:var(--color-text-primary);
+    font-size:14px;
+    font-weight:600;
+    padding:8px 10px;
+}
+
+.juego-puntaje{
+    position:absolute;
+    right:16px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:17px;
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    color:var(--color-text-primary);
+}
+
+.juego-escenario{
+    position:relative;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    touch-action:manipulation;
+}
+
+.juego-cielo{
+    flex:1;
+    position:relative;
+    background:linear-gradient(180deg, var(--color-background), var(--color-surface));
+    overflow:hidden;
+}
+/* Un espejo redondo de decoración, nada más -ancla visual de "salón"
+   en la zona vacía de arriba sin competir con la acción de la pista. */
+.juego-cielo::before{
+    content:"";
+    position:absolute;
+    right:12%;
+    top:18%;
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    border:4px solid rgba(242,184,75,.25);
+    background:rgba(255,255,255,.03);
+}
+
+.juego-pista{
+    position:relative;
+    height:40vh;
+    max-height:260px;
+    min-height:190px;
+    flex-shrink:0;
+    overflow:hidden;
+    background:var(--color-surface);
+    border-top:3px solid var(--color-border-default);
+}
+/* Franja de piso -puramente visual, el suelo "real" para la física es
+   bottom:0 de .juego-pista; esto solo da la sensación de línea de
+   base en vez de un corte seco. */
+.juego-pista::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:3px;
+    background:rgba(242,184,75,.35);
+}
+
+/* ---- La estilista ----
+   Silueta plana: cabeza + cola + torso con uniforme + un brazo
+   adelantado sosteniendo el secador + 2 piernas que alternan en el
+   ciclo de carrera. Todo con divs posicionados absolutos dentro de un
+   contenedor relativo -ningún SVG, por simplicidad. */
+.estilista{
+    position:absolute;
+    left:15%;
+    bottom:0;
+    width:56px;
+    height:88px;
+    will-change:transform;
+}
+
+.estilista-cabeza{
+    position:absolute;
+    top:0;
+    left:16px;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background:var(--salon-piel);
+}
+
+.estilista-cola{
+    position:absolute;
+    top:2px;
+    left:36px;
+    width:12px;
+    height:16px;
+    border-radius:0 10px 10px 4px;
+    background:var(--salon-pelo);
+    transform-origin:top left;
+    animation:estilista-cola-vaiven .32s ease-in-out infinite;
+}
+
+.estilista-cuerpo{
+    position:absolute;
+    top:22px;
+    left:12px;
+    width:32px;
+    height:34px;
+    border-radius:10px 10px 6px 6px;
+    background:var(--salon-uniforme);
+    box-shadow:inset -4px 0 0 var(--salon-uniforme-sombra);
+}
+
+.estilista-brazo{
+    position:absolute;
+    top:30px;
+    left:34px;
+    width:20px;
+    height:9px;
+    border-radius:6px;
+    background:var(--salon-uniforme);
+    transform-origin:left center;
+}
+
+.estilista-secador{
+    position:absolute;
+    top:24px;
+    left:50px;
+    width:16px;
+    height:10px;
+    border-radius:3px 8px 8px 3px;
+    background:var(--salon-metal);
+}
+.estilista-secador::after{
+    content:"";
+    position:absolute;
+    right:-4px;
+    top:1px;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--color-primary);
+}
+
+.estilista-pierna{
+    position:absolute;
+    top:54px;
+    left:18px;
+    width:10px;
+    height:30px;
+    border-radius:4px;
+    background:var(--salon-pelo);
+    transform-origin:top center;
+}
+.estilista-pierna-2{ left:28px }
+
+/* Ciclo de carrera: dos piernas oscilando en contrafase -se activa
+   solo en el piso (ver juego-estres.js: saltar() saca esta clase para
+   congelar las piernas en el aire, que es lo que se espera de un
+   salto real). */
+.estilista.corriendo .estilista-pierna-1{ animation:estilista-paso-a .36s linear infinite }
+.estilista.corriendo .estilista-pierna-2{ animation:estilista-paso-b .36s linear infinite }
+
+@keyframes estilista-paso-a{
+    0%,100%{ transform:rotate(28deg) }
+    50%{ transform:rotate(-28deg) }
+}
+@keyframes estilista-paso-b{
+    0%,100%{ transform:rotate(-28deg) }
+    50%{ transform:rotate(28deg) }
+}
+@keyframes estilista-cola-vaiven{
+    0%,100%{ transform:rotate(-8deg) }
+    50%{ transform:rotate(10deg) }
+}
+
+/* En el aire: piernas quietas, un poco recogidas -lectura clara de
+   "salto" aun siendo formas planas. */
+.estilista.saltando .estilista-pierna-1{ animation:none; transform:rotate(18deg) }
+.estilista.saltando .estilista-pierna-2{ animation:none; transform:rotate(-10deg) }
+
+/* ---- Obstáculos ----
+   Un contenedor por obstáculo, posicionado por JS vía transform
+   (translateX), con 2-3 formas simples adentro según el tipo. Todos
+   comparten la misma altura aproximada a propósito -el salto único
+   tiene que alcanzar para cualquiera, la variedad es solo visual. */
+.obstaculo{
+    position:absolute;
+    bottom:0;
+    left:0;
+    will-change:transform;
+}
+
+.obstaculo-carrito{ width:46px; height:40px }
+.obstaculo-carrito .carrito-bandeja{
+    position:absolute; top:0; left:2px; width:42px; height:10px;
+    border-radius:3px; background:var(--salon-metal);
+}
+.obstaculo-carrito .carrito-cuerpo{
+    position:absolute; top:9px; left:8px; width:30px; height:19px;
+    border-radius:0 0 4px 4px; background:var(--color-primary); opacity:.85;
+}
+.obstaculo-carrito .carrito-rueda{
+    position:absolute; bottom:0; width:10px; height:10px; border-radius:50%;
+    background:var(--salon-pelo);
+}
+.obstaculo-carrito .carrito-rueda:first-of-type{ left:8px }
+.obstaculo-carrito .carrito-rueda:last-of-type{ left:28px }
+
+.obstaculo-sillon{ width:50px; height:38px }
+.obstaculo-sillon .sillon-respaldo{
+    position:absolute; top:0; left:4px; width:14px; height:38px;
+    border-radius:6px 6px 0 0; background:var(--salon-madera);
+}
+.obstaculo-sillon .sillon-asiento{
+    position:absolute; bottom:8px; left:4px; width:44px; height:12px;
+    border-radius:4px; background:var(--salon-uniforme-sombra);
+}
+.obstaculo-sillon .sillon-pata{
+    position:absolute; bottom:0; width:6px; height:9px; background:var(--salon-madera);
+}
+.obstaculo-sillon .sillon-pata:first-of-type{ left:8px }
+.obstaculo-sillon .sillon-pata:last-of-type{ left:40px }
+
+.obstaculo-frasco{ width:20px; height:30px }
+.obstaculo-frasco .frasco-cuerpo{
+    position:absolute; bottom:0; left:2px; width:16px; height:22px;
+    border-radius:3px; background:var(--color-primary);
+}
+.obstaculo-frasco .frasco-tapa{
+    position:absolute; top:0; left:5px; width:10px; height:8px;
+    border-radius:2px; background:var(--salon-metal);
+}
+
+.obstaculo-secador{ width:44px; height:26px }
+.obstaculo-secador .secador-cuerpo{
+    position:absolute; bottom:6px; left:0; width:28px; height:14px;
+    border-radius:3px 10px 10px 3px; background:var(--salon-metal);
+}
+.obstaculo-secador .secador-mango{
+    position:absolute; bottom:0; left:4px; width:9px; height:16px;
+    border-radius:0 0 4px 4px; background:var(--salon-uniforme-sombra);
+}
+.obstaculo-secador .secador-cable{
+    position:absolute; bottom:4px; left:24px; width:20px; height:10px;
+    border:3px solid var(--salon-pelo); border-left:none; border-radius:0 10px 10px 0;
+}
+
+/* ---- Overlays (inicio / fin) ---- */
+
+/* [hidden] necesita su propia regla porque una clase de autor
+   (.juego-overlay) y el atributo [hidden] empatan en especificidad
+   -ahí gana el origen de la hoja (autor vence a la del navegador), no
+   el orden ni la especificidad, así que display:flex se quedaba
+   encima incluso con hidden puesto. Se comprobó corriendo el juego:
+   las dos pantallas (inicio y fin) quedaban superpuestas todo el
+   tiempo, nunca ocultas de verdad. */
+.juego-overlay[hidden]{
+    display:none;
+}
+
+.juego-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:0 32px;
+    text-align:center;
+    background:rgba(15,17,21,.72);
+    backdrop-filter:blur(2px);
+    z-index:5;
+}
+
+.juego-overlay-titulo{
+    margin:0;
+    font-size:26px;
+    font-weight:800;
+    color:var(--color-primary);
+}
+
+.juego-overlay-texto{
+    margin:0;
+    font-size:15px;
+    line-height:1.5;
+    color:var(--color-text-secondary);
+}
+
+.juego-overlay-mejor{
+    margin:6px 0 0;
+    font-size:13px;
+    color:var(--color-text-secondary);
+    opacity:.8;
+}
+
+.juego-overlay-botones{
+    display:flex;
+    gap:10px;
+    margin-top:8px;
+}
+
+.juego-boton{
+    min-height:var(--touch-target-min);
+    padding:var(--control-padding-y) var(--control-padding-x);
+    border-radius:999px;
+    border:1px solid var(--color-border-default);
+    background:transparent;
+    color:var(--color-text-primary);
+    font-size:15px;
+    font-weight:700;
+}
+
+.juego-boton-primario{
+    border-color:var(--color-primary);
+    background:var(--color-primary);
+    color:#15181e;
+}

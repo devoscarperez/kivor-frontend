@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>KIVOR — Spa Run</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/juego-estres.css">
+</head>
+<body data-theme="dark" class="app-juego">
+
+<header class="juego-topbar">
+    <button type="button" class="juego-volver" id="botonVolverJuego">← Cubo</button>
+    <span class="juego-topbar-title">Spa Run</span>
+    <span class="juego-puntaje" id="puntajeActual">0</span>
+</header>
+
+<main class="juego-escenario" id="juegoEscenario">
+    <div class="juego-cielo"></div>
+
+    <div class="juego-pista" id="juegoPista">
+        <div class="estilista" id="estilista">
+            <div class="estilista-cola"></div>
+            <div class="estilista-cabeza"></div>
+            <div class="estilista-cuerpo"></div>
+            <div class="estilista-brazo"></div>
+            <div class="estilista-secador"></div>
+            <div class="estilista-pierna estilista-pierna-1"></div>
+            <div class="estilista-pierna estilista-pierna-2"></div>
+        </div>
+    </div>
+
+    <div class="juego-overlay" id="pantallaInicio">
+        <p class="juego-overlay-titulo">Spa Run</p>
+        <p class="juego-overlay-texto">Un respiro entre clientas.<br>Toca la pantalla para saltar lo que se cruce en el salón.</p>
+        <p class="juego-overlay-mejor" id="mejorPuntajeInicio"></p>
+    </div>
+
+    <div class="juego-overlay" id="pantallaFin" hidden>
+        <p class="juego-overlay-titulo">Pausa cumplida ✨</p>
+        <p class="juego-overlay-texto" id="puntajeFinalTexto"></p>
+        <div class="juego-overlay-botones">
+            <button type="button" class="juego-boton juego-boton-primario" id="botonReintentar">Otra vez</button>
+            <button type="button" class="juego-boton" id="botonVolverFin">Volver al cubo</button>
+        </div>
+    </div>
+</main>
+
+<script>
+const token = sessionStorage.getItem("access_token");
+if (!token) window.location.href = "login.html";
+</script>
+<script src="js/juego-estres.js"></script>
+</body>
+</html>
