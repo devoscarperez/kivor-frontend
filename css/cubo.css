@@ -1,0 +1,157 @@
+/* =========================
+   KIVOR — Menú Cubo (prototipo)
+   Reemplaza el menú lateral actual por un cubo 3D flotante: 4 caras
+   de menú reales (Tickets, Negocio, Configuración, Juego) + 2 caras
+   "techo/piso" de marca, no interactivas, que solo se alcanzan a ver
+   al inclinar el cubo arriba/abajo -nunca quedan como destino final
+   (ver cubo.js: el eje X siempre vuelve a 0 al soltar, solo el eje Y
+   calza en una de las 4 caras reales).
+========================= */
+
+*{box-sizing:border-box}
+
+.app-cubo{
+    margin:0;
+    min-height:100vh;
+    background:var(--color-background);
+    color:var(--color-text-primary);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.cubo-topbar{
+    padding:16px 20px;
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:.04em;
+    color:var(--color-primary);
+}
+
+.cubo-escenario{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:0;
+}
+
+/* El perspective vive en su propio wrapper, no en .cubo ni en
+   .cubo-escenario -mismo motivo ya documentado en ticketm.css: un
+   elemento con perspective se convierte en un nuevo contexto de
+   stacking, y si ese mismo elemento tuviera una sombra propia con
+   z-index negativo, la sombra se pintaría mal (ya pasó una vez con
+   el giro del Ticket Mágico). Acá .cubo-sombra es un hermano aparte,
+   sin esa combinación, pero se mantiene el wrapper dedicado por la
+   misma disciplina. */
+.cubo-stage{
+    position:relative;
+    width:220px;
+    height:220px;
+    perspective:900px;
+    animation:cubo-flotar 4.2s ease-in-out infinite;
+}
+.cubo-stage.sin-flote{animation-play-state:paused}
+
+@keyframes cubo-flotar{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+}
+
+.cubo-sombra{
+    position:absolute;
+    left:50%;
+    bottom:-36px;
+    width:170px;
+    height:34px;
+    transform:translateX(-50%);
+    background:radial-gradient(ellipse at center, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 72%);
+    border-radius:50%;
+    animation:cubo-sombra-pulso 4.2s ease-in-out infinite;
+    pointer-events:none;
+}
+.cubo-stage.sin-flote .cubo-sombra{animation-play-state:paused}
+
+@keyframes cubo-sombra-pulso{
+    0%,100%{transform:translateX(-50%) scale(1); opacity:.9}
+    50%{transform:translateX(-50%) scale(.82); opacity:.6}
+}
+
+.cubo{
+    position:absolute;
+    inset:0;
+    transform-style:preserve-3d;
+    cursor:grab;
+    touch-action:none;
+}
+.cubo.arrastrando{cursor:grabbing}
+
+.cara{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:18px;
+    background:
+        linear-gradient(145deg, #1f232b, #15181e);
+    border:1px solid rgba(242,184,75,.35);
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.03),
+        inset 0 1px 0 rgba(255,255,255,.06);
+    backface-visibility:hidden;
+}
+/* La capa de luz: un overlay negro que cubo.js oscurece según el
+   ángulo actual de cada cara respecto a una luz fija imaginaria -es
+   lo que hace que el cubo lea como un cuerpo sólido con volumen en
+   vez de 6 recortes pegados. --luz es una custom property que
+   cubo.js fija en cada cara (element.style.setProperty), por eso la
+   puede leer el ::before aunque un pseudo-elemento no se pueda
+   stylear directo desde JS. */
+.cara::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    background:#000;
+    opacity:var(--luz, 0);
+    pointer-events:none;
+}
+
+.cara-label{
+    position:relative;
+    z-index:1;
+    font-size:19px;
+    font-weight:700;
+    letter-spacing:.02em;
+    color:var(--color-text-primary);
+    text-align:center;
+    padding:0 16px;
+    text-wrap:balance;
+}
+.cara-label-logo{
+    color:var(--color-primary);
+    font-size:17px;
+    letter-spacing:.12em;
+    opacity:.55;
+}
+
+/* Las 6 caras de un cubo de 220px: cada una se posiciona rotando el
+   plano y empujándolo hacia afuera la mitad del lado (110px). */
+.cara-frente{transform:translateZ(110px)}
+.cara-atras{transform:rotateY(180deg) translateZ(110px)}
+.cara-derecha{transform:rotateY(90deg) translateZ(110px)}
+.cara-izquierda{transform:rotateY(-90deg) translateZ(110px)}
+.cara-arriba{transform:rotateX(90deg) translateZ(110px)}
+.cara-abajo{transform:rotateX(-90deg) translateZ(110px)}
+
+.cubo-debug{
+    position:fixed;
+    left:8px;
+    bottom:8px;
+    font:12px/1.4 monospace;
+    color:#8a8f98;
+    white-space:pre;
+    pointer-events:none;
+}

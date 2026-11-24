@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>KIVOR — Menú Cubo (prototipo)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/cubo.css">
+</head>
+<body data-theme="dark" class="app-cubo">
+
+<header class="cubo-topbar">
+    <span class="cubo-topbar-title">KIVOR</span>
+</header>
+
+<main class="cubo-escenario">
+    <div class="cubo-stage" id="cuboStage">
+        <div class="cubo-sombra" id="cuboSombra"></div>
+        <div class="cubo" id="cubo">
+            <div class="cara cara-frente" data-cara="tickets">
+                <span class="cara-label">Tickets</span>
+            </div>
+            <div class="cara cara-derecha" data-cara="negocio">
+                <span class="cara-label">Negocio</span>
+            </div>
+            <div class="cara cara-atras" data-cara="configuracion">
+                <span class="cara-label">Configuración</span>
+            </div>
+            <div class="cara cara-izquierda" data-cara="juego">
+                <span class="cara-label">Juego</span>
+            </div>
+            <div class="cara cara-arriba">
+                <span class="cara-label cara-label-logo">KIVOR</span>
+            </div>
+            <div class="cara cara-abajo">
+                <span class="cara-label cara-label-logo">KIVOR</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div id="debugInfo" class="cubo-debug"></div>
+
+<script src="js/cubo.js"></script>
+</body>
+</html>
