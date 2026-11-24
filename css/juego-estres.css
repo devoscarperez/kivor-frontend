@@ -157,8 +157,16 @@
        vez de un desenfoque real. */
     left:-4%;
     right:-4%;
-    top:4%;
-    bottom:calc(var(--piso-offset) + 49px);
+    top:2%;
+    /* Antes dejaba 49px de hueco sobre el piso (altura de cintura
+       calculada a mano) -se pidió mostrar más muro verticalmente: con
+       cover, agrandar el recuadro hacia abajo hace que se recorte
+       menos arriba/abajo de la foto (el recuadro se acerca más a la
+       proporción real de la imagen), así que se ve más pared en vez
+       de la franja vacía. Se deja un resto chico (12px) para que
+       igual se note la separación entre la pared de fondo y el piso
+       donde corre la estilista. */
+    bottom:calc(var(--piso-offset) + 12px);
     background-image:url("../assets/images/fondo-juego-salon.png");
     /* cover, no contain -con contain, en pantallas bien anchas y bajas
        (celular en horizontal/tablet) el recuadro queda mucho más
