@@ -244,7 +244,7 @@ async function authenticate(username, password) {
         sessionStorage.setItem("access_token", data.access_token);
 
         setTimeout(() => {
-            window.location.href = "dashboard.html";
+            window.location.href = "cubo.html";
         }, 800);
 
     } catch (error) {

@@ -39,6 +39,10 @@
 <div id="toastCubo" class="cubo-toast"></div>
 <div id="debugInfo" class="cubo-debug"></div>
 
+<script>
+const token = sessionStorage.getItem("access_token");
+if (!token) window.location.href = "login.html";
+</script>
 <script src="js/cubo.js"></script>
 </body>
 </html>
