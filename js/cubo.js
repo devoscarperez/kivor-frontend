@@ -239,22 +239,32 @@ function iniciarInercia() {
             cuadroInercia = null;
             velX = 0;
             velY = 0;
-            iniciarSnap();
+            // Antes acá se forzaba un snap a la cara de menú más
+            // cercana (Y a un múltiplo de 90°, X siempre de vuelta a
+            // 0) -se sacó a pedido: el cubo se siente más natural si
+            // a veces se queda donde quedó en vez de ajustarse siempre
+            // solo. obtenerCaraFrente() (la misma matemática del
+            // sombreado) sigue encontrando la cara más al frente para
+            // el tap sin importar el ángulo exacto, así que esto no
+            // le quita nada a la interacción -la única vez que se
+            // sigue corrigiendo el ángulo es si el tap cae justo en el
+            // techo/piso de marca (ver manejarTap), para no dejar un
+            // toque sin ningún efecto visible.
+            if (!menuAbierto) pausarFlote(false);
         }
     }
 
     cuadroInercia = requestAnimationFrame(cuadro);
 }
 
-// El eje Y calza en la cara real más cercana (múltiplo de 90°). El
-// eje X siempre vuelve a 0 -nunca queda "en reposo" mostrando el
-// techo o el piso de marca, aunque arrastrar hacia arriba/abajo
-// durante el gesto sí los deja ver de pasada.
-function iniciarSnap() {
+// Lleva rotX/rotY a un destino puntual con una animación corta -ya no
+// se usa después de cada arrastre (ver iniciarInercia), solo como
+// arreglo puntual cuando el tap cae en una cara no interactiva (ver
+// manejarTap): en vez de un toque que no hace nada, se acomoda a la
+// cara de menú real más cercana.
+function iniciarAjuste(destinoY, destinoX) {
     const inicioY = rotY;
     const inicioX = rotX;
-    const destinoY = Math.round(rotY / 90) * 90;
-    const destinoX = Math.round(rotX / 360) * 360;
     const duracionMs = 320;
     const inicioT = performance.now();
 
@@ -319,7 +329,16 @@ function manejarTap() {
     if (!caraFrente) return;
 
     const tipo = caraFrente.dataset.cara;
-    if (!tipo) return; // techo/piso de marca, no interactivos
+    if (!tipo) {
+        // Tocó el techo/piso de marca (no interactivo) -en vez de un
+        // toque sin ningún efecto, acomoda a la cara de menú real más
+        // cercana. Único caso donde el ángulo se sigue corrigiendo
+        // (ver iniciarInercia): un tap sin efecto se siente roto, un
+        // reposo natural después de arrastrar no.
+        const destinoY = Math.round(rotY / 90) * 90;
+        iniciarAjuste(destinoY, 0);
+        return;
+    }
 
     if (tipo === "juego") {
         mostrarToastCubo("El juego todavía no está listo — próximamente.");
