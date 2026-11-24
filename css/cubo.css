@@ -185,51 +185,6 @@
     pointer-events:none;
 }
 
-/* ---- Abanico de opciones (grafo de satélites) ---- */
-
-.satelites-hilos{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    z-index:4;
-    overflow:visible;
-}
-.satelite-hilo{
-    stroke:rgba(242,184,75,.55);
-    stroke-width:1.5;
-    transition:x2 .35s ease, y2 .35s ease;
-}
-
-.satelites{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    z-index:5;
-}
-
-.satelite{
-    position:absolute;
-    transform:translate(-50%, -50%) scale(.3);
-    opacity:0;
-    pointer-events:auto;
-    max-width:118px;
-    padding:10px 14px;
-    border:1px solid rgba(242,184,75,.4);
-    border-radius:12px;
-    background:linear-gradient(145deg, #1f232b, #15181e);
-    color:var(--color-text-primary);
-    font-size:13px;
-    font-weight:600;
-    text-align:center;
-    line-height:1.3;
-    box-shadow:0 8px 18px rgba(0,0,0,.4);
-    transition:transform .3s cubic-bezier(.34,1.56,.64,1), opacity .25s ease;
-}
-.satelite.visible{
-    transform:translate(-50%, -50%) scale(1);
-    opacity:1;
-}
-
 /* ---- Toast (mismo patrón que el resto de la app) ---- */
 
 .cubo-toast{

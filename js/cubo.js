@@ -348,6 +348,11 @@ function manejarTap() {
     abrirMenu(caraFrente, tipo);
 }
 
+// El abanico de satélites (grafo/estrella) se sacó -no se veía bien.
+// Reemplazo pendiente: el mismo cubo recargado con las opciones del
+// siguiente nivel, con una vuelta completa marcando el cambio (ver
+// conversación). abrirMenu/cerrarMenu quedan mínimos mientras tanto:
+// solo hunden/sueltan la cara, sin ningún listado todavía.
 function abrirMenu(caraEl, tipo) {
     const datos = MENU_DATA[tipo];
     if (!datos) return;
@@ -357,8 +362,6 @@ function abrirMenu(caraEl, tipo) {
     caraEl.classList.add("hundida");
     pausarFlote(true);
     document.getElementById("botonVolver").hidden = false;
-
-    renderSatelites(datos.hijos);
 }
 
 function cerrarMenu() {
@@ -369,67 +372,6 @@ function cerrarMenu() {
     caraActiva = null;
     pausarFlote(false);
     document.getElementById("botonVolver").hidden = true;
-
-    limpiarSatelites();
-}
-
-function limpiarSatelites() {
-    document.getElementById("satelites").innerHTML = "";
-    document.getElementById("satelitesHilos").innerHTML = "";
-}
-
-function renderSatelites(hijos) {
-    const contenedor = document.getElementById("satelites");
-    const svg = document.getElementById("satelitesHilos");
-    const escenario = document.getElementById("cuboEscenario");
-    limpiarSatelites();
-
-    const rect = escenario.getBoundingClientRect();
-    const centroX = rect.width / 2;
-    const centroY = rect.height / 2;
-    const radio = Math.min(rect.width, rect.height) * 0.36;
-
-    svg.setAttribute("width", rect.width);
-    svg.setAttribute("height", rect.height);
-
-    hijos.forEach((nombre, i) => {
-        const angulo = (i / hijos.length) * Math.PI * 2 - Math.PI / 2; // empieza arriba, en sentido horario
-        const x = centroX + radio * Math.cos(angulo);
-        const y = centroY + radio * Math.sin(angulo);
-
-        const linea = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        linea.setAttribute("x1", centroX);
-        linea.setAttribute("y1", centroY);
-        linea.setAttribute("x2", centroX);
-        linea.setAttribute("y2", centroY);
-        linea.setAttribute("class", "satelite-hilo");
-        svg.appendChild(linea);
-
-        const tarjeta = document.createElement("button");
-        tarjeta.type = "button";
-        tarjeta.className = "satelite";
-        tarjeta.style.left = `${x}px`;
-        tarjeta.style.top = `${y}px`;
-        tarjeta.style.transitionDelay = `${i * 45}ms`;
-        tarjeta.textContent = nombre;
-        tarjeta.addEventListener("click", (e) => {
-            e.stopPropagation();
-            mostrarToastCubo(`Iría a: ${nombre}`);
-        });
-        contenedor.appendChild(tarjeta);
-
-        // El hilo "crece" desde el centro hasta el satélite -se anima
-        // el x2/y2 de la línea en el siguiente cuadro, no de entrada,
-        // para que se vea el trazo dibujándose en vez de aparecer ya
-        // completo.
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                linea.setAttribute("x2", x);
-                linea.setAttribute("y2", y);
-                tarjeta.classList.add("visible");
-            });
-        });
-    });
 }
 
 let toastCuboTimeout = null;
@@ -444,13 +386,12 @@ function mostrarToastCubo(texto) {
     toastCuboTimeout = setTimeout(() => toast.classList.remove("visible"), 2500);
 }
 
-// Tocar afuera del cubo y del abanico también cierra -mismo criterio
-// ya usado en el Ticket Mágico. Tocar el cubo mismo (incluida la cara
-// hundida) lo maneja manejarTap() vía el flujo normal de puntero, no
-// este listener -por eso acá se ignora explícitamente.
+// Tocar afuera del cubo también cierra -mismo criterio ya usado en el
+// Ticket Mágico. Tocar el cubo mismo (incluida la cara hundida) lo
+// maneja manejarTap() vía el flujo normal de puntero, no este
+// listener -por eso acá se ignora explícitamente.
 document.addEventListener("click", (e) => {
     if (!menuAbierto) return;
-    if (e.target.closest("#satelites")) return;
     if (e.target.closest("#botonVolver")) return;
     if (e.target.closest("#cubo")) return;
 
