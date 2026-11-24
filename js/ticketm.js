@@ -184,7 +184,11 @@ function construirTicketHTML(t, contador) {
                                 </div>
                                 <div class="rule"></div>
                                 <div class="ticket-footer">
-                                    <span class="abono-footer"><span class="label">Abono</span><strong>${formatearMontoM(t.ticket_booking_deposit)}</strong></span>
+                                    <span class="abono-footer" id="abonoFooter" data-monto="${Number(t.ticket_booking_deposit || 0)}">
+                                        <span class="label">Abono</span>
+                                        <strong class="abono-monto">${formatearMontoM(t.ticket_booking_deposit)}</strong>
+                                        <input class="abono-input" id="abonoInput" type="number" inputmode="numeric" min="0" max="99999" step="1">
+                                    </span>
                                     <span class="antiguedad">${tiempoTranscurridoM(t.primera_atencion || t.ticket_created_at)}</span>
                                     <!-- Cre/Act deshabilitado por ahora, no hace falta mostrarlo:
                                     <span class="ticket-fechas">Cre: ${formatearFechaM(t.ticket_created_at)} · Act: ${formatearFechaM(t.ticket_updated_at)}</span>
@@ -623,6 +627,118 @@ function inicializarCierreAfueraStatus() {
         if (e.target.closest(".stub-status")) return;
         cancelarCajonStatus();
     });
+}
+
+// El cajón del abono: doble-tap sobre el monto lo abre -se despega
+// sutilmente hacia abajo (ver .abono-footer.abierto en el css) y el
+// monto se vuelve editable. A diferencia del status y el nombre, acá
+// no hay gesto de cancelar: tocar afuera del ticket siempre guarda lo
+// que haya quedado en el input, porque no hay nada más que confirmar
+// -el monto escrito YA es el monto (se pidió así explícitamente).
+let abonoAbierto = false;
+let ultimoTapAbono = 0;
+
+function inicializarCajonAbono() {
+    const slot = document.getElementById("ticketmSlot");
+
+    slot.addEventListener("click", (e) => {
+        if (!e.target.closest(".abono-footer")) return;
+        if (abonoAbierto) return; // ya abierto -el click es para usar el input, no para reabrir
+
+        const ahora = Date.now();
+        if (ahora - ultimoTapAbono < DOBLE_TAP_MS) {
+            abrirCajonAbono();
+            ultimoTapAbono = 0;
+        } else {
+            ultimoTapAbono = ahora;
+        }
+    });
+}
+
+function abrirCajonAbono() {
+    const footer = document.getElementById("abonoFooter");
+    const input = document.getElementById("abonoInput");
+    if (!footer || !input) return;
+
+    abonoAbierto = true;
+    footer.classList.add("abierto");
+    input.value = footer.dataset.monto;
+    input.focus();
+    input.select();
+}
+
+function cerrarCajonAbono() {
+    const footer = document.getElementById("abonoFooter");
+    const input = document.getElementById("abonoInput");
+    if (!footer || !input) return;
+
+    abonoAbierto = false;
+    footer.classList.remove("abierto");
+
+    const original = Number(footer.dataset.monto);
+    let nuevoMonto = Math.trunc(Number(input.value));
+    if (!Number.isFinite(nuevoMonto)) nuevoMonto = original;
+    nuevoMonto = Math.min(99999, Math.max(0, nuevoMonto));
+
+    footer.dataset.monto = String(nuevoMonto);
+    footer.querySelector(".abono-monto").textContent = formatearMontoM(nuevoMonto);
+
+    if (nuevoMonto !== original) {
+        guardarAbonoM(nuevoMonto, original);
+    }
+}
+
+// En document, no en #ticketmSlot -"afuera del ticket" incluye la
+// topbar y cualquier otra zona de la página, no solo el resto del
+// slot (ahí sí alcanzaría con escuchar en el slot, pero un clic en la
+// topbar nunca llega a burbujear hasta un listener puesto en el slot,
+// porque la topbar no es descendiente de #ticketmSlot).
+function inicializarCierreAfueraAbono() {
+    document.addEventListener("click", (e) => {
+        if (!abonoAbierto) return;
+        if (e.target.closest(".abono-footer")) return;
+        cerrarCajonAbono();
+    });
+}
+
+async function guardarAbonoM(nuevoMonto, montoAnterior) {
+    const actual = ticketsDelDia[indiceActual];
+    if (!actual) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/ticket/${actual.ticket_id}/booking-deposit`, {
+            method: "PATCH",
+            headers: { ...authHeadersM(), "Content-Type": "application/json" },
+            body: JSON.stringify({ booking_deposit: nuevoMonto })
+        });
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const resultado = await response.json();
+
+        if (!response.ok) {
+            throw new Error(resultado?.detail || "No se pudo guardar el abono.");
+        }
+
+        actual.ticket_booking_deposit = resultado.ticket_booking_deposit;
+        actual.ticket_updated_at = resultado.ticket_updated_at;
+
+        mostrarToastM("Abono actualizado");
+
+    } catch (error) {
+        console.error("Error guardando abono:", error);
+
+        const footer = document.getElementById("abonoFooter");
+        if (footer) {
+            footer.dataset.monto = String(montoAnterior);
+            footer.querySelector(".abono-monto").textContent = formatearMontoM(montoAnterior);
+        }
+
+        mostrarToastM(error.message || "No se pudo guardar el abono.", true);
+    }
 }
 
 function cambiarStatusVisual(direccion) {
@@ -1409,6 +1525,8 @@ construirChipsStatus();
 inicializarArrastreNumero();
 inicializarArrastreStatus();
 inicializarCierreAfueraStatus();
+inicializarCajonAbono();
+inicializarCierreAfueraAbono();
 inicializarCajonNombre();
 inicializarBusquedaNombre();
 inicializarGiroAtenciones();

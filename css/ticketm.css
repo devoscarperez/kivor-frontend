@@ -649,10 +649,23 @@
     font-size:12px;
     color:var(--text-soft);
 }
+/* El cajón del abono: doble-tap lo abre (se despega sutilmente hacia
+   abajo, mismo criterio visual que .stub-status.abierto), el monto se
+   vuelve editable. A diferencia del status y el nombre, acá tocar
+   afuera del ticket SIEMPRE guarda lo que haya en el input -no hay un
+   gesto de cancelar, porque no hay nada que confirmar aparte: el
+   monto que quedó escrito es el monto. */
 .ticket .abono-footer{
+    position:relative;
     display:flex;
     align-items:baseline;
     gap:6px;
+    transition:transform .18s ease, box-shadow .18s ease;
+}
+.ticket .abono-footer.abierto{
+    transform:translateY(7px);
+    box-shadow:0 3px 8px rgba(0,0,0,.18);
+    z-index:1;
 }
 .ticket .abono-footer .label{
     font-size:12px;
@@ -669,6 +682,27 @@
     font:700 19px/1.2 Georgia,"Times New Roman",serif;
     color:var(--text);
 }
+.ticket .abono-footer.abierto .abono-monto{display:none}
+.ticket .abono-input{
+    display:none;
+    width:72px;
+    font:700 19px/1.2 Georgia,"Times New Roman",serif;
+    color:var(--text);
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--ink);
+    outline:none;
+    padding:0;
+}
+.ticket .abono-footer.abierto .abono-input{display:inline-block}
+/* Quita las flechitas del <input type=number> -no aportan nada acá y
+   rompen el ancho angosto que se buscó. */
+.ticket .abono-input::-webkit-outer-spin-button,
+.ticket .abono-input::-webkit-inner-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+}
+.ticket .abono-input{appearance:textfield}
 .ticket .ticket-contador{
     font:400 15px/1 Georgia,"Times New Roman",serif;
     letter-spacing:.03em;
