@@ -33,13 +33,31 @@ let punteroId = null;
 let ultimoX = 0;
 let ultimoY = 0;
 let ultimoT = 0;
+let inicioXArrastre = 0;
+let inicioYArrastre = 0;
+let inicioTArrastre = 0;
 
 let cuadroInercia = null;
 let cuadroSnap = null;
 
+let menuAbierto = false;
+let caraActiva = null;
+
 const SENSIBILIDAD = 0.35; // grados por píxel arrastrado
 const FRICCION = 0.94; // por cuadro, mientras hay inercia
 const VELOCIDAD_MINIMA = 0.02; // grados/ms -debajo de esto, se corta la inercia
+const TAP_DISTANCIA_MAX = 10; // px -por debajo de esto, es un tap, no un arrastre
+const TAP_DURACION_MAX = 350; // ms
+
+// Datos reales del menú (ver la reorganización hecha en core.menu):
+// 3 caras de menú + la cara del juego, que no lleva a un abanico de
+// opciones -por ahora un simple aviso, el juego en sí es una pieza
+// aparte, pendiente.
+const MENU_DATA = {
+    tickets: { nombre: "Tickets", hijos: ["Tickets Mágico", "Cierre Ticket", "Ticket Fome"] },
+    negocio: { nombre: "Negocio", hijos: ["Clientes", "Ventas", "Reportes"] },
+    configuracion: { nombre: "Configuración", hijos: ["Servicios", "Código de Barra", "Carga de Precios", "Mantenedores", "Bandeja WhatsApp"] },
+};
 
 function normalizar(v) {
     const mag = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
@@ -101,16 +119,27 @@ function cancelarAnimacionesEnCurso() {
 }
 
 function alIniciarArrastre(e) {
-    cancelarAnimacionesEnCurso();
-    arrastrando = true;
     punteroId = e.pointerId;
     cubo.setPointerCapture(punteroId);
+    inicioXArrastre = e.clientX;
+    inicioYArrastre = e.clientY;
+    inicioTArrastre = performance.now();
+
+    if (menuAbierto) {
+        // Con el menú abierto no se gira el cubo -solo se espera a ver
+        // si esto termina siendo un tap (eso sí cierra el menú, en
+        // alSoltarArrastre -> manejarTap).
+        return;
+    }
+
+    cancelarAnimacionesEnCurso();
+    arrastrando = true;
     cubo.classList.add("arrastrando");
     pausarFlote(true);
 
     ultimoX = e.clientX;
     ultimoY = e.clientY;
-    ultimoT = performance.now();
+    ultimoT = inicioTArrastre;
     velX = 0;
     velY = 0;
 }
@@ -146,12 +175,30 @@ function alMoverArrastre(e) {
 }
 
 function alSoltarArrastre(e) {
-    if (!arrastrando || e.pointerId !== punteroId) return;
-    arrastrando = false;
+    if (e.pointerId !== punteroId) return;
     cubo.releasePointerCapture(punteroId);
-    cubo.classList.remove("arrastrando");
 
-    iniciarInercia();
+    const distancia = Math.hypot(e.clientX - inicioXArrastre, e.clientY - inicioYArrastre);
+    const duracion = performance.now() - inicioTArrastre;
+    const fueTap = distancia < TAP_DISTANCIA_MAX && duracion < TAP_DURACION_MAX;
+
+    if (arrastrando) {
+        arrastrando = false;
+        cubo.classList.remove("arrastrando");
+
+        if (!fueTap) {
+            iniciarInercia();
+            return;
+        }
+
+        // Fue un tap, no un arrastre -no tiene sentido arrancar la
+        // inercia con una velocidad casi nula.
+        velX = 0;
+        velY = 0;
+        pausarFlote(false);
+    }
+
+    if (fueTap) manejarTap();
 }
 
 function iniciarInercia() {
@@ -225,12 +272,173 @@ function iniciarSnap() {
             cuadroSnap = requestAnimationFrame(cuadro);
         } else {
             cuadroSnap = null;
-            pausarFlote(false);
+            if (!menuAbierto) pausarFlote(false);
         }
     }
 
     cuadroSnap = requestAnimationFrame(cuadro);
 }
+
+// El secreto del cubo: tocar (sin arrastrar) la cara que está de
+// frente la "hunde" y abre el abanico de sus opciones. La cara del
+// juego es la excepción (no lleva a un abanico, ver MENU_DATA). Para
+// volver: tocar la misma cara hundida de nuevo, tocar afuera del
+// cubo/abanico, o el botón "Volver" -tres caminos al mismo lugar,
+// pero el botón es el único visible sin tener que descubrirlo (el
+// cubo es la navegación principal, no un secreto -lo habitual no
+// puede depender solo de un gesto oculto).
+function obtenerCaraFrente() {
+    let mejorCara = null;
+    let mejorProducto = -Infinity;
+
+    caras.forEach((cara) => {
+        let claseCara = null;
+        for (const clase of cara.classList) {
+            if (NORMAL_POR_CARA[clase]) { claseCara = clase; break; }
+        }
+        if (!claseCara) return;
+
+        const normalMundo = rotarVectorX(rotarVectorY(NORMAL_POR_CARA[claseCara], rotY), rotX);
+        const p = producto(normalMundo, [0, 0, 1]);
+        if (p > mejorProducto) {
+            mejorProducto = p;
+            mejorCara = cara;
+        }
+    });
+
+    return mejorCara;
+}
+
+function manejarTap() {
+    if (menuAbierto) {
+        cerrarMenu();
+        return;
+    }
+
+    const caraFrente = obtenerCaraFrente();
+    if (!caraFrente) return;
+
+    const tipo = caraFrente.dataset.cara;
+    if (!tipo) return; // techo/piso de marca, no interactivos
+
+    if (tipo === "juego") {
+        mostrarToastCubo("El juego todavía no está listo — próximamente.");
+        return;
+    }
+
+    abrirMenu(caraFrente, tipo);
+}
+
+function abrirMenu(caraEl, tipo) {
+    const datos = MENU_DATA[tipo];
+    if (!datos) return;
+
+    menuAbierto = true;
+    caraActiva = caraEl;
+    caraEl.classList.add("hundida");
+    pausarFlote(true);
+    document.getElementById("botonVolver").hidden = false;
+
+    renderSatelites(datos.hijos);
+}
+
+function cerrarMenu() {
+    if (!menuAbierto) return;
+
+    menuAbierto = false;
+    if (caraActiva) caraActiva.classList.remove("hundida");
+    caraActiva = null;
+    pausarFlote(false);
+    document.getElementById("botonVolver").hidden = true;
+
+    limpiarSatelites();
+}
+
+function limpiarSatelites() {
+    document.getElementById("satelites").innerHTML = "";
+    document.getElementById("satelitesHilos").innerHTML = "";
+}
+
+function renderSatelites(hijos) {
+    const contenedor = document.getElementById("satelites");
+    const svg = document.getElementById("satelitesHilos");
+    const escenario = document.getElementById("cuboEscenario");
+    limpiarSatelites();
+
+    const rect = escenario.getBoundingClientRect();
+    const centroX = rect.width / 2;
+    const centroY = rect.height / 2;
+    const radio = Math.min(rect.width, rect.height) * 0.36;
+
+    svg.setAttribute("width", rect.width);
+    svg.setAttribute("height", rect.height);
+
+    hijos.forEach((nombre, i) => {
+        const angulo = (i / hijos.length) * Math.PI * 2 - Math.PI / 2; // empieza arriba, en sentido horario
+        const x = centroX + radio * Math.cos(angulo);
+        const y = centroY + radio * Math.sin(angulo);
+
+        const linea = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        linea.setAttribute("x1", centroX);
+        linea.setAttribute("y1", centroY);
+        linea.setAttribute("x2", centroX);
+        linea.setAttribute("y2", centroY);
+        linea.setAttribute("class", "satelite-hilo");
+        svg.appendChild(linea);
+
+        const tarjeta = document.createElement("button");
+        tarjeta.type = "button";
+        tarjeta.className = "satelite";
+        tarjeta.style.left = `${x}px`;
+        tarjeta.style.top = `${y}px`;
+        tarjeta.style.transitionDelay = `${i * 45}ms`;
+        tarjeta.textContent = nombre;
+        tarjeta.addEventListener("click", (e) => {
+            e.stopPropagation();
+            mostrarToastCubo(`Iría a: ${nombre}`);
+        });
+        contenedor.appendChild(tarjeta);
+
+        // El hilo "crece" desde el centro hasta el satélite -se anima
+        // el x2/y2 de la línea en el siguiente cuadro, no de entrada,
+        // para que se vea el trazo dibujándose en vez de aparecer ya
+        // completo.
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                linea.setAttribute("x2", x);
+                linea.setAttribute("y2", y);
+                tarjeta.classList.add("visible");
+            });
+        });
+    });
+}
+
+let toastCuboTimeout = null;
+function mostrarToastCubo(texto) {
+    const toast = document.getElementById("toastCubo");
+    if (!toast) return;
+
+    toast.textContent = texto;
+    toast.classList.add("visible");
+
+    clearTimeout(toastCuboTimeout);
+    toastCuboTimeout = setTimeout(() => toast.classList.remove("visible"), 2500);
+}
+
+// Tocar afuera del cubo y del abanico también cierra -mismo criterio
+// ya usado en el Ticket Mágico. Tocar el cubo mismo (incluida la cara
+// hundida) lo maneja manejarTap() vía el flujo normal de puntero, no
+// este listener -por eso acá se ignora explícitamente.
+document.addEventListener("click", (e) => {
+    if (!menuAbierto) return;
+    if (e.target.closest("#satelites")) return;
+    if (e.target.closest("#botonVolver")) return;
+    if (e.target.closest("#cubo")) return;
+
+    cerrarMenu();
+});
+
+document.getElementById("botonVolver").addEventListener("click", cerrarMenu);
 
 cubo.addEventListener("pointerdown", alIniciarArrastre);
 cubo.addEventListener("pointermove", alMoverArrastre);

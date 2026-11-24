@@ -10,10 +10,11 @@
 <body data-theme="dark" class="app-cubo">
 
 <header class="cubo-topbar">
+    <button type="button" class="cubo-volver" id="botonVolver" hidden>← Volver</button>
     <span class="cubo-topbar-title">KIVOR</span>
 </header>
 
-<main class="cubo-escenario">
+<main class="cubo-escenario" id="cuboEscenario">
     <div class="cubo-stage" id="cuboStage">
         <div class="cubo-sombra" id="cuboSombra"></div>
         <div class="cubo" id="cubo">
@@ -37,8 +38,11 @@
             </div>
         </div>
     </div>
+    <svg class="satelites-hilos" id="satelitesHilos"></svg>
+    <div class="satelites" id="satelites"></div>
 </main>
 
+<div id="toastCubo" class="cubo-toast"></div>
 <div id="debugInfo" class="cubo-debug"></div>
 
 <script src="js/cubo.js"></script>
