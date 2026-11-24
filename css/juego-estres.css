@@ -136,16 +136,34 @@
        de la línea. */
     --piso-offset:calc(env(safe-area-inset-bottom) + 9vh);
 }
-.juego-pista::before{
+/* Foto de fondo (la fachada real del local) -se corta a la altura de
+   la cintura de la estilista (94px de alto, la cintura le queda a
+   ~49px desde el piso -ver .estilista-falda) en vez de llegar hasta
+   el piso del juego, para que lea como "pared de fondo, a la
+   distancia" y no como un cartel pegado al suelo donde ella corre.
+   Reemplaza al círculo decorativo que había antes -mismo rol de
+   "fondo", ahora con la foto real. El ::after de abajo (vignette)
+   funde los bordes duros del rectángulo con el fondo oscuro del
+   juego, y el filtro lo apaga un poco para que se sienta "lejos"
+   en vez de competir con la acción de adelante. */
+.juego-fondo-foto{
+    position:absolute;
+    left:8%;
+    right:8%;
+    top:4%;
+    bottom:calc(var(--piso-offset) + 49px);
+    border-radius:10px;
+    background-image:url("../assets/images/fondo-juego-salon.png");
+    background-size:cover;
+    background-position:center top;
+    filter:saturate(.8) brightness(.75);
+}
+.juego-fondo-foto::after{
     content:"";
     position:absolute;
-    right:12%;
-    top:10%;
-    width:54px;
-    height:54px;
-    border-radius:50%;
-    border:4px solid rgba(242,184,75,.25);
-    background:rgba(255,255,255,.03);
+    inset:0;
+    border-radius:inherit;
+    box-shadow:inset 0 0 34px 16px var(--color-background);
 }
 /* Línea de piso -marca dónde "paran" la estilista y los obstáculos
    (bottom:var(--piso-offset) en ambos, ver más abajo). */
