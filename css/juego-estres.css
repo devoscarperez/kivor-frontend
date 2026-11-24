@@ -148,11 +148,17 @@
    en vez de competir con la acción de adelante. */
 .juego-fondo-foto{
     position:absolute;
-    left:8%;
-    right:8%;
+    /* Ancho completo del espacio donde corre la estilista -antes
+       quedaba en un recuadro angosto (8% de margen a cada lado). Se
+       extiende 4% más allá de cada borde (no 0 exacto) para que el
+       blur de abajo tenga margen para desvanecerse antes de que
+       .juego-pista (overflow:hidden) lo corte en seco -si el blur
+       llegara justo al borde del recorte, se vería una línea dura en
+       vez de un desenfoque real. */
+    left:-4%;
+    right:-4%;
     top:4%;
     bottom:calc(var(--piso-offset) + 49px);
-    border-radius:10px;
     background-image:url("../assets/images/fondo-juego-salon.png");
     /* contain, no cover -se pidió ver el mural completo de lado a
        lado (la flor grande a la izquierda, la mujer a la derecha),
@@ -162,7 +168,10 @@
     background-size:contain;
     background-repeat:no-repeat;
     background-position:center top;
-    filter:saturate(.8) brightness(.75);
+    /* blur -efecto de "fuera de foco", como una foto con el fondo
+       desenfocado: refuerza que la pared está lejos, detrás de la
+       acción nítida de adelante (estilista y obstáculos). */
+    filter:saturate(.8) brightness(.75) blur(4px);
 }
 .juego-fondo-foto::after{
     content:"";
