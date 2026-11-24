@@ -55,7 +55,7 @@ let fasePelo = 0;
 // criterio para los obstáculos, ver colisionan().
 const COLISION_TOLERANCIA = 10; // px de margen perdonado por lado
 
-const TIPOS_OBSTACULO = ["carrito", "sillon", "frasco", "secador", "peineta", "cepillo", "tijeras"];
+const TIPOS_OBSTACULO = ["carrito", "sillon", "frasco", "secador", "peineta", "cepillo", "tijeras", "plancha", "tenaza", "maquina", "espejo"];
 const MARCADO_INTERNO = {
     carrito: '<div class="carrito-bandeja"></div><div class="carrito-cuerpo"></div><div class="carrito-rueda"></div><div class="carrito-rueda"></div>',
     sillon: '<div class="sillon-respaldo"></div><div class="sillon-asiento"></div><div class="sillon-pata"></div><div class="sillon-pata"></div>',
@@ -64,15 +64,19 @@ const MARCADO_INTERNO = {
     peineta: '<div class="peineta-lomo"></div><div class="peineta-dientes"></div>',
     cepillo: '<div class="cepillo-cabeza"></div><div class="cepillo-mango"></div>',
     tijeras: '<div class="tijeras-hoja tijeras-hoja-1"></div><div class="tijeras-hoja tijeras-hoja-2"></div><div class="tijeras-anilla tijeras-anilla-1"></div><div class="tijeras-anilla tijeras-anilla-2"></div><div class="tijeras-remache"></div>',
+    plancha: '<div class="plancha-mango"></div><div class="plancha-placas"></div><div class="plancha-luz"></div>',
+    tenaza: '<div class="tenaza-cano"></div><div class="tenaza-mango"></div><div class="tenaza-clip"></div>',
+    maquina: '<div class="maquina-cuerpo"></div><div class="maquina-cuchilla"></div><div class="maquina-boton"></div>',
+    espejo: '<div class="espejo-marco"></div><div class="espejo-vidrio"></div><div class="espejo-mango"></div>',
 };
 
 // Objetos chicos de mano -los únicos candidatos a salir "gigantes"
 // (ver crearObstaculo). Un carrito o un sillón gigante no tendría la
-// misma gracia visual (ya son grandes de por sí); un secador/peineta/
-// cepillo del porte de la estilista sí es la sorpresa graciosa que se
-// pidió, y de paso exige saltar mejor sincronizado -no todos, solo
-// algunos al azar.
-const TIPOS_GIGANTE_ELEGIBLES = ["secador", "peineta", "cepillo", "tijeras"];
+// misma gracia visual (ya son grandes de por sí); una herramienta del
+// porte de la estilista sí es la sorpresa graciosa que se pidió, y de
+// paso exige saltar mejor sincronizado -no todos, solo algunos al
+// azar.
+const TIPOS_GIGANTE_ELEGIBLES = ["secador", "peineta", "cepillo", "tijeras", "plancha", "tenaza", "maquina", "espejo"];
 const PROBABILIDAD_GIGANTE = 0.3;
 const ESCALA_GIGANTE_MIN = 1.8;
 const ESCALA_GIGANTE_MAX = 2.6;

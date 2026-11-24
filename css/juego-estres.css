@@ -42,6 +42,11 @@
     --salon-metal:#c9ccd1;
     --salon-negro:#2b2d33;
     --salon-acento:#e2542f;
+    --salon-azul:#6f93c9;
+    --salon-azul-sombra:#52739e;
+    --salon-crema:#f1e4c3;
+    --salon-rosa:#dba9a5;
+    --salon-oliva:#6e7a52;
 }
 
 .juego-topbar{
@@ -390,25 +395,93 @@
     transform:rotate(-20deg); transform-origin:left center;
 }
 
-/* Secador profesional -cuerpo negro con el anillo de acento naranja
-   junto al motor, como el de la foto de referencia (antes era un gris
-   liso, poco reconocible como "secador" y no otra cosa). */
+/* Secador profesional -cuerpo azul con la franja crema junto al
+   motor, como el de la foto de referencia (antes era gris liso, y
+   después negro con acento naranja; esta foto nueva lo muestra azul
+   con una línea clara, así que se ajustó de nuevo). */
 .obstaculo-secador{ width:44px; height:26px }
 .obstaculo-secador .secador-cuerpo{
     position:absolute; bottom:6px; left:0; width:28px; height:14px;
-    border-radius:3px 10px 10px 3px; background:var(--salon-negro);
+    border-radius:3px 10px 10px 3px; background:var(--salon-azul);
 }
 .obstaculo-secador .secador-anillo{
     position:absolute; bottom:6px; left:16px; width:5px; height:14px;
-    background:var(--salon-acento);
+    background:var(--salon-crema);
 }
 .obstaculo-secador .secador-mango{
     position:absolute; bottom:0; left:4px; width:9px; height:16px;
-    border-radius:0 0 4px 4px; background:var(--salon-negro);
+    border-radius:0 0 4px 4px; background:var(--salon-azul-sombra);
 }
 .obstaculo-secador .secador-cable{
     position:absolute; bottom:4px; left:24px; width:20px; height:10px;
     border:3px solid var(--salon-pelo); border-left:none; border-radius:0 10px 10px 0;
+}
+
+/* Plancha -mango rosa + placas metálicas al frente con una lucecita
+   (display), como la de la foto. Perfil angosto a propósito: de
+   costado una plancha se ve como una barra larga, no un bloque. */
+.obstaculo-plancha{ width:40px; height:12px }
+.obstaculo-plancha .plancha-mango{
+    position:absolute; bottom:0; left:0; width:24px; height:10px;
+    border-radius:5px 2px 2px 5px; background:var(--salon-rosa);
+}
+.obstaculo-plancha .plancha-placas{
+    position:absolute; bottom:1px; left:22px; width:18px; height:8px;
+    border-radius:2px 6px 6px 2px; background:var(--salon-metal);
+}
+.obstaculo-plancha .plancha-luz{
+    position:absolute; bottom:3px; left:6px; width:4px; height:4px;
+    border-radius:50%; background:var(--salon-acento);
+}
+
+/* Tenaza de rizar -caño delgado y largo (metal) + mango oscuro más
+   grueso + la palanca del clip, como la negra con caño plateado de la
+   foto. */
+.obstaculo-tenaza{ width:40px; height:14px }
+.obstaculo-tenaza .tenaza-cano{
+    position:absolute; bottom:3px; left:12px; width:26px; height:7px;
+    border-radius:0 4px 4px 0; background:var(--salon-metal);
+}
+.obstaculo-tenaza .tenaza-mango{
+    position:absolute; bottom:0; left:0; width:14px; height:13px;
+    border-radius:4px; background:var(--salon-negro);
+}
+.obstaculo-tenaza .tenaza-clip{
+    position:absolute; bottom:9px; left:10px; width:12px; height:3px;
+    border-radius:2px; background:var(--salon-metal);
+    transform:rotate(-16deg); transform-origin:left center;
+}
+
+/* Máquina de cortar pelo -cuerpo oliva (como la de la foto) + la
+   cuchilla metálica asomando en la punta + un botón de encendido. */
+.obstaculo-maquina{ width:28px; height:22px }
+.obstaculo-maquina .maquina-cuerpo{
+    position:absolute; bottom:0; left:2px; width:24px; height:18px;
+    border-radius:5px; background:var(--salon-oliva);
+}
+.obstaculo-maquina .maquina-cuchilla{
+    position:absolute; top:0; left:2px; width:14px; height:4px;
+    border-radius:2px; background:var(--salon-metal);
+}
+.obstaculo-maquina .maquina-boton{
+    position:absolute; top:9px; left:7px; width:5px; height:5px;
+    border-radius:50%; background:var(--color-primary);
+}
+
+/* Espejo de mano -círculo (el vidrio) + mango corto, una silueta
+   redonda que no se repite con ningún otro objeto del juego. */
+.obstaculo-espejo{ width:24px; height:34px }
+.obstaculo-espejo .espejo-marco{
+    position:absolute; top:0; left:2px; width:20px; height:20px;
+    border-radius:50%; background:var(--salon-oliva);
+}
+.obstaculo-espejo .espejo-vidrio{
+    position:absolute; top:3px; left:5px; width:14px; height:14px;
+    border-radius:50%; background:rgba(255,255,255,.55);
+}
+.obstaculo-espejo .espejo-mango{
+    position:absolute; bottom:0; left:9px; width:6px; height:14px;
+    border-radius:0 0 3px 3px; background:var(--salon-oliva);
 }
 
 /* Tijeras -dos hojas cruzadas en X + remaches de los dedos, la
@@ -436,7 +509,7 @@
 .obstaculo-peineta{ width:34px; height:26px }
 .obstaculo-peineta .peineta-lomo{
     position:absolute; top:0; left:0; width:34px; height:8px;
-    border-radius:4px; background:var(--color-primary);
+    border-radius:4px; background:var(--salon-madera);
 }
 .obstaculo-peineta .peineta-dientes{
     position:absolute; top:8px; left:2px; width:30px; height:16px;
