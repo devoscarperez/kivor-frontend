@@ -154,7 +154,13 @@
     bottom:calc(var(--piso-offset) + 49px);
     border-radius:10px;
     background-image:url("../assets/images/fondo-juego-salon.png");
-    background-size:cover;
+    /* contain, no cover -se pidió ver el mural completo de lado a
+       lado (la flor grande a la izquierda, la mujer a la derecha),
+       aunque eso deje una franja vacía abajo y recorte el árbol de
+       arriba -"cover" recortaba los costados para no dejar huecos,
+       que era justo lo que no se quería. */
+    background-size:contain;
+    background-repeat:no-repeat;
     background-position:center top;
     filter:saturate(.8) brightness(.75);
 }
