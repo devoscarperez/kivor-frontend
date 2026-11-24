@@ -31,13 +31,26 @@ const INTERVALO_MAX_FINAL = 1150;
 // criterio para los obstáculos, ver colisionan().
 const COLISION_TOLERANCIA = 10; // px de margen perdonado por lado
 
-const TIPOS_OBSTACULO = ["carrito", "sillon", "frasco", "secador"];
+const TIPOS_OBSTACULO = ["carrito", "sillon", "frasco", "secador", "peineta", "cepillo"];
 const MARCADO_INTERNO = {
     carrito: '<div class="carrito-bandeja"></div><div class="carrito-cuerpo"></div><div class="carrito-rueda"></div><div class="carrito-rueda"></div>',
     sillon: '<div class="sillon-respaldo"></div><div class="sillon-asiento"></div><div class="sillon-pata"></div><div class="sillon-pata"></div>',
     frasco: '<div class="frasco-cuerpo"></div><div class="frasco-tapa"></div>',
     secador: '<div class="secador-cuerpo"></div><div class="secador-mango"></div><div class="secador-cable"></div>',
+    peineta: '<div class="peineta-lomo"></div><div class="peineta-dientes"></div>',
+    cepillo: '<div class="cepillo-cabeza"></div><div class="cepillo-mango"></div>',
 };
+
+// Objetos chicos de mano -los únicos candidatos a salir "gigantes"
+// (ver crearObstaculo). Un carrito o un sillón gigante no tendría la
+// misma gracia visual (ya son grandes de por sí); un secador/peineta/
+// cepillo del porte de la estilista sí es la sorpresa graciosa que se
+// pidió, y de paso exige saltar mejor sincronizado -no todos, solo
+// algunos al azar.
+const TIPOS_GIGANTE_ELEGIBLES = ["secador", "peineta", "cepillo"];
+const PROBABILIDAD_GIGANTE = 0.3;
+const ESCALA_GIGANTE_MIN = 1.8;
+const ESCALA_GIGANTE_MAX = 2.6;
 
 let estado = "esperando"; // esperando | jugando | terminado
 let posicionY = 0; // 0 = en el piso, negativo = elevada (coincide con translateY)
@@ -79,14 +92,17 @@ function elegirIntervaloProximoObstaculo() {
 
 function crearObstaculo() {
     const tipo = TIPOS_OBSTACULO[Math.floor(Math.random() * TIPOS_OBSTACULO.length)];
+    const esGigante = TIPOS_GIGANTE_ELEGIBLES.includes(tipo) && Math.random() < PROBABILIDAD_GIGANTE;
+    const escala = esGigante ? ESCALA_GIGANTE_MIN + Math.random() * (ESCALA_GIGANTE_MAX - ESCALA_GIGANTE_MIN) : 1;
+
     const el = document.createElement("div");
-    el.className = `obstaculo obstaculo-${tipo}`;
+    el.className = `obstaculo obstaculo-${tipo}` + (esGigante ? " obstaculo-gigante" : "");
     el.innerHTML = MARCADO_INTERNO[tipo];
     pista.appendChild(el);
 
     const x = pista.clientWidth;
-    el.style.transform = `translateX(${x}px)`;
-    obstaculos.push({ el, x });
+    el.style.transform = `translateX(${x}px) scale(${escala})`;
+    obstaculos.push({ el, x, escala });
 }
 
 function limpiarObstaculos() {
@@ -136,7 +152,7 @@ function cuadro(ahora) {
     for (let i = obstaculos.length - 1; i >= 0; i--) {
         const o = obstaculos[i];
         o.x -= velocidadActual * dt;
-        o.el.style.transform = `translateX(${o.x}px)`;
+        o.el.style.transform = `translateX(${o.x}px) scale(${o.escala})`;
         if (o.x + o.el.clientWidth < 0) {
             o.el.remove();
             obstaculos.splice(i, 1);

@@ -99,7 +99,15 @@
     min-height:0;
     overflow:hidden;
     background:linear-gradient(180deg, var(--color-background) 0%, var(--color-background) 55%, var(--color-surface) 100%);
-    padding-bottom:calc(env(safe-area-inset-bottom) + 10px);
+    /* --piso-offset es la altura del piso real, compartida por la
+       línea, la estilista y los obstáculos -una custom property se
+       hereda por el árbol del DOM, así que los tres la leen igual sin
+       repetir el valor. OJO: padding-bottom NO sirve para esto -no
+       mueve elementos position:absolute con bottom:0 (el padding edge
+       que usan de referencia es el borde de afuera, no el de adentro
+       del padding), se probó y quedaban los tres flotando separados
+       de la línea. */
+    --piso-offset:calc(env(safe-area-inset-bottom) + 9vh);
 }
 .juego-pista::before{
     content:"";
@@ -113,12 +121,12 @@
     background:rgba(255,255,255,.03);
 }
 /* Línea de piso -marca dónde "paran" la estilista y los obstáculos
-   (bottom:0 de ambos cae justo encima de esta línea, ver más abajo). */
+   (bottom:var(--piso-offset) en ambos, ver más abajo). */
 .juego-pista::after{
     content:"";
     position:absolute;
     left:0; right:0;
-    bottom:calc(env(safe-area-inset-bottom) + 10px);
+    bottom:var(--piso-offset);
     height:3px;
     background:rgba(242,184,75,.35);
 }
@@ -131,7 +139,7 @@
 .estilista{
     position:absolute;
     left:15%;
-    bottom:0;
+    bottom:var(--piso-offset);
     width:56px;
     height:88px;
     will-change:transform;
@@ -240,14 +248,27 @@
 
 /* ---- Obstáculos ----
    Un contenedor por obstáculo, posicionado por JS vía transform
-   (translateX), con 2-3 formas simples adentro según el tipo. Todos
-   comparten la misma altura aproximada a propósito -el salto único
-   tiene que alcanzar para cualquiera, la variedad es solo visual. */
+   (translateX + scale en el mismo valor, ver juego-estres.js), con
+   2-3 formas simples adentro según el tipo. La mayoría comparte una
+   altura chica a propósito -el salto único alcanza fácil-, salvo la
+   variante "gigante" (ver más abajo), pensada para que de vez en
+   cuando SÍ haga falta saltar bien sincronizado. */
 .obstaculo{
     position:absolute;
-    bottom:0;
+    bottom:var(--piso-offset);
     left:0;
+    transform-origin:left bottom;
     will-change:transform;
+}
+
+/* Un secador/peineta/cepillo del porte de la estilista -el toque de
+   gracia pedido: no todos, solo algunos al azar (ver
+   TIPOS_GIGANTE_ELEGIBLES y PROBABILIDAD_GIGANTE en el JS). El scale
+   se aplica desde la esquina inferior izquierda (transform-origin más
+   arriba) para que el objeto crezca hacia arriba sin hundirse en el
+   piso. */
+.obstaculo-gigante{
+    z-index:1;
 }
 
 .obstaculo-carrito{ width:46px; height:40px }
@@ -303,6 +324,26 @@
 .obstaculo-secador .secador-cable{
     position:absolute; bottom:4px; left:24px; width:20px; height:10px;
     border:3px solid var(--salon-pelo); border-left:none; border-radius:0 10px 10px 0;
+}
+
+.obstaculo-peineta{ width:34px; height:26px }
+.obstaculo-peineta .peineta-lomo{
+    position:absolute; top:0; left:0; width:34px; height:8px;
+    border-radius:4px; background:var(--color-primary);
+}
+.obstaculo-peineta .peineta-dientes{
+    position:absolute; top:8px; left:2px; width:30px; height:16px;
+    background:repeating-linear-gradient(90deg, var(--salon-metal) 0 3px, transparent 3px 6px);
+}
+
+.obstaculo-cepillo{ width:26px; height:34px }
+.obstaculo-cepillo .cepillo-cabeza{
+    position:absolute; top:0; left:3px; width:20px; height:20px;
+    border-radius:50%; background:var(--salon-madera);
+}
+.obstaculo-cepillo .cepillo-mango{
+    position:absolute; bottom:0; left:9px; width:8px; height:16px;
+    border-radius:0 0 4px 4px; background:var(--salon-madera);
 }
 
 /* ---- Overlays (inicio / fin) ---- */
