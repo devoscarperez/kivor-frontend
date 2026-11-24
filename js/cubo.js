@@ -57,40 +57,43 @@ const TAP_DURACION_MAX = 350; // ms
 // exactamente 1 hijo (Clientes, Reportes, Mantenedores) se salta
 // solo al tocarlo -ver resolverDestino: no tiene sentido mostrar un
 // cubo con un solo lado útil.
+// "ruta" viene literal de menu_path en core.menu (se pidió la
+// consulta real, no son rutas inventadas) -solo las hojas la tienen,
+// los grupos no apuntan a ninguna página propia.
 const MENU_RAIZ = [
     {
         id: "tickets", nombre: "Tickets", hijos: [
-            { id: "tickets_magico", nombre: "Tickets Mágico" },
-            { id: "cierre_ticket", nombre: "Cierre Ticket" },
-            { id: "ticket_fome", nombre: "Ticket Fome" },
+            { id: "tickets_magico", nombre: "Tickets Mágico", ruta: "ticketm.html" },
+            { id: "cierre_ticket", nombre: "Cierre Ticket", ruta: "cierre-tickets.html" },
+            { id: "ticket_fome", nombre: "Ticket Fome", ruta: "ticket.html" },
         ],
     },
     {
         id: "negocio", nombre: "Negocio", hijos: [
             { id: "clientes", nombre: "Clientes", hijos: [
-                { id: "solicitar_datos_cliente", nombre: "Solicitar datos cliente" },
+                { id: "solicitar_datos_cliente", nombre: "Solicitar datos cliente", ruta: "customer-express-generate.html" },
             ]},
             { id: "ventas", nombre: "Ventas", hijos: [
-                { id: "carga_ventas", nombre: "Carga de Ventas" },
-                { id: "analisis_ventas_kpis", nombre: "Análisis de Ventas y KPIs" },
-                { id: "analisis_ventas", nombre: "Análisis de Ventas" },
-                { id: "analisis_kpis", nombre: "Análisis de KPIs" },
+                { id: "carga_ventas", nombre: "Carga de Ventas", ruta: "ventas-lyl-carga.html" },
+                { id: "analisis_ventas_kpis", nombre: "Análisis de Ventas y KPIs", ruta: "ventas-lyl-analisis.html" },
+                { id: "analisis_ventas", nombre: "Análisis de Ventas", ruta: "ventas-lyl-reporte.html" },
+                { id: "analisis_kpis", nombre: "Análisis de KPIs", ruta: "ventas-lyl-kpis.html" },
             ]},
             { id: "reportes", nombre: "Reportes", hijos: [
-                { id: "ganancias_mensuales", nombre: "Ganancias Mensuales" },
+                { id: "ganancias_mensuales", nombre: "Ganancias Mensuales", ruta: "ganancias-mensuales.html" },
             ]},
         ],
     },
     {
         id: "configuracion", nombre: "Configuración", hijos: [
-            { id: "servicios", nombre: "Servicios" },
-            { id: "codigo_barra", nombre: "Código de Barra" },
-            { id: "carga_precios", nombre: "Carga de Precios" },
+            { id: "servicios", nombre: "Servicios", ruta: "servicios-profesional.html" },
+            { id: "codigo_barra", nombre: "Código de Barra", ruta: "lector-codigo-barra.html" },
+            { id: "carga_precios", nombre: "Carga de Precios", ruta: "precios-servicios-carga.html" },
             { id: "mas", nombre: "+1 más", hijos: [
                 { id: "mantenedores", nombre: "Mantenedores", hijos: [
-                    { id: "mantenedor_precios", nombre: "Mantenedor de Precios" },
+                    { id: "mantenedor_precios", nombre: "Mantenedor de Precios", ruta: "mantenedor-precios.html" },
                 ]},
-                { id: "bandeja_whatsapp", nombre: "Bandeja WhatsApp" },
+                { id: "bandeja_whatsapp", nombre: "Bandeja WhatsApp", ruta: "bandeja-whatsapp.html" },
             ]},
         ],
     },
@@ -405,13 +408,23 @@ function manejarTap() {
 
     const destino = resolverDestino(nodo);
     if (destino.tipo === "hoja") {
-        // Opción final -sin páginas reales conectadas todavía en este
-        // prototipo, así que por ahora solo avisa en vez de navegar.
-        mostrarToastCubo(`Iría a: ${destino.nodo.nombre}`);
+        // Opción final -ruta real (menu_path de core.menu), navega
+        // directo, sin aviso ni confirmación.
+        if (destino.nodo.ruta) navegarA(destino.nodo.ruta);
         return;
     }
 
     entrarANivel(destino.nodo);
+}
+
+// Envuelto en su propia función (en vez de usar window.location.href
+// directo en manejarTap) para poder interceptarlo en las pruebas
+// headless -reasignar window.location.href ahí mismo no es seguro en
+// todos los navegadores (se comprobó: romper eso rompía en cadena el
+// resto del script de la prueba, incluida la simulación de
+// requestAnimationFrame).
+function navegarA(ruta) {
+    window.location.href = ruta;
 }
 
 // Un nodo con exactamente 1 hijo se salta solo -no tiene sentido
