@@ -132,94 +132,133 @@
 }
 
 /* ---- La estilista ----
-   Silueta plana: cabeza + cola + torso con uniforme + un brazo
-   adelantado sosteniendo el secador + 2 piernas que alternan en el
-   ciclo de carrera. Todo con divs posicionados absolutos dentro de un
-   contenedor relativo -ningún SVG, por simplicidad. */
+   Silueta femenina estilizada: pelo largo que flota detrás de la
+   cabeza, torso angosto con una falda que insinúa el uniforme, piernas
+   finas, y un brazo adelantado sosteniendo el secador. Todo con divs
+   posicionados absolutos dentro de un contenedor relativo -ningún
+   SVG, por simplicidad. El orden en el HTML importa para el tapado:
+   pelo y piernas primero (quedan detrás), cabeza/brazo/secador al
+   final (quedan delante). */
 .estilista{
     position:absolute;
     left:15%;
     bottom:var(--piso-offset);
-    width:56px;
-    height:88px;
+    width:52px;
+    height:94px;
     will-change:transform;
+}
+
+/* El pelo largo se dibuja ANTES de la cabeza a propósito -la cabeza
+   lo tapa por delante y deja ver solo lo que cae por detrás/debajo,
+   como una melena real en vez de un triángulo pegado al costado
+   (la "cola" chica de la versión anterior). */
+.estilista-pelo{
+    position:absolute;
+    top:0;
+    left:7px;
+    width:22px;
+    height:58px;
+    background:var(--salon-pelo);
+    clip-path:polygon(32% 0%, 68% 0%, 100% 38%, 88% 100%, 12% 100%, 0% 38%);
+    transform-origin:top center;
+    animation:estilista-pelo-vaiven .32s ease-in-out infinite;
 }
 
 .estilista-cabeza{
     position:absolute;
-    top:0;
-    left:16px;
-    width:24px;
-    height:24px;
+    top:1px;
+    left:14px;
+    width:21px;
+    height:21px;
     border-radius:50%;
     background:var(--salon-piel);
 }
 
-.estilista-cola{
-    position:absolute;
-    top:2px;
-    left:36px;
-    width:12px;
-    height:16px;
-    border-radius:0 10px 10px 4px;
-    background:var(--salon-pelo);
-    transform-origin:top left;
-    animation:estilista-cola-vaiven .32s ease-in-out infinite;
-}
-
 .estilista-cuerpo{
     position:absolute;
-    top:22px;
-    left:12px;
-    width:32px;
-    height:34px;
-    border-radius:10px 10px 6px 6px;
+    top:21px;
+    left:14px;
+    width:22px;
+    height:26px;
+    border-radius:9px 9px 5px 5px;
     background:var(--salon-uniforme);
-    box-shadow:inset -4px 0 0 var(--salon-uniforme-sombra);
+    box-shadow:inset -3px 0 0 var(--salon-uniforme-sombra);
+}
+
+/* Falda -un trapecio angosto que se abre apenas bajo el torso, lo
+   justo para leerse como silueta de mujer sin estorbar el movimiento
+   de las piernas debajo. */
+.estilista-falda{
+    position:absolute;
+    top:45px;
+    left:11px;
+    width:28px;
+    height:13px;
+    background:var(--salon-uniforme-sombra);
+    clip-path:polygon(22% 0%, 78% 0%, 100% 100%, 0% 100%);
 }
 
 .estilista-brazo{
     position:absolute;
-    top:30px;
-    left:34px;
-    width:20px;
-    height:9px;
-    border-radius:6px;
+    top:27px;
+    left:30px;
+    width:17px;
+    height:7px;
+    border-radius:5px;
     background:var(--salon-uniforme);
     transform-origin:left center;
 }
 
+/* Secador con boquilla afinada (clip-path en punta) + mango angulado
+   -antes era una sola cápsula, ahora se lee más como un secador real. */
 .estilista-secador{
     position:absolute;
-    top:24px;
-    left:50px;
-    width:16px;
-    height:10px;
-    border-radius:3px 8px 8px 3px;
-    background:var(--salon-metal);
+    top:23px;
+    left:45px;
+    width:20px;
+    height:11px;
 }
-.estilista-secador::after{
-    content:"";
+.estilista-secador-boquilla{
     position:absolute;
-    right:-4px;
-    top:1px;
-    width:8px;
-    height:8px;
+    top:0;
+    left:0;
+    width:15px;
+    height:11px;
+    background:var(--salon-metal);
+    clip-path:polygon(0% 15%, 70% 0%, 100% 50%, 70% 100%, 0% 85%);
+}
+.estilista-secador-boton{
+    position:absolute;
+    top:3px;
+    left:2px;
+    width:5px;
+    height:5px;
     border-radius:50%;
     background:var(--color-primary);
+}
+.estilista-secador-mango{
+    position:absolute;
+    top:6px;
+    left:1px;
+    width:7px;
+    height:13px;
+    border-radius:0 0 4px 4px;
+    background:var(--salon-uniforme-sombra);
+    transform:rotate(18deg);
+    transform-origin:top center;
 }
 
 .estilista-pierna{
     position:absolute;
-    top:54px;
-    left:18px;
-    width:10px;
+    top:58px;
+    left:17px;
+    width:7px;
     height:30px;
-    border-radius:4px;
+    border-radius:3px;
     background:var(--salon-pelo);
     transform-origin:top center;
 }
-.estilista-pierna-2{ left:28px }
+.estilista-pierna-2{ left:26px }
 
 /* Ciclo de carrera: dos piernas oscilando en contrafase -se activa
    solo en el piso (ver juego-estres.js: saltar() saca esta clase para
@@ -236,9 +275,9 @@
     0%,100%{ transform:rotate(-28deg) }
     50%{ transform:rotate(28deg) }
 }
-@keyframes estilista-cola-vaiven{
-    0%,100%{ transform:rotate(-8deg) }
-    50%{ transform:rotate(10deg) }
+@keyframes estilista-pelo-vaiven{
+    0%,100%{ transform:rotate(-6deg) }
+    50%{ transform:rotate(7deg) }
 }
 
 /* En el aire: piernas quietas, un poco recogidas -lectura clara de
