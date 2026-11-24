@@ -6,6 +6,7 @@
 const escenario = document.getElementById("juegoEscenario");
 const pista = document.getElementById("juegoPista");
 const estilista = document.getElementById("estilista");
+const pelo = estilista.querySelector(".estilista-pelo");
 const elementoPuntaje = document.getElementById("puntajeActual");
 const pantallaInicio = document.getElementById("pantallaInicio");
 const pantallaFin = document.getElementById("pantallaFin");
@@ -25,6 +26,20 @@ const INTERVALO_MIN_INICIAL = 1150; // ms entre obstáculos, al empezar
 const INTERVALO_MAX_INICIAL = 1800;
 const INTERVALO_MIN_FINAL = 750; // piso del intervalo aunque la velocidad siga subiendo -no se vuelve injusto
 const INTERVALO_MAX_FINAL = 1150;
+
+// El pelo flamea más fuerte y más rápido a medida que sube la
+// velocidad -mismo "progreso" (0 a 1 entre inicial y máxima) que ya
+// se usa para el intervalo de obstáculos, ver cuadro(). Mientras
+// jugando, esto reemplaza por completo la animación CSS de reposo
+// (ver .estilista.jugando en el css): una animación CSS infinita
+// siempre gana sobre un transform inline, así que no alcanzaba con
+// setear el style desde acá sin antes apagarla.
+const PELO_FRECUENCIA_MIN = 0.006; // rad/ms
+const PELO_FRECUENCIA_MAX = 0.017;
+const PELO_AMPLITUD_MIN = 7; // grados
+const PELO_AMPLITUD_MAX = 24;
+const PELO_ELEVACION_MAX = 12; // px que se levanta hacia atrás a velocidad máxima
+let fasePelo = 0;
 
 // Hitbox de la estilista más angosta que el div visual (el uniforme
 // "visualmente" la toca antes de que sea justo que pierda) -mismo
@@ -133,6 +148,16 @@ function cuadro(ahora) {
     const tiempoTranscurrido = ahora - tiempoInicio;
 
     velocidadActual = Math.min(VELOCIDAD_MAXIMA, VELOCIDAD_INICIAL + tiempoTranscurrido * RAMPA_VELOCIDAD);
+    const progresoVelocidad = (velocidadActual - VELOCIDAD_INICIAL) / (VELOCIDAD_MAXIMA - VELOCIDAD_INICIAL);
+
+    // Pelo al viento: más rápido y con más vuelo a medida que sube la
+    // velocidad, y se levanta hacia atrás (translateY negativo).
+    const frecuenciaPelo = PELO_FRECUENCIA_MIN + (PELO_FRECUENCIA_MAX - PELO_FRECUENCIA_MIN) * progresoVelocidad;
+    fasePelo += frecuenciaPelo * dt;
+    const amplitudPelo = PELO_AMPLITUD_MIN + (PELO_AMPLITUD_MAX - PELO_AMPLITUD_MIN) * progresoVelocidad;
+    const anguloPelo = Math.sin(fasePelo) * amplitudPelo;
+    const elevacionPelo = -PELO_ELEVACION_MAX * progresoVelocidad;
+    pelo.style.transform = `translateY(${elevacionPelo}px) rotate(${anguloPelo}deg)`;
 
     // Física del salto.
     if (!enElPiso) {
@@ -192,8 +217,9 @@ function empezarJuego() {
     actualizarPuntajeEnPantalla();
 
     estilista.classList.remove("saltando");
-    estilista.classList.add("corriendo");
+    estilista.classList.add("corriendo", "jugando");
     estilista.style.transform = "translateY(0px)";
+    fasePelo = 0;
 
     tiempoInicio = performance.now();
     tiempoUltimoCuadro = tiempoInicio;
@@ -206,7 +232,8 @@ function terminarJuego() {
     estado = "terminado";
     if (cuadroJuego) { cancelAnimationFrame(cuadroJuego); cuadroJuego = null; }
 
-    estilista.classList.remove("corriendo", "saltando");
+    estilista.classList.remove("corriendo", "saltando", "jugando");
+    pelo.style.transform = "";
     guardarMejorPuntajeSiCorresponde(puntaje);
 
     const mejor = obtenerMejorPuntaje();
