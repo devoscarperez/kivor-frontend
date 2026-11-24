@@ -18,18 +18,14 @@
     <div class="cubo-stage" id="cuboStage">
         <div class="cubo-sombra" id="cuboSombra"></div>
         <div class="cubo" id="cubo">
-            <div class="cara cara-frente" data-cara="tickets">
-                <span class="cara-label">Tickets</span>
-            </div>
-            <div class="cara cara-derecha" data-cara="negocio">
-                <span class="cara-label">Negocio</span>
-            </div>
-            <div class="cara cara-atras" data-cara="configuracion">
-                <span class="cara-label">Configuración</span>
-            </div>
-            <div class="cara cara-izquierda" data-cara="juego">
-                <span class="cara-label">Juego</span>
-            </div>
+            <!-- Las 4 caras laterales se llenan por JS
+                 (aplicarContenidoNivel), empezando por MENU_RAIZ -el
+                 contenido cambia según el nivel en que esté el cubo,
+                 así que acá no hace falta texto de partida. -->
+            <div class="cara cara-frente"><span class="cara-label"></span></div>
+            <div class="cara cara-derecha"><span class="cara-label"></span></div>
+            <div class="cara cara-atras"><span class="cara-label"></span></div>
+            <div class="cara cara-izquierda"><span class="cara-label"></span></div>
             <div class="cara cara-arriba">
                 <span class="cara-label cara-label-logo">KIVOR</span>
             </div>

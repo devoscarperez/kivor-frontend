@@ -40,8 +40,9 @@ let inicioTArrastre = 0;
 let cuadroInercia = null;
 let cuadroSnap = null;
 
-let menuAbierto = false;
-let caraActiva = null;
+let transicionEnCurso = false;
+let pilaNavegacion = []; // nodos de MENU_RAIZ visitados -vacío = en la raíz
+let nivelHijosActuales = []; // los hasta-4 nodos reales mostrados ahora mismo, en orden de cara
 
 const SENSIBILIDAD = 0.35; // grados por píxel arrastrado
 const FRICCION = 0.94; // por cuadro, mientras hay inercia
@@ -49,15 +50,58 @@ const VELOCIDAD_MINIMA = 0.02; // grados/ms -debajo de esto, se corta la inercia
 const TAP_DISTANCIA_MAX = 10; // px -por debajo de esto, es un tap, no un arrastre
 const TAP_DURACION_MAX = 350; // ms
 
-// Datos reales del menú (ver la reorganización hecha en core.menu):
-// 3 caras de menú + la cara del juego, que no lleva a un abanico de
-// opciones -por ahora un simple aviso, el juego en sí es una pieza
-// aparte, pendiente.
-const MENU_DATA = {
-    tickets: { nombre: "Tickets", hijos: ["Tickets Mágico", "Cierre Ticket", "Ticket Fome"] },
-    negocio: { nombre: "Negocio", hijos: ["Clientes", "Ventas", "Reportes"] },
-    configuracion: { nombre: "Configuración", hijos: ["Servicios", "Código de Barra", "Carga de Precios", "Mantenedores", "Bandeja WhatsApp"] },
-};
+// Árbol real del menú (ver la reorganización hecha en core.menu).
+// "configuracion" tiene 5 hijos propios, uno más de los 4 que caben
+// en el cubo -por ahora se agrupan 2 bajo "+1 más" (temporal, a la
+// espera de una reagrupación real del contenido). Un nodo con
+// exactamente 1 hijo (Clientes, Reportes, Mantenedores) se salta
+// solo al tocarlo -ver resolverDestino: no tiene sentido mostrar un
+// cubo con un solo lado útil.
+const MENU_RAIZ = [
+    {
+        id: "tickets", nombre: "Tickets", hijos: [
+            { id: "tickets_magico", nombre: "Tickets Mágico" },
+            { id: "cierre_ticket", nombre: "Cierre Ticket" },
+            { id: "ticket_fome", nombre: "Ticket Fome" },
+        ],
+    },
+    {
+        id: "negocio", nombre: "Negocio", hijos: [
+            { id: "clientes", nombre: "Clientes", hijos: [
+                { id: "solicitar_datos_cliente", nombre: "Solicitar datos cliente" },
+            ]},
+            { id: "ventas", nombre: "Ventas", hijos: [
+                { id: "carga_ventas", nombre: "Carga de Ventas" },
+                { id: "analisis_ventas_kpis", nombre: "Análisis de Ventas y KPIs" },
+                { id: "analisis_ventas", nombre: "Análisis de Ventas" },
+                { id: "analisis_kpis", nombre: "Análisis de KPIs" },
+            ]},
+            { id: "reportes", nombre: "Reportes", hijos: [
+                { id: "ganancias_mensuales", nombre: "Ganancias Mensuales" },
+            ]},
+        ],
+    },
+    {
+        id: "configuracion", nombre: "Configuración", hijos: [
+            { id: "servicios", nombre: "Servicios" },
+            { id: "codigo_barra", nombre: "Código de Barra" },
+            { id: "carga_precios", nombre: "Carga de Precios" },
+            { id: "mas", nombre: "+1 más", hijos: [
+                { id: "mantenedores", nombre: "Mantenedores", hijos: [
+                    { id: "mantenedor_precios", nombre: "Mantenedor de Precios" },
+                ]},
+                { id: "bandeja_whatsapp", nombre: "Bandeja WhatsApp" },
+            ]},
+        ],
+    },
+    { id: "juego", nombre: "Juego", esJuego: true },
+];
+
+// Los 4 nodos de MENU_RAIZ ya llenan el cubo exacto (3 grupos + el
+// juego) -nunca sobra ni falta un lado en la raíz, por eso no
+// necesita la lógica de "Volver"/cara vacía que sí usan los niveles
+// más profundos (ver aplicarContenidoNivel).
+const ORDEN_CARAS = ["cara-frente", "cara-derecha", "cara-atras", "cara-izquierda"];
 
 function normalizar(v) {
     const mag = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
@@ -125,10 +169,11 @@ function alIniciarArrastre(e) {
     inicioYArrastre = e.clientY;
     inicioTArrastre = performance.now();
 
-    if (menuAbierto) {
-        // Con el menú abierto no se gira el cubo -solo se espera a ver
-        // si esto termina siendo un tap (eso sí cierra el menú, en
-        // alSoltarArrastre -> manejarTap).
+    if (transicionEnCurso) {
+        // Mientras el cubo está dando la vuelta entre niveles no se
+        // gira a mano -solo se espera a ver si esto termina siendo un
+        // tap, que de todos modos no hace nada hasta que termine la
+        // transición (ver manejarTap).
         return;
     }
 
@@ -250,7 +295,7 @@ function iniciarInercia() {
             // sigue corrigiendo el ángulo es si el tap cae justo en el
             // techo/piso de marca (ver manejarTap), para no dejar un
             // toque sin ningún efecto visible.
-            if (!menuAbierto) pausarFlote(false);
+            pausarFlote(false);
         }
     }
 
@@ -282,7 +327,7 @@ function iniciarAjuste(destinoY, destinoX) {
             cuadroSnap = requestAnimationFrame(cuadro);
         } else {
             cuadroSnap = null;
-            if (!menuAbierto) pausarFlote(false);
+            pausarFlote(false);
         }
     }
 
@@ -290,13 +335,13 @@ function iniciarAjuste(destinoY, destinoX) {
 }
 
 // El secreto del cubo: tocar (sin arrastrar) la cara que está de
-// frente la "hunde" y abre el abanico de sus opciones. La cara del
-// juego es la excepción (no lleva a un abanico, ver MENU_DATA). Para
-// volver: tocar la misma cara hundida de nuevo, tocar afuera del
-// cubo/abanico, o el botón "Volver" -tres caminos al mismo lugar,
-// pero el botón es el único visible sin tener que descubrirlo (el
-// cubo es la navegación principal, no un secreto -lo habitual no
-// puede depender solo de un gesto oculto).
+// frente, si tiene más opciones, hunde esa cara y el cubo da una
+// vuelta completa -a mitad de camino, cuando ninguna cara mira al
+// usuario, se cambian las etiquetas por las del nivel nuevo. Sigue
+// siendo el mismo cubo todo el tiempo, nunca se reemplaza -solo gira
+// y, al completar la vuelta, "ya es otro". Si la opción tocada es
+// final (sin hijos), no hay vuelta -salta directo (por ahora, sin
+// páginas reales conectadas, con un aviso).
 function obtenerCaraFrente() {
     let mejorCara = null;
     let mejorProducto = -Infinity;
@@ -320,16 +365,26 @@ function obtenerCaraFrente() {
 }
 
 function manejarTap() {
-    if (menuAbierto) {
-        cerrarMenu();
-        return;
-    }
+    if (transicionEnCurso) return;
 
     const caraFrente = obtenerCaraFrente();
     if (!caraFrente) return;
 
-    const tipo = caraFrente.dataset.cara;
-    if (!tipo) {
+    if (caraFrente.classList.contains("cara-vacia")) return; // lado sobrante, sin contenido
+
+    // Hundir brevemente la cara tocada -feedback táctil inmediato,
+    // independiente de si lo que sigue es un aviso, un salto directo
+    // o la vuelta completa. Se saca sola; no queda pegada esperando
+    // un "cerrar" como en el diseño anterior.
+    caraFrente.classList.add("hundida");
+    setTimeout(() => caraFrente.classList.remove("hundida"), 160);
+
+    if (caraFrente.classList.contains("cara-volver")) {
+        irANivelAnterior();
+        return;
+    }
+
+    if (!("nodoIndice" in caraFrente.dataset)) {
         // Tocó el techo/piso de marca (no interactivo) -en vez de un
         // toque sin ningún efecto, acomoda a la cara de menú real más
         // cercana. Único caso donde el ángulo se sigue corrigiendo
@@ -340,38 +395,134 @@ function manejarTap() {
         return;
     }
 
-    if (tipo === "juego") {
+    const nodo = nivelHijosActuales[Number(caraFrente.dataset.nodoIndice)];
+    if (!nodo) return;
+
+    if (nodo.esJuego) {
         mostrarToastCubo("El juego todavía no está listo — próximamente.");
         return;
     }
 
-    abrirMenu(caraFrente, tipo);
+    const destino = resolverDestino(nodo);
+    if (destino.tipo === "hoja") {
+        // Opción final -sin páginas reales conectadas todavía en este
+        // prototipo, así que por ahora solo avisa en vez de navegar.
+        mostrarToastCubo(`Iría a: ${destino.nodo.nombre}`);
+        return;
+    }
+
+    entrarANivel(destino.nodo);
 }
 
-// El abanico de satélites (grafo/estrella) se sacó -no se veía bien.
-// Reemplazo pendiente: el mismo cubo recargado con las opciones del
-// siguiente nivel, con una vuelta completa marcando el cambio (ver
-// conversación). abrirMenu/cerrarMenu quedan mínimos mientras tanto:
-// solo hunden/sueltan la cara, sin ningún listado todavía.
-function abrirMenu(caraEl, tipo) {
-    const datos = MENU_DATA[tipo];
-    if (!datos) return;
+// Un nodo con exactamente 1 hijo se salta solo -no tiene sentido
+// mostrar un cubo con un único lado útil. Si ese único hijo también
+// tiene un único hijo, sigue saltando (recursivo) hasta encontrar un
+// grupo con 2+ hijos reales, o una hoja de verdad.
+function resolverDestino(nodo) {
+    if (nodo.hijos && nodo.hijos.length === 1) {
+        return resolverDestino(nodo.hijos[0]);
+    }
+    if (nodo.hijos && nodo.hijos.length > 1) {
+        return { tipo: "grupo", nodo };
+    }
+    return { tipo: "hoja", nodo };
+}
 
-    menuAbierto = true;
-    caraActiva = caraEl;
-    caraEl.classList.add("hundida");
-    pausarFlote(true);
+// Pinta hasta 4 nodos reales en las caras laterales. Si sobra algún
+// lado (menos de 4 hijos): el primer lado sobrante se vuelve la cara
+// "Volver" -un camino físico más, además del botón de arriba-, el
+// resto (como mucho queda 1 más, dado que los nodos de 1 solo hijo ya
+// se resolvieron antes de llegar acá) queda en blanco, sin función.
+// La raíz (MENU_RAIZ) nunca entra por acá -siempre tiene exactamente
+// 4 nodos (3 grupos + el juego), nunca sobra ni falta un lado.
+function aplicarContenidoNivel(hijos, { permitirVolver }) {
+    nivelHijosActuales = hijos.slice(0, 4);
+
+    ORDEN_CARAS.forEach((clase, i) => {
+        const caraEl = cubo.querySelector("." + clase);
+        const label = caraEl.querySelector(".cara-label");
+        caraEl.classList.remove("cara-vacia", "cara-volver");
+        label.classList.remove("cara-label-logo");
+
+        if (i < nivelHijosActuales.length) {
+            caraEl.dataset.nodoIndice = String(i);
+            label.textContent = nivelHijosActuales[i].nombre;
+        } else if (permitirVolver && i === nivelHijosActuales.length) {
+            delete caraEl.dataset.nodoIndice;
+            caraEl.classList.add("cara-volver");
+            label.textContent = "← Volver";
+        } else {
+            delete caraEl.dataset.nodoIndice;
+            caraEl.classList.add("cara-vacia");
+            label.textContent = "";
+        }
+    });
+}
+
+function entrarANivel(nodo) {
+    pilaNavegacion.push(nodo);
     document.getElementById("botonVolver").hidden = false;
+    transicionCubo(() => aplicarContenidoNivel(nodo.hijos, { permitirVolver: true }), 1);
 }
 
-function cerrarMenu() {
-    if (!menuAbierto) return;
+function irANivelAnterior() {
+    if (pilaNavegacion.length === 0 || transicionEnCurso) return;
 
-    menuAbierto = false;
-    if (caraActiva) caraActiva.classList.remove("hundida");
-    caraActiva = null;
-    pausarFlote(false);
-    document.getElementById("botonVolver").hidden = true;
+    pilaNavegacion.pop();
+    const padre = pilaNavegacion[pilaNavegacion.length - 1];
+    const quedanNiveles = pilaNavegacion.length > 0;
+
+    document.getElementById("botonVolver").hidden = !quedanNiveles;
+
+    if (padre) {
+        transicionCubo(() => aplicarContenidoNivel(padre.hijos, { permitirVolver: true }), -1);
+    } else {
+        transicionCubo(() => aplicarContenidoNivel(MENU_RAIZ, { permitirVolver: false }), -1);
+    }
+}
+
+// La vuelta completa que marca el cambio: gira 360° en el mismo eje
+// que ya usa el arrastre (dirección +1 al entrar a un nivel, -1 al
+// volver, para que se sienta como "ir" y "deshacer"), y a mitad de
+// camino (t=0.5, cuando por construcción ninguna cara mira de frente
+// al usuario) cambia las etiquetas en silencio. Como la vuelta es de
+// 360° completos, aterriza exactamente en el mismo ángulo de pantalla
+// en el que empezó -el mismo lugar, pero ya mostrando otra cosa.
+function transicionCubo(aplicarCambio, direccion) {
+    cancelarAnimacionesEnCurso();
+    transicionEnCurso = true;
+    pausarFlote(true);
+
+    const inicioY = rotY;
+    const destinoY = rotY + 360 * direccion;
+    const duracionMs = 560;
+    const inicioT = performance.now();
+    let cambioAplicado = false;
+
+    function facilitar(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; } // ease-in-out
+
+    function cuadro(ahora) {
+        const t = Math.min(1, (ahora - inicioT) / duracionMs);
+        const f = facilitar(t);
+
+        rotY = inicioY + (destinoY - inicioY) * f;
+        aplicarTransform();
+
+        if (!cambioAplicado && t >= 0.5) {
+            cambioAplicado = true;
+            aplicarCambio();
+        }
+
+        if (t < 1) {
+            cuadroSnap = requestAnimationFrame(cuadro);
+        } else {
+            cuadroSnap = null;
+            transicionEnCurso = false;
+            pausarFlote(false);
+        }
+    }
+
+    cuadroSnap = requestAnimationFrame(cuadro);
 }
 
 let toastCuboTimeout = null;
@@ -386,23 +537,12 @@ function mostrarToastCubo(texto) {
     toastCuboTimeout = setTimeout(() => toast.classList.remove("visible"), 2500);
 }
 
-// Tocar afuera del cubo también cierra -mismo criterio ya usado en el
-// Ticket Mágico. Tocar el cubo mismo (incluida la cara hundida) lo
-// maneja manejarTap() vía el flujo normal de puntero, no este
-// listener -por eso acá se ignora explícitamente.
-document.addEventListener("click", (e) => {
-    if (!menuAbierto) return;
-    if (e.target.closest("#botonVolver")) return;
-    if (e.target.closest("#cubo")) return;
-
-    cerrarMenu();
-});
-
-document.getElementById("botonVolver").addEventListener("click", cerrarMenu);
+document.getElementById("botonVolver").addEventListener("click", irANivelAnterior);
 
 cubo.addEventListener("pointerdown", alIniciarArrastre);
 cubo.addEventListener("pointermove", alMoverArrastre);
 cubo.addEventListener("pointerup", alSoltarArrastre);
 cubo.addEventListener("pointercancel", alSoltarArrastre);
 
+aplicarContenidoNivel(MENU_RAIZ, { permitirVolver: false });
 aplicarTransform();

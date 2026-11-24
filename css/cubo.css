@@ -166,6 +166,23 @@
     opacity:.55;
 }
 
+/* Lado sobrante sin contenido (cuando un nivel tiene menos de 4
+   hijos y tampoco queda para "Volver") -se ve apagada, sin invitar
+   al tap, aunque tocarla técnicamente no hace nada (manejarTap la
+   ignora explícitamente). */
+.cara-vacia{
+    border-color:rgba(255,255,255,.08);
+    background:linear-gradient(145deg, #191c22, #121419);
+}
+
+/* La cara "Volver" que aparece cuando sobra un lado -mismo camino
+   físico que el botón de arriba, para quien prefiere seguir
+   explorando el cubo en vez de ir a buscar el botón. */
+.cara-volver .cara-label{
+    color:var(--color-primary);
+    opacity:.85;
+}
+
 /* Las 6 caras de un cubo de 220px: cada una se posiciona rotando el
    plano y empujándolo hacia afuera la mitad del lado (110px). */
 .cara-frente{transform:translateZ(110px)}
