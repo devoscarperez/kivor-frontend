@@ -160,13 +160,15 @@
     top:4%;
     bottom:calc(var(--piso-offset) + 49px);
     background-image:url("../assets/images/fondo-juego-salon.png");
-    /* contain, no cover -se pidió ver el mural completo de lado a
-       lado (la flor grande a la izquierda, la mujer a la derecha),
-       aunque eso deje una franja vacía abajo y recorte el árbol de
-       arriba -"cover" recortaba los costados para no dejar huecos,
-       que era justo lo que no se quería. */
-    background-size:contain;
-    background-repeat:no-repeat;
+    /* cover, no contain -con contain, en pantallas bien anchas y bajas
+       (celular en horizontal/tablet) el recuadro queda mucho más
+       ancho que alto comparado con la foto (882x650), y contain ajusta
+       por el alto: dejaba franjas vacías a los costados en vez de
+       llenar el ancho completo, que es lo que se pidió priorizar.
+       cover sí llena sin huecos en cualquier forma de pantalla, a
+       costa de recortar arriba/abajo (o los costados, según el
+       aparato) en vez de mostrar la foto entera siempre. */
+    background-size:cover;
     background-position:center top;
     /* blur -efecto de "fuera de foco", como una foto con el fondo
        desenfocado: refuerza que la pared está lejos, detrás de la
