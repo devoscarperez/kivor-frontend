@@ -202,12 +202,26 @@
    no con una relación de aspecto forzada.
 ========================= */
 .ticket{
-    --paper:#FBF2E4;
-    --paper2:#F2E0C2;
-    --ink:#7A2142;
-    --ink-soft:#C8A5B3;
-    --text:#4E4E4E;
-    --text-soft:#96898A;
+    /* Paleta "vintage": antes --paper era casi blanco (#FBF2E4) y
+       --ink un vino bien saturado -se veía más papel nuevo que ticket
+       de feria antiguo (ver muestra en Errores/variosTicketsMuestra.PNG).
+       Mismo esquema de color (se pidió mantenerlo), pero más cálido,
+       más oscuro, y con la tinta un poco apagada -como tinta vieja,
+       no recién impresa. */
+    --paper:#E9D3A3;
+    --paper2:#D7B877;
+    --ink:#6B2142;
+    --ink-soft:#B99A82;
+    --text:#4A3F33;
+    --text-soft:#8C7B68;
+
+    /* Fuente "cartel de feria" -Rockwell es una slab-serif gruesa,
+       disponible en la mayoría de los sistemas (Windows/Mac), bastante
+       más cercana al look de ticket antiguo que Georgia sola. Si no
+       está instalada, cae de vuelta al stack anterior -no se agregó
+       ninguna fuente web externa (no hay ese tipo de dependencia hoy
+       en el proyecto, y sumarla es una decisión aparte). */
+    --ticket-font:"Rockwell","Georgia","Times New Roman",serif;
 
     position:relative;
     width:100%;
@@ -215,7 +229,17 @@
     border-radius:10px;
     color:var(--text);
     background:
-        radial-gradient(circle at 7px 7px, rgba(60,30,20,.09) 0.7px, transparent 1.1px) 0 0/9px 9px,
+        /* Manchas de envejecido ("foxing") -unas pocas machas tenues
+           e irregulares, no un patrón parejo, para que se sienta como
+           papel con años encima en vez de una textura digital. */
+        radial-gradient(circle at 14% 22%, rgba(110,65,25,.10) 0%, transparent 7%),
+        radial-gradient(circle at 82% 12%, rgba(110,65,25,.08) 0%, transparent 9%),
+        radial-gradient(circle at 72% 82%, rgba(110,65,25,.09) 0%, transparent 8%),
+        radial-gradient(circle at 24% 78%, rgba(110,65,25,.07) 0%, transparent 6%),
+        radial-gradient(circle at 47% 48%, rgba(110,65,25,.05) 0%, transparent 10%),
+        /* Viñeta -borde apenas más oscuro, como un papel manoseado. */
+        radial-gradient(ellipse at center, transparent 55%, rgba(90,55,20,.10) 100%),
+        radial-gradient(circle at 7px 7px, rgba(60,30,20,.12) 0.7px, transparent 1.1px) 0 0/9px 9px,
         linear-gradient(145deg, var(--paper2), var(--paper) 60%);
 }
 /* La sombra vive en una capa aparte, angosta en los costados, para
@@ -406,7 +430,7 @@
     padding:8px;
     background:transparent;
     color:var(--ink);
-    font:700 14px Georgia,"Times New Roman",serif;
+    font:700 14px var(--ticket-font);
 }
 /* Mismo motivo que .dorso-fila-editor: :not([hidden]) para no pisar
    el atributo hidden con una regla de mayor especificidad. */
@@ -486,7 +510,7 @@
     border:none;
     border-radius:8px;
     padding:10px;
-    font:700 14px Georgia,"Times New Roman",serif;
+    font:700 14px var(--ticket-font);
     background:var(--ink);
     color:var(--paper);
 }
@@ -526,7 +550,7 @@
 .ticket .name{
     margin:0;
     text-align:center;
-    font:700 22px/1.2 Georgia,"Times New Roman",serif;
+    font:700 22px/1.2 var(--ticket-font);
     text-wrap:balance;
     overflow-wrap:break-word;
     color:var(--text);
@@ -540,7 +564,7 @@
     border-bottom:2px solid var(--ink);
     background:transparent;
     text-align:center;
-    font:700 20px/1.2 Georgia,"Times New Roman",serif;
+    font:700 20px/1.2 var(--ticket-font);
     color:var(--text);
     padding:0 0 4px;
     outline:none;
@@ -576,7 +600,7 @@
     position:absolute;
     right:2px;
     bottom:-14px;
-    font:400 12px/1 Georgia,"Times New Roman",serif;
+    font:400 12px/1 var(--ticket-font);
     letter-spacing:.03em;
     color:var(--ink-soft);
     white-space:nowrap;
@@ -603,7 +627,7 @@
 }
 .ticket .ficha-wrap{min-width:0}
 .ticket .ficha-vacio{
-    font:700 19px/1.2 Georgia,"Times New Roman",serif;
+    font:700 19px/1.2 var(--ticket-font);
     color:var(--text-soft);
 }
 .ticket .ficha-atencion{
@@ -679,14 +703,14 @@
     text-align:center;
 }
 .ticket .abono-footer strong{
-    font:700 19px/1.2 Georgia,"Times New Roman",serif;
+    font:700 19px/1.2 var(--ticket-font);
     color:var(--text);
 }
 .ticket .abono-footer.abierto .abono-monto{display:none}
 .ticket .abono-input{
     display:none;
     width:72px;
-    font:700 19px/1.2 Georgia,"Times New Roman",serif;
+    font:700 19px/1.2 var(--ticket-font);
     color:var(--text);
     background:transparent;
     border:none;
@@ -704,7 +728,7 @@
 }
 .ticket .abono-input{appearance:textfield}
 .ticket .ticket-contador{
-    font:400 15px/1 Georgia,"Times New Roman",serif;
+    font:400 15px/1 var(--ticket-font);
     letter-spacing:.03em;
     color:var(--ink);
     background:var(--paper);
@@ -733,7 +757,7 @@
 .ticket .number{
     writing-mode:vertical-rl;
     transform:rotate(180deg);
-    font:900 26px/1.03 Georgia,"Times New Roman",serif;
+    font:900 26px/1.03 var(--ticket-font);
     letter-spacing:.02em;
     color:var(--ink);
 }
