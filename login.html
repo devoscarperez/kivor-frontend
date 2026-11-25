@@ -17,15 +17,18 @@
                     <div class="kivor-scanlines"></div>
                     <div class="kivor-container">
                     <div class="kivor-terminal">
-                    
-                        <pre id="kivor-boot" class="kivor-boot"></pre>
-                    
+
+                        <div class="kivor-marca" id="kivorMarca">
+                            <pre id="kivor-boot" class="kivor-boot"></pre>
+                            <span class="kivor-caret" id="kivorMarcaCursor"></span>
+                        </div>
+
                         <div class="kivor-line" id="kivor-login" style="display:none;">
-                            <span>login:</span>
+                            <span id="kivor-prompt"></span>
                             <span id="kivor-text"></span>
                             <span id="kivor-caret" class="kivor-caret"></span>
                         </div>
-                    
+
                         <div class="kivor-input-wrapper">
                             <input
                                 type="text"

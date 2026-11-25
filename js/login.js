@@ -3,7 +3,9 @@ let text = document.getElementById('kivor-text');
 const terminal = document.querySelector('.kivor-terminal');
 const screen = document.querySelector('.kivor-screen');
 
-let stage = "login";
+// "esperando": solo se ve la marca KIVOR centrada + el cursor debajo
+// de la V, a la espera de un clic/tap -recién ahí arranca el login.
+let stage = "esperando";
 let loginValue = "";
 let showPassword = false;
 
@@ -57,7 +59,7 @@ input.addEventListener('keydown', (e) => {
             text.textContent = "";
 
             stage = "password";
-            changePrompt("password:");
+            changePrompt("password ");
             input.focus();
 
         } else if (stage === "password") {
@@ -67,21 +69,40 @@ input.addEventListener('keydown', (e) => {
             input.value = "";
             text.textContent = "";
 
-            loginEl.style.display = "none";
-            showProcessingMessage("Authenticating...");
+            stage = "auth";
+            mostrarMensajeCentral("Authenticating...");
 
             authenticate(loginValue, passwordValue);
         }
     }
 });
 
-/* mantener foco */
+// Primer clic: arranca el login (achica la marca, pide el usuario).
+// Cualquier clic después de eso (salvo el botón de mostrar/ocultar
+// password) solo mantiene el foco en el input invisible, igual que
+// antes.
 document.addEventListener('click', (e) => {
+
+    if (stage === "esperando") {
+        iniciarDesdeEspera();
+        return;
+    }
 
     if (e.target.id === "toggle-password") return;
 
     input.focus();
 });
+
+function iniciarDesdeEspera() {
+    if (stage !== "esperando") return;
+
+    document.getElementById("kivorMarca").classList.add("achicado");
+
+    stage = "login";
+    changePrompt("login ");
+    loginEl.style.display = "flex";
+    input.focus();
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const screen = document.querySelector(".kivor-screen");
@@ -115,22 +136,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* helpers */
 
-function appendLine(content, type = "normal") {
-    const line = document.createElement('div');
+// Mensajes (Authenticating/Access granted/error) van en la MISMA
+// posición central que login y password -antes se apilaban como
+// líneas nuevas debajo (appendLine), lo que tenía sentido en el
+// terminal alineado a la izquierda de antes, pero ya no calza con el
+// diseño centrado de un solo renglón a la vez.
+function mostrarMensajeCentral(texto) {
+    const line = document.getElementById("kivor-login");
+    line.innerHTML = "";
 
-    line.className = type === "system"
-        ? 'kivor-line kivor-system'
-        : 'kivor-line';
+    const span = document.createElement("span");
+    span.textContent = texto;
+    line.appendChild(span);
 
-    line.textContent = content;
-
-    const inputWrapper = document.querySelector('.kivor-input-wrapper');
-    terminal.insertBefore(line, inputWrapper);
-}
-
-function showProcessingMessage(message = "Validating...") {
-    clearSystemMessages();
-    appendLine(message, "system");
+    line.style.display = "flex";
 }
 
 function changePrompt(newPrompt) {
@@ -193,6 +212,9 @@ document.addEventListener("click", (e) => {
     input.focus();
 });
 
+// Solo la marca -las líneas "KIVOR SYSTEM TERMINAL v1.0" y
+// "UNAUTHORIZED ACCESS PROHIBITED" se sacaron del flujo (se pidió
+// eliminarlas del todo, no solo ocultarlas más adelante).
 const bootText = `
 
 K     K   IIIIII   V       V   OOOO    RRRRR
@@ -201,25 +223,17 @@ KKKK        I        V   V    O    O   RRRRR
 K    K      I         V V     O    O   R   R
 K     K   IIIIII       V       OOOO    R    R
 
-KIVOR SYSTEM TERMINAL v1.0
-
-UNAUTHORIZED ACCESS PROHIBITED
-
-
 `;
 
 const bootEl = document.getElementById("kivor-boot");
 const loginEl = document.getElementById("kivor-login");
 const inputEl = document.getElementById("kivor-input");
 
+// Ya no auto-avanza a login: solo revela la marca y se queda en
+// "esperando" -el primer clic/tap (ver iniciarDesdeEspera) es lo que
+// arranca el resto del flujo.
 function typeBoot() {
-    // 💥 mostrar TODO de una vez
     bootEl.textContent = bootText;
-
-    setTimeout(() => {
-        loginEl.style.display = "flex";
-        inputEl.focus();
-    }, 300);
 }
 
 async function authenticate(username, password) {
@@ -239,7 +253,7 @@ async function authenticate(username, password) {
             throw new Error(data.detail || "Invalid credentials");
         }
 
-        appendLine("Access granted");
+        mostrarMensajeCentral("Access granted");
 
         sessionStorage.setItem("access_token", data.access_token);
 
@@ -254,25 +268,17 @@ async function authenticate(username, password) {
 }
 
 function resetToLogin(message) {
-    clearSystemMessages();
-    appendLine(message, "system");
+    mostrarMensajeCentral(message);
 
     setTimeout(() => {
-        clearSystemMessages();
-
-        changePrompt("login:");
         stage = "login";
+        changePrompt("login ");
 
         input.value = "";
         text.textContent = "";
         loginEl.style.display = "flex";
         input.focus();
     }, 800);
-}
-
-function clearSystemMessages() {
-    const messages = document.querySelectorAll('.kivor-system');
-    messages.forEach(m => m.remove());
 }
 
 function delay(ms) {

@@ -512,10 +512,18 @@ CAmbio 1
 ========================= */
 
 .kivor-container {
+    /* width/height:100% -sin esto, .kivor-container y .kivor-terminal
+       (que hereda height:100% de acá) quedaban con alto 0, porque
+       antes el contenido se anclaba arriba-izquierda y nunca hizo
+       falta una altura real. Centrar con top:50% sobre una caja de
+       alto 0 es lo que dejaba la marca pegada arriba en vez de al
+       centro -se comprobó midiendo getBoundingClientRect(). */
+    width: 100%;
+    height: 100%;
     opacity: 0;
     transform: scaleY(0);
     transform-origin: center;
-    transition: 
+    transition:
         opacity 0.4s ease,
         transform 0.4s ease;
 }
@@ -689,17 +697,51 @@ CAmbio 1
 .kivor-terminal {
     width: 100%;
     height: 100%;
-
-    padding-left: 16px;
-    padding-top: 24px;
+    position: relative;
 
     display: flex;
     flex-direction: column;
 
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
 
     gap: 4px;
+}
+
+/* La marca KIVOR -absoluta, centrada sobre el resto, para poder
+   animarla a la esquina sin que el reflow de los demás elementos
+   (login/password) la empuje. #kivor-login queda centrado por el flex
+   de .kivor-terminal de arriba, en el mismo punto donde estaba la
+   marca -por eso no hace falta coordinar posiciones a mano entre
+   ambos, el centro del contenedor es el mismo para los dos.
+   align-items:center en vez de text-align:center en .kivor-boot: así
+   se centra el bloque del pre como una unidad rígida (todas sus
+   líneas conservan su alineación relativa exacta), en vez de centrar
+   cada línea del arte ASCII por separado -eso desalinearía el dibujo
+   de la K/I/V/O/R, que depende de que las columnas calcen igual en
+   todas las filas. */
+.kivor-marca {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: top .6s ease, left .6s ease, transform .6s ease;
+}
+/* Se achica a la esquina con el primer clic -ver iniciarDesdeEspera()
+   en login.js. El cursor de espera (bajo la V) no viaja con ella,
+   simplemente desaparece: ya cumplió su función de "toca para
+   empezar". */
+.kivor-marca.achicado {
+    top: 18px;
+    left: 18px;
+    transform: translate(0, 0) scale(0.22);
+}
+.kivor-marca.achicado #kivorMarcaCursor {
+    display: none;
 }
 
 /* línea tipo terminal */
